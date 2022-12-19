@@ -341,8 +341,4 @@ spawn(function()
     while wait() do pcall(function() if getgenv().AutoDurability then game:GetService("ReplicatedStorage").Remotes.Durability:FireServer(1)
 end end) end end)
 
-local queue_on_teleport = queue_on_teleport or syn and syn.queue_on_teleport
-[[ loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/BokuNoRoblox.lua'))() ]]
-     
-
 Rayfield:LoadConfiguration()
