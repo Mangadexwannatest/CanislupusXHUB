@@ -7,10 +7,12 @@ Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins =
 KeySystem = false,KeySettings = {Title = "Sirius Hub",Subtitle = "Key System",Note = "Join the discord (discord.gg/sirius)",FileName = "SiriusKey",SaveKey = true,GrabKeyFromSite = false,Key = "Hello"}})
 local Tab = Window:CreateTab("Main", 4483362458)
 local Tab2 = Window:CreateTab("Status", 4483362458)
-local Tab3 = Window:CreateTab("Misc", 4483362458)
+local Tab3 = Window:CreateTab("Spin", 4483362458)
+local Tab4 = Window:CreateTab("Misc", 4483362458)
 local Section = Tab:CreateSection("Main")
 local Section2 = Tab2:CreateSection("Status")
-local Section3 = Tab3:CreateSection("Misc")
+local Section3 = Tab3:CreateSection("Spin")
+local Section4 = Tab4:CreateSection("Misc")
 --------------------------------------------// Local Misc \\--------------------------------------------
 
 local questname = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.QuestObjectives.NPCName
@@ -18,7 +20,8 @@ local amoutquest = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.Que
 local lvlplr = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Level
 local cash = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Cash
 local plr = game.Players.LocalPlayer.Character
-
+local quirk = game:GetService("Players").LocalPlayer.PlayerGui.playerhud.playerstats.display.quirk
+getgenv().StopFarm = false
 
 --------------------------------------------// E N D \\------------------------------------------------
 
@@ -45,9 +48,28 @@ Tab2:CreateToggle({Name = "Durability",CurrentValue = getgenv().Durability,Flag 
   getgenv().AutoDurability = Value
 end,})
 
+Tab3:CreateDropdown({Name = "Select type spin",Options = {"Commons","Uncommons","Rares"},CurrentOption = "",Flag = "TypeSpin",Callback = function(Option)
+getgenv().TypeSpin = Option
+end,})
 
-Tab3:CreateParagraph({Title = "Auto Rejoin ⬇", Content = "if player got kick or have error ui will automatic rejoin"})
-Tab3:CreateToggle({Name = "Auto Rejoin",CurrentValue = getgenv().autorejoin,Flag = "AutoRejoin",Callback = function(Value)
+Tab3:CreateInput({Name = "Quirk desired 1",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+getgenv().quirkdesired1 = Text
+end,})
+
+Tab3:CreateInput({Name = "Quirk desired 2",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+getgenv().quirkdesired2 = Text
+end,})
+
+Tab3:CreateInput({Name = "Quirk desired 3",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+getgenv().quirkdesired3 = Text
+	end,})
+
+Tab3:CreateToggle({Name = "Auto Spin",CurrentValue = getgenv().autoSpin,Flag = "AutoSpin",Callback = function(Value)
+  getgenv().autoSpin = Value
+end,})
+
+Tab4:CreateParagraph({Title = "Auto Rejoin ⬇", Content = "if player got kick or have error ui will automatic rejoin"})
+Tab4:CreateToggle({Name = "Auto Rejoin",CurrentValue = getgenv().autorejoin,Flag = "AutoRejoin",Callback = function(Value)
   getgenv().autorejoin = Value
 end,})
 
@@ -104,6 +126,98 @@ end)
 setreadonly(metatable, true)
 
 --------------------------------------------// Script Call \\--------------------------------------------
+
+spawn(function()
+    while task.wait() do pcall(function()
+if getgenv().quirkdesired1 == "Half Hot Half Cold" then
+    getgenv().quirkdesired1 = "HHHC"
+elseif getgenv().quirkdesired2 == "Half Hot Half Cold" then
+    getgenv().quirkdesired2 = "HHHC"
+elseif getgenv().quirkdesired3 == "Half Hot Half Cold" then
+    getgenv().quirkdesired3 = "HHHC" 
+        end
+     end)
+   end
+end)
+
+spawn(function()
+    while task.wait() do pcall(function()
+if getgenv().quirkdesired1 == "Tomura All For One" then
+    getgenv().quirkdesired1 = "Tomura's AFO"
+elseif getgenv().quirkdesired2 == "Tomura All For One" then
+    getgenv().quirkdesired2 = "Tomura's AFO"
+elseif getgenv().quirkdesired3 == "Tomura All For One" then
+    getgenv().quirkdesired3 = "Tomura's AFO" 
+        end
+     end)
+   end
+end)
+
+spawn(function()
+    while task.wait() do pcall(function()
+if getgenv().quirkdesired1 == "Deku's One For All" then
+    getgenv().quirkdesired1 = "Deku's OFA"
+elseif getgenv().quirkdesired2 == "Deku's One For All" then
+    getgenv().quirkdesired2 = "Deku's OFA"
+elseif getgenv().quirkdesired3 == "Deku's One For All" then
+    getgenv().quirkdesired3 = "Deku's OFA" 
+        end
+     end)
+   end
+end)
+
+spawn(function()
+    while task.wait() do pcall(function()
+if getgenv().quirkdesired1 == "All For One" then
+    getgenv().quirkdesired1 = "AFO"
+elseif getgenv().quirkdesired2 == "All For One" then
+    getgenv().quirkdesired2 = "AFO"
+elseif getgenv().quirkdesired3 == "All For One" then
+    getgenv().quirkdesired3 = "AFO" 
+        end
+     end)
+   end
+end)
+
+spawn(function()
+    while task.wait() do pcall(function()
+if getgenv().quirkdesired1 == "One For All" then
+    getgenv().quirkdesired1 = "OFA"
+elseif getgenv().quirkdesired2 == "One For All" then
+    getgenv().quirkdesired2 = "OFA"
+elseif getgenv().quirkdesired3 == "One For All" then
+    getgenv().quirkdesired3 = "OFA" 
+        end
+     end)
+   end
+end)
+
+
+spawn(function()
+    while wait() do pcall(function()
+        if getgenv().autoSpin and game.PlaceId == 1499872953 then
+    if string.find(quirk.Text,getgenv().quirkdesired1) or string.find(quirk.Text,getgenv().quirkdesired2) or string.find(quirk.Text,getgenv().quirkdesired3) then
+    getgenv().StopFarm = false
+    elseif not string.find(quirk.Text,getgenv().quirkdesired1) or not string.find(quirk.Text,getgenv().quirkdesired2) or not string.find(quirk.Text,getgenv().quirkdesired3) then
+     getgenv().StopFarm = true
+     workspace.S1c2R5i66p5t5s51.Spin.Spinner:InvokeServer(getgenv().TypeSpin)
+            end
+         end
+     end)
+   end
+end)
+
+spawn(function()
+    while wait() do pcall(function()
+        if not getgenv().autoSpin and getgenv().Autolvl and game.PlaceId == 1499872953 then
+        getgenv().StopFarm = false
+         end
+      end)
+    end
+end)
+
+
+
 spawn(function()
     while wait() do
         pcall(function()
@@ -306,7 +420,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if getgenv().Autolvl and game.PlaceId == 1499872953 then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 and not getgenv().StopFarm then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
                 
                setfflag("HumanoidParallelRemoveNoPhysics", "false")
@@ -332,7 +446,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if getgenv().Autolvl and game.PlaceId == 1499872953 then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 and not getgenv().StopFarm then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
         for i,v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
         if lvlplr.Value <= 49 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  then
