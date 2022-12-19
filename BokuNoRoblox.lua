@@ -363,47 +363,47 @@ spawn(function()
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 500 
    
-    elseif lvlplr.Value <= 999 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Mount Lady").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0  then
+    elseif lvlplr.Value <= 1599 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Mount Lady").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0  then
                repeat task.wait()
    Label2:Set("Status | Farming : Noumu".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1000
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1600
                
-    elseif lvlplr.Value <= 999 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Mount Lady").Humanoid.Health ~= 0 and v.Name == 'Mount Lady' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 1599 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Mount Lady").Humanoid.Health ~= 0 and v.Name == 'Mount Lady' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
    Label2:Set("Status | Farming : Mount Lady".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1000
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1600
                
-    elseif lvlplr.Value <= 1599 and lvlplr.Value >= 1000 and game:GetService("Workspace").NPCs:FindFirstChild("Overhaul").Humanoid.Health ~= 0 and v.Name == 'Overhaul' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 1999 and lvlplr.Value >= 1600 and game:GetService("Workspace").NPCs:FindFirstChild("Overhaul").Humanoid.Health ~= 0 and v.Name == 'Overhaul' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
    Label2:Set("Status | Farming : Overhaul".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1600
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 2000
                
-    elseif lvlplr.Value <= 1599 and lvlplr.Value >= 1000 and game:GetService("Workspace").NPCs:FindFirstChild("Overhaul").Humanoid.Health == 0 and v.Name == 'Endeavor' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 1999 and lvlplr.Value >= 1600 and game:GetService("Workspace").NPCs:FindFirstChild("Overhaul").Humanoid.Health == 0 and v.Name == 'Endeavor' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
    Label2:Set("Status | Farming : Endeavor".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1600
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 2000
                
-    elseif lvlplr.Value <= 2299 and lvlplr.Value >= 1600 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health ~= 0 and v.Name == 'Hawks' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 2999 and lvlplr.Value >= 2000 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health ~= 0 and v.Name == 'Hawks' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
    Label2:Set("Status | Farming : Hawks".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1200
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 3000
                
-    elseif lvlplr.Value <= 2299 and lvlplr.Value >= 1600 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == "Gigantomachia" and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 2999 and lvlplr.Value >= 2000 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == "Gigantomachia" and v.Humanoid.Health ~= 0 then
                repeat task.wait()
    Label2:Set("Status | Farming : Gigantomachia".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1200
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 3000
                
                
                   end
