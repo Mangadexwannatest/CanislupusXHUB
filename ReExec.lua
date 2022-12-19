@@ -1,4 +1,4 @@
-syn.queue_on_teleport('syn.queue_on_teleport(game:HttpGet("https://pastebin.com/raw/znNZ7DiY"))')
+syn.queue_on_teleport('syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ReExec.lua"))')
 while not game:IsLoaded() do wait() end 
 
 local success = pcall(function()
