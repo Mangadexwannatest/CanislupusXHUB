@@ -311,16 +311,22 @@ spawn(function()
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
 
-        elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
        Label2:Set("Stas | Farming... Tomura")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
    
-        elseif lvlplr.Value <= 599 and lvlplr.Value >= 300 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 599 and lvlplr.Value >= 300 and not game:GetService("Workspace").NPCs:FindFirstChild("Tomura") and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
        Label2:Set("Stas | Farming... Noumu")
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
+   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
+    elseif lvlplr.Value <= 599 and lvlplr.Value >= 300 and game:GetService("Workspace").NPCs:FindFirstChild("Tomura") and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
+               repeat task.wait()
+       Label2:Set("Stas | Farming... Tomura")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
