@@ -1,12 +1,13 @@
-repeat  task.wait() until game:IsLoaded()
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({Name = "CanisLupus X Hub",LoadingTitle = "CanisLupusX",LoadingSubtitle = "By CanisLupusX",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
 Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins = false},
 KeySystem = false,KeySettings = {Title = "Sirius Hub",Subtitle = "Key System",Note = "Join the discord (discord.gg/sirius)",FileName = "SiriusKey",SaveKey = true,GrabKeyFromSite = false,Key = "Hello"}})
 local Tab = Window:CreateTab("Main", 4483362458)
 local Tab2 = Window:CreateTab("Status", 4483362458)
+local Tab3 = Window:CreateTab("Misc", 4483362458)
 local Section = Tab:CreateSection("Main")
 local Section2 = Tab2:CreateSection("Status")
+local Section3 = Tab3:CreateSection("Misc")
 --------------------------------------------// Local Misc \\--------------------------------------------
 
 local questname = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.QuestObjectives.NPCName
@@ -20,7 +21,7 @@ local cash = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Playe
 
 Rayfield:Notify({Title = "Welcome to CanisLupusX Hub",Content = "Thank for user we script!",Duration = 6.5,Image = 4483362458,Actions = {Ignore = {Name = "Okay!",Callback = function()end},},})
 
-local Paragraph = Tab:CreateParagraph({Title = "T I P", Content = "Up only strength stats for ez farm"})
+local Paragraph = Tab:CreateParagraph({Title = "T.I.P", Content = "Up only strength stats for ez farm"})
 local Label1 = Tab:CreateLabel("Time | ")
 local Label2 = Tab:CreateLabel("Stas | ....... ")
 
@@ -39,6 +40,13 @@ end,})
 Tab2:CreateToggle({Name = "Durability",CurrentValue = getgenv().Durability,Flag = "Durability",Callback = function(Value)
   getgenv().AutoDurability = Value
 end,})
+
+
+Tab3:CreateParagraph({Title = "Auto Rejoin ⬇", Content = "if player got kick or have error ui will automatic rejoin"})
+Tab3:CreateToggle({Name = "Auto Rejoin",CurrentValue = getgenv().autorejoin,Flag = "AutoRejoin",Callback = function(Value)
+  getgenv().autorejoin = Value
+end,})
+
 --------------------------------------------// function \\--------------------------------------------
 
 ClickEquipButton=function()for i,v in pairs({"MouseButton1Click", "MouseButton1Down", "Activated"}) do for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.Equipbutton[v])) do v:Fire()end end end
@@ -77,6 +85,21 @@ end)
 
 
 --------------------------------------------// Script Call \\--------------------------------------------
+spawn(function()
+    while wait() do
+        pcall(function()
+            if getgenv().autorejoin then
+                for i,v in pairs(game:GetService("CoreGui").RobloxPromptGui:GetDescendants()) do
+                 if v.Name == 'ErrorPrompt' then
+            game:GetService("TeleportService"):Teleport(1499872953)
+                       end
+                   end
+                end
+            end)
+        end
+    end)
+
+
 
 spawn(function()
     while wait() do
