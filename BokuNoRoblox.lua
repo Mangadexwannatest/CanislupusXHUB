@@ -253,12 +253,7 @@ elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and amoutquest.Text == "15/15"
 elseif lvlplr.Value >= 200 and questname.Text == "Defeat UA Student" then   
 game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
 
-elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and questname.Text ~= "Defeat Villain" and amoutquest.Text == "" then
-game:GetService("ReplicatedStorage").Remotes.Quest.AcceptQuest:FireServer("Hero","Quest")
-elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and amoutquest.Text == "15/15" then
-    game:GetService("ReplicatedStorage").Remotes.Quest.CompleteQuest:FireServer("Hero","Quest")
-elseif lvlplr.Value >= 200 and questname.Text == "Defeat Villain" then
-game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
+
                   end
              end
         end 
@@ -304,32 +299,31 @@ spawn(function()
         for i,v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
         if lvlplr.Value <= 49 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  then
    repeat task.wait()
-       Label2:Set("Stas | Farming....")
+       Label2:Set("Stas | Farming... Criminal")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
 
     elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and string.find(v.Name,"UA Student") and v.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming....")
+       Label2:Set("Stas | Farming... UA Student")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-        
-    elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Villain' and v.Humanoid.Health ~= 0 then
+
+        elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming....")
-   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
-   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
-               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-    
-        elseif lvlplr.Value <= 699 and lvlplr.Value >= 300 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
-               repeat task.wait()
-       Label2:Set("Stas | Farming....")
+       Label2:Set("Stas | Farming... Tomura")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
    
+        elseif lvlplr.Value <= 599 and lvlplr.Value >= 300 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 then
+               repeat task.wait()
+       Label2:Set("Stas | Farming... Noumu")
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
+   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
                   end
             end
          end
