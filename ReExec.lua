@@ -351,6 +351,6 @@ end)
 
 print(success)
 if not success then
-    repeat wait() until game:IsLoaded
+    wait(10)
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end
