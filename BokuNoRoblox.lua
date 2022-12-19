@@ -1,4 +1,4 @@
-repeat  wait() until game:IsLoaded()
+repeat  task.wait() until game:IsLoaded()
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({Name = "CanisLupus X Hub",LoadingTitle = "CanisLupusX",LoadingSubtitle = "By CanisLupusX",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
 Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins = false},
@@ -78,6 +78,18 @@ end)
 
 --------------------------------------------// Script Call \\--------------------------------------------
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Visible == true then
+              for i,v in pairs({"MouseButton1Click", "MouseButton1Down", "Activated"}) do 
+                  for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Center.StartButton[v])) do v:Fire()
+                end 
+             end
+          end
+      end)
+   end
+end)
 
 spawn(function()
     while task.wait() do
@@ -216,7 +228,7 @@ elseif lvlplr.Value >= 201 and questname.Text == "Defeat UA Student" then
 game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
 
 elseif lvlplr.Value <= 300 and lvlplr.Value >= 201 and questname.Text ~= "Defeat Villain" and amoutquest.Text == "" then
-game:GetService("300").Remotes.Quest.AcceptQuest:FireServer("Hero","Quest")
+game:GetService("ReplicatedStorage").Remotes.Quest.AcceptQuest:FireServer("Hero","Quest")
 elseif lvlplr.Value <= 300 and lvlplr.Value >= 201 and amoutquest.Text == "15/15" then
     game:GetService("ReplicatedStorage").Remotes.Quest.CompleteQuest:FireServer("Hero","Quest")
 elseif lvlplr.Value >= 300 and questname.Text == "Defeat Villain" then
