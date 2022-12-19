@@ -35,6 +35,10 @@ local lvlplr = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Pla
 local cash = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Cash
 local plr = game.Players.LocalPlayer.Character
 local quirk = game:GetService("Players").LocalPlayer.PlayerGui.playerhud.playerstats.display.quirk
+local strength = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Strength
+local agility = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Agility
+local durability = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Durability
+
 getgenv().StopFarm = false
 
 --------------------------------------------// E N D \\------------------------------------------------
@@ -49,6 +53,10 @@ local Label2 = Tab:CreateLabel("Status | ....... ")
 Tab:CreateToggle({Name = "Auto Level",CurrentValue = getgenv().Autolvl,Flag = "AutoLvl",Callback = function(Value)
   getgenv().Autolvl = Value
 end,})
+
+local Label3 = Tab2:CreateLabel("Strength : ")
+local Label4 = Tab2:CreateLabel("Agility : ")
+local Label5 = Tab2:CreateLabel("Durability : ")
 
 Tab2:CreateToggle({Name = "Strength",CurrentValue = getgenv().AutoStrenght,Flag = "Strength",Callback = function(Value)
   getgenv().AutoStrenght = Value
@@ -144,6 +152,18 @@ end)
 setreadonly(metatable, true)
 
 --------------------------------------------// Script Call \\--------------------------------------------
+
+spawn(function()
+    while wait() do pcall(function()
+        Label3:Set("Strength : "..strength.Value)
+        Label4:Set("Agility : "..agility.Value)
+        Label5:Set("Durability : "..durability.Value)
+       end)
+    end
+  end)
+
+
+
 
 spawn(function()
     while task.wait() do pcall(function()
