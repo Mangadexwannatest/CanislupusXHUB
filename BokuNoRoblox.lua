@@ -1,5 +1,19 @@
 repeat task.wait() until game:IsLoaded()
    if game.PlaceId == 1499872953 then
+--------------------------------------------// Bypass Error Loading \\--------------------------------------------
+
+spawn(function()
+    while wait(10) do
+        pcall(function()
+            if game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Visible == true and string.find(game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Center.StartButton.Text,"Loading") then
+    game:GetService("TeleportService"):Teleport(1499872953)
+            end
+        end)
+    end
+end)
+
+--------------------------------------------// E        N       D     \\--------------------------------------------
+
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({Name = "CanisLupusX Hub",LoadingTitle = "CanisLupusX Hub",LoadingSubtitle = "ui by Sirius",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
@@ -259,18 +273,6 @@ spawn(function()
       end)
    end
 end)
-
-spawn(function()
-    while wait(10) do
-        pcall(function()
-            if game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Visible == true and string.find(game:GetService("Players").LocalPlayer.PlayerGui.IntroGui.Menu.Center.StartButton.Text,"Loading") then
-    game:GetService("TeleportService"):Teleport(1499872953)
-            end
-        end)
-    end
-end)
-
-
 
 
 spawn(function()
