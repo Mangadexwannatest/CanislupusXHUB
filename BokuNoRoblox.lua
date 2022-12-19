@@ -1,4 +1,6 @@
 repeat task.wait() until game:IsLoaded()
+   if game.PlaceId == 1499872953 then
+
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({Name = "CanisLupus X Hub",LoadingTitle = "CanisLupusX",LoadingSubtitle = "By CanisLupusX",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
 Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins = false},
@@ -89,7 +91,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if getgenv().autorejoin then
+            if getgenv().autorejoin and game.PlaceId == 1499872953 then
                 for i,v in pairs(game:GetService("CoreGui").RobloxPromptGui:GetDescendants()) do
                  if v.Name == 'ErrorPrompt' then
             game:GetService("TeleportService"):Teleport(1499872953)
@@ -118,7 +120,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
         if not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
         Label2:Set("Stas | Filling Code....")
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "InfiniteRaid!"
@@ -162,7 +164,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953  then
             if not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
                 for i,v in pairs(game:GetService("Workspace").InteractionNPCS:GetChildren()) do
     if v.Name == "MeiHatsume" and not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
@@ -184,7 +186,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if cash.Value >= 100000 then
                 if not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
                 Label2:Set("Stas | Buying Weapon ....")
@@ -203,7 +205,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
         SelectPistols()
         if  game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.CenterInfo.Text ~= "★★★" and game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then 
@@ -220,7 +222,7 @@ end)
 spawn(function()
     while wait(1) do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
         if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols")
         and game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
         Label2:Set("Stas | Equiping Weapon ....")
@@ -235,27 +237,27 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
-if lvlplr.Value <= 50 and questname.Text ~= "Defeat Criminal" and amoutquest.Text == "" then
+if lvlplr.Value <= 49 and questname.Text ~= "Defeat Criminal" and amoutquest.Text == "" then
         game:GetService("ReplicatedStorage").Remotes.Quest.AcceptQuest:FireServer("Injured Man","Quest")
-elseif lvlplr.Value <= 50 and amoutquest.Text == "15/15" then
+elseif lvlplr.Value <= 49 and amoutquest.Text == "15/15" then
         game:GetService("ReplicatedStorage").Remotes.Quest.CompleteQuest:FireServer("Injured Man","Quest")
-elseif lvlplr.Value >= 51 and questname.Text == "Defeat Criminal" then
+elseif lvlplr.Value >= 50 and questname.Text == "Defeat Criminal" then
 game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
 
-elseif lvlplr.Value <= 200 and lvlplr.Value >= 51 and questname.Text ~= "Defeat UA Student" and amoutquest.Text == "" then
+elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and questname.Text ~= "Defeat UA Student" and amoutquest.Text == "" then
 game:GetService("ReplicatedStorage").Remotes.Quest.AcceptQuest:FireServer("Suspicious Character","Quest")
-elseif lvlplr.Value <= 200 and lvlplr.Value >= 51 and amoutquest.Text == "15/15" then
+elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and amoutquest.Text == "15/15" then
     game:GetService("ReplicatedStorage").Remotes.Quest.CompleteQuest:FireServer("Suspicious Character","Quest")
-elseif lvlplr.Value >= 201 and questname.Text == "Defeat UA Student" then   
+elseif lvlplr.Value >= 200 and questname.Text == "Defeat UA Student" then   
 game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
 
-elseif lvlplr.Value <= 300 and lvlplr.Value >= 201 and questname.Text ~= "Defeat Villain" and amoutquest.Text == "" then
+elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and questname.Text ~= "Defeat Villain" and amoutquest.Text == "" then
 game:GetService("ReplicatedStorage").Remotes.Quest.AcceptQuest:FireServer("Hero","Quest")
-elseif lvlplr.Value <= 300 and lvlplr.Value >= 201 and amoutquest.Text == "15/15" then
+elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and amoutquest.Text == "15/15" then
     game:GetService("ReplicatedStorage").Remotes.Quest.CompleteQuest:FireServer("Hero","Quest")
-elseif lvlplr.Value >= 300 and questname.Text == "Defeat Villain" then
+elseif lvlplr.Value >= 200 and questname.Text == "Defeat Villain" then
 game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
                   end
              end
@@ -268,7 +270,7 @@ end)
 spawn(function()
     while wait() do 
         pcall(function() 
-             if getgenv().Autolvl then
+             if getgenv().Autolvl and game.PlaceId == 1499872953 then
                  if questname.Text == "" and amoutquest.Text ~= "" then
             game:GetService("ReplicatedStorage").Remotes.Quest.CancelQuest:FireServer("CancelQuestScript")
                  end
@@ -281,7 +283,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
                 
                setfflag("HumanoidParallelRemoveNoPhysics", "false")
@@ -297,30 +299,36 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if getgenv().Autolvl then
+            if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
         for i,v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
-        if lvlplr.Value <= 50 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  then
+        if lvlplr.Value <= 49 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  then
    repeat task.wait()
        Label2:Set("Stas | Farming....")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
 
-    elseif lvlplr.Value <= 200 and lvlplr.Value >= 51 and string.find(v.Name,"UA Student") and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and string.find(v.Name,"UA Student") and v.Humanoid.Health ~= 0 then
                repeat task.wait()
        Label2:Set("Stas | Farming....")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
         
-    elseif lvlplr.Value <= 300 and lvlplr.Value >= 201 and v.Name == 'Villain' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Villain' and v.Humanoid.Health ~= 0 then
                repeat task.wait()
        Label2:Set("Stas | Farming....")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-
+    
+        elseif lvlplr.Value <= 699 and lvlplr.Value >= 300 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
+               repeat task.wait()
+       Label2:Set("Stas | Farming....")
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
+   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
    
                   end
             end
@@ -343,3 +351,5 @@ spawn(function()
 end end) end end)
 
 Rayfield:LoadConfiguration()
+
+end
