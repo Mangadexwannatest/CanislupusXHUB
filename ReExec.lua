@@ -13,3 +13,4 @@ if not success then
     wait(20)
     game:GetService("TeleportService"):Teleport(game.PlaceId)
 end
+--l
