@@ -376,9 +376,9 @@ spawn(function()
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1200
-    elseif lvlplr.Value <= 1199 and lvlplr.Value >= 700 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == 'Awakened Tomura' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 1199 and lvlplr.Value >= 700 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and string.find(v.Name,"All Might") and v.Humanoid.Health ~= 0 then
                repeat task.wait()
-   Label2:Set("Status | Farming : Awakened Tomura".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
+   Label2:Set("Status | Farming : All Might".." | Health : "..v.Humanoid.Health.." / "..v.Humanoid.MaxHealth)
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-180,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl or lvlplr.Value >= 1200
