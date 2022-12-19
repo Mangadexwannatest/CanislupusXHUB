@@ -46,7 +46,7 @@ getgenv().StopFarm = false
 
 Rayfield:Notify({Title = "Welcome to CanisLupusX Hub",Content = "Thank for user we script!",Duration = 6.5,Image = nil,Actions = {Ignore = {Name = "Okay!",Callback = function()end},},})
 
-local Paragraph = Tab:CreateParagraph({Title = "CreateInput", Content = "Up only strength stats for ez farm"})
+local Paragraph = Tab:CreateParagraph({Title = "Tip", Content = "Up only strength stats for ez farm"})
 local Label1 = Tab:CreateLabel("Time | ")
 local Label2 = Tab:CreateLabel("Status | ....... ")
 
