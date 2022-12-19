@@ -1,3 +1,4 @@
+repeat  wait() until game:IsLoaded()
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({Name = "CanisLupus X Hub",LoadingTitle = "CanisLupusX",LoadingSubtitle = "By CanisLupusX",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
 Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins = false},
