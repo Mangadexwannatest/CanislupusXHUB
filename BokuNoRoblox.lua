@@ -52,17 +52,21 @@ Tab3:CreateDropdown({Name = "Select type spin",Options = {"Commons","Uncommons",
 getgenv().TypeSpin = Option
 end,})
 
-Tab3:CreateInput({Name = "Quirk desired 1",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+Tab3:CreateInput({Name = "Quirk Desired 1",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
 getgenv().quirkdesired1 = Text
 end,})
 
-Tab3:CreateInput({Name = "Quirk desired 2",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+Tab3:CreateInput({Name = "Quirk Desired 2",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
 getgenv().quirkdesired2 = Text
 end,})
 
-Tab3:CreateInput({Name = "Quirk desired 3",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+Tab3:CreateInput({Name = "Quirk Desired 3",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
 getgenv().quirkdesired3 = Text
-	end,})
+end,})
+
+Tab3:CreateInput({Name = "Quirk Desired 4",PlaceholderText = "Quirk Name",RemoveTextAfterFocusLost = false,Callback = function(Text)
+getgenv().quirkdesired4 = Text
+end,})
 
 Tab3:CreateToggle({Name = "Auto Spin",CurrentValue = getgenv().autoSpin,Flag = "AutoSpin",Callback = function(Value)
   getgenv().autoSpin = Value
@@ -135,6 +139,8 @@ elseif getgenv().quirkdesired2 == "Half Hot Half Cold" then
     getgenv().quirkdesired2 = "HHHC"
 elseif getgenv().quirkdesired3 == "Half Hot Half Cold" then
     getgenv().quirkdesired3 = "HHHC" 
+elseif getgenv().quirkdesired4 == "Half Hot Half Cold" then
+    getgenv().quirkdesired4 = "HHHC"
         end
      end)
    end
@@ -148,6 +154,8 @@ elseif getgenv().quirkdesired2 == "Tomura All For One" then
     getgenv().quirkdesired2 = "Tomura's AFO"
 elseif getgenv().quirkdesired3 == "Tomura All For One" then
     getgenv().quirkdesired3 = "Tomura's AFO" 
+elseif getgenv().quirkdesired4 == "Tomura All For One" then
+    getgenv().quirkdesired4 = "Tomura's AFO"
         end
      end)
    end
@@ -161,6 +169,8 @@ elseif getgenv().quirkdesired2 == "Deku's One For All" then
     getgenv().quirkdesired2 = "Deku's OFA"
 elseif getgenv().quirkdesired3 == "Deku's One For All" then
     getgenv().quirkdesired3 = "Deku's OFA" 
+elseif getgenv().quirkdesired4 == "Deku's One For All" then
+    getgenv().quirkdesired4 = "Deku's OFA"
         end
      end)
    end
@@ -174,6 +184,8 @@ elseif getgenv().quirkdesired2 == "All For One" then
     getgenv().quirkdesired2 = "AFO"
 elseif getgenv().quirkdesired3 == "All For One" then
     getgenv().quirkdesired3 = "AFO" 
+elseif getgenv().quirkdesired4 == "All For One" then
+    getgenv().quirkdesired4 = "AFO"
         end
      end)
    end
@@ -187,6 +199,8 @@ elseif getgenv().quirkdesired2 == "One For All" then
     getgenv().quirkdesired2 = "OFA"
 elseif getgenv().quirkdesired3 == "One For All" then
     getgenv().quirkdesired3 = "OFA" 
+elseif getgenv().quirkdesired4 == "One For All" then
+    getgenv().quirkdesired4 = "OFA"
         end
      end)
    end
