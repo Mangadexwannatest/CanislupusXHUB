@@ -2,9 +2,9 @@ repeat task.wait() until game:IsLoaded()
    if game.PlaceId == 1499872953 then
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
-local Window = Rayfield:CreateWindow({Name = "CanisLupus X Hub",LoadingTitle = "CanisLupusX",LoadingSubtitle = "By CanisLupusX",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
-Discord = {Enabled = true,Invite = "https://discord.gg/GCtRvfNp",RememberJoins = false},
-KeySystem = false,KeySettings = {Title = "Sirius Hub",Subtitle = "Key System",Note = "Join the discord (discord.gg/sirius)",FileName = "SiriusKey",SaveKey = true,GrabKeyFromSite = false,Key = "Hello"}})
+local Window = Rayfield:CreateWindow({Name = "CanisLupusX Hub",LoadingTitle = "CanisLupusX Hub",LoadingSubtitle = "ui by Sirius",ConfigurationSaving = {Enabled = true,FolderName = "CanisLupusX",FileName = "BoKuNoRoblox_"..game.Players.LocalPlayer.Name},
+Discord = {Enabled = true,Invite = "https://discord.gg/CswHQPHu",RememberJoins = true},
+KeySystem = true,KeySettings = {Title = "CanisLupusX Hub",Subtitle = "Key System",Note = "(user at your own risk) key in https://discord.gg/CswHQPHu",FileName = "CanisLupusX Key",SaveKey = true,GrabKeyFromSite = false,Key = "CanisLupusX"}})
 local Tab = Window:CreateTab("Main", 4483362458)
 local Tab2 = Window:CreateTab("Status", 4483362458)
 local Tab3 = Window:CreateTab("Spin", 4483362458)
