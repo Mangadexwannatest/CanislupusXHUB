@@ -17,7 +17,7 @@ local questname = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.Ques
 local amoutquest = game:GetService("Players").LocalPlayer.PlayerGui.QuestGui.QuestObjectives.KilledAmount
 local lvlplr = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Level
 local cash = game:GetService("Workspace").S1c2R5i66p5t5s51.PlayerData[game.Players.LocalPlayer.Name].Cash
-
+local plr = game.Players.LocalPlayer.Character
 
 --------------------------------------------// E N D \\------------------------------------------------
 
@@ -85,7 +85,21 @@ spawn(function()
    end
 end)
 
+local metatable = getrawmetatable(game)
+local nc = metatable.namecall
 
+setreadonly(metatable, false)
+
+metatable.namecall = newcclosure(function(self, ...)
+        local args = {...} 
+        local name = self
+    if getnamecallmethod() == "FireServer" and tostring(name) == "ExploitKick" then
+            return nil
+    end
+    return nc(self,...)
+end)
+
+setreadonly(metatable, true)
 
 --------------------------------------------// Script Call \\--------------------------------------------
 spawn(function()
@@ -122,38 +136,38 @@ spawn(function()
         pcall(function()
             if getgenv().Autolvl and game.PlaceId == 1499872953 then
         if not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ....")
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "InfiniteRaid!"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... InfiniteRaid")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... InfiniteRaid")
         wait(11)
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "ThanksFor570k!"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... ThanksFor570k")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... ThanksFor570k")
         wait(11)
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "echoeyesonYT5K"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... echoeyesonYT5K")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... echoeyesonYT5K")
         wait(11)
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "Sc4rySkel3ton"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... Sc4rySkel3ton")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... Sc4rySkel3ton")
         wait(11)
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "newu1s"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... newu1s")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... newu1s")
         wait(11)
         game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.CodesMenu.EnterCode.Text = "1MFAVS"
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... 1MFAVS")
         ClickCode()
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | Filling Code ... 1MFAVS")
         wait(11)
-        Label2:Set("Stas | Filling Code....")
+        Label2:Set("Stas | All codes have been used")
                   end
             end
         end)
@@ -189,7 +203,7 @@ spawn(function()
             if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if cash.Value >= 100000 then
                 if not game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
-                Label2:Set("Stas | Buying Weapon ....")
+                Label2:Set("Stas | Buying Weapon .... Pistol")
                 SelectPistolsToBuy()
                 wait(2.5)
                 ConfirmBuy()
@@ -225,7 +239,7 @@ spawn(function()
             if getgenv().Autolvl and game.PlaceId == 1499872953 then
         if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols")
         and game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.WeaponsMenu.ScrollingFrame:FindFirstChild("Pistol") then
-        Label2:Set("Stas | Equiping Weapon ....")
+        Label2:Set("Stas | Equiping Weapon .... Pistol")
         SelectPistols()
         ClickEquipButton()
                 end
@@ -297,51 +311,64 @@ spawn(function()
             if getgenv().Autolvl and game.PlaceId == 1499872953 then
             if string.find(game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text,"Pistols") or game:GetService("Players").LocalPlayer.PlayerGui.MainMenus.Inventory.WepName.Text == "Pistol" then
         for i,v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
-        if lvlplr.Value <= 49 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  then
+        if lvlplr.Value <= 49 and v.Name == 'Criminal' and v.Humanoid.Health ~= 0  and plr.Humanoid.Health ~= 0 then
    repeat task.wait()
-       Label2:Set("Stas | Farming... Criminal")
+       Label2:Set("Stas | Farming ... Criminal")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
 
-    elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and string.find(v.Name,"UA Student") and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 199 and lvlplr.Value >= 50 and string.find(v.Name,"UA Student") and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... UA Student")
+       Label2:Set("Stas | Farming ... UA Student")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
    until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
 
-    elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 299 and lvlplr.Value >= 200 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... Tomura")
+       Label2:Set("Stas | Farming ... Tomura")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
    
-    elseif lvlplr.Value <= 499 and lvlplr.Value >= 300 and game:GetService("Workspace").NPCs:FindFirstChild("Tomura").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 499 and lvlplr.Value >= 300 and game:GetService("Workspace").NPCs:FindFirstChild("Tomura").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0  and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... Noumu")
+       Label2:Set("Stas | Farming ... Noumu")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-    elseif lvlplr.Value <= 499 and lvlplr.Value >= 300 and game:GetService("Workspace").NPCs:FindFirstChild("Tomura").Humanoid.Health ~= 0 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 499 and lvlplr.Value >= 300 and game:GetService("Workspace").NPCs:FindFirstChild("Tomura").Humanoid.Health ~= 0 and v.Name == 'Tomura' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... Tomura")
+       Label2:Set("Stas | Farming ... Tomura")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-    elseif lvlplr.Value <= 699 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health ~= 0 and v.Name == 'Hawks' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 699 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health ~= 0 and v.Name == 'Hawks' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... Hawks")
+       Label2:Set("Stas | Farming ... Hawks")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
-    elseif lvlplr.Value <= 699 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 then
+    elseif lvlplr.Value <= 699 and lvlplr.Value >= 500 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == 'Noumu' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
                repeat task.wait()
-       Label2:Set("Stas | Farming... Noumu")
+       Label2:Set("Stas | Farming ... Noumu")
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
    game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
                until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
+    elseif lvlplr.Value <= 899 and lvlplr.Value >= 700 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health ~= 0 and v.Name == 'Hawks' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
+               repeat task.wait()
+       Label2:Set("Stas | Farming ... Hawks")
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
+   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl
+    elseif lvlplr.Value <= 899 and lvlplr.Value >= 700 and game:GetService("Workspace").NPCs:FindFirstChild("Hawks").Humanoid.Health == 0 and v.Name == 'Awakened Tomura' and v.Humanoid.Health ~= 0 and plr.Humanoid.Health ~= 0 then
+               repeat task.wait()
+       Label2:Set("Stas | Farming ... Awakened Tomura")
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,-200,0) * CFrame.Angles(math.rad(90),0,0)
+   game:GetService("Players").LocalPlayer.Character.Main.Swing:FireServer(v.HumanoidRootPart.CFrame)
+               until v.Humanoid.Health <= 0 or v.Humanoid.Health == 0 or not getgenv().Autolvl           
+               
                   end
             end
          end
