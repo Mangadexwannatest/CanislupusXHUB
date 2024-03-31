@@ -5,11 +5,13 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/Can
 while not game:IsLoaded() do wait() end 
 
 local success = pcall(function()
-    print("Reexec Working")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceReleaseTest.lua"))()
+print("Re Execute")
 end)
 
 
 if not success then
     wait(20)
-    print("Reexec Working")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceReleaseTest.lua"))()
+  print("Re Execute")
 end
