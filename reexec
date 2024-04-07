@@ -12,6 +12,6 @@ end)
 
 if not success then
     wait(20)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/flag123te/main/111"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/reexec"))()
   print("Re Execute")
 end
