@@ -1589,7 +1589,7 @@ end))
                 if  getgenv().SpawnRare and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket")  then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket"))
                 end
-                if  getgenv().SpawnCommon and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket")  then
+                if  getgenv().SpawnCommon and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket")  then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket"))
                 end
     
