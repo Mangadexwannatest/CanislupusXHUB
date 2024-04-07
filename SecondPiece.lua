@@ -1549,7 +1549,7 @@ end))
 
 
     coroutine.resume(coroutine.create(function()
-        while wait() do pcall(function ()
+        while task.wait() do pcall(function ()
         if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
                 for _,k in pairs(game.Players.LocalPlayer:GetChildren()) do 
