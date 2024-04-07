@@ -636,21 +636,21 @@ end))
 
 coroutine.resume(coroutine.create(function()
 	while task.wait() do pcall(function ()
-		if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InPorTal and not getgenv().InBossHunt then
+		if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InPorTal then
 			for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
-				if getgenv().Common and v.Name == "1" and not getgenv().InPorTal and not getgenv().InBossHunt then
+				if getgenv().Common and v.Name == "1" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         getgenv().StopHealthDetech = true
 						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                         getgenv().EnterNow = true
 					   end
-                if getgenv().Uncommon and v.Name == "2" and not getgenv().InPorTal and not getgenv().InBossHunt then
+                if getgenv().Uncommon and v.Name == "2" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         getgenv().StopHealthDetech = true
 						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                         getgenv().EnterNow = true
 					   end
-                if getgenv().Legendary and v.Name == "3" and not getgenv().InPorTal and not getgenv().InBossHunt then
+                if getgenv().Legendary and v.Name == "3" and not getgenv().InPorTal then
                         getgenv().STOP = true
                         getgenv().StopHealthDetech = true
 						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
@@ -665,9 +665,9 @@ coroutine.resume(coroutine.create(function()
 
   coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InBossHunt then
+        if Options.AutoPortal.Value and game.PlaceId == 15049111150  then
             for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
-                if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil and not getgenv().InBossHunt then
+                if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
                     local clickThis = v.Parent.Parent.ProximityPrompt
                     if getgenv().EnterNow and not getgenv().InBossHunt then
                         repeat task.wait()
