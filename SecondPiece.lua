@@ -1555,24 +1555,12 @@ end))
                 for _,k in pairs(game.Players.LocalPlayer:GetChildren()) do 
                 if getgenv().Legendary and string.find(v.Name,"Legendary") then
                 getgenv().SpawnLegend = true getgenv().SpawnLegendDetech = true getgenv().NoEquip = true
-                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") 
-                and not getgenv().STOPEquipTicket then
-                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Legendary] Portal Summon Ticket")
-                end
                 end
                 if getgenv().Uncommon and string.find(v.Name,"Rare") and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech then
                 getgenv().SpawnRare = true getgenv().SpawnRareDetech = true getgenv().NoEquip = true
-                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") 
-                and not getgenv().STOPEquipTicket then
-                   game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Rare] Portal Summon Ticket")
-                end
                 end
                 if getgenv().Common and string.find(v.Name,"Common") and not getgenv().SpawnLegend and not getgenv().SpawnRare and not getgenv().SpawnLegendDetech and not getgenv().SpawnRareDetech then
                 getgenv().SpawnCommon = true getgenv().NoEquip = true 
-                if game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket") == nil and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") 
-                and not getgenv().STOPEquipTicket then
-                    game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Common] Portal Summon Ticket")
-                end
                 end
                 if not getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech then 
                     getgenv().SpawnLegend = false
@@ -1582,35 +1570,26 @@ end))
                     getgenv().SpawnRare = false
                     getgenv().SpawnRareDetech =false
                 end
-
-                if  getgenv().SpawnLegend and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket")  then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket"))
-                end
-                if  getgenv().SpawnRare and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket")  then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket"))
-                end
-                if  getgenv().SpawnCommon and not game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket")  then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket"))
-                end
-    
+                
                 if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
-                getgenv().Legendary and getgenv().SpawnLegend and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow 
+                getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech
+                and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 3] Summon Ticket") and not getgenv().EnterNow 
                 and not getgenv().STOPUserTicket then
-                    getgenv().STOPEquipTicket = true
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 3] Summon Ticket")
                     wait(1)
                 end
                 if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
-                getgenv().Uncommon and getgenv().SpawnRare and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow 
+                getgenv().Uncommon and getgenv().SpawnRare and getgenv().SpawnRareDetech
+                and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech
+                and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 2] Summon Ticket") and not getgenv().EnterNow 
                 and not getgenv().STOPUserTicket then
-                    getgenv().STOPEquipTicket = true
-                    game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 2] Summon Ticket")
+                game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 2] Summon Ticket")
                     wait(1)
                 end
                 if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") == nil and
-                getgenv().Common and getgenv().SpawnCommon and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow 
+                getgenv().Common and getgenv().SpawnCommon and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech and not getgenv().SpawnRare and not getgenv().SpawnRareDetech 
+                and game.Players.LocalPlayer.Character:FindFirstChild("[Tier 1] Summon Ticket") and not getgenv().EnterNow 
                 and not getgenv().STOPUserTicket then
-                    getgenv().STOPEquipTicket = true
                     game:GetService("ReplicatedStorage").Remotes.UseItemFromClient:FireServer("[Tier 1] Summon Ticket")
                     wait(1)
                 end   
@@ -1633,6 +1612,47 @@ end))
     end)
     end
     end))
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+        if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
+            
+            if  getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech 
+            and game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket")  then
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket"))
+                getgenv().JustEquipTicket3 = true
+            end
+            if  getgenv().Uncommon and getgenv().SpawnRare and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech
+            and game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket")  then
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket"))
+                getgenv().JustEquipTicket2 = true
+            end
+            if  getgenv().Common and getgenv().SpawnCommon and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech and not getgenv().SpawnRare and not getgenv().SpawnRareDetech
+            and game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket")  then
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket"))
+                getgenv().JustEquipTicket1 = true
+            end
+
+            -- 2
+            if getgenv().SpawnLegend and getgenv().SpawnLegendDetech 
+            and not game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 3] Summon Ticket")
+            and not getgenv().JustEquipTicket3 then
+              game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Legendary] Portal Summon Ticket")
+           end
+           if getgenv().SpawnRare and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech 
+           and not game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 2] Summon Ticket")
+           and not getgenv().JustEquipTicket2 then
+             game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Rare] Portal Summon Ticket")
+          end
+          if getgenv().SpawnCommon and not getgenv().SpawnLegend and not getgenv().SpawnLegendDetech and not getgenv().SpawnRare and not getgenv().SpawnRareDetech
+            and not game.Players.LocalPlayer.Backpack:FindFirstChild("[Tier 1] Summon Ticket")
+          and not getgenv().JustEquipTicket1 then
+             game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Common] Portal Summon Ticket")
+         end
+        end
+    end)
+end
+end))
 
     coroutine.resume(coroutine.create(function()
         pcall(function ()
