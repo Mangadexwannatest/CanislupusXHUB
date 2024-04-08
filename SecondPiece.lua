@@ -894,25 +894,64 @@ coroutine.resume(coroutine.create(function()
            end)
         end
     end))
-
+    
     coroutine.resume(coroutine.create(function()
-        while task.wait() do pcall(function ()
-            if Options.AutoBountyHunter.Value then
-                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
-                    if v.Name == "NotifyText" then
-                        if string.find(v.Text.Text,"on cooldown") or string.find(v.Text.Text,"gotten the reward") then
-                            getgenv().QuestHuntOnCoolDown = true
-                            getgenv().InBossHunt = false
-                            wait(30.5)
-                            getgenv().QuestHuntOnCoolDown = false
-
-                        end
-                    end
-                end
-              end
-           end)  
+        pcall(function ()
+    game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
+        if Options.AutoBountyHunter.Value then
+        if v.Name == "NotifyText" then
+            if string.find(v.Text.Text,"on cooldown") or string.find(v.Text.Text,"gotten the reward") then
+                getgenv().QuestHuntOnCoolDown = true
+                getgenv().InBossHunt = false
+                wait(30.5)
+                getgenv().QuestHuntOnCoolDown = false
+               end
+            if string.find(v.Text.Text,"gotten the reward") and Options.AutoWebhookBountyTask.Value then
+                wait(1)
+                local timeInfo = os.date("*t")
+                BBody = game:GetService("HttpService"):JSONEncode({
+                      content = nil,
+                      embeds = {{
+                          ["author"] = {
+                              ["name"] = "CrazyDay",
+                              ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                          },
+                          ["title"] = "Second Piece", 
+                          ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                          ["footer"] = {
+                              ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                              ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                         
+                          },
+                          ["color"] = tonumber(0xFFD700),
+                          ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                          ["fields"] = {
+                          
+                                         {
+                                ["name"] = "Quest Hunter Reward",
+                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..v.Text.Text,
+                                ["inline"] = false
+                                  
+                              },
+                            
+                          }
+                          }}
+                      })
+                  local response = syn.request({
+                  Url = Options.WebhookLink.Value,
+                  Method = "POST",
+                  Headers = {
+                      ["Content-Type"] = "application/json"
+                  },
+                  Body = BBody
+                })    
+            
+             end
+            end
         end
-    end))
+    end)
+end)
+end))
     
     local TimeChecker = 0
 
