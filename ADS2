@@ -273,7 +273,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/60,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -309,12 +309,12 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
-    repeat task.wait(.35)
+    repeat task.wait(.45)
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-    repeat task.wait(.35)
+    repeat task.wait(.45)
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value
@@ -380,14 +380,14 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,20,side)
+                    local side = math.clamp(3.5,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,40,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,75)
-                        Sizeto = v.Size + Vector3.new(side,side,75)
+                        a.Size = Vector3.new(0,0,30)
+                        Sizeto = v.Size + Vector3.new(side,side,30)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(.85),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(1),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -395,6 +395,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
+                    wait(1)
                     a:Destroy()
                 end
             end)
@@ -403,7 +404,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -420,12 +421,13 @@ coroutine.resume(coroutine.create(function()
         end
 end)
 end
-end))
+end))--]]
 
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
+repeat wait() until Options.AutoFarmAndStart.Value
         game.workspace:WaitForChild("GameMap")
 for i,v in next,game.workspace.GameMap:GetDescendants() do 
     if v:IsA("BasePart") then
@@ -435,7 +437,7 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))--]]
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
@@ -447,7 +449,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.05,0)
     end
 end)
 end
