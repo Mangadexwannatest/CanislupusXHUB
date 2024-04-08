@@ -273,7 +273,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -309,12 +309,12 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
-    repeat wait(.25)
+    repeat task.wait(.35)
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-    repeat wait(.25)
+    repeat task.wait(.35)
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value
@@ -381,11 +381,11 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,45,side)
+                    local Sizeto = v.Size + Vector3.new(side,20,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        a.Size = Vector3.new(0,0,75)
+                        Sizeto = v.Size + Vector3.new(side,side,75)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(.85),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
@@ -447,7 +447,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
     end
 end)
 end
