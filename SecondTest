@@ -920,6 +920,8 @@ coroutine.resume(coroutine.create(function()
                     if Options.AutoWebhookBountyTask.Value then
                     wait(1)
                     local timeInfo = os.date("*t")
+                    local Split_V = string.split(v.Text.Text, ">")
+                    local Split_A = string.split(Split_V[2], "<")
                     BBody = game:GetService("HttpService"):JSONEncode({
                           content = nil,
                           embeds = {{
@@ -940,7 +942,7 @@ coroutine.resume(coroutine.create(function()
                               
                                              {
                                     ["name"] = "Quest Hunter Reward",
-                                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..v.Text.Text,
+                                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..Split_A[1],
                                     ["inline"] = false
                                       
                                   },
@@ -1732,13 +1734,19 @@ end))
             local queue_teleport = queueonteleport or queue_on_teleport
             local script = 
             [[
+                repeat wait() until game:IsLoaded()
+                repeat wait() until Options.AutoExecuteScript.Value
+                if Options.AutoExecuteScript.Value then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua'))()
+                end
             ]]
             if (queue_teleport) and Options.AutoExecuteScript.Value then
                 queue_teleport(script)
              end
              local success = pcall(function()
+                if Options.AutoExecuteScript.Value then
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua"))()
+                end
              end)
              
              print(success)
