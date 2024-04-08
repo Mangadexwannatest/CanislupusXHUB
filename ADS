@@ -308,22 +308,9 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
-    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if v:IsA("BasePart") then
-            if not v.CanCollide then
-                Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
-            end
-        end
-    end
-    
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if v:IsA("BasePart") then
-            if not v.CanCollide then
-    Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
-end
-end
-end
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 end
 end
 end)
@@ -380,29 +367,13 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("CrazyDay_NO") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "CrazyDay_NO"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
-elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.3,0)
-    end
-end)
-end
-end))
-
-coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.25,0,10)
+                    local side = math.clamp(3,0,10)
                     local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
@@ -429,15 +400,10 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                for _,k in next, workspace.Folders.Debris:GetChildren() do
-                if v:IsA("BasePart") and k.Name == "DodgePart" then
-                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - k.Position).magnitude
-                    if mag <= 10 then
+                if v:IsA("BasePart") then
                     v.CanCollide = true
-                end
             end
         end
-    end
         elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
@@ -450,7 +416,7 @@ end
 end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
         game.workspace:WaitForChild("GameMap")
@@ -462,7 +428,7 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))
+end))--]]
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
