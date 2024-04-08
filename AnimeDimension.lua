@@ -185,6 +185,7 @@ a.__namecall = newcclosure(function(self,...)
     end
     if arg[1] == "TeleportPlayers" and game.PlaceId == 6938803436 then
         getgenv().JustTeleport = true
+        getgenv().STOP_Creat_Teleport = true
         print("Teleport Can : True")
     end
     return backs(self,...)
@@ -228,7 +229,7 @@ end
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if not getgenv().JustCreatRoom and game.PlaceId == 6938803436 and not getgenv().JustTeleport then
+            if not getgenv().JustCreatRoom and game.PlaceId == 6938803436 and not getgenv().STOP_Creat_Teleport and not getgenv().JustTeleport then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -242,15 +243,12 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
                 print("Creat : "..Options.SelectDimension.Value)
             end
-            if getgenv().JustCreatRoom and game.PlaceId == 6938803436  and getgenv().JustTeleport then
+            if getgenv().JustCreatRoom and game.PlaceId == 6938803436 and not getgenv().STOP_Creat_Teleport and not getgenv().JustTeleport then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
                 print("Start Teleport")
             end
             end
        end)
-       if getgenv().JustCreatRoom and getgenv().JustTeleport then
-           break
-       end
      end
 end))
 
