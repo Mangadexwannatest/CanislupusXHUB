@@ -53,6 +53,13 @@ do
         Default = {nil},
     })
 
+    local AssistSelect = Tabs.Main:AddDropdown("SelectAssist", {
+        Title = "Select Assist",
+        Values = {"Assist 1","Assist 2","Fruit"},
+        Multi = true,
+        Default = {nil},
+    })
+
     SkillSelect:OnChanged(function(Value)
         local Values = {}
         for Value, State in next, Value do
@@ -92,9 +99,37 @@ do
         end
     end)
 
+    AssistSelect:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        if table.find(Values,"Assist 1") and not getgenv().Assist_1 then
+            getgenv().Assist_1 = true
+        end
+        if table.find(Values,"Assist 2") and not getgenv().Assist_2 then
+            getgenv().Assist_2 = true
+        end
+        if table.find(Values,"Fruit") and not getgenv().Assist_Fruit then
+            getgenv().Assist_Fruit = true
+        end
+
+        if not table.find(Values,"Assist 1") and getgenv().Assist_1 then
+            getgenv().Assist_1 = false
+        end
+        if not table.find(Values,"Assist 2") and getgenv().Assist_2 then
+            getgenv().Assist_2 = false
+        end
+        if not table.find(Values,"Fruit") and getgenv().Assist_Fruit then
+            getgenv().Assist_Fruit = false
+        end
+
+    end)
+
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = false })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
+    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = false })
 
 
 end -- End of Do
@@ -299,13 +334,33 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
+    while wait(.55) do pcall(function ()
+        for i, v in next, workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+            if getgenv().Assist_1 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+            end  
+            if getgenv().Assist_2 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
+            end  
+            if getgenv().Assist_Fruit and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+            end  
+        end
+    end
+end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
 if not game.workspace:FindFirstChild("CrazyDay_NO") then
     local NO_CLIP_PART = Instance.new("Part",workspace)
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
      game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.35,0)
@@ -361,6 +416,24 @@ coroutine.resume(coroutine.create(function()
         end
 end)
 end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+        while wait(1) do
+            pcall(function()
+                if Options.AutoRetry.Value then
+                    if game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Visible == true then
+                        wait(1)
+                        if getgenv().RaidOpened and getgenv().StopReplay then
+                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text ~= "1" then
+                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text == "1" then
+                            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("RetryDungeon")
+                        end
+                    end
+                end
+            end)
+        end
 end))
 
 end -- End Of Do
