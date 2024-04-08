@@ -1527,6 +1527,11 @@ end))
                             getgenv().AlrBuy = true
                             getgenv().InMerchant = false
                         end
+                        if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                            wait(10)
+                            getgenv().AlrBuy = true
+                            getgenv().InMerchant = false
+                        end
                 end
             end
         end)
