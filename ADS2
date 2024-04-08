@@ -332,9 +332,12 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
     if part.Name == "DodgePart" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
+        repeat 
+            wait(0.45)
+        until not part.Parent
+        getgenv().STOP_Farm = false
      end
 end)
-getgenv().STOP_Farm = false
 end)
 end))
 
@@ -418,11 +421,11 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(3.5,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,500,side)
+                    local Sizeto = v.Size + Vector3.new(side,1000,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        a.Size = Vector3.new(0,0,1000)
+                        Sizeto = v.Size + Vector3.new(side,side,1000)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.55),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
