@@ -325,7 +325,7 @@ coroutine.resume(coroutine.create(function()
                     local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
 and mag <= 7.5 then
-    Tween(mag.CFrame * CFrame.new(mag.Size.Z,0,0)  )
+    Tween(mag.CFrame * CFrame.new(mag.Size.Z,0,mag.Size.X) + Vector3.new(2.75,0,10)  )
 elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
 and mag >= 12.5 then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
