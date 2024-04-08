@@ -273,7 +273,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/50,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/80,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -329,46 +329,57 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
     if part.Name == "DodgePart" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
-        wait(2)
+        repeat wait() until not part.Parent
+        wait(.25)
         getgenv().STOP_Farm = false
      end
 end)
 end)
 end))
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.LocalPlayer.Character.HumanoidRootPart.TouchEnded:Connect(function(part)
-    if part.Name == "DodgePart" and getgenv().STOP_Farm then
+    if part.Name == "DodgePart" and not getgenv().STOP_Farm then
+        getgenv().STOP_Farm = true
+        repeat wait() until not part.Parent
+        wait(.25)
         getgenv().STOP_Farm = false
     end
 end)
 end)
-end))--]]
+end))
 
 
 coroutine.resume(coroutine.create(function()
-    while wait(.355) do pcall(function ()
+    while wait() do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Skill_1 and mag <= 30 then
+                wait(.2)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Skill_2 and mag <= 30 then
+                wait(.2)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Skill_3 and mag <= 30 then
+                wait(.35)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
             end  
             if getgenv().Skill_4 and mag <= 30 then
+                wait(.45)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
             end  
             if getgenv().Skill_5 and mag <= 30 then
+                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
             if mag <= 10 then
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+                task.wait(.1)
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
             end
         end
     end
@@ -382,12 +393,15 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Assist_1 and mag <= 30 then
+                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Assist_2 and mag <= 30 then
+                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Assist_Fruit and mag <= 30 then
+                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
         end
@@ -418,7 +432,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    wait(1.5)
+                    wait(1)
                     a:Destroy()
                 end
             end)
