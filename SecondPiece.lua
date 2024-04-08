@@ -900,7 +900,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoBountyHunter.Value then
                 for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
                     if v.Name == "NotifyText" then
-                        if string.find(v.Text.Text,"on cooldown") then
+                        if string.find(v.Text.Text,"on cooldown") or string.find(v.Text.Text,"gotten the reward") then
                             getgenv().QuestHuntOnCoolDown = true
                             getgenv().InBossHunt = false
                             wait(30.5)
