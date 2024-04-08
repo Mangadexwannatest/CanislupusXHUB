@@ -272,7 +272,7 @@ local function getClosestDodgePart()
 end
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150, Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/250, Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -323,9 +323,12 @@ coroutine.resume(coroutine.create(function()
             for i, v in next, workspace.Folders.Debris:GetChildren() do
                 if v.Name == "DodgePart" then
                     local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+                    if mag <= 10 then
+                        mag = SK_BDD
+                    end
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
 and mag <= 7.5 then
-    Tween(mag.CFrame * CFrame.new(mag.Size.Z,0,mag.Size.X) + Vector3.new(2.75,0,10)  )
+    Tween(SK_BDD.CFrame * CFrame.new(SK_BDD.Size.Z,0,SK_BDD.Size.X) + Vector3.new(2.75,0,10)  )
 elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
 and mag >= 12.5 then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
