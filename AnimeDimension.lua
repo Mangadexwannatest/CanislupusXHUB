@@ -46,6 +46,52 @@ do
         Default = 1,
     })
 
+    local SkillSelect = Tabs.Main:AddDropdown("SelectSkill", {
+        Title = "Select Skill",
+        Values = {"1","2","3","4","5"},
+        Multi = true,
+        Default = {nil},
+    })
+
+    SkillSelect:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        if table.find(Values,"1") and not getgenv().Skill_1 then
+            getgenv().Skill_1 = true
+        end
+        if table.find(Values,"2") and not getgenv().Skill_2 then
+            getgenv().Skill_2 = true
+        end
+        if table.find(Values,"3") and not getgenv().Skill_3 then
+            getgenv().Skill_3 = true
+        end
+        if table.find(Values,"4") and not getgenv().Skill_4 then
+            getgenv().Skill_4 = true
+        end
+        if table.find(Values,"5") and not getgenv().Skill_5 then
+            getgenv().Skill_5 = true
+        end
+
+
+        if not table.find(Values,"1") and getgenv().Skill_1 then
+            getgenv().Skill_1 = false
+        end
+        if not table.find(Values,"2") and getgenv().Skill_2 then
+            getgenv().Skill_2 = false
+        end
+        if not table.find(Values,"3") and getgenv().Skill_3 then
+            getgenv().Skill_3 = false
+        end
+        if not table.find(Values,"4") and getgenv().Skill_4 then
+            getgenv().Skill_4 = false
+        end
+        if not table.find(Values,"5") and getgenv().Skill_5 then
+            getgenv().Skill_5 = false
+        end
+    end)
+
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = false })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
@@ -182,7 +228,7 @@ end
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if not getgenv().JustCreatRoom and game.PlaceId == 6938803436 then
+            if not getgenv().JustCreatRoom and game.PlaceId == 6938803436 and not getgenv().JustTeleport then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -196,12 +242,15 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
                 print("Creat : "..Options.SelectDimension.Value)
             end
-            if getgenv().JustCreatRoom and game.PlaceId == 6938803436 then
+            if getgenv().JustCreatRoom and game.PlaceId == 6938803436  and getgenv().JustTeleport then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
                 print("Start Teleport")
             end
             end
        end)
+       if getgenv().JustCreatRoom and getgenv().JustTeleport then
+           break
+       end
      end
 end))
 
@@ -223,8 +272,8 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
 for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
     if v:IsA("BasePart") then
-        if not v.CanCollide then
-        v.CanCollide = true
+        if v.CanCollide then
+        v.CanCollide = false
            end
            end
            end
@@ -232,5 +281,33 @@ for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
        end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait(.355) do pcall(function ()
+        for i, v in next, workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+            if getgenv().Skill_1 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+            end  
+            if getgenv().Skill_2 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
+            end  
+            if getgenv().Skill_3 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
+            end  
+            if getgenv().Skill_4 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
+            end  
+            if getgenv().Skill_5 and mag <= 10 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
+            end
+            if mag <= 15 then
+                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+            end
+        end
+    end
+end)
+end
+end))
 
 end -- End Of Do
