@@ -318,6 +318,17 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+local BossFrame = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame
+if BossFrame.Visible and BossFrame.BossName.Text == "Speed" then
+getgenv().Dist = 3.5
+elseif BossFrame.Visible and BossFrame.BossName.Text == "Dominator" then
+getgenv().Dist = 5
+end
+end)
+end
+end))
 
 
 coroutine.resume(coroutine.create(function()
@@ -327,7 +338,7 @@ coroutine.resume(coroutine.create(function()
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
     repeat wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-4.55,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-getgenv().Dist,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 
@@ -520,10 +531,10 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
+    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Size = Vector3.new(12.5,-3,12.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
     end
 end)
 end
