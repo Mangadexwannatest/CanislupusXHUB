@@ -309,12 +309,12 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
-    repeat task.wait(.35)
+    repeat task.wait(.55)
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-    repeat task.wait(.35)
+    repeat task.wait(.55)
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value
@@ -381,7 +381,7 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,20,side)
+                    local Sizeto = v.Size + Vector3.new(side,55,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,75)
@@ -423,7 +423,7 @@ end
 end))
 
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
         game.workspace:WaitForChild("GameMap")
@@ -435,7 +435,7 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))--]]
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
