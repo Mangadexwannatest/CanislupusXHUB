@@ -272,7 +272,7 @@ local function getClosestDodgePart()
 end
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/0.5,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -429,10 +429,15 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v:IsA("BasePart") then
+                for _,k in next, workspace.Folders.Debris:GetChildren() do
+                if v:IsA("BasePart") and k.Name == "DodgePart" then
+                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+                    if mag <= 10 then
                     v.CanCollide = true
                 end
             end
+        end
+    end
         elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
