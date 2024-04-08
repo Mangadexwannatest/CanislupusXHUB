@@ -305,7 +305,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while task.wait() do pcall(function ()
+    while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and not workspace.Folders.Debris:FindFirstChild("DodgePart") then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
@@ -318,7 +318,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while task.wait() do pcall(function ()
+    while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             for i, v in next, workspace.Folders.Debris:GetChildren() do
                 if v.Name == "DodgePart" then
@@ -330,7 +330,7 @@ if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.Boss
 and mag <= 7.5 then
     Tween(SK_BDD.CFrame * CFrame.new(SK_BDD.Size.Z,0,SK_BDD.Size.X) + Vector3.new(3.5,0,10)  )
 elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
-and mag >= 12.5 then
+and mag >= 30 then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
 end
 end
