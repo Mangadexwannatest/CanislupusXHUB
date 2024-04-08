@@ -178,7 +178,7 @@ game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.Humano
 end
 
 coroutine.resume(coroutine.create(function()
-    while task.wait() do pcall(function ()
+    while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if not getgenv().JustCreatRoom and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
@@ -197,17 +197,37 @@ coroutine.resume(coroutine.create(function()
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
-            if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
-                Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
-            elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-                Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5)  * CFrame.Angles(math.rad(0),1800,0) ) 
-
             end
-        end
        end)
      end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while task.wait() do pcall(function ()
+        if Options.AutoFarmAndStart.Value then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
+    Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
+    Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5)  * CFrame.Angles(math.rad(0),1800,0) ) 
+end
+end
+end)
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+    if v:IsA("BasePart") then
+        if not v.CanCollide then
+        v.CanCollide = true
+           end
+           end
+           end
+           end)
+       end
+end))
 
 
 end -- End Of Do
