@@ -402,7 +402,7 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3.5,0,10)
+                    local side = math.clamp(2.25,0,10)
                     local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
@@ -431,7 +431,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 for _,k in next, workspace.Folders.Debris:GetChildren() do
                 if v:IsA("BasePart") and k.Name == "DodgePart" then
-                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - k.Position).magnitude
                     if mag <= 10 then
                     v.CanCollide = true
                 end
