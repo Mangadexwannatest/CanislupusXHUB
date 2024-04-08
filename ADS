@@ -324,7 +324,7 @@ local BossFrame = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.Cen
 if BossFrame.Visible and BossFrame.BossName.Text == "Speed" then
 getgenv().Dist = 3.5
 elseif BossFrame.Visible and BossFrame.BossName.Text == "Dominator" then
-getgenv().Dist = 5
+getgenv().Dist = 5.75
 end
 end)
 end
@@ -532,9 +532,12 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 0
-    NO_CLIP_PART.Size = Vector3.new(12.5,-3,12.5)
+    NO_CLIP_PART.Size = Vector3.new(12.5,1,12.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
+    repeat
+        task.wait()
      game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
+     until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
     end
 end)
 end
