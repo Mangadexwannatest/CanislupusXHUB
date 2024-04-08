@@ -309,7 +309,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and not workspace.Folders.Debris:FindFirstChild("DodgePart") then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not workspace.Folders.Debris:FindFirstChild("DodgePart") then
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
     Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5)  * CFrame.Angles(math.rad(0),1800,0) ) 
 end
 end
@@ -324,18 +324,11 @@ coroutine.resume(coroutine.create(function()
                 if v.Name == "DodgePart" then
                     local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
-and mag <= 10 then
-    Tween(mag.CFrame * CFrame.new(2.75,0,0)  )
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and workspace.Folders.Debris:FindFirstChild("DodgePart") 
-and mag <= 10 then
-    Tween(mag.CFrame * CFrame.new(2.75,0,0)  ) 
+and mag <= 7.5 then
+    Tween(mag.CFrame * CFrame.new(mag.Size.Z,0,0)  )
 elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
-and mag >= 20 then
+and mag >= 12.5 then
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
-elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
-and mag >= 20 then
-    Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
-
 end
 end
 end
