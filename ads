@@ -312,8 +312,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-            
+    while wait() do pcall(function ()  
 if not game.workspace:FindFirstChild("CrazyDay_NO") then
     local NO_CLIP_PART = Instance.new("Part",workspace)
     NO_CLIP_PART.Name = "CrazyDay_NO"
@@ -326,6 +325,35 @@ elseif game.workspace:FindFirstChild("CrazyDay_NO") then
     end
 end)
 end
+end))
+
+coroutine.resume(coroutine.create(function()
+    pcall(function()
+        workspace.Folders.Debris.ChildAdded:Connect(function(v)
+            pcall(function()
+                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
+                    local op = v.Material
+                    local a = v:Clone()
+                    local side = math.clamp(2.75,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,85,side)
+                    a.Size = Vector3.new(0,0,v.Size.Z)
+                    if v.ClassName == "MeshPart" then
+                        a.Size = Vector3.new(0,0,100)
+                        Sizeto = v.Size + Vector3.new(side,side,100)
+                    end
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.135),{Size = Sizeto}):Play()
+                    a.CFrame = v.CFrame + Vector3.new(0,0,0)
+                    a.Anchored = true
+                    a.Transparency = 0.57
+                    a.CanCollide = true
+                    a.Name = "DodgePart"
+                    a.Parent = v.Parent
+                    repeat wait() until not v.Parent
+                    a:Destroy()
+                end
+            end)
+        end)
+    end)
 end))
 
 end -- End Of Do
