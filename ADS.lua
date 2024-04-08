@@ -319,10 +319,10 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Transparency = 0
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
     if game.workspace:FindFirstChild("CrazyDay_NO") then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
     end
     end
 end)
