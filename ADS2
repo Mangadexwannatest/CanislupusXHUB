@@ -330,12 +330,16 @@ end))
 coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
-    if part.Name == "DodgePart" and not getgenv().STOP_Farm then
+    if part.Name == "DodgePart"and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
-        repeat 
-            wait(0.45)
-        until not part.Parent
+        repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
+     end
+     if part.ClassName == "MeshPart" and part.Parent == "Telegraph" and not getgenv().STOP_Farm then
+        getgenv().STOP_Farm = true
+        repeat wait() until not part.Parent
+        getgenv().STOP_Farm = false
+        wanr("Just Touch Damage")
      end
 end)
 end)
@@ -430,12 +434,11 @@ coroutine.resume(coroutine.create(function()
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.55),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0.75
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    wait(1)
                     a:Destroy()
                 end
             end)
