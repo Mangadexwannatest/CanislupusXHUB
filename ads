@@ -270,19 +270,6 @@ end))
 
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-    if v:IsA("BasePart") then
-        if v.CanCollide then
-        v.CanCollide = false
-           end
-           end
-           end
-           end)
-       end
-end))
-
-coroutine.resume(coroutine.create(function()
     while wait(.355) do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
@@ -344,7 +331,7 @@ coroutine.resume(coroutine.create(function()
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.135),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 0.57
+                    a.Transparency = 1
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
@@ -354,6 +341,20 @@ coroutine.resume(coroutine.create(function()
             end)
         end)
     end)
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+        if workspace.Folders.Debris:FindFirstChild("DodgePart") and v:IsA("BasePart") then
+        v.CanCollide = true
+        elseif  not workspace.Folders.Debris:FindFirstChild("DodgePart") and v:IsA("BasePart") then
+        v.CanCollide = false
+        end
+    end
+end)
+end
 end))
 
 end -- End Of Do
