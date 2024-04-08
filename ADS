@@ -312,7 +312,7 @@ coroutine.resume(coroutine.create(function()
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm then
     repeat wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-5,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm then
@@ -339,13 +339,11 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(par
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
-        print("Touch Highlight")
      end
      if part.Name == "Telegraph" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
-        print("Touch Telegraph")
      end
 end)
 end)
