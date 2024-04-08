@@ -311,38 +311,60 @@ if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.Boss
     Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not workspace.Folders.Debris:FindFirstChild("DodgePart") then
     Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5)  * CFrame.Angles(math.rad(0),1800,0) ) 
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") then
-    Tween(getClosestDodgePart().CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0) )
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and workspace.Folders.Debris:FindFirstChild("DodgePart") then
-    Tween(getClosestDodgePart().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5)  * CFrame.Angles(math.rad(0),1800,0) ) 
 end
 end
 end)
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while task.wait() do pcall(function ()
+        if Options.AutoFarmAndStart.Value then
+            for i, v in next, workspace.Folders.Debris:GetChildren() do
+                if v.Name == "DodgePart" then
+                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
+and mag <= 10 then
+    Tween(mag.CFrame * CFrame.new(2.75,0,0)  )
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and workspace.Folders.Debris:FindFirstChild("DodgePart") 
+and mag <= 10 then
+    Tween(mag.CFrame * CFrame.new(2.75,0,0)  ) 
+elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
+and mag >= 20 then
+    Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
+elseif  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false  and workspace.Folders.Debris:FindFirstChild("DodgePart") 
+and mag >= 20 then
+    Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
+
+end
+end
+end
+end
+end)
+end
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.355) do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Skill_1 and mag <= 10 then
+            if getgenv().Skill_1 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
-            if getgenv().Skill_2 and mag <= 10 then
+            if getgenv().Skill_2 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
-            if getgenv().Skill_3 and mag <= 10 then
+            if getgenv().Skill_3 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
             end  
-            if getgenv().Skill_4 and mag <= 10 then
+            if getgenv().Skill_4 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
             end  
-            if getgenv().Skill_5 and mag <= 10 then
+            if getgenv().Skill_5 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
-            if mag <= 15 then
+            if mag <= 10 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
             end
         end
@@ -356,13 +378,13 @@ coroutine.resume(coroutine.create(function()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Assist_1 and mag <= 10 then
+            if getgenv().Assist_1 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
-            if getgenv().Assist_2 and mag <= 10 then
+            if getgenv().Assist_2 and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
-            if getgenv().Assist_Fruit and mag <= 10 then
+            if getgenv().Assist_Fruit and mag <= 30 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
         end
