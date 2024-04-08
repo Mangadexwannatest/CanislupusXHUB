@@ -387,7 +387,7 @@ coroutine.resume(coroutine.create(function()
                         a.Size = Vector3.new(0,0,75)
                         Sizeto = v.Size + Vector3.new(side,side,75)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(.85),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(1),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -395,6 +395,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
+                    wait(1)
                     a:Destroy()
                 end
             end)
@@ -403,7 +404,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -420,12 +421,13 @@ coroutine.resume(coroutine.create(function()
         end
 end)
 end
-end))
+end))--]]
 
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
+repeat wait() until Options.AutoFarmAndStart.Value
         game.workspace:WaitForChild("GameMap")
 for i,v in next,game.workspace.GameMap:GetDescendants() do 
     if v:IsA("BasePart") then
@@ -447,7 +449,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
     end
 end)
 end
