@@ -322,9 +322,9 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
 local BossFrame = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame
 if BossFrame.Visible and BossFrame.BossName.Text == "Speed" then
-getgenv().Dist = 3.5
+getgenv().Dist = 2.75
 elseif BossFrame.Visible and BossFrame.BossName.Text == "Dominator" then
-getgenv().Dist = 5
+getgenv().Dist = 5.45
 end
 end)
 end
@@ -337,14 +337,14 @@ coroutine.resume(coroutine.create(function()
             if getgenv().STOP_Farm then 
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
-    repeat wait()
+    repeat task.wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-getgenv().Dist,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 
 
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm  then
-    repeat wait()
+    repeat task.wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
@@ -422,10 +422,9 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if mag <= 25 then
-                repeat wait(.55)
+                wait(.55)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
-                until mag > 25
             end
         end
     end
@@ -532,10 +531,10 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 0
-    NO_CLIP_PART.Size = Vector3.new(12.5,1,12.5)
+    NO_CLIP_PART.Size = Vector3.new(12.5,-0.2,12.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
-        task.wait()
+        wait()
      game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
      until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
     end
