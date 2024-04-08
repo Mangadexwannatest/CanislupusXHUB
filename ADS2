@@ -311,7 +311,7 @@ if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.Boss
     for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
         if v:IsA("BasePart") then
             if not v.CanCollide then
-                Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-6.5) * CFrame.Angles(math.rad(0),1800,0)  )
+                Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
             end
         end
     end
@@ -320,7 +320,7 @@ elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.
     for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
         if v:IsA("BasePart") then
             if not v.CanCollide then
-    Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,6,0) * CFrame.Angles(math.rad(-90),0,0) ) 
+    Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 end
 end
 end
@@ -388,77 +388,8 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
-elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.3,0)
-    end
-end)
-end
-end))
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("TAB_1") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_1"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(3.5,-5,3.5)
-elseif game.workspace:FindFirstChild("TAB_1") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_1").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-2.5,0)
-    end
-if not game.workspace:FindFirstChild("TAB_2") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_2"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(10,10,-5)
-elseif game.workspace:FindFirstChild("TAB_2") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_2").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-1.5)
-end
-
-if not game.workspace:FindFirstChild("TAB_3") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_3"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(10,10,-5)
-elseif game.workspace:FindFirstChild("TAB_3") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_3").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1.5)
-end
-
-if not game.workspace:FindFirstChild("TAB_4") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_4"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(3.5,-5,3.5)
-elseif game.workspace:FindFirstChild("TAB_4") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_4").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2.5,0)
-    end
-
-if not game.workspace:FindFirstChild("TAB_5") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_5"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(-5,10,10)
-elseif game.workspace:FindFirstChild("TAB_5") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_5").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(-1.5,0,0)
-    end
-
-if not game.workspace:FindFirstChild("TAB_6") and Options.AutoFarmAndStart.Value then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB_6"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(-5,10,10)
-elseif game.workspace:FindFirstChild("TAB_6") and Options.AutoFarmAndStart.Value and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-     game.workspace:FindFirstChild("TAB_6").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(1.5,0,0)
+elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
     end
 end)
 end
