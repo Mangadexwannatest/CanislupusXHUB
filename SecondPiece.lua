@@ -11,7 +11,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
