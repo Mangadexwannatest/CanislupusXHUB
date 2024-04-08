@@ -906,7 +906,8 @@ coroutine.resume(coroutine.create(function()
                 wait(30.5)
                 getgenv().QuestHuntOnCoolDown = false
                end
-            if v.Name == "NotifyText" and string.find(v.Text.Text,"gotten the reward") and Options.AutoWebhookBountyTask.Value then
+            if v.Name == "NotifyText" then 
+                if string.find(v.Text.Text,"gotten the reward") and Options.AutoWebhookBountyTask.Value then
                 wait(1)
                 local timeInfo = os.date("*t")
                 BBody = game:GetService("HttpService"):JSONEncode({
@@ -945,7 +946,7 @@ coroutine.resume(coroutine.create(function()
                   },
                   Body = BBody
                 })    
-            
+            end
              end
             end
         end
