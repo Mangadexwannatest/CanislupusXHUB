@@ -144,13 +144,13 @@ do
         for Value, State in next, Value do
             table.insert(Values, Value)
         end
-        if table.find(Values,"Common") then
+        if table.find(Values,"Common") and not getgenv().Common then
             getgenv().Common = true
         end
-        if table.find(Values,"Uncommon") then
+        if table.find(Values,"Uncommon") and not getgenv().Uncommon then
             getgenv().Uncommon = true
         end
-        if table.find(Values,"Legendary") then
+        if table.find(Values,"Legendary") and not getgenv().Legendary then
             getgenv().Legendary = true
         end
         if not table.find(Values,"Common") and getgenv().Common then
@@ -169,19 +169,19 @@ do
         for Value, State in next, Value do
             table.insert(Values, Value)
         end
-        if table.find(Values,"Z") then
+        if table.find(Values,"Z") and not getgenv().AutoSkillZ then
             getgenv().AutoSkillZ = true
         end
-        if table.find(Values,"X") then
+        if table.find(Values,"X") and not getgenv().AutoSkillX then
             getgenv().AutoSkillX = true
         end
-        if table.find(Values,"C") then
+        if table.find(Values,"C") and not getgenv().AutoSkillC then
             getgenv().AutoSkillC = true
         end
-        if table.find(Values,"V") then
+        if table.find(Values,"V") and not getgenv().AutoSkillV then
             getgenv().AutoSkillV = true
         end
-        if table.find(Values,"F") then
+        if table.find(Values,"F") and not getgenv().AutoSkillF then
             getgenv().AutoSkillF = true
         end
 
