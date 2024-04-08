@@ -271,8 +271,9 @@ local function getClosestDodgePart()
     return thing
 end
 
+
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -308,9 +309,15 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
+    repeat wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
+until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
+or not Options.AutoFarmAndStart.Value
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
+    repeat wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
+until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
+or not Options.AutoFarmAndStart.Value
 end
 end
 end)
@@ -429,6 +436,22 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
 end
 end)
 end))--]]
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.workspace:FindFirstChild("CrazyDay_NO") then
+    local NO_CLIP_PART = Instance.new("Part",workspace)
+    NO_CLIP_PART.Name = "CrazyDay_NO"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
+elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
+    end
+end)
+end
+end))
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
