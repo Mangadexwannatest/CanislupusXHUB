@@ -133,17 +133,6 @@ do
     Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = false })
 
 
-    Tabs.Other:AddSlider("HealthDetech", 
-    {
-        Title = "Escape Health at ",
-        Description = "Calculated as the max percentage of health",
-        Default = 40,
-        Min = 10,
-        Max = 100,
-        Rounding = 0,
-        })
-        
-    Tabs.Other:AddToggle("AutoEscape", {Title = "Auto Escape", Default = false })
     
 
 end -- End of Do
@@ -329,50 +318,25 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.AutoEscape.Value then
-            local HPTax = game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text
-            local HpSplit = string.split(HPTax, "/")
-            local HealthPercent = Options.HealthDetech.Value * (HpSplit[2] / 100)  
-        if tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) <= tonumber(HealthPercent) then
-            getgenv().Distand100Mon = -100
-            getgenv().Distand100Boss = -100
-        else
-            getgenv().Distand100Mon = 0
-            getgenv().Distand100Boss = -4.65
-               end
-            end
-        if not Options.AutoEscape.Value and getgenv().Distand100Mon == -100 or getgenv().Distand100Boss == -100 then
-            getgenv().Distand100Mon = 0
-            getgenv().Distand100Boss = -4.65
-        end
-       end)
-    end
-end))
 
-getgenv().Distand100Boss = -4.65
-getgenv().Distand100Mon = 0
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then 
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm 
-and not getgenv().STOP then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
     repeat wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().Distand100Boss,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-4.55,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().STOP
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 
 
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm 
-and not getgenv().STOP then
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm  then
     repeat wait()
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getgenv().Distand100Mon,6.5) ) 
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().STOP
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 end
 end
 end
@@ -421,25 +385,31 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Skill_1 and mag <= 30 then
-                wait(.2)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Skill_2 and mag <= 30 then
-                wait(.2)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Skill_3 and mag <= 30 then
-                wait(.35)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
             end  
             if getgenv().Skill_4 and mag <= 30 then
-                wait(.45)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
             end  
             if getgenv().Skill_5 and mag <= 30 then
-                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
+        end
+    end
+end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        for i, v in next, workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if mag <= 25 then
                 repeat wait(.55)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
