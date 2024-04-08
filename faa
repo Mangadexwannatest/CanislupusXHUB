@@ -135,9 +135,11 @@ a.__namecall = newcclosure(function(self,...)
     arg = {...}
     if not checkcaller() and arg[1] == "CreateRoom" and game.PlaceId == 6938803436 then
         getgenv().JustCreatRoom = true
+        print("Creat Room : True")
     end
     if not checkcaller() and arg[1] == "TeleportPlayers" and game.PlaceId == 6938803436 then
         getgenv().JustTeleport = true
+        print("Teleport Can : True")
     end
     return backs(self,...)
 end)
@@ -192,10 +194,11 @@ coroutine.resume(coroutine.create(function()
                 }
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
+                print("1!")
             end
-            if getgenv().JustCreatRoom and not getgenv().JustTeleport 
-            and game.PlaceId == 6938803436 then
+            if getgenv().JustCreatRoom and game.PlaceId == 6938803436 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
+                print("2!")
             end
             end
        end)
