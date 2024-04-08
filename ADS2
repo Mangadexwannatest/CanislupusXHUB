@@ -402,7 +402,7 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3.5,0,10)
+                    local side = math.clamp(2.25,0,10)
                     local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
@@ -429,10 +429,15 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v:IsA("BasePart") then
+                for _,k in next, workspace.Folders.Debris:GetChildren() do
+                if v:IsA("BasePart") and k.Name == "DodgePart" then
+                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - k.Position).magnitude
+                    if mag <= 10 then
                     v.CanCollide = true
                 end
             end
+        end
+    end
         elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
@@ -444,6 +449,20 @@ end)
 end
 end))
 
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        repeat wait() until game:IsLoaded()
+        game.workspace:WaitForChild("GameMap")
+for i,v in next,game.workspace.GameMap:GetDescendants() do 
+    if v:IsA("BasePart") then
+        if v.CanCollide then
+        v.CanCollide = false
+        end
+    end
+end
+end)
+end))
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
