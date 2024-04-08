@@ -357,22 +357,15 @@ end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
-game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
+        local PlrFind = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        PlrFind.Touched:Connect(function(part)
+    pcall(function ()
     if part.Name == "DodgePart"and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
-     end
-     if part.Name == "Highlight" and not getgenv().STOP_Farm then
-        getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
-        getgenv().STOP_Farm = false
-     end
-     if part.Name == "Telegraph" and not getgenv().STOP_Farm then
-        getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
-        getgenv().STOP_Farm = false
-     end
+        end
+     end)
 end)
 end)
 end))
@@ -380,11 +373,15 @@ end))
 --[[coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.LocalPlayer.Character.HumanoidRootPart.TouchEnded:Connect(function(part)
-    if part.Name == "DodgePart" and not getgenv().STOP_Farm then
-        getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
-        getgenv().STOP_Farm = false
+    pcall(function ()
+    if part.Name == "DodgePart" then
+        if getgenv().STOP_Farm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        repeat wait() until not part.Parent or not getgenv().STOP_Farm
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
     end
+        end
+    end)
 end)
 end)
 end))--]]
