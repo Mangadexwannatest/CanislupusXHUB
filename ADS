@@ -273,7 +273,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/80,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -332,7 +332,9 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
     if part.Name == "DodgePart" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
-        wait(1)
+        repeat 
+            wait(0.45)
+        until not part.Parent
         getgenv().STOP_Farm = false
      end
 end)
