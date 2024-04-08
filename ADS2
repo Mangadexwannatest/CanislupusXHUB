@@ -1,6 +1,7 @@
 repeat wait() until game:IsLoaded()
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+game.workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
 
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
@@ -131,6 +132,8 @@ do
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
     Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = false })
 
+
+    
 
 end -- End of Do
 
@@ -314,21 +317,26 @@ coroutine.resume(coroutine.create(function()
      end
 end))
 
+
+
+
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then 
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
     repeat wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-4.25,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-4.55,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm then
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
+
+
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm  then
     repeat wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 end
 end
 end
@@ -396,10 +404,11 @@ coroutine.resume(coroutine.create(function()
                 wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
-            if mag <= 20 then
-                task.wait()
+            if mag <= 25 then
+                repeat wait(.88)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
+                until mag > 25
             end
         end
     end
@@ -434,6 +443,8 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
+                if getgenv().Distand100Mon == -100 or getgenv().Distand100Boss == -100 then
+                else
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
@@ -453,6 +464,7 @@ coroutine.resume(coroutine.create(function()
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
                     a:Destroy()
+                end
                 end
             end)
         end)
