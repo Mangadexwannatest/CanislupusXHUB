@@ -330,10 +330,22 @@ end))
 coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
-    if part.Name == "DodgePart" or part.ClassName == "MeshPart" and not getgenv().STOP_Farm then
+    if part.Name == "DodgePart"and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
+     end
+     if part.Name == "Highlight" and not getgenv().STOP_Farm then
+        getgenv().STOP_Farm = true
+        repeat wait() until not part.Parent
+        getgenv().STOP_Farm = false
+        print("Touch Highlight")
+     end
+     if part.Name == "Telegraph" and not getgenv().STOP_Farm then
+        getgenv().STOP_Farm = true
+        repeat wait() until not part.Parent
+        getgenv().STOP_Farm = false
+        print("Touch Telegraph")
      end
 end)
 end)
