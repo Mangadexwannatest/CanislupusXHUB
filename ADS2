@@ -271,8 +271,9 @@ local function getClosestDodgePart()
     return thing
 end
 
+
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -308,22 +309,15 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true  then
-    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if v:IsA("BasePart") then
-            if not v.CanCollide then
-                Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
-            end
-        end
-    end
-    
+    repeat wait()
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
+until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
+or not Options.AutoFarmAndStart.Value
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
-    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if v:IsA("BasePart") then
-            if not v.CanCollide then
-    Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
-end
-end
-end
+    repeat wait()
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
+until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
+or not Options.AutoFarmAndStart.Value
 end
 end
 end)
@@ -380,36 +374,20 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("CrazyDay_NO") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "CrazyDay_NO"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
-elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
-    end
-end)
-end
-end))
-
-coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.25,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,85,side)
+                    local side = math.clamp(3,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,30,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.45),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.2),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -429,15 +407,10 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                for _,k in next, workspace.Folders.Debris:GetChildren() do
-                if v:IsA("BasePart") and k.Name == "DodgePart" then
-                    local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - k.Position).magnitude
-                    if mag <= 10 then
+                if v:IsA("BasePart") then
                     v.CanCollide = true
-                end
             end
         end
-    end
         elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
@@ -450,7 +423,7 @@ end
 end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
         game.workspace:WaitForChild("GameMap")
@@ -462,6 +435,22 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
+end))--]]
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.workspace:FindFirstChild("CrazyDay_NO") then
+    local NO_CLIP_PART = Instance.new("Part",workspace)
+    NO_CLIP_PART.Name = "CrazyDay_NO"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(7.5,-5,7.5)
+elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.15,0)
+    end
+end)
+end
 end))
 
 coroutine.resume(coroutine.create(function()
