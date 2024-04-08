@@ -273,7 +273,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/80,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -308,6 +308,8 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
+            if getgenv().STOP_Farm then 
+            else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm then
     repeat wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
@@ -320,6 +322,7 @@ until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService(
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 end
 end
+end
 end)
 end
 end))
@@ -329,30 +332,27 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
     if part.Name == "DodgePart" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
-        wait(.25)
-        getgenv().STOP_Farm = false
      end
 end)
+getgenv().STOP_Farm = false
 end)
 end))
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.LocalPlayer.Character.HumanoidRootPart.TouchEnded:Connect(function(part)
     if part.Name == "DodgePart" and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
-        wait(.25)
         getgenv().STOP_Farm = false
     end
 end)
 end)
-end))
+end))--]]
 
 
 coroutine.resume(coroutine.create(function()
-    while wait(.355) do pcall(function ()
+    while wait() do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
@@ -376,8 +376,8 @@ coroutine.resume(coroutine.create(function()
                 wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
-            if mag <= 10 then
-                wait(0.1)
+            if mag <= 20 then
+                task.wait()
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
             end
