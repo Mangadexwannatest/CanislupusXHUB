@@ -288,7 +288,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/80,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -365,6 +365,7 @@ do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
         CheckTouch(PlayerCheck)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Size = Vector3.new(1,0,1)
     end
 end
 end))
@@ -447,7 +448,7 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(1,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,65,side)
+                    local Sizeto = v.Size + Vector3.new(side,55,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
@@ -456,7 +457,7 @@ coroutine.resume(coroutine.create(function()
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 0.25
+                    a.Transparency = 0
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
