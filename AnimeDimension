@@ -360,7 +360,7 @@ coroutine.resume(coroutine.create(function()
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
     repeat task.wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-3,-3) * CFrame.Angles(math.rad(0),1800,0) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 
