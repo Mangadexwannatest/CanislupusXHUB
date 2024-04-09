@@ -37,14 +37,14 @@ do
         "Ghoul Dimension","Fate Dimension","Slime Dimension","Devil Dimension","Pirate Dimension",
         "Alien Dimension","Level Dimension"},
         Multi = false,
-        Default = 1,
+        Default = getgenv().Select_Dimension_Tier,
     })
 
     Tabs.Main:AddDropdown("SelectDifficulty", {
         Title = "Select Difficulty",
         Values = {"Easy","Hard","Nightmare"},
         Multi = false,
-        Default = 1,
+        Default = getgenv().Difficulty,
     })
 
     local SkillSelect = Tabs.Main:AddDropdown("SelectSkill", {
@@ -127,12 +127,12 @@ do
 
     end)
 
-    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = true })
-    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = false })
-    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
-    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = true })
+    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
+    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
+    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
+    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = getgenv().Auto_Retry })
 
-    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = true })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
 
 
@@ -212,14 +212,6 @@ for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
     end)
 end))
 
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        repeat wait() until game:IsLoaded()
-    if game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-        getgenv().ATLobby = true 
-    end
-    end)
-end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
