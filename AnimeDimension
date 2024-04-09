@@ -127,7 +127,7 @@ do
 
     end)
 
-    Tab:AddSlider("Distance", 
+    Tabs.Main:AddSlider("Distance", 
 {
     Title = "Distance",
     Description = "(Only Mon)",
