@@ -338,7 +338,7 @@ coroutine.resume(coroutine.create(function()
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
     repeat task.wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-getgenv().Dist,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 
@@ -355,67 +355,29 @@ end)
 end
 end))
 
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        local PlrFind = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-        PlrFind.Touched:Connect(function(part)
-    pcall(function ()
-    if part.Name == "DodgePart"and not getgenv().STOP_Farm then
+local function CheckTouch(KUB)
+    local Dd = KUB:WaitForChild("HumanoidRootPart")
+    if not Dd then
+        return
+    end
+Dd.Touched:Connect(function(part)
+    if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
-        end
-     end)
-end)
-end)
-end))
-
---[[local function onCharacterAdded(character)
-    local player = game:GetService("Players").LocalPlayer
-    local humanoid = character:WaitForChild("Humanoid", 5)
-    if not humanoid then
-        return
     end
-    humanoid.Died:Connect(function()
-        if Options.AutoBountyHunter.Value then
-            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                wait(.5)
-                getgenv().InBossHunt = false
-                getgenv().QuestHuntOnCoolDown = false
-                getgenv().InMerchant = false
-            end)
-        end
-    end)
+end)
 end
 
 coroutine.resume(coroutine.create(function()
-    pcall(function ()
-game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
-do 
-    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
-    if alreadyExistingCharacter then
-        onCharacterAdded(alreadyExistingCharacter )
-              end
-           end
-        end)
-end))--]]
-
---[[coroutine.resume(coroutine.create(function()
-    pcall(function ()
-game.Players.LocalPlayer.Character.HumanoidRootPart.TouchEnded:Connect(function(part)
-    pcall(function ()
-    if part.Name == "DodgePart" then
-        if getgenv().STOP_Farm then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
-        repeat wait() until not part.Parent or not getgenv().STOP_Farm
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch)
+do
+    local PlayerCheck = game.Players.LocalPlayer.Character 
+    if PlayerCheck then
+        CheckTouch(PlayerCheck)
     end
-        end
-    end)
-end)
-end)
-end))--]]
+end
+end))
 
 
 coroutine.resume(coroutine.create(function()
@@ -445,12 +407,11 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
+    while wait(.35) do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if mag <= 25 then
-                wait(.55)
+            if mag <= 15 then
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
             end
@@ -487,17 +448,15 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
-                if getgenv().Distand100Mon == -100 or getgenv().Distand100Boss == -100 then
-                else
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(3.5,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,1000,side)
+                    local Sizeto = v.Size + Vector3.new(side,100,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,1000)
-                        Sizeto = v.Size + Vector3.new(side,side,1000)
+                        a.Size = Vector3.new(0,0,100)
+                        Sizeto = v.Size + Vector3.new(side,side,100)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.55),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
@@ -509,7 +468,6 @@ coroutine.resume(coroutine.create(function()
                     repeat wait() until not v.Parent
                     a:Destroy()
                 end
-                end
             end)
         end)
     end)
@@ -518,13 +476,13 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if workspace.Folders.Debris:FindFirstChild("DodgePart") then
+        if getgenv().STOP_Farm then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = true
             end
         end
-        elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
+        elseif not getgenv().STOP_Farm then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = false
@@ -549,9 +507,9 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))--]]
+end))
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
 if not game.workspace:FindFirstChild("CrazyDay_NO") then
     local NO_CLIP_PART = Instance.new("Part",workspace)
@@ -568,8 +526,8 @@ elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart
     end
 end)
 end
-end))
---]]
+end))--]]
+
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
