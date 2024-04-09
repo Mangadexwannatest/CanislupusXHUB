@@ -132,9 +132,21 @@ do
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
     Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = getgenv().Auto_Retry })
 
-    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
-    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+    Tabs.Main:AddSection("Raid")
 
+    Tabs.Main:AddDropdown("SelectRaid", {
+        Title = "Select Raid",
+        Values = {"Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+        Multi = false,
+        Default = 1 or getgenv().Select_Raid,
+    })
+    Tabs.Main:AddToggle("AutoRaid", {Title = "Auto Raid", Default = getgenv().Auto_Raid })
+
+    Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
+
+
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
+    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
 
     
 
@@ -224,30 +236,6 @@ for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
     end)
 end))
 
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-local a = getrawmetatable(game)
-local backs =  a.__namecall
-local Macro = {}
-setreadonly(a,false) 
-a.__namecall = newcclosure(function(self,...)
-    arg = {...}
-    if arg[1] == "CreateRoom" and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
-        getgenv().JustCreatRoom = true
-        print("Creat Room Can : True")
-    end
-    if arg[1] == "TeleportPlayers" and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
-        getgenv().JustTeleport = true
-        getgenv().STOP_Creat_Teleport = true
-        print("Teleport Can : True")
-    end
-    return backs(self,...)
-end)
-setreadonly(a,true)
-end)
-end))
-
 local function getClosestBoss()
     local dist, thing = math.huge
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
@@ -291,16 +279,40 @@ local function getClosestDodgePart()
 end
 
 
+
 function Tween(P)
 game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
+
+coroutine.resume(coroutine.create(function()
+    while wait() do
+    pcall(function()
+                if tonumber(os.date("!*t").min) <= 9 and Options.AutoRaid.Value then
+                    getgenv().RaidOpened = true
+                else
+                    getgenv().RaidOpened = false
+                end
+        end)
+    end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait(5) do
+    pcall(function()
+        if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.AutoLeaveIfRaid.Value then
+if getgenv().RaidOpened and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+    game:GetService("TeleportService"):Teleport(6938803436)
+end
+end
+end)
+end
+end))
+
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if not getgenv().JustCreatRoom and not getgenv().STOP_Creat_Teleport and not getgenv().JustTeleport 
-            and game.PlaceId == 6938803436 
-            or game.PlaceId == 7274690025 then
+            if not getgenv().JustCreatRoom and not getgenv().RaidOpened and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -313,27 +325,44 @@ coroutine.resume(coroutine.create(function()
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
                 print("Creat : "..Options.SelectDimension.Value)
+                getgenv().JustCreatRoom = true
             end
-            if getgenv().JustCreatRoom and not getgenv().STOP_Creat_Teleport and not getgenv().JustTeleport and game.PlaceId == 6938803436 
-            or game.PlaceId == 7274690025 then
+
+            if not getgenv().JustCreat_Raid and getgenv().RaidOpened then
+                local args = {
+                    [1] = "CreateRoom",
+                    [2] = {
+                        ["Difficulty"] = "Easy",
+                        ["FriendsOnly"] = Options.FriendOnly.Value,
+                        ["MapName"] = Options.SelectRaid.Value,
+                        ["Hardcore"] = false
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
+                getgenv().JustCreat_Raid = true
+            end
+
+            if not getgenv().Teleporting and getgenv().JustCreat_Raid or getgenv().JustCreatRoom  then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
                 print("Start Teleport")
+                getgenv().Teleporting = true
             end
+
             end
        end)
-       if getgenv().STOP_Creat_Teleport then
+       if getgenv().Teleporting then
         break
        end
      end
 end))
 
-
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
-                repeat task.wait(.125)
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFramew * CFrame.new(0,0.1,0) )
+                repeat task.wait()
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFramew)
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
@@ -476,17 +505,17 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,85,side)
+                    local side = math.clamp(2,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,100,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.5),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 0
+                    a.Transparency = 1
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
@@ -498,49 +527,6 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
-coroutine.resume(coroutine.create(function()
-        while wait() do pcall(function ()
-            for i,v in next,workspace.Folders.Debris:GetChildren() do 
-                if v.Name == "DodgePart" and not v:FindFirstChild("Dodge") then
-                    local a = v:Clone()
-                    v.CanCollide = true
-                    v.Anchored = true
-                    v.Transparency = 0
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
-                    a.CFrame = v.CFrame + Vector3.new(0,0,0)
-                    a.Anchored = true
-                    a.Transparency = 1
-                    a.CanCollide = true
-                    a.Name = "Dodge"
-                    a.Parent = v.Parent
-                    repeat task.wait() until not v.Parent
-                    a:Destroy()
-                end
-            end
-        end)
-    end
-end))
-
-
-
---[[coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if workspace.Folders.Debris:FindFirstChild("DodgePart") then
-            for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = true
-            end
-        end
-        elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
-            for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v:IsA("BasePart") then
-                    v.CanCollide = false
-                end
-            end
-        end
-end)
-end
-end))--]]
 
 coroutine.resume(coroutine.create(function()
     repeat wait() until Options.AutoFarmAndStart.Value
@@ -561,7 +547,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
@@ -580,7 +566,7 @@ if not game.workspace:FindFirstChild("TAB__1") then
     NO_CLIP_PART.Name = "TAB__1"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
 elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value then
     repeat
@@ -591,6 +577,30 @@ elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Valu
 end)
 end
 end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.workspace:FindFirstChild("MAP_NEW") and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+    local NO_CLIP_PART = Instance.new("Part",workspace)
+    NO_CLIP_PART.Name = "MAP_NEW"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(50,1,50)
+elseif game.workspace:FindFirstChild("MAP_NEW") and Options.AutoFarmAndStart.Value 
+and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+    repeat wait()
+     game.workspace:FindFirstChild("MAP_NEW").CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+    until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+    or not Options.AutoFarmAndStart.Value
+    end
+if game.workspace:FindFirstChild("MAP_NEW") and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+    game.workspace:FindFirstChild("MAP_NEW"):Destroy()
+end
+end)
+end
+end))
+
 
 
 coroutine.resume(coroutine.create(function()
