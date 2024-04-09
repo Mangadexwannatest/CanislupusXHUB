@@ -332,8 +332,8 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
-                repeat task.wait(.15)
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                repeat task.wait(.125)
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFramew * CFrame.new(0,0.1,0) )
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
@@ -547,6 +547,9 @@ coroutine.resume(coroutine.create(function()
     for i,v in next,game.workspace.GameMap:GetDescendants() do
         if v:IsA("BasePart") then
             v.CanCollide = false
+        end
+        if string.find(v.Name,"Barrier") then
+            v:Destroy()
         end
     end
 end))
