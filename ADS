@@ -466,7 +466,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    wait(1.5)
+                    task.wait(1)
                     a:Destroy()
                 end
             end)
