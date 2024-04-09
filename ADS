@@ -365,6 +365,13 @@ local function CheckHumanoid()
         end
 end)
 end
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        do 
+            CheckHumanoid()
+        end
+    end)
+end))
 
 
 local function onCharacterAdded(character)
