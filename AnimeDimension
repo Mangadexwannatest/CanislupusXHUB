@@ -386,7 +386,7 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") then
+        if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == false then
             if not v.HumanoidRootPart.Anchored then
             v.HumanoidRootPart.Anchored = true
             end
