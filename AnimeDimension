@@ -212,6 +212,18 @@ for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
     end)
 end))
 
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+Button.MouseButton1Click:Connect(function()
+for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+        if v.Name == "Frame" and i == 2 then
+            v.Visible = not v.Visible
+                    end
+                end
+        end)
+    end)
+end))
+
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
@@ -369,6 +381,23 @@ do
     end
 end
 end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if Options.AutoFarmAndStart.Value then
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+            if not v.HumanoidRootPart.Anchored then
+            v.HumanoidRootPart.Anchored = true
+            end
+        end
+    end    
+end
+end)
+end
+end))
+
+
 --]]
 
 coroutine.resume(coroutine.create(function()
