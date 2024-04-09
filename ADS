@@ -386,11 +386,11 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Skill_1 and mag <= 25 then
-                wait(.35)
+                wait(.25)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Skill_2 and mag <= 25 then
-                wait(.35)
+                wait(.25)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Skill_3 and mag <= 25 then
@@ -456,22 +456,22 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.15,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,500,side)
+                    local side = math.clamp(1.5,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,1000,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,500)
-                        Sizeto = v.Size + Vector3.new(side,side,500)
+                        a.Size = Vector3.new(0,0,100)
+                        Sizeto = v.Size + Vector3.new(side,side,100)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 0.75
+                    a.Transparency = 0.25
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    task.wait(1)
+                    task.wait(.5)
                     a:Destroy()
                 end
             end)
@@ -522,8 +522,8 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
-    NO_CLIP_PART.Size = Vector3.new(2.5,-0.365,2.5)
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(2.5,-0.395,2.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
         wait()
