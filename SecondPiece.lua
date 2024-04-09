@@ -1368,6 +1368,18 @@ end))
         
 
         coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        Button.MouseButton1Click:Connect(function()
+        for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+                if v.Name == "Frame" and i == 2 then
+                    v.Visible = not v.Visible
+                            end
+                        end
+                end)
+            end)
+        end))
+
+        coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
                 if Options.AutoBuyMerchantItem.Value and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled and not getgenv().AlrBuy and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
