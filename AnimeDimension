@@ -133,7 +133,7 @@ do
     Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = true })
 
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = true })
-    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = true })
+    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
 
 
     
@@ -288,7 +288,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/60,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -324,20 +324,24 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if getgenv().STOP_Farm then 
+            if getgenv().STOP_Farm then
+                repeat task.wait(.15)
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                until not getgenv().STOP_Farm
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
-    repeat task.wait()
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
+    repeat wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-3,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 
 
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm  then
-    repeat task.wait()
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false 
+ then
+    repeat wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 end
 end
 end
@@ -359,45 +363,18 @@ Dd.Touched:Connect(function(part)
 end)
 end
 
-local function TouchEnd(End)
-    local Dd = End:WaitForChild("HumanoidRootPart")
-    if not Dd then
-        return
-    end
-Dd.TouchEnded:Connect(function(part)
-    if part.Name == "DodgePart" then
-        getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
-        getgenv().STOP_Farm = false
-    end
-end)
-end
 
 
 coroutine.resume(coroutine.create(function()
-game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch,TouchEnd)
+game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch)
 do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
         CheckTouch(PlayerCheck)
-        TouchEnd(PlayerCheck)
     end
 end
 end))
-
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-for i, v in next, workspace.Folders.Monsters:GetChildren() do
-    if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == false then
-        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and mag >= 50 then
-            game.Players.LocalPlayer.Character.Humanoid.Health = 0
-        end
-    end
-end
-    end)
-end
-end))
+--]]
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -475,28 +452,51 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(1,0,10)
+                    local side = math.clamp(3,0,10)
                     local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.5),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    task.wait(.75)
                     a:Destroy()
                 end
             end)
         end)
     end)
 end))
+
+coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            for i,v in next,workspace.Folders.Debris:GetChildren() do 
+                if v.Name == "DodgePart" and not v:FindFirstChild("Dodge") then
+                    local a = v:Clone()
+                    v.CanCollide = true
+                    v.Anchored = true
+                    v.Transparency = 0
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    a.CFrame = v.CFrame + Vector3.new(0,0,0)
+                    a.Anchored = true
+                    a.Transparency = 1
+                    a.CanCollide = true
+                    a.Name = "Dodge"
+                    a.Parent = v.Parent
+                    repeat task.wait() until not v.Parent
+                    a:Destroy()
+                end
+            end
+        end)
+    end
+end))
+
 
 
 --[[coroutine.resume(coroutine.create(function()
