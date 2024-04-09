@@ -285,7 +285,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/60,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/80,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -385,19 +385,24 @@ coroutine.resume(coroutine.create(function()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Skill_1 and mag <= 30 then
+            if getgenv().Skill_1 and mag <= 25 then
+                wait(.35)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
-            if getgenv().Skill_2 and mag <= 30 then
+            if getgenv().Skill_2 and mag <= 25 then
+                wait(.35)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
-            if getgenv().Skill_3 and mag <= 30 then
+            if getgenv().Skill_3 and mag <= 25 then
+                wait(.45)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
             end  
-            if getgenv().Skill_4 and mag <= 30 then
+            if getgenv().Skill_4 and mag <= 25 then
+                wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
             end  
-            if getgenv().Skill_5 and mag <= 30 then
+            if getgenv().Skill_5 and mag <= 25 then
+                wait(.65)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
             end
         end
@@ -407,7 +412,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(.35) do pcall(function ()
+    while task.wait(1.1) do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
@@ -451,14 +456,14 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.5,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,70,side)
+                    local side = math.clamp(2.15,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,500,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        a.Size = Vector3.new(0,0,500)
+                        Sizeto = v.Size + Vector3.new(side,side,500)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 0.75
@@ -518,7 +523,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 0
-    NO_CLIP_PART.Size = Vector3.new(12.5,-0.31,12.5)
+    NO_CLIP_PART.Size = Vector3.new(2.5,-0.365,2.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
         wait()
