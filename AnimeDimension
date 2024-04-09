@@ -146,7 +146,7 @@ do
 
     Tabs.Main:AddDropdown("SelectRaid", {
         Title = "Select Raid",
-        Values = {"Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+        Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
         Multi = false,
         Default = 1 or getgenv().Select_Raid,
     })
@@ -324,7 +324,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
