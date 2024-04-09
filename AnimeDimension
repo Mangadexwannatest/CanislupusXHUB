@@ -297,8 +297,23 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
-            if not getgenv().JustCreatRoom and not getgenv().RaidOpened and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
+        if Options.AutoFarmAndStart.Value or Options.AutoRaid.Value then
+            if not getgenv().JustCreat_Raid and getgenv().RaidOpened and Options.AutoRaid.Value then
+                local args = {
+                    [1] = "CreateRoom",
+                    [2] = {
+                        ["Difficulty"] = "Easy",
+                        ["FriendsOnly"] = Options.FriendOnly.Value,
+                        ["MapName"] = Options.SelectRaid.Value,
+                        ["Hardcore"] = false
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
+                getgenv().JustCreat_Raid = true
+            end
+            if not getgenv().JustCreatRoom and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -312,21 +327,6 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
                 print("Creat : "..Options.SelectDimension.Value)
                 getgenv().JustCreatRoom = true
-            end
-
-            if not getgenv().JustCreat_Raid and getgenv().RaidOpened then
-                local args = {
-                    [1] = "CreateRoom",
-                    [2] = {
-                        ["Difficulty"] = "Easy",
-                        ["FriendsOnly"] = Options.FriendOnly.Value,
-                        ["MapName"] = Options.SelectRaid.Value,
-                        ["Hardcore"] = false
-                    }
-                }
-                
-                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-                getgenv().JustCreat_Raid = true
             end
 
             if not getgenv().Teleporting and getgenv().JustCreat_Raid or getgenv().JustCreatRoom  then
