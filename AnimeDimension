@@ -51,14 +51,14 @@ do
         Title = "Select Skill",
         Values = {"1","2","3","4","5"},
         Multi = true,
-        Default = {nil},
+        Default = {"1","2","3","4"},
     })
 
     local AssistSelect = Tabs.Main:AddDropdown("SelectAssist", {
         Title = "Select Assist",
         Values = {"Assist 1","Assist 2","Fruit"},
         Multi = true,
-        Default = {nil},
+        Default = {"Assist 1","Assist 2","Fruit"},
     })
 
     SkillSelect:OnChanged(function(Value)
@@ -127,13 +127,13 @@ do
 
     end)
 
-    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = false })
+    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = true })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
-    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = false })
+    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = true })
 
-    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
-    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = true })
+    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = true })
 
 
     
@@ -288,7 +288,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/60,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -359,17 +359,45 @@ Dd.Touched:Connect(function(part)
 end)
 end
 
+local function TouchEnd(End)
+    local Dd = End:WaitForChild("HumanoidRootPart")
+    if not Dd then
+        return
+    end
+Dd.TouchEnded:Connect(function(part)
+    if part.Name == "DodgePart" then
+        getgenv().STOP_Farm = true
+        repeat wait() until not part.Parent
+        getgenv().STOP_Farm = false
+    end
+end)
+end
+
+
 coroutine.resume(coroutine.create(function()
-game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch)
+game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch,TouchEnd)
 do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
         CheckTouch(PlayerCheck)
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Size = Vector3.new(1,0,1)
+        TouchEnd(PlayerCheck)
     end
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+for i, v in next, workspace.Folders.Monsters:GetChildren() do
+    if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == false then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and mag >= 50 then
+            game.Players.LocalPlayer.Character.Humanoid.Health = 0
+        end
+    end
+end
+    end)
+end
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -462,7 +490,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
-                    task.wait(.5)
+                    task.wait(.75)
                     a:Destroy()
                 end
             end)
@@ -471,7 +499,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -488,8 +516,16 @@ coroutine.resume(coroutine.create(function()
         end
 end)
 end
-end))
+end))--]]
 
+coroutine.resume(coroutine.create(function()
+    repeat wait() until Options.AutoFarmAndStart.Value
+    for i,v in next,game.workspace.GameMap:GetDescendants() do
+        if v:IsA("BasePart") then
+            v.CanCollide = false
+        end
+    end
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
@@ -505,6 +541,25 @@ elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart
         wait()
      game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
      until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
+    end
+end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.workspace:FindFirstChild("TAB__1") then
+    local NO_CLIP_PART = Instance.new("Part",workspace)
+    NO_CLIP_PART.Name = "TAB__1"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Size = Vector3.new(2,1,2)
+elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value then
+    repeat
+        wait()
+     game.workspace:FindFirstChild("TAB__1").CFrame = game.workspace:FindFirstChild("CrazyDay_NO").CFrame * CFrame.new(0,-1,0)
+     until not game.workspace:FindFirstChild("TAB__1")  or not Options.AutoFarmAndStart.Value
     end
 end)
 end
@@ -574,4 +629,4 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-end -- End Of Do
+end -- End Of Doprint('Hello World!');
