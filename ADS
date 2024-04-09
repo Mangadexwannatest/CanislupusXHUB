@@ -320,25 +320,12 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-local BossFrame = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame
-if BossFrame.Visible and BossFrame.BossName.Text == "Speed" then
-getgenv().Dist = 2.75
-elseif BossFrame.Visible and BossFrame.BossName.Text == "Dominator" then
-getgenv().Dist = 5.45
-end
-end)
-end
-end))
-
-
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then 
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm  then
     repeat task.wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) )
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-3,6.5) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm 
 
@@ -386,11 +373,11 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Skill_1 and mag <= 25 then
-                wait(.25)
+                wait(.15)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Skill_2 and mag <= 25 then
-                wait(.25)
+                wait(.15)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Skill_3 and mag <= 25 then
@@ -456,8 +443,8 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(1.5,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,1000,side)
+                    local side = math.clamp(1,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,100000,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
@@ -482,13 +469,13 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if getgenv().STOP_Farm then
+        if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = true
             end
         end
-        elseif not getgenv().STOP_Farm then
+        elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = false
@@ -523,11 +510,11 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(2.5,-0.395,2.5)
+    NO_CLIP_PART.Size = Vector3.new(2.5,-0.35,2.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
         wait()
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3,0)
+     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
      until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
     end
 end)
