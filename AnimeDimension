@@ -127,6 +127,16 @@ do
 
     end)
 
+    Tab:AddSlider("Distance", 
+{
+    Title = "Distance",
+    Description = "(Only Mon)",
+    Default = 6.5 or getgenv().Distance,
+    Min = 0,
+    Max = 10,
+    Rounding = 1,
+})
+
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
     Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
@@ -145,6 +155,7 @@ do
     Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
 
 
+    Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = getgenv().Auto_Rejoin_Error })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
 
@@ -298,7 +309,8 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value or Options.AutoRaid.Value then
-            if not getgenv().JustCreat_Raid and getgenv().RaidOpened and Options.AutoRaid.Value then
+            if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -310,9 +322,8 @@ coroutine.resume(coroutine.create(function()
                 }
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-                getgenv().JustCreat_Raid = true
             end
-            if not getgenv().JustCreatRoom and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
+            if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 then
                 local args = {
                     [1] = "CreateRoom",
@@ -326,20 +337,16 @@ coroutine.resume(coroutine.create(function()
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
                 print("Creat : "..Options.SelectDimension.Value)
-                getgenv().JustCreatRoom = true
             end
 
-            if not getgenv().Teleporting and getgenv().JustCreat_Raid or getgenv().JustCreatRoom  then
+            if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
                 print("Start Teleport")
-                getgenv().Teleporting = true
             end
 
             end
        end)
-       if getgenv().Teleporting then
-        break
-       end
      end
 end))
 
@@ -361,7 +368,7 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false 
  then
     repeat task.wait()
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,4.5,-2) * CFrame.Angles(math.rad(0),1800,0) ) 
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,Options.Distance.Value,0) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 end
@@ -380,6 +387,7 @@ Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
         repeat task.wait() until not part.Parent
+        task.wait(.3)
         getgenv().STOP_Farm = false
     end
 end)
@@ -418,19 +426,19 @@ function Skill()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if getgenv().Skill_2 and mag <= 25 then
+        if getgenv().Skill_2 and mag <= 30 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
         end 
-        if getgenv().Skill_1 and mag <= 25 then
+        if getgenv().Skill_1 and mag <= 30 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
         end  
-        if getgenv().Skill_3 and mag <= 25 then
+        if getgenv().Skill_3 and mag <= 30 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
         end  
-        if getgenv().Skill_4 and mag <= 25 then
+        if getgenv().Skill_4 and mag <= 30 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
         end  
-        if getgenv().Skill_5 and mag <= 25 then
+        if getgenv().Skill_5 and mag <= 30 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
         end
     end
@@ -449,7 +457,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.65) do
+        while wait(0.85) do
             pcall(function()
                 Skill()
             end)
@@ -457,7 +465,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(0.85) do
+    while wait(1.5) do
         pcall(function()
             Melee()
         end)
@@ -495,17 +503,17 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,100,side)
+                    local side = math.clamp(2.5,0,5)
+                    local Sizeto = v.Size + Vector3.new(side,500,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
@@ -625,6 +633,16 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
+    game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+        if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+            if getgenv().Auto_Rejoin_Error then
+                game:GetService("TeleportService"):Teleport(6938803436)
+            end
+        end
+    end)
+end))
+
+coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
         repeat wait() until Options.AutoExecuteScript.Value
@@ -656,4 +674,4 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-end -- End Of Doprint('Hello World!');
+end -- End Of Do
