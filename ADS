@@ -355,19 +355,45 @@ end)
 end
 end))
 
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        local PlrFind = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+local function CheckHumanoid()
+        local PlrFind = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
         PlrFind.Touched:Connect(function(part)
-    pcall(function ()
     if part.Name == "DodgePart"and not getgenv().STOP_Farm then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
         end
-     end)
 end)
-end)
+end
+
+
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        if Options.AutoBountyHunter.Value then
+            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(.5)
+                CheckHumanoid()
+            end)
+        end
+    end)
+end
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+              end
+           end
+        end)
 end))
 
 --[[coroutine.resume(coroutine.create(function()
@@ -485,7 +511,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if workspace.Folders.Debris:FindFirstChild("DodgePart") then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
@@ -502,10 +528,10 @@ end))
         end
 end)
 end
-end))--]]
+end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
 repeat wait() until Options.AutoFarmAndStart.Value
@@ -518,9 +544,9 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))
+end))--]]
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
 if not game.workspace:FindFirstChild("CrazyDay_NO") then
     local NO_CLIP_PART = Instance.new("Part",workspace)
@@ -538,6 +564,7 @@ elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart
 end)
 end
 end))
+--]]
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
