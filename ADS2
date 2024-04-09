@@ -285,7 +285,7 @@ end
 
 
 function Tween(P)
-game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/60,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -406,13 +406,12 @@ end)
 end
 end))
 
---[[coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
+coroutine.resume(coroutine.create(function()
+    while wait(.35) do pcall(function ()
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if mag <= 25 then
-                wait(.55)
+            if mag <= 15 then
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
                 game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
             end
@@ -420,7 +419,7 @@ end))
     end
 end)
 end
-end))--]]
+end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.55) do pcall(function ()
@@ -453,13 +452,13 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(3.5,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,100,side)
+                    local Sizeto = v.Size + Vector3.new(side,40,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.55),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(1),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 0.75
@@ -467,6 +466,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat wait() until not v.Parent
+                    wait(1)
                     a:Destroy()
                 end
             end)
@@ -475,15 +475,15 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
---[[coroutine.resume(coroutine.create(function()
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if workspace.Folders.Debris:FindFirstChild("DodgePart") then
+        if getgenv().STOP_Farm then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = true
             end
         end
-        elseif not workspace.Folders.Debris:FindFirstChild("DodgePart") then
+        elseif not getgenv().STOP_Farm then
             for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v:IsA("BasePart") then
                     v.CanCollide = false
@@ -492,10 +492,10 @@ end))
         end
 end)
 end
-end))--]]
+end))
 
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     pcall(function ()
         repeat wait() until game:IsLoaded()
 repeat wait() until Options.AutoFarmAndStart.Value
@@ -508,7 +508,7 @@ for i,v in next,game.workspace.GameMap:GetDescendants() do
     end
 end
 end)
-end))
+end))--]]
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
@@ -518,7 +518,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 0
-    NO_CLIP_PART.Size = Vector3.new(12.5,-0.3,12.5)
+    NO_CLIP_PART.Size = Vector3.new(12.5,-0.31,12.5)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
         wait()
