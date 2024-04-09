@@ -37,14 +37,14 @@ do
         "Ghoul Dimension","Fate Dimension","Slime Dimension","Devil Dimension","Pirate Dimension",
         "Alien Dimension","Level Dimension"},
         Multi = false,
-        Default = getgenv().Select_Dimension_Tier,
+        Default = 12 or getgenv().Select_Dimension_Tier,
     })
 
     Tabs.Main:AddDropdown("SelectDifficulty", {
         Title = "Select Difficulty",
         Values = {"Easy","Hard","Nightmare"},
         Multi = false,
-        Default = getgenv().Difficulty,
+        Default = 3 or getgenv().Difficulty,
     })
 
     local SkillSelect = Tabs.Main:AddDropdown("SelectSkill", {
@@ -264,20 +264,6 @@ local function getClosestMob()
     return thing
 end
 
-local function getClosestDodgePart()
-    local dist, thing = math.huge
-        for i, v in next, workspace.Folders.Debris:GetChildren() do
-            if v.Name == "DodgePart" then
-                local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
-                if mag < dist then
-                    dist = mag 
-                    thing = v
-                end
-            end
-        end
-    return thing
-end
-
 
 
 function Tween(P)
@@ -366,16 +352,16 @@ coroutine.resume(coroutine.create(function()
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
-    repeat wait()
-Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-3,6.5) )
+    repeat task.wait()
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,-3,-3) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 
 
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false 
  then
-    repeat wait()
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,6.5) ) 
+    repeat task.wait()
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,4.5,-2) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 end
@@ -393,7 +379,7 @@ local function CheckTouch(KUB)
 Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
-        repeat wait() until not part.Parent
+        repeat task.wait() until not part.Parent
         getgenv().STOP_Farm = false
     end
 end)
@@ -411,7 +397,7 @@ do
 end
 end))
 
-coroutine.resume(coroutine.create(function()
+--[[coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
@@ -425,55 +411,59 @@ end
 end)
 end
 end))
-
-
 --]]
 
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        for i, v in next, workspace.Folders.Monsters:GetChildren() do
-            if v:FindFirstChildOfClass("BillboardGui") then
-            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Skill_1 and mag <= 25 then
-                wait(.15)
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
-            end  
-            if getgenv().Skill_2 and mag <= 25 then
-                wait(.15)
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
-            end  
-            if getgenv().Skill_3 and mag <= 25 then
-                wait(.45)
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
-            end  
-            if getgenv().Skill_4 and mag <= 25 then
-                wait(.55)
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
-            end  
-            if getgenv().Skill_5 and mag <= 25 then
-                wait(.65)
-                game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
-            end
+
+function Skill()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if getgenv().Skill_2 and mag <= 25 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
+        end 
+        if getgenv().Skill_1 and mag <= 25 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+        end  
+        if getgenv().Skill_3 and mag <= 25 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
+        end  
+        if getgenv().Skill_4 and mag <= 25 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
+        end  
+        if getgenv().Skill_5 and mag <= 25 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
         end
     end
-end)
 end
+end
+
+function Melee()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if mag <= 10 then
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+        end
+    end
+end 
+end
+
+coroutine.resume(coroutine.create(function()
+        while wait(0.65) do
+            pcall(function()
+                Skill()
+            end)
+        end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while task.wait(1.1) do pcall(function ()
-        for i, v in next, workspace.Folders.Monsters:GetChildren() do
-            if v:FindFirstChildOfClass("BillboardGui") then
-            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if mag <= 15 then
-                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
-                game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
-            end
-        end
+    while wait(0.85) do
+        pcall(function()
+            Melee()
+        end)
     end
-end)
-end
 end))
+
 
 coroutine.resume(coroutine.create(function()
     while wait(.55) do pcall(function ()
@@ -505,21 +495,21 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2,0,10)
+                    local side = math.clamp(3,0,10)
                     local Sizeto = v.Size + Vector3.new(side,100,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.25),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
-                    repeat wait() until not v.Parent
+                    repeat task.wait() until not v.Parent
                     a:Destroy()
                 end
             end)
