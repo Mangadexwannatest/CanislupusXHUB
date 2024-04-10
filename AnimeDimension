@@ -368,7 +368,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
                 repeat task.wait()
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFramew)
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
@@ -391,6 +391,19 @@ end)
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if Options.AutoFarmAndStart.Value then
+            if getgenv().STOP_Farm then
+                repeat task.wait()
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                until not getgenv().STOP_Farm
+end
+end
+end)
+end
+end))
+
 local function CheckTouch(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
     if not Dd then
@@ -400,7 +413,7 @@ Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
         repeat task.wait() until not part.Parent
-        task.wait(.3)
+        task.wait(.45)
         getgenv().STOP_Farm = false
     end
 end)
@@ -530,6 +543,35 @@ coroutine.resume(coroutine.create(function()
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.375),{Size = Sizeto}):Play()
+                    a.CFrame = v.CFrame + Vector3.new(0,0,0)
+                    a.Anchored = true
+                    a.Transparency = 1
+                    a.CanCollide = true
+                    a.Name = "DodgePart"
+                    a.Parent = v.Parent
+                    repeat task.wait() until not v.Parent
+                    a:Destroy()
+                end
+            end)
+        end)
+    end)
+end))
+
+coroutine.resume(coroutine.create(function()
+    pcall(function()
+        workspace.Folders.Debris.ChildAdded:Connect(function(v)
+            pcall(function()
+                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
+                    local op = v.Material
+                    local a = v:Clone()
+                    local side = math.clamp(2.5,0,2.5)
+                    local Sizeto = v.Size + Vector3.new(side,500,side)
+                    a.Size = Vector3.new(0,0,v.Size.Z)
+                    if v.ClassName == "MeshPart" then
+                        a.Size = Vector3.new(0,0,100)
+                        Sizeto = v.Size + Vector3.new(side,side,100)
+                    end
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.4),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
