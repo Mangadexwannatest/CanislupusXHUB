@@ -759,6 +759,7 @@ end))
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
     if Options.AutoWebhook_Dungeon.Value then
+        wait(1.25)
 local timeInfo = os.date("*t")
 BBody = game:GetService("HttpService"):JSONEncode({
       content = nil,
