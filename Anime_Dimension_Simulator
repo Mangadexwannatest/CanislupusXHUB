@@ -1,4 +1,5 @@
 repeat wait() until game:IsLoaded()
+game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
 local Username = game.Players.LocalPlayer.Name
 local UserId 
 
@@ -6,7 +7,6 @@ pcall(function()
    UserId = game.Players:GetUserIdFromNameAsync(Username)
 end)
 
-game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
 for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScrollList.SizeOffsetFrame.ScrollingFrameContainer.ScrollingFrameClippingFrame.ScollingFrame.OffsetUndoFrame:GetChildren() do
     if v.Name == "p_"..UserId then
     for _,k in next,v:GetDescendants() do
@@ -67,15 +67,6 @@ do
         Default = getgenv().Difficulty or 3,
     })
 
-    Tabs.Main:AddSlider("Distance", 
-{
-    Title = "Distance",
-    Description = "(Only Mon)",
-    Default = getgenv().Distance or 6.45,
-    Min = 0,
-    Max = 10,
-    Rounding = 2,
-})
 
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
@@ -381,27 +372,32 @@ coroutine.resume(coroutine.create(function()
        end)
      end
 end))
+function TweenPart(part,goal)
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((part.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal.CFrame}):Play()
+end
+
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if getgenv().STOP_Farm then
+            if getgenv().STOP_Farm and not getgenv().Break_Farm then
                 repeat task.wait()
                 Tween(game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame * CFrame.new(0,-0.885,0) )
-                until not getgenv().STOP_Farm
+                until not getgenv().STOP_Farm or getgenv().Break_Farm 
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm and not getgenv().Break_Farm then
     repeat task.wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm
 
 
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm then
+elseif
+ game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm then
     repeat task.wait()
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,Options.Distance.Value,0) * CFrame.Angles(math.rad(0),1800,0) ) 
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm
 end
 end
 end
@@ -409,6 +405,71 @@ end)
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        local Boss = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame
+        if Boss.Visible and not getgenv().Touch and Boss.BossName.Text == "King of Curses" or Boss.BossName.Text == "King" then
+            getgenv().Break_Farm = true
+        elseif getgenv().Touch and getgenv().Break_Farm then
+            getgenv().Break_Farm = false
+        end
+      end)
+    end
+end))
+
+coroutine.resume(coroutine.create(function()
+    pcall(function()
+        workspace.Folders.Monsters.ChildAdded:Connect(function(v)
+            if v.Name == "Onihime" then
+                repeat wait() until not v.Parent
+                getgenv().Break_Farm = true
+            end
+        end)
+    end)
+end))
+
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if not game.workspace:FindFirstChild("Teleport_Part_Boss") 
+        and game.workspace.GameMap:FindFirstChild("Curse Dimension") then
+            local PART = Instance.new("Part",game.workspace)
+            PART.Name = "Teleport_Part_Boss"
+            PART.CanCollide = false
+            PART.Anchored = true
+            PART.Transparency = 1
+            PART.Size = Vector3.new(5,5,5)
+            PART.CFrame = CFrame.new(204.747787, 4.38378477, -275.407867, 0.0972495899, 4.15591543e-08, 0.99526, -3.80400529e-08, 1, -3.80400849e-08, -0.99526, -3.41603581e-08, 0.0972495899)
+        elseif not game.workspace:FindFirstChild("Teleport_Part_Boss") 
+        and game.workspace.GameMap:FindFirstChild("Fate Dimension") then
+            local PART = Instance.new("Part",game.workspace)
+            PART.Name = "Teleport_Part_Boss"
+            PART.CanCollide = false
+            PART.Anchored = true
+            PART.Transparency = 1
+            PART.Size = Vector3.new(5,5,5)
+            PART.CFrame = CFrame.new(267.234406, 45.1668282, -1174.48718, 0.422591954, 1.84010762e-08, 0.906320035, 3.80401346e-08, 1, -3.8040131e-08, -0.906320035, 5.05519893e-08, 0.422591954)
+        elseif not game.workspace:FindFirstChild("Teleport_Part_Boss") 
+        and game.workspace.GameMap:FindFirstChild("Pirate Dimension") then
+            local PART = Instance.new("Part",game.workspace)
+            PART.Name = "Teleport_Part_Boss"
+            PART.CanCollide = false
+            PART.Anchored = true
+            PART.Transparency = 1
+            PART.Size = Vector3.new(5,53,5)
+            PART.CFrame = CFrame.new(-1441.08545, 14.8336296, 256.363922, 0.198312044, -4.48285427e-08, -0.980138958, 3.80402305e-08, 1, -3.8040227e-08, 0.980138958, -2.97408747e-08, 0.198312044)
+
+        else
+            if game.workspace:FindFirstChild("Teleport_Part_Boss") and not getgenv().Touch and getgenv().Break_Farm then
+            repeat wait()
+                TweenPart(game.workspace:FindFirstChild("Teleport_Part_Boss"),game.workspace:FindFirstChild("Teleport_Part_Boss"))
+                until getgenv().Touch
+                getgenv().Break_Farm = false
+            end
+        end
+    end)
+end
+end))
 
 local function CheckTouch(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
@@ -424,6 +485,21 @@ Dd.Touched:Connect(function(part)
     end
 end)
 end
+
+local function TocuhEnd(KUB)
+    local Dd = KUB:WaitForChild("HumanoidRootPart")
+    if not Dd then
+        return
+    end
+Dd.TouchEnded:Connect(function(part)
+    if part.Name == "Teleport_Part_Boss" and getgenv().Break_Farm then
+        getgenv().Touch = true
+        getgenv().Break_Farm = false
+    end
+end)
+end
+
+
 
 local function CheckAnchored(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
@@ -467,15 +543,11 @@ do
         CheckTouch(PlayerCheck)
         CheckAnchored(PlayerCheck)
         onCharacterAdded(PlayerCheck)
+        TocuhEnd(PlayerCheck)
         game.Players.LocalPlayer.Character.Head.CanCollide = false
         print("Head : False")
         game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
         getgenv().IFrame_MODE = false
-        for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-            if string.find(v.Name,"Animate") then
-                v.Disabled = true
-            end
-        end
     end
 end
 end))
@@ -582,7 +654,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(0.85) do
+    while wait(0.7775) do
         pcall(function()
             Melee()
         end)
