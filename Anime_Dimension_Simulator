@@ -447,6 +447,7 @@ do
     if PlayerCheck then
         CheckTouch(PlayerCheck)
         CheckAnchored(PlayerCheck)
+        onCharacterAdded(PlayerCheck)
         getgenv().IFrame_MODE = false
         for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
             if string.find(v.Name,"Animate") then
