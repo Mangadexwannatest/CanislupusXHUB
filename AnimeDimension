@@ -363,7 +363,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
                 repeat task.wait()
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0.01,0))
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0.1,0))
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
