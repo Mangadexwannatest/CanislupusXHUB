@@ -1,18 +1,26 @@
 repeat wait() until game:IsLoaded()
+local Username = game.Players.LocalPlayer.Name
+local UserId 
+
+pcall(function() 
+   UserId = game.Players:GetUserIdFromNameAsync(Username)
+end)
+
+game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
+for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScrollList.SizeOffsetFrame.ScrollingFrameContainer.ScrollingFrameClippingFrame.ScollingFrame.OffsetUndoFrame:GetChildren() do
+    if v.Name == "p_"..UserId then
+    for _,k in next,v:GetDescendants() do
+    if k.Name == "PlayerName" and k.ClassName == "TextLabel" then
+    k.Text = "Protech_By_CrazyDay"
+    end
+    end
+end
+end
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 game.workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
 
-game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
-for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScrollList.SizeOffsetFrame.ScrollingFrameContainer.ScrollingFrameClippingFrame.ScollingFrame.OffsetUndoFrame:GetDescendants() do
-    if v.Name == "PlayerName" and v.ClassName == "TextLabel" then
-        if tostring(v.Text == game.Players.LocalPlayer.Name) or tostring(v.Text == game.Players.LocalPlayer.Name) then
-       v.Text = "Protech_By_CrazyDay"
-       game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
-    end
-end
-end
-
+game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
 
@@ -810,6 +818,8 @@ elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.49411
         table.insert(item_name,v.Name.." [Epic]")
 elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
     table.insert(item_name,v.Name.." [Legendary]")
+else
+    table.insert(item_name,v.Name.." [Mythic]")
     end
 end)
 end)
@@ -839,7 +849,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
           
                          {
                 ["name"] = "Card",
-                ["value"] = "\n[+] "..table.concat( item_name,"\n[+] "),
+                ["value"] = "\n[+1] "..table.concat( item_name,"\n[+1] "),
                 ["inline"] = false
                   
               },
