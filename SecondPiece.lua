@@ -1358,30 +1358,31 @@ end
 end))
 
 
-        coroutine.resume(coroutine.create(function()
-            pcall(function ()
-        Button.TouchTap:Connect(function()
-        for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-                if v.Name == "Frame" and i == 2 then
-                    v.Visible = not v.Visible
-                            end
-                        end
-                end)
-            end)
-        end))
-        
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        repeat wait() until UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled
+Button.TouchTap:Connect(function()
+for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+        if v.Name == "Frame" and i == 2 and UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
+            v.Visible = not v.Visible
+                    end
+                end
+        end)
+    end)
+end))
 
-        coroutine.resume(coroutine.create(function()
-            pcall(function ()
-        Button.MouseButton1Click:Connect(function()
-        for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-                if v.Name == "Frame" and i == 2 then
-                    v.Visible = not v.Visible
-                            end
-                        end
-                end)
-            end)
-        end))
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        repeat wait() until not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled
+Button.MouseButton1Click:Connect(function()
+for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+        if v.Name == "Frame" and i == 2 and not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
+            v.Visible = not v.Visible
+                    end
+                end
+        end)
+    end)
+end))
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
