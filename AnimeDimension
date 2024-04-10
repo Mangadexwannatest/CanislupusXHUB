@@ -441,7 +441,7 @@ function Skill_First()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+        if Options.Auto_Skill_Assist.Value and mag <= 30 then
             task.wait(1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.First_Skill.Value)
         end 
@@ -453,7 +453,7 @@ function Skill_Second()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+        if Options.Auto_Skill_Assist.Value and mag <= 30 then
             task.wait(1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Second_Skill.Value)
         end 
@@ -466,7 +466,7 @@ function Skill_Third()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+        if Options.Auto_Skill_Assist.Value and mag <= 30 then
             task.wait(1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Third_Skill.Value)
         end 
@@ -479,7 +479,7 @@ function Skill_Fourth()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+        if Options.Auto_Skill_Assist.Value and mag <= 30 then
             task.wait(1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Fourth_Skill.Value)
         end 
@@ -492,7 +492,7 @@ function Skill_Fifth()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+        if Options.Auto_Skill_Assist.Value and mag <= 30 then
             task.wait(1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Fifth_Skill.Value)
         end 
