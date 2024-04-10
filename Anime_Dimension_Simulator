@@ -945,9 +945,7 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     local script = 
     [[
         repeat wait() until game:IsLoaded()
-        if Options.AutoExecuteScript.Value then
     loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/AnimeDimension'))()
-        end
     ]]
     if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
