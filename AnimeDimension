@@ -391,18 +391,6 @@ end)
 end
 end))
 
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
-            if getgenv().STOP_Farm then
-                repeat task.wait()
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
-                until not getgenv().STOP_Farm
-end
-end
-end)
-end
-end))
 
 local function CheckTouch(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
@@ -489,7 +477,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.75) do
+        while wait(0.85) do
             pcall(function()
                 Skill()
             end)
