@@ -22,12 +22,14 @@ local Window = Fluent:CreateWindow({
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Skill = Window:AddTab({ Title = "Skill", Icon = "" }),
     Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
     Other = Window:AddTab({ Title = "Other", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "" })
 }
 
 local Options = Fluent.Options
+local item_name = {}
 
 do
 
@@ -47,58 +49,39 @@ do
         Default = getgenv().Difficulty or 3,
     })
 
-    local SkillSelect = Tabs.Main:AddDropdown("SelectSkill", {
-        Title = "Select Skill",
-        Values = {"1","2","3","4","5"},
-        Multi = true,
-        Default = {"1","2","3","4"},
-    })
+    Tabs.Main:AddSlider("Distance", 
+{
+    Title = "Distance",
+    Description = "(Only Mon)",
+    Default = getgenv().Distance or 6.5,
+    Min = 0,
+    Max = 10,
+    Rounding = 1,
+})
 
-    local AssistSelect = Tabs.Main:AddDropdown("SelectAssist", {
+    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
+    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
+    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
+    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = getgenv().Auto_Retry })
+
+    Tabs.Main:AddSection("Raid")
+
+    Tabs.Main:AddDropdown("SelectRaid", {
+        Title = "Select Raid",
+        Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+        Multi = false,
+        Default = 1 or getgenv().Select_Raid,
+    })
+    Tabs.Main:AddToggle("AutoRaid", {Title = "Auto Raid", Default = getgenv().Auto_Raid })
+
+    Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
+
+    local AssistSelect = Tabs.Skill:AddDropdown("SelectAssist", {
         Title = "Select Assist",
         Values = {"Assist 1","Assist 2","Fruit"},
         Multi = true,
         Default = {"Assist 1","Assist 2","Fruit"},
     })
-
-    SkillSelect:OnChanged(function(Value)
-        local Values = {}
-        for Value, State in next, Value do
-            table.insert(Values, Value)
-        end
-        if table.find(Values,"1") and not getgenv().Skill_1 then
-            getgenv().Skill_1 = true
-        end
-        if table.find(Values,"2") and not getgenv().Skill_2 then
-            getgenv().Skill_2 = true
-        end
-        if table.find(Values,"3") and not getgenv().Skill_3 then
-            getgenv().Skill_3 = true
-        end
-        if table.find(Values,"4") and not getgenv().Skill_4 then
-            getgenv().Skill_4 = true
-        end
-        if table.find(Values,"5") and not getgenv().Skill_5 then
-            getgenv().Skill_5 = true
-        end
-
-
-        if not table.find(Values,"1") and getgenv().Skill_1 then
-            getgenv().Skill_1 = false
-        end
-        if not table.find(Values,"2") and getgenv().Skill_2 then
-            getgenv().Skill_2 = false
-        end
-        if not table.find(Values,"3") and getgenv().Skill_3 then
-            getgenv().Skill_3 = false
-        end
-        if not table.find(Values,"4") and getgenv().Skill_4 then
-            getgenv().Skill_4 = false
-        end
-        if not table.find(Values,"5") and getgenv().Skill_5 then
-            getgenv().Skill_5 = false
-        end
-    end)
 
     AssistSelect:OnChanged(function(Value)
         local Values = {}
@@ -127,32 +110,44 @@ do
 
     end)
 
-    Tabs.Main:AddSlider("Distance", 
-{
-    Title = "Distance",
-    Description = "(Only Mon)",
-    Default = getgenv().Distance or 6.5,
-    Min = 0,
-    Max = 10,
-    Rounding = 1,
-})
-
-    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
-    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
-    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
-    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = getgenv().Auto_Retry })
-
-    Tabs.Main:AddSection("Raid")
-
-    Tabs.Main:AddDropdown("SelectRaid", {
-        Title = "Select Raid",
-        Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+    Tabs.Skill:AddDropdown("First_Skill", {
+        Title = "Skill First",
+        Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = 1 or getgenv().Select_Raid,
+        Default = getgenv().First_Skill or 1,
     })
-    Tabs.Main:AddToggle("AutoRaid", {Title = "Auto Raid", Default = getgenv().Auto_Raid })
 
-    Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
+    Tabs.Skill:AddDropdown("Second_Skill", {
+        Title = "Second First",
+        Values = {"1","2","3","4","5"},
+        Multi = false,
+        Default = getgenv().First_Skill or 2,
+    })
+
+    Tabs.Skill:AddDropdown("Third_Skill", {
+        Title = "Third First",
+        Values = {"1","2","3","4","5"},
+        Multi = false,
+        Default = getgenv().First_Skill or 3,
+    })
+
+    Tabs.Skill:AddDropdown("Fourth_Skill", {
+        Title = "Fourth First",
+        Values = {"1","2","3","4","5"},
+        Multi = false,
+        Default = getgenv().First_Skill or 4,
+    })
+
+    Tabs.Skill:AddDropdown("Fifth_Skill", {
+        Title = "Fifth First",
+        Values = {"1","2","3","4","5"},
+        Multi = false,
+        Default = getgenv().First_Skill or 5,
+    })
+
+    Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "Auto Skill // Assist", Default = getgenv().Auto_Skill_Assist })
+
+    
 
 
     Tabs.Webhook:AddInput("Webhook", {
@@ -442,28 +437,71 @@ end))
 --]]
 
 
-function Skill()
+function Skill_First()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-        if getgenv().Skill_2 and mag <= 30 then
-            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
+        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.First_Skill.Value)
         end 
-        if getgenv().Skill_1 and mag <= 30 then
-            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
-        end  
-        if getgenv().Skill_3 and mag <= 30 then
-            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},3)
-        end  
-        if getgenv().Skill_4 and mag <= 30 then
-            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},4)
-        end  
-        if getgenv().Skill_5 and mag <= 30 then
-            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},5)
         end
     end
 end
+
+function Skill_Second()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Second_Skill.Value)
+        end 
+        end
+    end
 end
+
+
+function Skill_Third()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Third_Skill.Value)
+        end 
+        end
+    end
+end
+
+
+function Skill_Fourth()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Fourth_Skill.Value)
+        end 
+        end
+    end
+end
+
+
+function Skill_Fifth()
+    for i, v in next, workspace.Folders.Monsters:GetChildren() do
+        if v:FindFirstChildOfClass("BillboardGui") then
+        local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
+        if Options.Auto_Skill_Assist.Value and magw <= 30 then
+            task.wait(1)
+            game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},Options.Fifth_Skill.Value)
+        end 
+        end
+    end
+end
+
+
+
 
 function Melee()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
@@ -477,15 +515,21 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.8) do
+        while wait(0.2) do
             pcall(function()
-                Skill()
+                if Options.Auto_Skill_Assist.Value then
+                    Skill_First()
+                    Skill_Second()
+                    Skill_Third()
+                    Skill_Fourth()
+                    Skill_Fifth()
+                end
             end)
         end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(1.1) do
+    while wait(1) do
         pcall(function()
             Melee()
         end)
@@ -495,6 +539,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.55) do pcall(function ()
+        if Options.Auto_Skill_Assist.Value then
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
@@ -509,6 +554,7 @@ coroutine.resume(coroutine.create(function()
             if getgenv().Assist_Fruit and mag <= 30 then
                 wait(.55)
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+               end
             end  
         end
     end
@@ -524,7 +570,7 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
-                    local Sizeto = v.Size + Vector3.new(side,500,side)
+                    local Sizeto = v.Size + Vector3.new(side,150,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
@@ -533,7 +579,7 @@ coroutine.resume(coroutine.create(function()
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.375),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
@@ -553,16 +599,16 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
-                    local Sizeto = v.Size + Vector3.new(side,500,side)
+                    local Sizeto = v.Size + Vector3.new(side,100,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        a.Size = Vector3.new(0,0,50)
+                        Sizeto = v.Size + Vector3.new(side,side,50)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.375),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
@@ -691,9 +737,10 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
-local item_name = {}
 coroutine.resume(coroutine.create(function()
     pcall(function ()
+        game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
+        repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
     if not v:FindFirstChild("Gradient") then
     table.insert(item_name,v.Name.." [Common]")
