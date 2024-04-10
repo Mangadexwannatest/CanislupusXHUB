@@ -199,6 +199,9 @@ SaveManager:LoadAutoloadConfig()
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
+        if not UserInputService.TouchEnabled then
+            return;
+        else
         if game.CoreGui:FindFirstChild("Close/Open") == nil then
 local CloseOpen = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
@@ -217,6 +220,7 @@ TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextButton.TextScaled = true
 TextButton.TextSize = 14.000
 TextButton.TextWrapped = true
+        end
         end
 end)
 end))
@@ -248,23 +252,13 @@ end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
-        if UserInputService.TouchEnabled then
 Button.TouchTap:Connect(function()
 for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
         if v.Name == "Frame" and i == 2 and UserInputService.TouchEnabled then
             v.Visible = not v.Visible
-                    end
                 end
+            end
         end)
-    else
-        Button.MouseButton1Click:Connect(function()
-            for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-                    if v.Name == "Frame" and i == 2 and not UserInputService.TouchEnabled then
-                        v.Visible = not v.Visible
-                                end
-                            end
-                    end)
-    end
     end)
 end))
 
