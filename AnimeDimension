@@ -37,14 +37,14 @@ do
         "Ghoul Dimension","Fate Dimension","Slime Dimension","Devil Dimension","Pirate Dimension",
         "Alien Dimension","Level Dimension"},
         Multi = false,
-        Default = 12 or getgenv().Select_Dimension_Tier,
+        Default = getgenv().Select_Dimension_Tier or 12,
     })
 
     Tabs.Main:AddDropdown("SelectDifficulty", {
         Title = "Select Difficulty",
         Values = {"Easy","Hard","Nightmare"},
         Multi = false,
-        Default = 3 or getgenv().Difficulty,
+        Default = getgenv().Difficulty or 3,
     })
 
     local SkillSelect = Tabs.Main:AddDropdown("SelectSkill", {
@@ -131,7 +131,7 @@ do
 {
     Title = "Distance",
     Description = "(Only Mon)",
-    Default = 6.5 or getgenv().Distance,
+    Default = getgenv().Distance or 6.5,
     Min = 0,
     Max = 10,
     Rounding = 1,
@@ -465,7 +465,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(1.5) do
+    while wait(1) do
         pcall(function()
             Melee()
         end)
@@ -503,17 +503,17 @@ coroutine.resume(coroutine.create(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.5,0,5)
+                    local side = math.clamp(2.25,0,2.25)
                     local Sizeto = v.Size + Vector3.new(side,500,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.375),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 0
+                    a.Transparency = 1
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
