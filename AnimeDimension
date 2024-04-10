@@ -713,7 +713,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       })
   local response = http_request or request or HttpPost or syn.request
   response({
-  Url = Options.AutoWebhook_Dungeon.Value or getgenv().Webhook,
+  Url = Options.Webhook.Value or getgenv().Webhook,
   Method = "POST",
   Headers = {
       ["Content-Type"] = "application/json"
