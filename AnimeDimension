@@ -121,28 +121,28 @@ do
         Title = "Second First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().First_Skill or 2,
+        Default = getgenv().Second_Skill or 2,
     })
 
     Tabs.Skill:AddDropdown("Third_Skill", {
         Title = "Third First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().First_Skill or 3,
+        Default = getgenv().Third_Skill or 3,
     })
 
     Tabs.Skill:AddDropdown("Fourth_Skill", {
         Title = "Fourth First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().First_Skill or 4,
+        Default = getgenv().Fourth_Skill or 4,
     })
 
     Tabs.Skill:AddDropdown("Fifth_Skill", {
         Title = "Fifth First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().First_Skill or 5,
+        Default = getgenv().Fifth_Skill or 5,
     })
 
     Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "Auto Skill // Assist", Default = getgenv().Auto_Skill_Assist })
