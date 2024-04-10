@@ -945,7 +945,6 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     local script = 
     [[
         repeat wait() until game:IsLoaded()
-        repeat wait() until Options.AutoExecuteScript.Value
         if Options.AutoExecuteScript.Value then
     loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/AnimeDimension'))()
         end
