@@ -155,6 +155,19 @@ do
     Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
 
 
+    Tabs.Webhook:AddInput("Webhook", {
+        Title = "Webohook",
+        Description = "Link.",
+        Default = getgenv().Webhook,
+        Placeholder = "",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+    })
+
+    Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = getgenv().Dungeon_Reward })
+    Tabs.Webhook:AddToggle("AutoWebhook_Raid", {Title = "Raid Reward", Default = getgenv().Raid_Reward })
+
+
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = getgenv().Auto_Rejoin_Error })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
@@ -401,6 +414,12 @@ do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
         CheckTouch(PlayerCheck)
+        for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+            if string.find(v.Name,"Animate") then
+                v.Disabled = true
+                print(v.Disabled)
+            end
+        end
     end
 end
 end))
@@ -457,7 +476,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.85) do
+        while wait(0.75) do
             pcall(function()
                 Skill()
             end)
@@ -545,13 +564,13 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Transparency = 0
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
+elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
     repeat
         wait()
      game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
-     until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
+     until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
     end
 end)
 end
@@ -564,13 +583,13 @@ if not game.workspace:FindFirstChild("TAB__1") then
     NO_CLIP_PART.Name = "TAB__1"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Transparency = 0
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value then
+elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
     repeat
         wait()
      game.workspace:FindFirstChild("TAB__1").CFrame = game.workspace:FindFirstChild("CrazyDay_NO").CFrame * CFrame.new(0,-1,0)
-     until not game.workspace:FindFirstChild("TAB__1")  or not Options.AutoFarmAndStart.Value
+     until not game.workspace:FindFirstChild("TAB__1")  or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
     end
 end)
 end
@@ -641,6 +660,69 @@ coroutine.resume(coroutine.create(function()
         end
     end)
 end))
+
+local item_name = {}
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    if not v:FindFirstChild("Gradient") then
+    table.insert(item_name,v.Name.." [Common]")
+elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
+        table.insert(item_name,v.Name.." [Uncommon]")
+elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
+        table.insert(item_name,v.Name.." [Rare]")
+elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
+        table.insert(item_name,v.Name.." [Epic]")
+elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
+    table.insert(item_name,v.Name.." [Legendary]")
+    end
+end)
+end)
+end))
+
+game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+    if Options.AutoWebhook_Dungeon.Value then
+local timeInfo = os.date("*t")
+BBody = game:GetService("HttpService"):JSONEncode({
+      content = nil,
+      embeds = {{
+          ["author"] = {
+              ["name"] = "Crazy Day ",
+              ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632"
+          },
+          ["title"] = "Anime Dimension Simulator", 
+          ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632",
+          ["footer"] = {
+              ["text"] = "Anime Dimension Simulator : " .. timeInfo.hour .. ":" .. timeInfo.min,
+              ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632"
+         
+          },
+          ["color"] = tonumber(0xFFD700),
+          ["url"] = "https://www.reddit.com/r/cats/",
+          ["fields"] = {
+          
+                         {
+                ["name"] = "Card",
+                ["value"] = "\n[+] "..table.concat( item_name,"\n[+] "),
+                ["inline"] = false
+                  
+              },
+            
+          }
+          }}
+      })
+  local response = http_request or request or HttpPost or syn.request
+  response({
+  Url = Options.AutoWebhook_Dungeon.Value or getgenv().Webhook,
+  Method = "POST",
+  Headers = {
+      ["Content-Type"] = "application/json"
+  },
+  Body = BBody
+})    
+    end
+end)
+
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
