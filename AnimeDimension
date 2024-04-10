@@ -368,7 +368,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
                 repeat task.wait()
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0.01,0))
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
@@ -401,7 +401,7 @@ Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
         repeat task.wait() until not part.Parent
-        task.wait(.45)
+        task.wait(.25)
         getgenv().STOP_Farm = false
     end
 end)
@@ -477,7 +477,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.85) do
+        while wait(0.8) do
             pcall(function()
                 Skill()
             end)
@@ -485,7 +485,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(1) do
+    while wait(1.1) do
         pcall(function()
             Melee()
         end)
@@ -559,7 +559,7 @@ coroutine.resume(coroutine.create(function()
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.4),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.375),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -594,7 +594,7 @@ if not game.workspace:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
 elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
     repeat
@@ -613,7 +613,7 @@ if not game.workspace:FindFirstChild("TAB__1") then
     NO_CLIP_PART.Name = "TAB__1"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
 elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
     repeat
