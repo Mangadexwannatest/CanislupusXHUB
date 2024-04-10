@@ -950,7 +950,8 @@ coroutine.resume(coroutine.create(function()
                               }
                               }}
                           })
-                      local response = syn.request({
+                      local response = http_request or request or HttpPost or syn.request
+                      response({
                       Url = Options.WebhookLink.Value,
                       Method = "POST",
                       Headers = {
@@ -1123,7 +1124,8 @@ end))
               }
               }}
           })
-      local response = syn.request({
+      local response = http_request or request or HttpPost or syn.request
+      response({
       Url = Options.WebhookLink.Value,
       Method = "POST",
       Headers = {
@@ -1170,7 +1172,8 @@ if v2.Name == "WorldModel" then
                   }
                   }}
               })
-          local response = syn.request({
+          local response = http_request or request or HttpPost or syn.request
+          response({
           Url = Options.WebhookLink.Value,
           Method = "POST",
           Headers = {
@@ -1219,7 +1222,8 @@ function WebhookMerchant()
               }
               }}
           })
-      local response = syn.request({
+      local response = http_request or request or HttpPost or syn.request
+      response({
       Url = Options.WebhookLink.Value,
       Method = "POST",
       Headers = {
