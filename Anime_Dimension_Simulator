@@ -3,6 +3,16 @@ repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Play
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 game.workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
 
+game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
+for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScrollList.SizeOffsetFrame.ScrollingFrameContainer.ScrollingFrameClippingFrame.ScollingFrame.OffsetUndoFrame:GetDescendants() do
+    if v.Name == "PlayerName" and v.ClassName == "TextLabel" then
+        if tostring(v.Text == game.Players.LocalPlayer.Name) or tostring(v.Text == game.Players.LocalPlayer.Name) then
+       v.Text = "Protech_By_CrazyDay"
+       game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
+    end
+end
+end
+
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
 
@@ -53,7 +63,7 @@ do
 {
     Title = "Distance",
     Description = "(Only Mon)",
-    Default = getgenv().Distance or 6.55,
+    Default = getgenv().Distance or 6.45,
     Min = 0,
     Max = 10,
     Rounding = 2,
@@ -365,22 +375,21 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
+    while task.wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
                 repeat task.wait()
-                Tween(game.workspace:FindFirstChild("Halor_1").CFrame)
+                Tween(game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame * CFrame.new(0,-0.885,0) )
                 until not getgenv().STOP_Farm
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm then
     repeat task.wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
 
 
-elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false 
- then
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm then
     repeat task.wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,Options.Distance.Value,0) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
@@ -436,6 +445,8 @@ local function onCharacterAdded(character)
                 wait(.5)
                 getgenv().STOP_Farm = false
                 getgenv().IFrame_MODE = false
+                game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
+                print("Changed...")
             end)
     end)
 end
@@ -448,6 +459,9 @@ do
         CheckTouch(PlayerCheck)
         CheckAnchored(PlayerCheck)
         onCharacterAdded(PlayerCheck)
+        game.Players.LocalPlayer.Character.Head.CanCollide = false
+        print("Head : False")
+        game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
         getgenv().IFrame_MODE = false
         for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
             if string.find(v.Name,"Animate") then
@@ -458,22 +472,6 @@ do
 end
 end))
 
---[[coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
-    for i, v in next, workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == false then
-            if not v.HumanoidRootPart.Anchored then
-            v.HumanoidRootPart.Anchored = true
-            end
-        end
-    end    
-end
-end)
-end
-end))
---]]
-
 
 function Skill_First()
     for i, v in next, workspace.Folders.Monsters:GetChildren() do
@@ -481,7 +479,7 @@ function Skill_First()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) == nil
-        and mag <= 25 and not getgenv().IFrame_MODE then
+        and mag <= 30 and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.First_Skill.Value))
         end 
@@ -495,7 +493,7 @@ function Skill_Second()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text) == nil
-        and mag <= 25 and not getgenv().IFrame_MODE then
+        and mag <= 30 and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Second_Skill.Value))
         end 
@@ -510,7 +508,7 @@ function Skill_Third()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text)  == nil
-        and mag <= 25 and not getgenv().IFrame_MODE then
+        and mag <= 30 and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Third_Skill.Value))
         end 
@@ -525,7 +523,7 @@ function Skill_Fourth()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text)  == nil
-        and mag <= 25 and not getgenv().IFrame_MODE then
+        and mag <= 30 and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fourth_Skill.Value))
         end 
@@ -539,7 +537,7 @@ function Skill_Fifth()
         if v:FindFirstChildOfClass("BillboardGui") then
             if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].Visible and
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].SkillName.Text)  == nil
-            and mag <= 25 and not getgenv().IFrame_MODE then
+            and mag <= 30 and not getgenv().IFrame_MODE then
                 wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fifth_Skill.Value))
         end 
@@ -562,7 +560,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while task.wait(0.215) do
+        while task.wait(0.1) do
             pcall(function()
                 if Options.Auto_Skill_Assist.Value then
                     Skill_First()
@@ -629,13 +627,13 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
-                    local Sizeto = v.Size + Vector3.new(side,250,side)
+                    local Sizeto = v.Size + Vector3.new(side,175,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -643,6 +641,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat task.wait() until not v.Parent
+                    task.wait(.25)
                     a:Destroy()
                 end
             end)
@@ -658,13 +657,13 @@ coroutine.resume(coroutine.create(function()
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
-                    local Sizeto = v.Size + Vector3.new(side,250,side)
+                    local Sizeto = v.Size + Vector3.new(side,175,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,50)
                         Sizeto = v.Size + Vector3.new(side,side,50)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -672,6 +671,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat task.wait() until not v.Parent
+                    task.wait(.25)
                     a:Destroy()
                 end
             end)
@@ -694,56 +694,38 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("CrazyDay_NO") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
+if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
+    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.workspace:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
+elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and Options.AutoFarmAndStart.Value then
     repeat
         wait()
-     game.workspace:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
-     until not game.workspace:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
+        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO")  or not Options.AutoFarmAndStart.Value
     end
 end)
 end
 end))
 
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("TAB__1") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
-    NO_CLIP_PART.Name = "TAB__1"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.workspace:FindFirstChild("TAB__1") and Options.AutoFarmAndStart.Value and not getgenv().STOP_Farm then
-    repeat
-        wait()
-     game.workspace:FindFirstChild("TAB__1").CFrame = game.workspace:FindFirstChild("CrazyDay_NO").CFrame * CFrame.new(0,-2,0)
-     until not game.workspace:FindFirstChild("TAB__1")  or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm
-    end
-end)
-end
-end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()  
-if not game.workspace:FindFirstChild("Halor_1") then
-    local NO_CLIP_PART = Instance.new("Part",workspace)
+if not game.Players.LocalPlayer.Character:FindFirstChild("Halor_1") then
+    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
     NO_CLIP_PART.Name = "Halor_1"
     NO_CLIP_PART.CanCollide = false
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Transparency = 1
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.workspace:FindFirstChild("Halor_1") and Options.AutoFarmAndStart.Value then
+elseif game.Players.LocalPlayer.Character:FindFirstChild("Halor_1") and Options.AutoFarmAndStart.Value then
     repeat
         task.wait()
-     game.workspace:FindFirstChild("Halor_1").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,1,0)
-     until not game.workspace:FindFirstChild("Halor_1")  or not Options.AutoFarmAndStart.Value
+        game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0.95,0)
+     until not game.Players.LocalPlayer.Character:FindFirstChild("Halor_1")  or not Options.AutoFarmAndStart.Value
     end
 end)
 end
@@ -771,8 +753,6 @@ end
 end)
 end
 end))
-
-
 
 coroutine.resume(coroutine.create(function()
         while wait(1) do
