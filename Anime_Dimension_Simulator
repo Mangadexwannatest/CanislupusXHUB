@@ -53,10 +53,10 @@ do
 {
     Title = "Distance",
     Description = "(Only Mon)",
-    Default = getgenv().Distance or 6.5,
+    Default = getgenv().Distance or 6.55,
     Min = 0,
     Max = 10,
-    Rounding = 1,
+    Rounding = 2,
 })
 
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
@@ -78,9 +78,9 @@ do
 
     local AssistSelect = Tabs.Skill:AddDropdown("SelectAssist", {
         Title = "Select Assist",
-        Values = {"Assist 1","Assist 2","Fruit"},
+        Values = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
         Multi = true,
-        Default = {"Assist 1","Assist 2","Fruit"},
+        Default = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
     })
 
     AssistSelect:OnChanged(function(Value)
@@ -94,8 +94,11 @@ do
         if table.find(Values,"Assist 2") and not getgenv().Assist_2 then
             getgenv().Assist_2 = true
         end
-        if table.find(Values,"Fruit") and not getgenv().Assist_Fruit then
-            getgenv().Assist_Fruit = true
+        if table.find(Values,"Fruit 1") and not getgenv().Fruit_1 then
+            getgenv().Fruit_1 = true
+        end
+        if table.find(Values,"Fruit 2") and not getgenv().Fruit_2 then
+            getgenv().Fruit_2 = true
         end
 
         if not table.find(Values,"Assist 1") and getgenv().Assist_1 then
@@ -104,8 +107,11 @@ do
         if not table.find(Values,"Assist 2") and getgenv().Assist_2 then
             getgenv().Assist_2 = false
         end
-        if not table.find(Values,"Fruit") and getgenv().Assist_Fruit then
-            getgenv().Assist_Fruit = false
+        if not table.find(Values,"Fruit 1") and getgenv().Fruit_1 then
+            getgenv().Fruit_1 = false
+        end
+        if not table.find(Values,"Fruit 1") and getgenv().Fruit_2 then
+            getgenv().Fruit_2 = false
         end
 
     end)
@@ -363,7 +369,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm then
                 repeat task.wait()
-                Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0.1,0))
+                Tween(game.workspace:FindFirstChild("Halor_1").CFrame)
                 until not getgenv().STOP_Farm
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
@@ -402,7 +408,37 @@ Dd.Touched:Connect(function(part)
 end)
 end
 
+local function CheckAnchored(KUB)
+    local Dd = KUB:WaitForChild("HumanoidRootPart")
+    if not Dd then
+        return
+    end
+Dd:GetPropertyChangedSignal("Anchored"):Connect(function(v)
+    if Dd.Anchored then
+        getgenv().IFrame_MODE = true
+        warn("STOP SKILL")
+        repeat task.wait() until not Dd.Anchored
+        task.wait(.1)
+        getgenv().IFrame_MODE = false
+        warn("START SKILL")
+    end
+end)
+end
 
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+            game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                wait(.5)
+                getgenv().STOP_Farm = false
+                getgenv().IFrame_MODE = false
+            end)
+    end)
+end
 
 coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch)
@@ -410,10 +446,11 @@ do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
         CheckTouch(PlayerCheck)
+        CheckAnchored(PlayerCheck)
+        getgenv().IFrame_MODE = false
         for i,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
             if string.find(v.Name,"Animate") then
                 v.Disabled = true
-                print(v.Disabled)
             end
         end
     end
@@ -443,7 +480,8 @@ function Skill_First()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].Visible and not
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) 
-        and mag <= 30 then
+        and mag <= 25 and not getgenv().IFrame_MODE then
+            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.First_Skill.Value))
         end 
         end
@@ -456,7 +494,8 @@ function Skill_Second()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].Visible and not
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text)  and
-        mag <= 30 then
+        mag <= 25 and not getgenv().IFrame_MODE then
+            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Second_Skill.Value))
         end 
         end
@@ -470,7 +509,8 @@ function Skill_Third()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].Visible and not
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text)  and
-        mag <= 30 then
+        mag <= 25 and not getgenv().IFrame_MODE then
+            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Third_Skill.Value))
         end 
         end
@@ -484,7 +524,8 @@ function Skill_Fourth()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].Visible and not
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text)  and
-        mag <= 30 then
+        mag <= 25 and not getgenv().IFrame_MODE then
+            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fourth_Skill.Value))
         end 
         end
@@ -497,7 +538,8 @@ function Skill_Fifth()
         if v:FindFirstChildOfClass("BillboardGui") then
             if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].Visible and not
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].SkillName.Text)  and
-            mag <= 30 then
+            mag <= 25 and not getgenv().IFrame_MODE then
+                wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fifth_Skill.Value))
         end 
         end
@@ -519,7 +561,7 @@ end
 end
 
 coroutine.resume(coroutine.create(function()
-        while wait(0.1) do
+        while task.wait(0.215) do
             pcall(function()
                 if Options.Auto_Skill_Assist.Value then
                     Skill_First()
@@ -533,7 +575,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(0.75) do
+    while wait(0.85) do
         pcall(function()
             Melee()
         end)
@@ -548,23 +590,27 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Assist_1 and mag <= 30 
-            and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and not
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) then
+            and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == nil or 
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Assist_2 and mag <= 30
-                and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and not
-                tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) then
+                and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and
+                tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == nil or 
+                tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
-            if getgenv().Assist_Fruit and mag <= 30
-            and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and not 
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) then
+            if getgenv().Fruit_1 and mag <= 30
+            and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == nil or
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
                end
-            if getgenv().Assist_Fruit and mag <= 30
+            if getgenv().Fruit_2 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) then
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil  or 
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0 then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
                end
             end  
@@ -684,6 +730,25 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
+    while task.wait() do pcall(function ()  
+if not game.workspace:FindFirstChild("Halor_1") then
+    local NO_CLIP_PART = Instance.new("Part",workspace)
+    NO_CLIP_PART.Name = "Halor_1"
+    NO_CLIP_PART.CanCollide = false
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 0
+    NO_CLIP_PART.Size = Vector3.new(2,1,2)
+elseif game.workspace:FindFirstChild("Halor_1") and Options.AutoFarmAndStart.Value then
+    repeat
+        task.wait()
+     game.workspace:FindFirstChild("Halor_1").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,1,0)
+     until not game.workspace:FindFirstChild("Halor_1")  or not Options.AutoFarmAndStart.Value
+    end
+end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
 if not game.workspace:FindFirstChild("MAP_NEW") and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
     local NO_CLIP_PART = Instance.new("Part",workspace)
@@ -691,7 +756,7 @@ if not game.workspace:FindFirstChild("MAP_NEW") and not game:GetService("Players
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
     NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(50,1,50)
+    NO_CLIP_PART.Size = Vector3.new(100,1,100)
 elseif game.workspace:FindFirstChild("MAP_NEW") and Options.AutoFarmAndStart.Value 
 and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
     repeat wait()
@@ -778,17 +843,17 @@ BBody = game:GetService("HttpService"):JSONEncode({
       embeds = {{
           ["author"] = {
               ["name"] = "Crazy Day ",
-              ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632"
+              ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s108-c-k-c0x00ffffff-no-rj"
           },
           ["title"] = "Anime Dimension Simulator", 
-          ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632",
+          ["icon_url"] = "https://tr.rbxcdn.com/41ece3967a06d47a84f4859d6262ea46/150/150/Image/Png",
           ["footer"] = {
               ["text"] = "Anime Dimension Simulator : " .. timeInfo.hour .. ":" .. timeInfo.min,
-              ["icon_url"] = "https://static.wikia.nocookie.net/dungeonquestroblox/images/c/ce/GildedSkies.png/revision/latest/scale-to-width/360?cb=20221126052632"
+              ["icon_url"] = "https://tr.rbxcdn.com/41ece3967a06d47a84f4859d6262ea46/150/150/Image/Png"
          
           },
           ["color"] = tonumber(0xFFD700),
-          ["url"] = "https://www.reddit.com/r/cats/",
+          ["url"] = "https://www.roblox.com/games/6938803436/MUSCLE-Anime-Dimensions-Simulator",
           ["fields"] = {
           
                          {
