@@ -67,6 +67,14 @@ do
         Default = getgenv().Difficulty or 3,
     })
 
+    Tabs.Main:AddDropdown("PlayMode", {
+        Title = "Select Mode",
+        Values = {"Normal","Safe","Bring"},
+        Multi = false,
+        Default = 1,
+    })
+
+
 
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
     Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
@@ -250,7 +258,7 @@ coroutine.resume(coroutine.create(function()
     pcall(function ()
 Button.TouchTap:Connect(function()
 for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and UserInputService.TouchEnabled then
+        if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled then
             v.Visible = not v.Visible
                 end
             end
