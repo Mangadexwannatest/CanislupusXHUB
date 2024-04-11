@@ -372,13 +372,6 @@ end
 
 coroutine.resume(coroutine.create(function()
     pcall(function()
-        repeat wait() until Options.PlayMode.Value == "Bring Mode"
-ADDKUY()
-end)
-end))
-
-coroutine.resume(coroutine.create(function()
-    pcall(function()
         Workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             pcall(function()
                 if v.ClassName == "Model" and Options.PlayMode.Value == "Bring Mode" and game.Players.LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
@@ -729,6 +722,10 @@ do
         print("Head : False")
         game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
         getgenv().IFrame_MODE = false
+        if game.Players.LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
+            DestroyKuy()
+            print("Delete Head_K")
+        end
     end
 end
 end))
