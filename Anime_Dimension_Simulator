@@ -1,5 +1,5 @@
 repeat wait() until game:IsLoaded()
-game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
+repeat wait() until game:FindFirstChild("CoreGui"):FindFirstChild("PlayerList")
 local Username = game.Players.LocalPlayer.Name
 local UserId 
 
@@ -206,6 +206,13 @@ do
             game:GetService("TeleportService"):Teleport(6938803436)
         end
     })
+
+    Tabs.Other:AddParagraph({
+        Title = "Logs",
+        Content = "Other function soon"
+    })
+
+
 
     
 
@@ -1058,7 +1065,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
           ["fields"] = {
           
                          {
-                ["name"] = "Card",
+                ["name"] = "Item Reward",
                 ["value"] = "\n[+1] "..table.concat( item_name,"\n[+1] "),
                 ["inline"] = false
                   
