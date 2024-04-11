@@ -30,7 +30,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Anime Dimensions Simulator",
-    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/011/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -194,12 +194,18 @@ do
     })
 
     Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = getgenv().Dungeon_Reward })
-    Tabs.Webhook:AddToggle("AutoWebhook_Raid", {Title = "Raid Reward", Default = getgenv().Raid_Reward })
-
-
+    
+    Tabs.Other:AddToggle("DashNoCd", {Title = "Dash No Cooldown", Default = false })
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = getgenv().Auto_Rejoin_Error })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+    Tabs.Other:AddButton({
+        Title = "Teleport Lobby",
+        Description = nil,
+        Callback = function()
+            game:GetService("TeleportService"):Teleport(6938803436)
+        end
+    })
 
     
 
@@ -616,6 +622,16 @@ end)
 end
 
 
+function TouchKuy()
+game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
+    if part.Name == "Head_Kuy" then
+        part:Destroy()
+    end
+end)
+end
+
+
+
 local function CheckAnchored(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
     if not Dd then
@@ -645,6 +661,7 @@ local function onCharacterAdded(character)
                 getgenv().STOP_Farm = false
                 getgenv().IFrame_MODE = false
                 game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
+                TouchKuy()
                 print("Changed...")
             end)
     end)
@@ -1103,6 +1120,17 @@ else
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function()
+        
+                if Options.DashNoCd then
+                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = true
+                else
+                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = false
+                end
+            end)
+        end
+    end))
 
 coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
