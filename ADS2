@@ -428,17 +428,30 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm
 and not getgenv().SAFE_MODE then
-local susuck = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestMob().HumanoidRootPart.Position).Magnitude
-if susuck > 15 then
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+12.5,0) * CFrame.Angles(math.rad(0),1800,0) )
-else 
-TweenPart(getFarMob(),getFarMob() * CFrame.new(0,getFarMob().HumanoidRootPart.Size.Y+12.5,0) * CFrame.Angles(math.rad(0),1800,0) )  
-end
+    if not getgenv().GoNext then
+        Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,15,0) * CFrame.Angles(math.rad(0),1800,0)  )
+    else
+        TweenPart(getFarMob().HumanoidRootPart.CFrame ,getFarMob().HumanoidRootPart.CFrame* CFrame.new(0,15,0) * CFrame.Angles(math.rad(0),1800,0)  )
+    end
 end
 end
 end
 end)
 end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if Options.PlayMode.Value == "Bring Mode" and Options.AutoFarmAndStart.Value then
+        for i, v in next, workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+               v.HumanoidRootPart.Size = Vector3.new(3,50,3)
+               v.HumanoidRootPart.Transparency = 0.55
+                   end
+               end
+            end
+       end)
+    end
 end))
 
 coroutine.resume(coroutine.create(function()
@@ -523,6 +536,20 @@ Dd.Touched:Connect(function(part)
 end)
 end
 
+local function BringCheck(KUB)
+    local Dd = KUB:WaitForChild("HumanoidRootPart")
+    if not Dd then
+        return
+    end
+Dd.Touched:Connect(function(part)
+    if part.Name == "HumanoidRootPart" and part.Parent.Parent.Name == "Monsters" and Options.PlayMode.Value == "Bring Mode" then
+        getgenv().GoNext = true
+        repeat wait() until not part.Parent
+        getgenv().GoNext = false
+    end
+end)
+end
+
 local function TocuhEnd(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
     if not Dd then
@@ -582,6 +609,7 @@ do
         CheckAnchored(PlayerCheck)
         onCharacterAdded(PlayerCheck)
         TocuhEnd(PlayerCheck)
+        BringCheck(PlayerCheck)
         game.Players.LocalPlayer.Character.Head.CanCollide = false
         print("Head : False")
         game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
