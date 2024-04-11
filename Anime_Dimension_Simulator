@@ -446,21 +446,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value or Options.AutoRaid.Value then
-            if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-                local args = {
-                    [1] = "CreateRoom",
-                    [2] = {
-                        ["Difficulty"] = "Easy",
-                        ["FriendsOnly"] = Options.FriendOnly.Value,
-                        ["MapName"] = Options.SelectRaid.Value,
-                        ["Hardcore"] = false
-                    }
-                }
-                
-                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-            end
+        if Options.AutoFarmAndStart.Value then
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
@@ -481,6 +467,21 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
 
+            end
+            if Options.AutoRaid.Value and 
+            not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+                local args = {
+                    [1] = "CreateRoom",
+                    [2] = {
+                        ["Difficulty"] = "Easy",
+                        ["FriendsOnly"] = Options.FriendOnly.Value,
+                        ["MapName"] = Options.SelectRaid.Value,
+                        ["Hardcore"] = false
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
        end)
      end
