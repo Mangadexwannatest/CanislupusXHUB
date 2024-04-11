@@ -1,5 +1,7 @@
 repeat wait() until game:IsLoaded()
-game:WaitForChild("CoreGui"):WaitForChild("PlayerList")
+repeat wait() until game:FindFirstChild("CoreGui"):FindFirstChild("PlayerList")
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
 local Username = game.Players.LocalPlayer.Name
 local UserId 
 
@@ -16,6 +18,8 @@ for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScro
     end
 end
 end
+end)
+end))
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 game.workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
@@ -29,8 +33,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Anime Dimensions Simulator",
-    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
+    Title = "Anime Dimensions Simulator [Stats:Undetected]",
+    SubTitle = "Last Update April/011/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -194,12 +198,25 @@ do
     })
 
     Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = getgenv().Dungeon_Reward })
-    Tabs.Webhook:AddToggle("AutoWebhook_Raid", {Title = "Raid Reward", Default = getgenv().Raid_Reward })
-
-
+    
+    Tabs.Other:AddToggle("DashNoCd", {Title = "Dash No Cooldown", Default = false })
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = getgenv().Auto_Rejoin_Error })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+    Tabs.Other:AddButton({
+        Title = "Teleport Lobby",
+        Description = nil,
+        Callback = function()
+            game:GetService("TeleportService"):Teleport(6938803436)
+        end
+    })
+
+    Tabs.Other:AddParagraph({
+        Title = "Logs",
+        Content = "Other function soon"
+    })
+
+
 
     
 
@@ -315,7 +332,7 @@ end
             a.Transparency = 1
             a.CanCollide = false
             a.Name = "Head_Kuy"
-            a.Parent = game.workspace
+            a.Parent = v.Parent
         end
     end
 end
@@ -327,7 +344,9 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             pcall(function()
                 if v.ClassName == "Model" then
+                    if Options.PlayMode.Value == "Bring Mode" then
                     ADDKUY()
+                    end
                 end
             end)
         end)
@@ -461,10 +480,8 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
-        repeat wait()
         TweenKUY(getClosestKuy().CFrame)
         getgenv().InBring = true
-        until game.workspace:FindFirstChild("Head_Kuy") == nil
     end
     if game.workspace:FindFirstChild("Head_Kuy") == nil and getgenv().InBring then
         getgenv().InBring = false
@@ -476,6 +493,13 @@ end)
 end
 end))
 
+function TweenMon(goal)
+    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
+        if v:FindFirstChildOfClass("BillboardGui") then
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
+        end
+    end
+end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
@@ -485,9 +509,9 @@ coroutine.resume(coroutine.create(function()
                 for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
                     if v:FindFirstChildOfClass("BillboardGui") then
                         repeat task.wait()
-                            TweenPart(v.HumanoidRootPart,v.HumanoidRootPart * CFrame.new(0,0,v.HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) ) 
+                            TweenMon(v.HumanoidRootPart.CFrame * CFrame.new(0,0,6.35))
                         until
-                        game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
+                        game.workspace:FindFirstChild("Head_Kuy") or not Options.PlayMode.Value == "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
                         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
                     end
                 end
@@ -609,6 +633,16 @@ end)
 end
 
 
+function TouchKuy()
+game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
+    if part.Name == "Head_Kuy" then
+        part:Destroy()
+    end
+end)
+end
+
+
+
 local function CheckAnchored(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
     if not Dd then
@@ -638,6 +672,7 @@ local function onCharacterAdded(character)
                 getgenv().STOP_Farm = false
                 getgenv().IFrame_MODE = false
                 game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
+                TouchKuy()
                 print("Changed...")
             end)
     end)
@@ -774,7 +809,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.1) do pcall(function ()
-        if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
+        if Options.Auto_Skill_Assist.Value then
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
@@ -1034,7 +1069,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
           ["fields"] = {
           
                          {
-                ["name"] = "Card",
+                ["name"] = "Item Reward",
                 ["value"] = "\n[+1] "..table.concat( item_name,"\n[+1] "),
                 ["inline"] = false
                   
@@ -1096,6 +1131,17 @@ else
 end
 end))
 
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function()
+        
+                if Options.DashNoCd then
+                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = true
+                else
+                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = false
+                end
+            end)
+        end
+    end))
 
 coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
