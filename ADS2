@@ -334,6 +334,8 @@ local function getFarMob()
     end
 end
 
+ADDKUY()
+
 coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Monsters.ChildAdded:Connect(function(v)
@@ -473,21 +475,17 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
-        repeat task.wait()
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
         TweenKUY(getClosestKuy().CFrame)
         getgenv().InBring = true
-        until not getClosestKuy() or Options.PlayMode.Value ~= "Bring Mode" or not game.workspace:FindFirstChild("Head_Kuy") or not Options.AutoFarmAndStart.Value or getgenv().Break_Farm
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
-        getgenv().InBring = false
-    elseif not game.workspace:FindFirstChild("Head_Kuy") then
+
+elseif Options.PlayMode.Value == "Bring Mode" and game.workspace:FindFirstChild("Head_Kuy") == nil and
+game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
         repeat task.wait()
             getgenv().InBring = false
-        TweenPart(getFarMob().HumanoidRootPart,getFarMob().HumanoidRootPart * CFrame.new(0,0,getFarMob().HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) )
-        until game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
+            Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.55,0) * CFrame.Angles(math.rad(0),1800,0) ) 
+    until game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
     end
-
 end
 end
 end
@@ -598,12 +596,13 @@ local function HeadKuyTouch(KUB)
         return
     end
 Dd.Touched:Connect(function(part)
+    pcall(function ()
     if part.Name == "Head_Kuy" then
         part:Destroy()
     end
+    end)
 end)
 end
-
 
 
 local function CheckAnchored(KUB)
@@ -748,7 +747,7 @@ end
 coroutine.resume(coroutine.create(function()
         while task.wait(0.1) do
             pcall(function()
-                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE then
+                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
                     Skill_First()
                     Skill_Second()
                     Skill_Third()
@@ -1099,7 +1098,7 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     local script = 
     [[
         repeat wait() until game:IsLoaded()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS2'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
     ]]
     if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
