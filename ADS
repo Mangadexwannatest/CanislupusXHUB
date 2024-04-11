@@ -326,13 +326,15 @@ local function getFarMob()
             a.CFrame = v.CFrame * CFrame.new(0,10,0)
             a.Size = Vector3.new(10,10,10)
             a.Anchored = true
-            a.Transparency = 1
+            a.Transparency = 0
             a.CanCollide = false
             a.Name = "Head_Kuy"
             a.Parent = game.workspace
         end
     end
 end
+
+ADDKUY()
 
 coroutine.resume(coroutine.create(function()
     pcall(function()
@@ -473,13 +475,15 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
-        repeat task.wait()
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
         TweenKUY(getClosestKuy().CFrame)
-        until not getClosestKuy() or Options.PlayMode.Value ~= "Bring Mode" or not game.workspace:FindFirstChild("Head_Kuy") or not Options.AutoFarmAndStart.Value or getgenv().Break_Farm
+        getgenv().InBring = true
     elseif not game.workspace:FindFirstChild("Head_Kuy") then
         repeat task.wait()
-        TweenPart(getFarMob().HumanoidRootPart,getFarMob().HumanoidRootPart)
-        until game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
+            getgenv().InBring = false
+        TweenPart(getFarMob().HumanoidRootPart,getFarMob().HumanoidRootPart * CFrame.new(0,0,getFarMob().HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) )
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)    
+    until game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
     end
 
@@ -743,7 +747,7 @@ end
 coroutine.resume(coroutine.create(function()
         while task.wait(0.1) do
             pcall(function()
-                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE then
+                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
                     Skill_First()
                     Skill_Second()
                     Skill_Third()
@@ -805,7 +809,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE then
+                    if not getgenv().SAFE_MODE and not getgenv().InBring then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
@@ -837,7 +841,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE then
+                    if not getgenv().SAFE_MODE and not getgenv().InBring then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
@@ -1094,7 +1098,7 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     local script = 
     [[
         repeat wait() until game:IsLoaded()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
     ]]
     if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
