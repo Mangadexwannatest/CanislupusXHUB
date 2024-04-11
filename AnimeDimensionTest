@@ -332,26 +332,39 @@ end
             a.Transparency = 1
             a.CanCollide = false
             a.Name = "Head_Kuy"
-            a.Parent = v.Parent
+            a.Parent = game.workspace
         end
     end
 end
 
+coroutine.resume(coroutine.create(function()
+    pcall(function()
+        repeat wait() until Options.PlayMode.Value == "Bring Mode"
+        print("Head_Dumber")
 ADDKUY()
+end)
+end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.ClassName == "Model" then
-                    if Options.PlayMode.Value == "Bring Mode" then
+                if v.ClassName == "Model" and Options.PlayMode.Value == "Bring Mode" then
+                    print("Bring...")
                     ADDKUY()
-                    end
                 end
             end)
         end)
     end)
 end))
+
+local function NameT1()
+    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
+        if v:FindFirstChildOfClass("BillboardGui") then
+            return v.HumanoidRootPart
+        end
+    end
+end
 
  local function getClosestKuy()
     local dist, thing = math.huge
@@ -481,10 +494,9 @@ elseif  Options.PlayMode.Value == "Bring Mode" and
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
         TweenKUY(getClosestKuy().CFrame)
-        getgenv().InBring = true
     end
-    if game.workspace:FindFirstChild("Head_Kuy") == nil and getgenv().InBring then
-        getgenv().InBring = false
+    if not Options.PlayMode.Value == "Bring Mode" and game.workspace:FindFirstChild("Head_Kuy") then
+        game.workspace:FindFirstChild("Head_Kuy"):Destroy()
     end
 end
 end
@@ -494,11 +506,7 @@ end
 end))
 
 function TweenMon(goal)
-    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
-        if v:FindFirstChildOfClass("BillboardGui") then
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
-        end
-    end
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((NameT1().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -506,15 +514,11 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if Options.PlayMode.Value == "Bring Mode" and game.workspace:FindFirstChild("Head_Kuy") == nil and
             game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-                for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
-                    if v:FindFirstChildOfClass("BillboardGui") then
                         repeat task.wait()
-                            TweenMon(v.HumanoidRootPart.CFrame * CFrame.new(0,0,6.35))
+                            TweenMon(NameT1().CFrame * CFrame.new(0,0,6.35))
                         until
                         game.workspace:FindFirstChild("Head_Kuy") or not Options.PlayMode.Value == "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
                         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
-                    end
-                end
             end
             
         end
@@ -787,7 +791,7 @@ end
 coroutine.resume(coroutine.create(function()
         while task.wait(0.1) do
             pcall(function()
-                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
+                if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE then
                     Skill_First()
                     Skill_Second()
                     Skill_Third()
@@ -849,7 +853,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE and not getgenv().InBring then
+                    if not getgenv().SAFE_MODE and game.workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
@@ -881,7 +885,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE and not getgenv().InBring then
+                    if not getgenv().SAFE_MODE and game.workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
