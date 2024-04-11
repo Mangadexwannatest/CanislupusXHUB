@@ -30,7 +30,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Anime Dimensions Simulator",
-    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/011/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -305,20 +305,6 @@ local function getClosestMob()
     return thing
 end
 
-local function getFarMob()
-    local ClosestObject
-    for i, v in next, workspace.Folders.Monsters:GetChildren() do
-        local MinDistance = math.huge
-        if v:FindFirstChildOfClass("BillboardGui") then
-            local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-            if dist < MinDistance then
-                MinDistance, ClosestObject = dist, v
-            end
-        end
-    end
-    return ClosestObject
- end
-
  function ADDKUY()
     for i,v in pairs(game.workspace.Folders.Monsters:GetDescendants()) do
         if v.Name == "HumanoidRootPart" then
@@ -326,7 +312,7 @@ local function getFarMob()
             a.CFrame = v.CFrame * CFrame.new(0,10,0)
             a.Size = Vector3.new(10,10,10)
             a.Anchored = true
-            a.Transparency = 0
+            a.Transparency = 1
             a.CanCollide = false
             a.Name = "Head_Kuy"
             a.Parent = game.workspace
@@ -475,24 +461,50 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+        repeat wait()
         TweenKUY(getClosestKuy().CFrame)
         getgenv().InBring = true
-    elseif not game.workspace:FindFirstChild("Head_Kuy") then
-        repeat task.wait()
-            getgenv().InBring = false
-        TweenPart(getFarMob().HumanoidRootPart,getFarMob().HumanoidRootPart * CFrame.new(0,0,getFarMob().HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) )
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)    
-    until game.workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
-        or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+        until game.workspace:FindFirstChild("Head_Kuy") == nil
     end
-
+    if game.workspace:FindFirstChild("Head_Kuy") == nil and getgenv().InBring then
+        getgenv().InBring = false
+    end
 end
 end
 end
 end)
 end
 end))
+
+function TweenMon(goal)
+    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
+        if v:FindFirstChildOfClass("BillboardGui") then
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
+        end
+    end
+end
+
+coroutine.resume(coroutine.create(function()
+    while task.wait() do pcall(function ()
+        if Options.AutoFarmAndStart.Value then
+            if Options.PlayMode.Value == "Bring Mode" and not getgenv().InBring and
+            game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
+                for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
+                    if v:FindFirstChildOfClass("BillboardGui") then
+                        repeat task.wait()
+                            TweenMon(v.HumanoidRootPart.CFrame * CFrame.new(0,0,6.35))
+                        until
+                        getgenv().InBring or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
+                        or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+                    end
+                end
+            end
+            
+        end
+    end)
+    end
+    end))
+    
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -604,7 +616,6 @@ end)
 end
 
 
-
 local function CheckAnchored(KUB)
     local Dd = KUB:WaitForChild("HumanoidRootPart")
     if not Dd then
@@ -634,6 +645,7 @@ local function onCharacterAdded(character)
                 getgenv().STOP_Farm = false
                 getgenv().IFrame_MODE = false
                 game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.PlayerName.Text = "Protech_By_CrazyDay"
+                HeadKuyTouch()
                 print("Changed...")
             end)
     end)
@@ -644,10 +656,11 @@ game.Players.LocalPlayer.CharacterAdded:Connect(CheckTouch)
 do
     local PlayerCheck = game.Players.LocalPlayer.Character 
     if PlayerCheck then
+        PlayerCheck:WaitForChild("HumanoidRootPart")
         CheckTouch(PlayerCheck)
+        HeadKuyTouch(PlayerCheck)
         CheckAnchored(PlayerCheck)
         onCharacterAdded(PlayerCheck)
-        HeadKuyTouch(PlayerCheck)
         TocuhEnd(PlayerCheck)
         game.Players.LocalPlayer.Character.Head.CanCollide = false
         print("Head : False")
@@ -769,32 +782,32 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.1) do pcall(function ()
-        if Options.Auto_Skill_Assist.Value then
+        if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Assist_1 and mag <= 30 
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == nil or 
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0 then
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0  then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end  
             if getgenv().Assist_2 and mag <= 30
                 and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and
                 tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == nil or 
-                tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0 then
+                tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0  then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end  
             if getgenv().Fruit_1 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == nil or
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0 then
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0  then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
                end
             if getgenv().Fruit_2 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil  or 
-            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0 then
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0  then
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
                end
             end  
