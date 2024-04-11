@@ -78,14 +78,14 @@ do
         "Ghoul Dimension","Fate Dimension","Slime Dimension","Devil Dimension","Pirate Dimension",
         "Alien Dimension","Level Dimension"},
         Multi = false,
-        Default = getgenv().Select_Dimension_Tier or 12,
+        Default = 12,
     })
 
     Tabs.Main:AddDropdown("SelectDifficulty", {
         Title = "Select Difficulty",
         Values = {"Easy","Hard","Nightmare"},
         Multi = false,
-        Default = getgenv().Difficulty or 3,
+        Default = 3,
     })
 
     local PlayChang = Tabs.Main:AddDropdown("PlayMode", {
@@ -132,9 +132,9 @@ function DestroyKuy()
 
 
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "Auto Start // Auto Farm", Default = getgenv().AutoStart_AutoFarm })
-    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = getgenv().Friend_Only })
-    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = getgenv().Hard_Core })
-    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = getgenv().Auto_Retry })
+    Tabs.Main:AddToggle("FriendOnly", {Title = "Friends Only", Default = false })
+    Tabs.Main:AddToggle("HardCore", {Title = "Hard Core", Default = false })
+    Tabs.Main:AddToggle("AutoRetry", {Title = "Auto Retry", Default = false })
 
     Tabs.Main:AddSection("Raid")
 
@@ -144,15 +144,15 @@ function DestroyKuy()
         Multi = false,
         Default = 1 or getgenv().Select_Raid,
     })
-    Tabs.Main:AddToggle("AutoRaid", {Title = "Auto Raid", Default = getgenv().Auto_Raid })
+    Tabs.Main:AddToggle("AutoRaid", {Title = "Auto Raid", Default = false })
 
-    Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = getgenv().Leave_if_Raid })
+    Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "Auto Leave If Raid Open", Default = false })
 
     local AssistSelect = Tabs.Skill:AddDropdown("SelectAssist", {
         Title = "Select Assist",
         Values = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
         Multi = true,
-        Default = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
+        Default = {nil},
     })
 
     AssistSelect:OnChanged(function(Value)
@@ -223,7 +223,7 @@ function DestroyKuy()
         Default = getgenv().Fifth_Skill or 5,
     })
 
-    Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "Auto Skill // Assist", Default = getgenv().Auto_Skill_Assist })
+    Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "Auto Skill // Assist", Default = false })
 
     
 
@@ -231,17 +231,17 @@ function DestroyKuy()
     Tabs.Webhook:AddInput("Webhook", {
         Title = "Webohook",
         Description = "Link.",
-        Default = getgenv().Webhook,
+        Default = nil,
         Placeholder = "",
         Numeric = false, -- Only allows numbers
         Finished = false, -- Only calls callback when you press enter
     })
 
-    Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = getgenv().Dungeon_Reward })
+    Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = false })
     
     Tabs.Other:AddToggle("DashNoCd", {Title = "Dash No Cooldown", Default = false })
-    Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = getgenv().Auto_Rejoin_Error })
-    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = getgenv().Auto_Close_Gui })
+    Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
     Tabs.Other:AddButton({
         Title = "Teleport Lobby",
@@ -883,7 +883,7 @@ coroutine.resume(coroutine.create(function()
         end   
             if getgenv().Fruit_1 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
-            tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Tex) == "Dash" or
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Tex) == nil or
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0  then
                 pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
@@ -891,7 +891,7 @@ coroutine.resume(coroutine.create(function()
         end  
             if getgenv().Fruit_2 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
-            tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == "Dash"  or 
+            tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0  then
                 pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
@@ -920,7 +920,7 @@ coroutine.resume(coroutine.create(function()
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.335),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -952,7 +952,7 @@ coroutine.resume(coroutine.create(function()
                         a.Size = Vector3.new(0,0,50)
                         Sizeto = v.Size + Vector3.new(side,side,50)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.335),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1078,7 +1078,7 @@ end))
 coroutine.resume(coroutine.create(function()
     game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
         if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
-            if getgenv().Auto_Rejoin_Error then
+            if Options.AutoRejoinIfError.Value then
                 game:GetService("TeleportService"):Teleport(6938803436)
             end
         end
