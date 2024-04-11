@@ -69,10 +69,20 @@ do
 
     Tabs.Main:AddDropdown("PlayMode", {
         Title = "Select Mode",
-        Values = {"Normal","Safe","Bring"},
+        Values = {"Normal Mode","Safe Mode","Bring Mode"},
         Multi = false,
         Default = 1,
     })
+
+    Tabs.Main:AddSlider("Health", 
+    {
+        Title = "Health % (Only Safe Mode) ",
+        Description = "Calculated as the max percentage of health",
+        Default = 60,
+        Min = 10,
+        Max = 100,
+        Rounding = 0,
+        })
 
 
 
@@ -374,24 +384,25 @@ end
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value then
-            if getgenv().STOP_Farm and not getgenv().Break_Farm then
+            if getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
                 repeat task.wait()
                 Tween(game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame * CFrame.new(0,-0.885,0) )
-                until not getgenv().STOP_Farm or getgenv().Break_Farm 
+                until not getgenv().STOP_Farm or getgenv().Break_Farm  or getgenv().SAFE_MODE
             else
-if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm and not getgenv().Break_Farm then
+if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm and not getgenv().Break_Farm 
+and not getgenv().SAFE_MODE then
     repeat task.wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm
-
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
 
 elseif
- game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm then
+ game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm
+ and not getgenv().SAFE_MODE then
     repeat task.wait()
 Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Y-6.45) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
-or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm
+or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
 end
 end
 end
@@ -402,9 +413,10 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         local Boss = game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame
-        if Boss.Visible and not getgenv().Touch and Boss.BossName.Text == "King of Curses" or Boss.BossName.Text == "King" then
+        if Boss.Visible and not getgenv().Touch and Boss.BossName.Text == "King of Curses" or Boss.BossName.Text == "King" 
+        and not getgenv().SAFE_MODE then
             getgenv().Break_Farm = true
-        elseif getgenv().Touch and getgenv().Break_Farm then
+        elseif getgenv().Touch and getgenv().Break_Farm and not getgenv().SAFE_MODE then
             getgenv().Break_Farm = false
         end
       end)
@@ -416,6 +428,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             if v.Name == "Onihime" then
                 repeat wait() until not v.Parent
+                repeat wait() until not getgenv().SAFE_MODE
                 getgenv().Break_Farm = true
             end
         end)
@@ -454,11 +467,10 @@ coroutine.resume(coroutine.create(function()
             PART.CFrame = CFrame.new(-1441.08545, 14.8336296, 256.363922, 0.198312044, -4.48285427e-08, -0.980138958, 3.80402305e-08, 1, -3.8040227e-08, 0.980138958, -2.97408747e-08, 0.198312044)
 
         else
-            if game.workspace:FindFirstChild("Teleport_Part_Boss") and not getgenv().Touch and getgenv().Break_Farm then
+            if game.workspace:FindFirstChild("Teleport_Part_Boss") and not getgenv().Touch and getgenv().Break_Farm and not getgenv().SAFE_MODE then
             repeat wait()
                 TweenPart(game.workspace:FindFirstChild("Teleport_Part_Boss"),game.workspace:FindFirstChild("Teleport_Part_Boss"))
-                until getgenv().Touch
-                getgenv().Break_Farm = false
+                until getgenv().Touch or getgenv().SAFE_MODE
             end
         end
     end)
@@ -487,6 +499,7 @@ local function TocuhEnd(KUB)
     end
 Dd.TouchEnded:Connect(function(part)
     if part.Name == "Teleport_Part_Boss" and getgenv().Break_Farm then
+        repeat wait() until not getgenv().SAFE_MODE
         getgenv().Touch = true
         getgenv().Break_Farm = false
     end
@@ -698,6 +711,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
+                    if not getgenv().SAFE_MODE then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
@@ -718,6 +732,7 @@ coroutine.resume(coroutine.create(function()
                     task.wait(.25)
                     a:Destroy()
                 end
+                end
             end)
         end)
     end)
@@ -728,6 +743,7 @@ coroutine.resume(coroutine.create(function()
         workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
                 if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
+                    if not getgenv().SAFE_MODE then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
@@ -747,6 +763,7 @@ coroutine.resume(coroutine.create(function()
                     repeat task.wait() until not v.Parent
                     task.wait(.25)
                     a:Destroy()
+                end
                 end
             end)
         end)
