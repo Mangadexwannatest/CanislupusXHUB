@@ -199,7 +199,7 @@ SaveManager:LoadAutoloadConfig()
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
-        if game.CoreGui:FindFirstChild("Close/Open") == nil and UserInputService.TouchEnabled then
+        if game.CoreGui:FindFirstChild("Close/Open") == nil and game:GetService("UserInputService").TouchEnabled then
 local CloseOpen = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 CloseOpen.Name = "Close/Open"
