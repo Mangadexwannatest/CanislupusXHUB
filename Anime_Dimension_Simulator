@@ -343,13 +343,22 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.ClassName == "Model" then
+                if v.ClassName == "Model" and Options.PlayMode.Value == "Bring Mode" then
+                    print("Bring...")
                     ADDKUY()
                 end
             end)
         end)
     end)
 end))
+
+local function NameT1()
+    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
+        if v:FindFirstChildOfClass("BillboardGui") then
+            return v.HumanoidRootPart
+        end
+    end
+end
 
  local function getClosestKuy()
     local dist, thing = math.huge
@@ -478,10 +487,8 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
     if game.workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
-        repeat wait()
         TweenKUY(getClosestKuy().CFrame)
         getgenv().InBring = true
-        until game.workspace:FindFirstChild("Head_Kuy") == nil
     end
     if game.workspace:FindFirstChild("Head_Kuy") == nil and getgenv().InBring then
         getgenv().InBring = false
@@ -494,11 +501,7 @@ end
 end))
 
 function TweenMon(goal)
-    for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
-        if v:FindFirstChildOfClass("BillboardGui") then
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
-        end
-    end
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((NameT1().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
 end
 
 coroutine.resume(coroutine.create(function()
@@ -506,15 +509,11 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if Options.PlayMode.Value == "Bring Mode" and not getgenv().InBring and
             game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-                for i,v in pairs(game.workspace.Folders.Monsters:GetChildren()) do
-                    if v:FindFirstChildOfClass("BillboardGui") then
                         repeat task.wait()
-                            TweenMon(v.HumanoidRootPart.CFrame * CFrame.new(0,0,6.35))
+                            TweenMon(NameT1().CFrame * CFrame.new(0,0,6.35))
                         until
-                        getgenv().InBring or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
+                        getgenv().InBring or not Options.PlayMode.Value == "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm or not Options.AutoFarmAndStart.Value
                         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
-                    end
-                end
             end
             
         end
@@ -809,7 +808,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.1) do pcall(function ()
-        if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and not getgenv().InBring then
+        if Options.Auto_Skill_Assist.Value then
         for i, v in next, workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
