@@ -40,16 +40,14 @@ local function getClosestKuy()
     return thing
 end
 
-print(getClosestKuy().Head_Kuy)
-
 function Tween(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Head_Kuy.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 while true do wait() pcall(function ()
     repeat wait() 
-    Tween(getClosestKuy().Head_Kuy.CFrame) 
-    until not getClosestKuy().Head_Kuy
+    Tween(getClosestKuy().CFrame) 
+    until not getClosestKuy()
 end)
 end
 
