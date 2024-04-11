@@ -1310,7 +1310,7 @@ coroutine.resume(coroutine.create(function()
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
-                if game.CoreGui:FindFirstChild("Close/Open") == nil then
+                if game.CoreGui:FindFirstChild("Close/Open") == nil and game:GetService("UserInputService").TouchEnabled then
         local CloseOpen = Instance.new("ScreenGui")
         local TextButton = Instance.new("TextButton")
         CloseOpen.Name = "Close/Open"
@@ -1360,10 +1360,9 @@ end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
-        repeat wait() until UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled
 Button.TouchTap:Connect(function()
 for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled and not UserInputService.MouseEnabled then
+        if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled then
             v.Visible = not v.Visible
                     end
                 end
@@ -1371,18 +1370,6 @@ for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
     end)
 end))
 
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        repeat wait() until not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled
-Button.MouseButton1Click:Connect(function()
-for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and not UserInputService.TouchEnabled and UserInputService.KeyboardEnabled and UserInputService.MouseEnabled then
-            v.Visible = not v.Visible
-                    end
-                end
-        end)
-    end)
-end))
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
@@ -1743,36 +1730,20 @@ end))
         end)
     end))
 
-    coroutine.resume(coroutine.create(function()
-        pcall(function ()
-            repeat wait() until game:IsLoaded()
-            repeat wait() until Options.AutoExecuteScript.Value
-            warn("Active Auto Execute")
-            local queue_teleport = queueonteleport or queue_on_teleport
-            local script = 
-            [[
-                repeat wait() until game:IsLoaded()
-                repeat wait() until Options.AutoExecuteScript.Value
-                if Options.AutoExecuteScript.Value then
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua'))()
-                end
-            ]]
-            if (queue_teleport) and Options.AutoExecuteScript.Value then
-                queue_teleport(script)
-             end
-             local success = pcall(function()
-                if Options.AutoExecuteScript.Value then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua"))()
-                end
-             end)
-             
-             print(success)
-             if not success and Options.AutoExecuteScript.Value then
-                wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua"))()
-             end
-        end)
-    end))
+coroutine.resume(coroutine.create(function()
+game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+    local script = 
+    [[
+        repeat wait() until game:IsLoaded()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua'))()
+    ]]
+    if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+        QueueOnTeleport(script)
+        end
+end)
+end))
+
 
     end -- End Of If
 
