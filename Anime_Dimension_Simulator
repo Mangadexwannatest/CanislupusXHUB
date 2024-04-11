@@ -113,6 +113,12 @@ function DestroyKuy()
     end)
 
 
+    game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame:GetPropertyChangedSignal("Visible"):Connect(function ()
+        if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true then
+        DestroyKuy()
+        end
+    end)
+
     Tabs.Main:AddSlider("Health", 
     {
         Title = "Health % (Only Safe Mode) ",
@@ -367,7 +373,7 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Folders.Monsters.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.ClassName == "Model" and Options.PlayMode.Value == "Bring Mode" then
+                if v.ClassName == "Model" and Options.PlayMode.Value == "Bring Mode" and game.Players.LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false then
                     ADDKUY()
                 end
             end)
@@ -668,7 +674,7 @@ local function CheckAnchored(KUB)
     if not Dd then
         return
     end
-Dd:GetPropertyChangedSignal("Anchored"):Connect(function(v)
+Dd:GetPropertyChangedSignal("Anchored"):Connect(function()
     if Dd.Anchored then
         getgenv().IFrame_MODE = true
         warn("STOP SKILL")
@@ -719,8 +725,10 @@ end))
 
 
 function Skill_First()
+    pcall(function ()
     for i, v in next, Workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
+            pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) == nil
@@ -728,13 +736,17 @@ function Skill_First()
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.First_Skill.Value))
         end 
-        end
+    end)
     end
+    end
+end)
 end
 
 function Skill_Second()
-    for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") then
+    pcall(function ()
+        for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+                pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text) == nil
@@ -742,14 +754,19 @@ function Skill_Second()
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Second_Skill.Value))
         end 
-        end
+    end)
     end
+    end
+end)
 end
 
 
+
 function Skill_Third()
-    for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") then
+    pcall(function ()
+        for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+                pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text)  == nil
@@ -757,14 +774,18 @@ function Skill_Third()
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Third_Skill.Value))
         end 
-        end
+    end)
     end
+    end
+end)
 end
 
 
 function Skill_Fourth()
-    for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") then
+    pcall(function ()
+        for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+                pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text)  == nil
@@ -772,36 +793,46 @@ function Skill_Fourth()
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fourth_Skill.Value))
         end 
-        end
+    end)
     end
+    end
+end)
 end
 
 
 function Skill_Fifth()
-    for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-        if v:FindFirstChildOfClass("BillboardGui") then
+    pcall(function ()
+        for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            if v:FindFirstChildOfClass("BillboardGui") then
+                pcall(function ()
             if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].Visible and
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].SkillName.Text)  == nil
             and mag <= 30 and not getgenv().IFrame_MODE then
                 wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fifth_Skill.Value))
         end 
-        end
+    end)
     end
+    end
+end)
 end
 
 
 
 
 function Melee()
+    pcall(function ()
     for i, v in next, Workspace.Folders.Monsters:GetChildren() do
         if v:FindFirstChildOfClass("BillboardGui") then
+            pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if mag <= 10 then
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
-        end
+        end 
+    end)
     end
-end 
+    end
+end)
 end
 
 coroutine.resume(coroutine.create(function()
@@ -832,31 +863,41 @@ coroutine.resume(coroutine.create(function()
         if Options.Auto_Skill_Assist.Value and game.Workspace:FindFirstChild("Head_Kuy") == nil then
         for i, v in next, Workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") then
+                pcall(function ()
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
             if getgenv().Assist_1 and mag <= 30 
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == nil or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0  then
+                pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+                end)
             end  
             if getgenv().Assist_2 and mag <= 30
                 and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and
                 tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == nil or 
                 tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0  then
+                    pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
-            end  
+            end)
+        end   
             if getgenv().Fruit_1 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == nil or
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0  then
+                pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
-               end
+            end)
+        end  
             if getgenv().Fruit_2 and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil  or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0  then
+                pcall(function ()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
-               end
+            end)
+        end  
+            end)
             end  
         end
     end
