@@ -1,5 +1,7 @@
 repeat wait() until game:IsLoaded()
 repeat wait() until game:FindFirstChild("CoreGui"):FindFirstChild("PlayerList")
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
 local Username = game.Players.LocalPlayer.Name
 local UserId 
 
@@ -16,6 +18,8 @@ for i,v in next, game.CoreGui.PlayerList.PlayerListMaster.OffsetFrame.PlayerScro
     end
 end
 end
+end)
+end))
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 game.workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
