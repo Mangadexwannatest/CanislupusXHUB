@@ -242,6 +242,7 @@ function DestroyKuy()
     Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "Dungeon Reward", Default = false })
     
     Tabs.Other:AddToggle("DashNoCd", {Title = "Dash No Cooldown", Default = false })
+   local white = Tabs.Other:AddToggle("WhiteScreen", {Title = "Auto White Screen", Default = false })
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "Auto Rejoin if Error", Default = false })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
@@ -258,9 +259,14 @@ function DestroyKuy()
         Content = "Other function soon"
     })
 
+    white:OnChanged(function()
+        if Options.WhiteScreen.Value then
+            game:GetService("RunService"):Set3dRenderingEnabled(false)
+        else
+            game:GetService("RunService"):Set3dRenderingEnabled(true)
+        end
+    end)
 
-
-    
 
 end -- End of Do
 
