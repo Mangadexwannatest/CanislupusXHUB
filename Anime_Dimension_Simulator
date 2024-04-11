@@ -347,13 +347,11 @@ coroutine.resume(coroutine.create(function()
                 }
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-                print("Creat : "..Options.SelectDimension.Value)
             end
 
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
-                print("Start Teleport")
             end
 
             end
