@@ -1149,19 +1149,13 @@ BBody = game:GetService("HttpService"):JSONEncode({
               },
               {
                 ["name"] = "Level",
-                ["value"] = game.Players.LocalPlayer.leaderstats.Level.Value.."\n"..ExpPer[1].."/100%",
+                ["value"] = game.Players.LocalPlayer.leaderstats.Level.Value.." : "..ExpPer[1].."/100%",
                 ["inline"] = true
                   
               },
               {
-                ["name"] = "Gem",
-                ["value"] = Gem(),
-                ["inline"] = true
-                  
-              },
-              {
-                ["name"] = "Coin",
-                ["value"] = Coin(),
+                ["name"] = "Other",
+                ["value"] = "Gem : "..Gem().." | ".."Coin : "..Coin(),
                 ["inline"] = true
                   
               },
