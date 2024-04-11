@@ -386,7 +386,6 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoFarmAndStart.Value then
             if getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
                 repeat task.wait()
-                    game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
                 Tween(game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame * CFrame.new(0,-0.885,0) )
                 until not getgenv().STOP_Farm or getgenv().Break_Farm  or getgenv().SAFE_MODE
             else
@@ -409,10 +408,7 @@ elseif  Options.PlayMode.Value == "Safe Mode" and
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm
 and not getgenv().SAFE_MODE then
     repeat task.wait()
-        setfflag("HumanoidParallelRemoveNoPhysics", "false")
-        setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
-Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.55,0) * CFrame.Angles(math.rad(-90),0,0) ) 
+Tween(getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.55,0) * CFrame.Angles(math.rad(0),1800,0) ) 
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true
 or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Safe Mode"
 end
