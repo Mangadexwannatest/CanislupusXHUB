@@ -25,7 +25,7 @@ function EquipLevelCard()
     
     
         elseif v.name == "LevelReq" and string.match(v.Text,"106") and #DetechCard > 3 then
-print("TEST)
+print("TEST")
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             table.insert(DetechCard,v.Name)
     
