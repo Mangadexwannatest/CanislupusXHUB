@@ -155,14 +155,56 @@ function DestroyKuy()
     Tabs.Misc:AddToggle("Auto_FreeBossRush", {Title = "Auto Free Boss Rush", Default = false })
     Tabs.Misc:AddToggle("Auto_SpeedRaid", {Title = "Auto Speed Raid", Default = false })
     Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AutoEquip Character", Default = false })
+    local Config = {}
+    function Save_Config()
+        writefile("Character_ADS.json" , game:GetService("HttpService"):JSONEncode(Config))
+        for i,v in pairs(Config) do
+            Fluent:Notify({Title = "Save Character",Content = "Config",SubContent = tostring(i).." "..tostring(v), Duration = 2.5})
+            wait(1)
+        end
+    end
+
+    if isfile("Character_ADS.json") then
+        Config = game:GetService("HttpService"):JSONDecode(readfile("Character_ADS.json"))
+    end
+
     Tabs.Misc:AddButton({
         Title = "Save Character",
         Description = nil,
         Callback = function()
-            Fluent:Notify({Title = "Save Character",Content = "123",SubContent = "45612", Duration = 5
-        })
+            Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
+            Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
+            Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
+            Save_Config()
         end
     })
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function()
+            while wait(1) do
+                pcall(function()
+                    if Options.Auto_EquipCharacter.Value then
+                        if isfile("Character_ADS.json") then
+                            Config = game:GetService("HttpService"):JSONDecode(readfile("Character_ADS.json"))
+                        end
+                        for i,v in pairs(Config) do
+                            if tostring(i) == "Character1" then
+                                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacter",tostring(v))
+                                Fluent:Notify({Title = "Character Config",Content = "Character1 : ",SubContent = tostring(v), Duration = 2.5})
+                            elseif tostring(i) == "Character2" then
+                                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacterAssist",tostring(v),1)
+                                Fluent:Notify({Title = "Character Config",Content = "Character2 : ",SubContent = tostring(v), Duration = 2.5})
+                            elseif tostring(i) == "Character3"  then
+                                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacterAssist",tostring(v),2)
+                                Fluent:Notify({Title = "Character Config",Content = "Character3 : ",SubContent = tostring(v), Duration = 2.5})
+                            end
+                        end
+                        wait(6000)
+                    end
+                end)
+            end
+        end)
+    end))
 
     Tabs.Misc:AddSection("Card")
 
@@ -172,7 +214,46 @@ function DestroyKuy()
         Multi = true,
         Default = {nil},
     })
-    Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })
+    Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })    
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function()
+            wait(5)
+            while wait(1) do
+                pcall(function()
+                    if Options.Auto_SellCard.Value then
+                        local I = Cardtabel
+                        local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
+                        local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+                        for M, N in pairs(K:GetChildren()) do
+                            if N:IsA("ImageButton") then
+                                for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
+                                    P:Fire()
+                                    local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
+                                        if CardSelect.Value[Options.Card.Values[1]] and Q == CardSelect.Values[1] then
+                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                                        elseif CardSelect.Value[Options.Card.Values[2]] and Q == CardSelect.Values[2] then
+                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                                        elseif CardSelect.Value[Options.Card.Values[3]] and Q == CardSelect.Values[3] then
+                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                                        elseif CardSelect.Value[Options.Card.Values[4]] and Q == CardSelect.Values[4] then
+                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                                        elseif CardSelect.Value[Options.Card.Values[5]] and Q == CardSelect.Values[5] then
+                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                                    end
+
+                                    warn("Sell")
+                                end
+                            end
+                        end
+                        wait(60000)
+                    end
+                end)
+            end
+        end)
+    end))
+
     Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "EquipBest card", Default = false })
     Tabs.Misc:AddToggle("Auto_Upgard", {Title = "UpgradeEquip card", Default = false })
 
