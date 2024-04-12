@@ -1,140 +1,681 @@
-local DetechCard = {}
-local One = game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay
-function Slot1() for i,v in next,One:GetChildren() do if v.Name == "Slot1" and tostring(v.ItemImage.Image) == "" then return true  end end end
-function Slot2() for i,v in next,One:GetChildren() do if v.Name == "Slot2" and tostring(v.ItemImage.Image) == "" then return true  end end end
-function Slot3() for i,v in next,One:GetChildren() do if v.Name == "Slot3" and tostring(v.ItemImage.Image) == "" then return true  end end end
-function LevelActionCard()
-    if #DetechCard ~= 0 then
-        table.clear(DetechCard)
-    end
-    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetDescendants()) do
-        if v.Name == "LevelReq" and v.Text == "Lv. 151" and #DetechCard < 3 then
-            repeat wait()
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            until not Slot1() or not Slot2() or not Slot3()
-            
+local RarityLevel = {}
 
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 141" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 131" and #DetechCard < 3  then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-            
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 121" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 113" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 106" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 98" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 91" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 83" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 76" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 68" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 61" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 56" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 51" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 46" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 41" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 36" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 31" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 26" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 21" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 16" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 11" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 6" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 1" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-        end
+function Rarity_Level_Action()
+    if #RarityLevel ~= 0 then
+        table.clear(RarityLevel)
     end
-     
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+        Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
+        if v:IsA("ImageButton") and string.match(v.LevelReq.Text,"151") and Lvl > 150 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"141") and #RarityLevel < 3 and Lvl > 140 and Lvl < 150 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"131") and #RarityLevel < 3 and Lvl > 130 and Lvl < 140 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"121") and #RarityLevel < 3 and Lvl > 120 and Lvl < 130 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"113") and #RarityLevel < 3 and Lvl > 112 and Lvl < 120 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"106") and #RarityLevel < 3 and Lvl > 105 and Lvl < 112 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"98") and #RarityLevel < 3 and Lvl > 97 and Lvl < 105 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"91") and #RarityLevel < 3 and Lvl > 90 and Lvl < 97 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"83") and #RarityLevel < 3 and Lvl > 82 and Lvl < 90 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"76") and #RarityLevel < 3 and Lvl > 75 and Lvl < 82 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"68") and #RarityLevel < 3 and Lvl > 67 and Lvl < 75 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"61") and #RarityLevel < 3 and Lvl > 60 and Lvl < 67 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"56") and #RarityLevel < 3 and Lvl > 55 and Lvl < 60 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"51") and #RarityLevel < 3 and Lvl > 50 and Lvl < 55 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"46") and #RarityLevel < 3 and Lvl > 45 and Lvl < 50 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"41") and #RarityLevel < 3 and Lvl > 40 and Lvl < 45 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"36") and #RarityLevel < 3 and Lvl > 35 and Lvl < 40 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"31") and #RarityLevel < 3 and Lvl > 30 and Lvl < 35 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"26") and #RarityLevel < 3 and Lvl > 25 and Lvl < 30 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"21") and #RarityLevel < 3 and Lvl > 20 and Lvl < 25 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"16") and #RarityLevel < 3 and Lvl > 15 and Lvl < 20 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"11") and #RarityLevel < 3 and Lvl > 10 and Lvl < 15 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"6") and #RarityLevel < 3 and Lvl > 5 and Lvl < 10 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+    
+        elseif v:IsA("ImageButton") and string.match(v.LevelReq.Text,"1") and #RarityLevel < 3 and Lvl > 0 and Lvl < 5 then
+            task.wait()
+            firesignal(v.MouseButton1Down,game.Players.LocalPlayer)
+            if Rarity() == "Mythic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Legendary" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Epic" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Rare" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Uncommon" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+            if Rarity() == "Common" and #RarityLevel < 3 then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+                table.insert(RarityLevel,v.Name)
+            end
+        end
+     end
 end
