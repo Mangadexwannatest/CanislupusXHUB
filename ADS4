@@ -172,9 +172,9 @@ function DestroyKuy()
         Title = "Save Character",
         Description = nil,
         Callback = function()
-            Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
-            Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
             Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
+            Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
+            Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
             Save_Config()
         end
     })
@@ -190,13 +190,13 @@ function DestroyKuy()
                         for i,v in pairs(Config) do
                             if tostring(i) == "Character1" then
                                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacter",tostring(v))
-                                print("Character1 : "..tostring(v))
+                                Fluent:Notify({Title = "Character Config",Content = "Character1 : ",SubContent = tostring(v), Duration = 2.5})
                             elseif tostring(i) == "Character2" then
                                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacterAssist",tostring(v),1)
-                                print("Character2 : "..tostring(v))
+                                Fluent:Notify({Title = "Character Config",Content = "Character2 : ",SubContent = tostring(v), Duration = 2.5})
                             elseif tostring(i) == "Character3"  then
                                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacterAssist",tostring(v),2)
-                                print("Character3 : "..tostring(v))
+                                Fluent:Notify({Title = "Character Config",Content = "Character3 : ",SubContent = tostring(v), Duration = 2.5})
                             end
                         end
                         wait(6000)
@@ -210,11 +210,63 @@ function DestroyKuy()
 
     local CardSelect = Tabs.Misc:AddDropdown("Card", {
         Title = "Select Rarity",
-        Values = {"Common","Uncommon","Rare","Legendary","Mythic"},
+        Values = {"Common","Uncommon","Rare","Epic","Legendary","Mythic"},
         Multi = true,
         Default = {nil},
     })
-    Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })
+    local SELL = Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })    
+
+    function SellCard()
+        local I = Cardtabel
+        local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
+        local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+        for M, N in pairs(K:GetChildren()) do
+            if N:IsA("ImageButton") then
+                for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
+                    P:Fire()
+                    local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
+                        if CardSelect.Value[Options.Card.Values[1]] and Q == CardSelect.Values[1] then
+                            wanr("Common")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                        elseif CardSelect.Value[Options.Card.Values[2]] and Q == CardSelect.Values[2] then
+                            wanr("Uncommon")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[3]] and Q == CardSelect.Values[3] then
+                            wanr("Rare")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[4]] and Q == CardSelect.Values[4] then
+                            wanr("Epic")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[5]] and Q == CardSelect.Values[5] then
+                            wanr("Legendary")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[6]] and Q == CardSelect.Values[6] then
+                            wanr("Mythic")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                        end
+                end
+            end
+        end
+        wait(1.5)
+end
+
+    CardSelect:OnChanged(function(Value)
+        if Value ~= nil then
+        SellCard()
+        end
+    end)
+
+    SELL:OnChanged(function()
+        if Options.Auto_SellCard.Value then
+        SellCard()
+        end
+    end)
+
+
     Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "EquipBest card", Default = false })
     Tabs.Misc:AddToggle("Auto_Upgard", {Title = "UpgradeEquip card", Default = false })
 
