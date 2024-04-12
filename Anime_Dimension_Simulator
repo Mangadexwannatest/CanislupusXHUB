@@ -158,72 +158,40 @@ function DestroyKuy()
         Default = {nil},
     })
 
-    AssistSelect:OnChanged(function(Value)
-        local Values = {}
-        for Value, State in next, Value do
-            table.insert(Values, Value)
-        end
-        if table.find(Values,"Assist 1") and not getgenv().Assist_1 then
-            getgenv().Assist_1 = true
-        end
-        if table.find(Values,"Assist 2") and not getgenv().Assist_2 then
-            getgenv().Assist_2 = true
-        end
-        if table.find(Values,"Fruit 1") and not getgenv().Fruit_1 then
-            getgenv().Fruit_1 = true
-        end
-        if table.find(Values,"Fruit 2") and not getgenv().Fruit_2 then
-            getgenv().Fruit_2 = true
-        end
-
-        if not table.find(Values,"Assist 1") and getgenv().Assist_1 then
-            getgenv().Assist_1 = false
-        end
-        if not table.find(Values,"Assist 2") and getgenv().Assist_2 then
-            getgenv().Assist_2 = false
-        end
-        if not table.find(Values,"Fruit 1") and getgenv().Fruit_1 then
-            getgenv().Fruit_1 = false
-        end
-        if not table.find(Values,"Fruit 1") and getgenv().Fruit_2 then
-            getgenv().Fruit_2 = false
-        end
-
-    end)
 
     Tabs.Skill:AddDropdown("First_Skill", {
         Title = "Skill First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().First_Skill or 1,
+        Default = 1,
     })
 
     Tabs.Skill:AddDropdown("Second_Skill", {
         Title = "Second First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().Second_Skill or 2,
+        Default = 2,
     })
 
     Tabs.Skill:AddDropdown("Third_Skill", {
         Title = "Third First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().Third_Skill or 3,
+        Default = 3,
     })
 
     Tabs.Skill:AddDropdown("Fourth_Skill", {
         Title = "Fourth First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().Fourth_Skill or 4,
+        Default = 4,
     })
 
     Tabs.Skill:AddDropdown("Fifth_Skill", {
         Title = "Fifth First",
         Values = {"1","2","3","4","5"},
         Multi = false,
-        Default = getgenv().Fifth_Skill or 5,
+        Default = 5,
     })
 
     Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "Auto Skill // Assist", Default = false })
@@ -484,6 +452,13 @@ function TweenPart(part,goal)
     game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((part.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal.CFrame}):Play()
 end
 
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+    repeat wait() until Options.PlayMode.Value == "Bring Mode"
+    wait(2.5)
+    getgenv().ReadyToBring = true
+end)
+end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
@@ -518,7 +493,7 @@ or not Options.AutoFarmAndStart.Value or getgenv().STOP_Farm or getgenv().Break_
 
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-    if game.Workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm then
+    if game.Workspace:FindFirstChild("Head_Kuy") and not getgenv().Break_Farm and getgenv().ReadyToBring then
         TweenKUY(getClosestKuy().CFrame)
     end
 end
@@ -527,9 +502,6 @@ end
 end)
 end
 end))
-
-game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
-
 
 function TweenMon(goal)
     game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((NameT1().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal}):Play()
@@ -874,7 +846,7 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
                 pcall(function ()
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Assist_1 and mag <= 30 
+            if AssistSelect.Value[AssistSelect.Values[1]] and mag <= 30 
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and
             tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == "Dash" or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0  then
@@ -882,7 +854,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
                 end)
             end  
-            if getgenv().Assist_2 and mag <= 30
+            if AssistSelect.Value[AssistSelect.Values[2]] and mag <= 30
                 and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and
                 tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == "Dash" or 
                 tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0  then
@@ -890,7 +862,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end)
         end   
-            if getgenv().Fruit_1 and mag <= 30
+            if AssistSelect.Value[AssistSelect.Values[3]] and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == nil or
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0  then
@@ -898,7 +870,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end)
         end  
-            if getgenv().Fruit_2 and mag <= 30
+            if AssistSelect.Value[AssistSelect.Values[4]] and mag <= 30
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
             tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0  then
