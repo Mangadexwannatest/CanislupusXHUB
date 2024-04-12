@@ -210,11 +210,11 @@ function DestroyKuy()
 
     local CardSelect = Tabs.Misc:AddDropdown("Card", {
         Title = "Select Rarity",
-        Values = {"Common","Uncommon","Rare","Legendary","Mythic"},
+        Values = {"Common","Uncommon","Rare","Epic","Legendary","Mythic"},
         Multi = true,
         Default = {nil},
     })
-    Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })    
+    local SELL = Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })    
 
     coroutine.resume(coroutine.create(function()
         pcall(function()
@@ -222,37 +222,45 @@ function DestroyKuy()
             while wait(1) do
                 pcall(function()
                     if Options.Auto_SellCard.Value then
-                        local I = Cardtabel
-                        local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
-                        local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
-                        for M, N in pairs(K:GetChildren()) do
-                            if N:IsA("ImageButton") then
-                                for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
-                                    P:Fire()
-                                    local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
-                                        if CardSelect.Value[Options.Card.Values[1]] and Q == CardSelect.Values[1] then
-                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
-                                        elseif CardSelect.Value[Options.Card.Values[2]] and Q == CardSelect.Values[2] then
-                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
-                                        elseif CardSelect.Value[Options.Card.Values[3]] and Q == CardSelect.Values[3] then
-                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
-                                        elseif CardSelect.Value[Options.Card.Values[4]] and Q == CardSelect.Values[4] then
-                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
-                                        elseif CardSelect.Value[Options.Card.Values[5]] and Q == CardSelect.Values[5] then
-                                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+        local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
+        local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+        for M, N in pairs(K:GetChildren()) do
+            if N:IsA("ImageButton") then
+                for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
+                    P:Fire()
+                    local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
+                        if CardSelect.Value[Options.Card.Values[1]] and Q == CardSelect.Values[1] then
+                            wanr("Common")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+                        elseif CardSelect.Value[Options.Card.Values[2]] and Q == CardSelect.Values[2] then
+                            wanr("Uncommon")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
 
-                                    end
+                        elseif CardSelect.Value[Options.Card.Values[3]] and Q == CardSelect.Values[3] then
+                            wanr("Rare")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
 
-                                    warn("Sell")
-                                end
-                            end
+                        elseif CardSelect.Value[Options.Card.Values[4]] and Q == CardSelect.Values[4] then
+                            wanr("Epic")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[5]] and Q == CardSelect.Values[5] then
+                            wanr("Legendary")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
+
+                        elseif CardSelect.Value[Options.Card.Values[6]] and Q == CardSelect.Values[6] then
+                            wanr("Mythic")
+                            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",N.Name)
                         end
-                        wait(60000)
-                    end
-                end)
+                end
             end
-        end)
-    end))
+        end
+        task.wait(100)
+    end
+    end)
+end
+end)
+end))
 
     Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "EquipBest card", Default = false })
     Tabs.Misc:AddToggle("Auto_Upgard", {Title = "UpgradeEquip card", Default = false })
