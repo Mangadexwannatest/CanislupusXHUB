@@ -1,131 +1,131 @@
-local DetechCard = {}
+local Level_Card_Detech = {}
 function LevelActionCard()
-    if #DetechCard ~= 0 then
-        table.clear(DetechCard)
+    if #Level_Card_Detech ~= 0 then
+        table.clear(Level_Card_Detech)
     end
     for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetDescendants()) do
-        if v.Name == "LevelReq" and v.Text == "Lv. 151" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
+        if v.Name == "LevelReq" and v.Text == "Lv. 151" and #Level_Card_Detech < 3  and Lvl > 150 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
-
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 141" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 131" and #DetechCard < 3  then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-            
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 121" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 141" and #Level_Card_Detech < 3 and Lvl > 140 and Lvl < 150 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 113" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 131" and #Level_Card_Detech < 3  and Lvl > 130 and Lvl < 140 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+            
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 121" and #Level_Card_Detech < 3 and Lvl > 120 and Lvl < 130 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 106" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 113" and #Level_Card_Detech < 3 and Lvl > 112 and Lvl < 120 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 98" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 91" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 83" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 76" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 68" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 61" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 56" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 51" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 46" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 41" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
-            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
-            
-    
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 36" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 106" and  #Level_Card_Detech < 3 and Lvl > 105 and Lvl < 112 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 31" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 98" and #Level_Card_Detech < 3 and Lvl > 97 and Lvl < 105 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 26" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 91" and #Level_Card_Detech < 3 and Lvl > 90 and Lvl < 97 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 21" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 83" and #Level_Card_Detech < 3 and Lvl > 82 and Lvl < 90 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 16" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 76" and #Level_Card_Detech < 3 and Lvl > 75 and Lvl < 82 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 68" and #Level_Card_Detech < 3 and Lvl > 67 and Lvl < 75 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 61" and #Level_Card_Detech < 3 and Lvl > 60 and Lvl < 67 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 56" and #Level_Card_Detech < 3 and Lvl > 55 and Lvl < 60 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 51" and #Level_Card_Detech < 3 and Lvl > 50 and Lvl < 55 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 46" and #Level_Card_Detech < 3 and Lvl > 45 and Lvl < 50 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 41" and #Level_Card_Detech < 3 and Lvl > 40 and Lvl < 45 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 36" and #Level_Card_Detech < 3 and Lvl > 35 and Lvl < 40 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 11" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 31" and #Level_Card_Detech < 3 and Lvl > 30 and Lvl < 35 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 6" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 26" and #Level_Card_Detech < 3 and Lvl > 25 and Lvl < 30 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
     
-        elseif v.Name == "LevelReq" and v.Text == "Lv. 1" and #DetechCard < 3 then
-            table.insert(DetechCard,v.Name)
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 21" and #Level_Card_Detech < 3 and Lvl > 20 and Lvl < 25 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 16" and #Level_Card_Detech < 3 and Lvl > 15 and Lvl < 20 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 11" and #Level_Card_Detech < 3 and Lvl > 10 and Lvl < 15 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 6" and #Level_Card_Detech < 3 and Lvl > 5 and Lvl < 10 then
+            table.insert(Level_Card_Detech,v.Name)
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
+            
+    
+        elseif v.Name == "LevelReq" and v.Text == "Lv. 1" and #Level_Card_Detech < 3 and Lvl > 0 and Lvl < 5 then
+            table.insert(Level_Card_Detech,v.Name)
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Parent.Name)
             
         end
