@@ -6,10 +6,9 @@ function EquipCard()
         local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
         local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
         local C = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.OverlayUnequipButton.Label.Text
-        for M, N in pairs(K:GetChildren()) do
-            if N:IsA("ImageButton") then
-                for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
-                    P:Fire()
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+            if not v.Name:lower():match("cardinventory") and v.ClassName == "ImageButton" then
+            firesignal(v.MouseButton1Down)
                     if N.LevelReq.Text > "Lv. 141" and not N.LevelReq.Text > "Lv. 151" then
                         game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
 
@@ -47,13 +46,13 @@ function EquipCard()
                         game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
 
                 end
-            end
+                warn("Finish")
+                break
+                want("2")
             end
         end
         end
         end)
-        warn("EquipBestCard")
-        break
         end    
 end
 
