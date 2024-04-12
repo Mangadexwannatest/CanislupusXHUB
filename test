@@ -1,42 +1,48 @@
-function Gem() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame:GetChildren() do if v.Name == "CoinBlack" and i == 14 then
-            return v.Gem.Text end end end
-function Coin() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame:GetChildren() do if v.Name == "CoinBlack" and i == 13 then
-            return v.Gold.Text end end end
+getgenv().Break = false
 
-local timeInfo = os.date("*t")
-BBody = game:GetService("HttpService"):JSONEncode({
-      content = nil,
-      embeds = {{
-          ["author"] = {
-              ["name"] = "Crazy Day ",
-              ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s108-c-k-c0x00ffffff-no-rj"
-          },
-          ["title"] = "Anime Dimension Simulator", 
-          ["icon_url"] = "https://tr.rbxcdn.com/41ece3967a06d47a84f4859d6262ea46/150/150/Image/Png",
-          ["footer"] = {
-              ["text"] = "Anime Dimension Simulator : " .. timeInfo.hour .. ":" .. timeInfo.min,
-              ["icon_url"] = "https://tr.rbxcdn.com/41ece3967a06d47a84f4859d6262ea46/150/150/Image/Png"
-         
-          },
-          ["color"] = tonumber(0xFFD700),
-          ["url"] = "https://www.roblox.com/games/6938803436/MUSCLE-Anime-Dimensions-Simulator",
-          ["fields"] = {
-          
-                         {["name"] = "Coin,Gem", ["value"] = "AWDWAD",["inline"] = true
-              }, {["name"] = "Xawd,Gem",["value"] = "AWDWAD",["inline"] = true },
-              {["name"] = "C,FAW",["value"] = "KUY",["inline"] = false },
-              {["name"] = "Xawd,Gem",["value"] = "AWDWAD",["inline"] = true },
-
-            
-          }
-          }}
-      })
-  local response = http_request or request or HttpPost or syn.request
-  response({
-  Url = "https://discord.com/api/webhooks/1224522034806128731/VD6su55CViwzM4ETnttuhBE2KjnNwD-xEVHtLt-MqLANxl6nHT1WAF-yPdZUhurnOv5h",
-  Method = "POST",
-  Headers = {
-      ["Content-Type"] = "application/json"
-  },
-  Body = BBody
-})    
+while true do wait()
+local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
+local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
+local C = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.OverlayUnequipButton.Label.Text
+for M, N in pairs(K:GetChildren()) do
+    if N:IsA("ImageButton") then
+        for O, P in next, getconnections(N.CardClick.MouseButton1Down) do
+            P:Fire()
+            if C == "UNEQUIP" then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",N.Name)
+            end
+            if N.LevelReq.Text > "Lv. 141" then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 131" then
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 121" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 113" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 98" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 83" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 68" then   
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 56" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 41" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 26" then    
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text > "Lv. 11" then 
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            elseif N.LevelReq.Text <= "Lv. 11" then 
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
+            end
+        end
+    end
+end
+wait(10)
+getgenv().Break = true
+if getgenv().Break then
+break
+end
+end
