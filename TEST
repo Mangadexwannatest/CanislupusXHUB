@@ -1,4 +1,4 @@
-while true do wait()
+while true do wait() pcall(function ()
 local J = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory
 local K = J.Frame.CardInventoryFrame.CardInventoryScrollingFrame
 local Q = J.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text
@@ -15,56 +15,42 @@ for M, N in pairs(K:GetChildren()) do
             if N.LevelReq.Text > "Lv. 141" then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 131" then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 121" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 113" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 98" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 83" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 68" then   
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 56" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 41" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 26" then    
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text > "Lv. 11" then 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             elseif N.LevelReq.Text <= "Lv. 11" then 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",N.Name)
                 break
-                return
             end
         end
     end
 end
-if getgenv().wadawd then
-break
-end
+end)
 end
