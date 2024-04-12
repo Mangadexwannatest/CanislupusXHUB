@@ -155,7 +155,7 @@ function DestroyKuy()
     Tabs.Misc:AddToggle("Auto_FreeBossRush", {Title = "Auto Free Boss Rush", Default = false })
     Tabs.Misc:AddToggle("Auto_SpeedRaid", {Title = "Auto Speed Raid", Default = false })
     Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AutoEquip Character", Default = false })
-    Tabs.Other:AddButton({
+    Tabs.Misc:AddButton({
         Title = "Save Character",
         Description = nil,
         Callback = function()
@@ -163,6 +163,18 @@ function DestroyKuy()
         })
         end
     })
+
+    Tabs.Misc:AddSection("Card")
+
+    local CardSelect = Tabs.Misc:AddDropdown("Card", {
+        Title = "Select Rarity",
+        Values = {"Common","Uncommon","Rare","Legendary","Mythic"},
+        Multi = true,
+        Default = {nil},
+    })
+    Tabs.Misc:AddToggle("Auto_SellCard", {Title = "Sell selected card", Default = false })
+    Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "EquipBest card", Default = false })
+    Tabs.Misc:AddToggle("Auto_Upgard", {Title = "UpgradeEquip card", Default = false })
 
     local AssistSelect = Tabs.Skill:AddDropdown("SelectAssist", {
         Title = "Select Assist",
