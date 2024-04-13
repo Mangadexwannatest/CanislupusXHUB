@@ -89,7 +89,7 @@ local Tabs = {
 }
 
 local Options = Fluent.Options
-local item_name = {}
+local item_name = {"None"}
 
 do
 
@@ -190,6 +190,8 @@ function DestroyKuy()
         Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
     end
 
+    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
+
     Tabs.Misc:AddButton({
         Title = "SAVE CHARACTER",
         Description = nil,
@@ -197,13 +199,11 @@ function DestroyKuy()
             Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
             Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
             Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
-            Save_Config()
             Fluent:Notify({Title = "Save Success",Content = "Character ",SubContent = tostring(game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value.."\n"..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"
-        ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 3})
+            ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 5.5})
+            Save_Config()
         end
     })
-
-    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
 
     coroutine.resume(coroutine.create(function()
         pcall(function()
@@ -667,7 +667,7 @@ end
 end
 
 function TweenKUY(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/75,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 
@@ -1380,6 +1380,7 @@ coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
         repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    table.clear(item_name)
     if not v:FindFirstChild("Gradient") then
     table.insert(item_name,v.Name.." [Common]")
 elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1432,6 +1433,12 @@ BBody = game:GetService("HttpService"):JSONEncode({
                   
               },
               {
+                ["name"] = "Card",
+                ["value"] = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardsOwned.Text.."/"..game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.MaxCardsOwned.Text,
+                ["inline"] = false
+                  
+              },
+              {
                 ["name"] = "Username",
                 ["value"] = "||**"..game.Players.LocalPlayer.Name.."**||",
                 ["inline"] = true
@@ -1445,7 +1452,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
               },
               {
                 ["name"] = "Other",
-                ["value"] = "Gem : "..Gem().." | ".."Coin : "..Coin(),
+                ["value"] = "Gem : "..Gem().."\n".."Coin : "..Coin(),
                 ["inline"] = true
                   
               },
@@ -1455,7 +1462,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       })
   local response = http_request or request or HttpPost or syn.request
   response({
-  Url = Options.Webhook.Value or getgenv().Webhook,
+  Url = Options.Webhook.Value,
   Method = "POST",
   Headers = {
       ["Content-Type"] = "application/json"
