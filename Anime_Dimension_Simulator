@@ -43,6 +43,7 @@ function UnequipCard()
         if v.Name == "CardImage" then
         if tostring(v.BackgroundColor3) == tostring("1, 0.87451, 0.654902") then
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Parent.Name)
+            getgenv().CanCountFornow = true
             end
         end
     end       
@@ -488,7 +489,7 @@ end))
         UnequipCard()
         repeat task.wait()
         EquipBestCard()
-        if not Slot1() and not Slot2() and not Slot3() then
+        if not Slot1() and not Slot2() and not Slot3() and getgenv().CanCountFornow then
             getgenv().WorkingForDoing = false
         end
         until not Options.Auto_EquipBestCard.Value
