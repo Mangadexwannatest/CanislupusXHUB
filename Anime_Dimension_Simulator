@@ -180,123 +180,123 @@ function DestroyKuy()
         if Options.AUTO_LEVEL_SELECT.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                         Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
                         if Lvl > 0 and Lvl < 6 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Titan Dimension")
+                            Options.SelectDifficulty.Value ="Easy"
+                            Options.SelectDimension.Value = "Titan Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 5 and Lvl < 11 then
-                            DificulitySelect:SetValue("Hard")
-                            DimenSionSelect:SetValue("Titan Dimension")
+                            Options.SelectDifficulty.Value = "Hard"
+                            Options.SelectDimension.Value = "Titan Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 10 and Lvl < 16 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Titan Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Titan Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 15 and Lvl < 21 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Demon Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Demon Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 20 and Lvl < 26 then
-                            DificulitySelect:SetValue("Hard")
-                            DimenSionSelect:SetValue("Demon Dimension")
+                            Options.SelectDifficulty.Value = "Hard"
+                            Options.SelectDimension.Value = "Demon Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 25 and Lvl < 31 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Demon Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Demon Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 30 and Lvl < 36 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Curse Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Curse Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 35 and Lvl < 41 then
-                            DificulitySelect:SetValue("Hard")
-                            DimenSionSelect:SetValue("Curse Dimension")
+                            Options.SelectDifficulty.Value = "Hard"
+                            Options.SelectDimension.Value = "Curse Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 40 and Lvl < 46 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Curse Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare")
+                            Options.SelectDimension.Value = "Curse Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 45 and Lvl < 51 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Villain Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Villain Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 50 and Lvl < 56 then
-                            DificulitySelect:SetValue("Hard")
-                            DimenSionSelect:SetValue("Villain Dimension")
+                            Options.SelectDifficulty.Value = "Hard"
+                            Options.SelectDimension.Value = "Villain Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 55 and Lvl < 61 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Villain Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Villain Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 60 and Lvl < 68 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Sword Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Sword Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 67 and Lvl < 76 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Sword Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Sword Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 75 and Lvl < 83 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Ghoul Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Ghoul Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 82 and Lvl < 91 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Ghoul Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Ghoul Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 90 and Lvl < 98 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Fate Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Fate Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 97 and Lvl < 106 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Fate Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Fate Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 105 and Lvl < 113 then
-                            DificulitySelect:SetValue("Easy")
-                            DimenSionSelect:SetValue("Slime Dimension")
+                            Options.SelectDifficulty.Value = "Easy"
+                            Options.SelectDimension.Value = "Slime Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 112 and Lvl < 121 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Slime Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Slime Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 120 and Lvl < 131 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Devil Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Devil Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 130 and Lvl < 141 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Pirate Dimension")
+                            Options.SelectDifficulty.Value ="Nightmare"
+                            Options.SelectDimension.Value = "Pirate Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 140 and Lvl < 151 then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Alien Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value ="Alien Dimension"
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 150  then
-                            DificulitySelect:SetValue("Nightmare")
-                            DimenSionSelect:SetValue("Level Dimension")
+                            Options.SelectDifficulty.Value = "Nightmare"
+                            Options.SelectDimension.Value = "Level Dimension"
                             task.wait(.5)
                             CreatLLL()
                         end
