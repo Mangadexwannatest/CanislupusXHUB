@@ -484,10 +484,13 @@ end))
 
     CardEqip:OnChanged(function()
         if Options.Auto_EquipBestCard.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-            task.wait()
+        getgenv().WorkingForDoing = true
         UnequipCard()
-        repeat wait()
+        repeat task.wait()
         EquipBestCard()
+        if not Slot1() and not Slot2() and not Slot3() then
+            getgenv().WorkingForDoing = false
+        end
         until not Options.Auto_EquipBestCard.Value
     end
 end)
@@ -833,9 +836,12 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.15) do pcall(function ()
+        if getgenv().WorkingForDoing  then
+        else
         if Options.AutoRaid.Value and 
         not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
-        and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+        and not getgenv().WorkingForDoing and 
+        game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
         local args = {
                 [1] = "CreateRoom",
                 [2] = {
@@ -848,12 +854,14 @@ coroutine.resume(coroutine.create(function()
             
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
         end
+    end
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
-            if getgenv().RaidOpened then 
+            if getgenv().RaidOpened or getgenv().WorkingForDoing then 
             else
         if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
-        not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+        not getgenv().CurrentSpeedRaid and not getgenv().WorkingForDoing and 
+        game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -869,7 +877,7 @@ coroutine.resume(coroutine.create(function()
         end
     end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 and not getgenv().WorkingForDoing then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
        end)
