@@ -89,7 +89,7 @@ local Tabs = {
 }
 
 local Options = Fluent.Options
-local item_name = {}
+local item_name = {"None"}
 
 do
 
@@ -161,6 +161,12 @@ function DestroyKuy()
 
     Tabs.Main:AddSection("Raid")
 
+    Tabs.Main:AddDropdown("SelectRaid", {
+        Title = "SELECT RAID",
+        Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+        Multi = false,
+        Default = 1,
+    })
     
     Tabs.Main:AddToggle("AutoRaid", {Title = "AUTO RAID", Default = false })
 
@@ -172,19 +178,10 @@ function DestroyKuy()
     local Config = {}
     local CharacterSSSS = {}
 
-    local CharacterHere = Tabs.Misc:AddDropdown("CHARACTER", {
-        Title = "CHARACTER SAVE",
-        Values = {CharacterSSSS},
-        Multi = true,
-        Default = {nil},
-    })
+
     function Save_Config()
         writefile("CrazyDay/Character_ADS.json" , game:GetService("HttpService"):JSONEncode(Config))
         for i,v in pairs(Config) do
-            table.insert(CharacterSSSS,v)
-            CharacterHere:SetValue(nil)
-            CharacterHere:Close()
-            CharacterHere:SetValues(CharacterSSSS)
             wait(1)
         end
     end
@@ -193,6 +190,8 @@ function DestroyKuy()
         Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
     end
 
+    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
+
     Tabs.Misc:AddButton({
         Title = "SAVE CHARACTER",
         Description = nil,
@@ -200,11 +199,11 @@ function DestroyKuy()
             Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
             Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
             Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
+            Fluent:Notify({Title = "Save Success",Content = "Character ",SubContent = tostring(game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value.."\n"..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"
+            ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 5.5})
             Save_Config()
         end
     })
-
-    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
 
     coroutine.resume(coroutine.create(function()
         pcall(function()
@@ -242,6 +241,12 @@ function DestroyKuy()
         Default = {nil},
     })
 
+    Tabs.Misc:AddDropdown("Select_Action_MaxCard", {
+        Title = "SELECT ACTION",
+        Values = {"STOP RETRY","LEAVE"},
+        Multi = false,
+        Default = 1,
+    })
     local SELL = Tabs.Misc:AddToggle("Auto_SellCard", {Title = "SELL SELECT CARDS", Default = false })   
     Tabs.Misc:AddToggle("STOP_LEAVE_MAXCARD", {Title = "STOP RETRY // LEAVE IF MAX CARDS", Default = false }) 
     local CardCheckOwner = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame
@@ -249,9 +254,13 @@ function DestroyKuy()
         while wait() do pcall(function ()  
             if Options.STOP_LEAVE_MAXCARD.Value then
                 if tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
-                and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
-                    game:GetService("TeleportService"):Teleport(6938803436)
+                and Options.Select_Action_MaxCard.Value == "STOP RETRY"
+                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
                     getgenv().StopReplay = true
+                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
+                and Options.Select_Action_MaxCard.Value == "LEAVE" 
+                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
+                game:GetService("TeleportService"):Teleport(6938803436)
                 end
             end
         end)
@@ -658,7 +667,7 @@ end
 end
 
 function TweenKUY(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/75,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 
@@ -1371,6 +1380,7 @@ coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
         repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    table.clear(item_name)
     if not v:FindFirstChild("Gradient") then
     table.insert(item_name,v.Name.." [Common]")
 elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1423,6 +1433,12 @@ BBody = game:GetService("HttpService"):JSONEncode({
                   
               },
               {
+                ["name"] = "Card",
+                ["value"] = CardCheckOwner.CardsOwned.Text.."/"..CardCheckOwner.MaxCardsOwned.Text,
+                ["inline"] = false
+                  
+              },
+              {
                 ["name"] = "Username",
                 ["value"] = "||**"..game.Players.LocalPlayer.Name.."**||",
                 ["inline"] = true
@@ -1436,7 +1452,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
               },
               {
                 ["name"] = "Other",
-                ["value"] = "Gem : "..Gem().." | ".."Coin : "..Coin(),
+                ["value"] = "Gem : "..Gem().."\n".."Coin : "..Coin(),
                 ["inline"] = true
                   
               },
@@ -1446,7 +1462,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       })
   local response = http_request or request or HttpPost or syn.request
   response({
-  Url = Options.Webhook.Value or getgenv().Webhook,
+  Url = Options.Webhook.Value,
   Method = "POST",
   Headers = {
       ["Content-Type"] = "application/json"
