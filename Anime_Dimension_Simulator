@@ -810,7 +810,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(1.5) do pcall(function ()
+    while wait(.55) do pcall(function ()
         if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
@@ -832,8 +832,6 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(2.5) do pcall(function ()
-        if Options.Auto_EquipBestCard.Value then
-        else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
@@ -871,7 +869,6 @@ coroutine.resume(coroutine.create(function()
                 }
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-            end
         end
        end)
      end
