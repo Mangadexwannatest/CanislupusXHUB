@@ -71,7 +71,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Anime Dimensions Simulator",
-    SubTitle = "Last Update April/12/2024 [CrazyDay]",
+    SubTitle = "Last Update April/13/2024 [CrazyDay:edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -89,7 +89,7 @@ local Tabs = {
 }
 
 local Options = Fluent.Options
-local item_name = {}
+local item_name = {"None"}
 
 do
 
@@ -165,27 +165,32 @@ function DestroyKuy()
         Title = "SELECT RAID",
         Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
         Multi = false,
-        Default = 1 or getgenv().Select_Raid,
+        Default = 1,
     })
+    
     Tabs.Main:AddToggle("AutoRaid", {Title = "AUTO RAID", Default = false })
 
     Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "AUTO LEAVE IF RAID OPENED", Default = false })
 
     Tabs.Misc:AddToggle("Auto_FreeBossRush", {Title = "AUTO FREE BOSS RUSH", Default = false })
     Tabs.Misc:AddToggle("Auto_SpeedRaid", {Title = "AUTO SPEED RAID", Default = false })
-    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
+
     local Config = {}
+    local CharacterSSSS = {}
+
+
     function Save_Config()
-        writefile("Character_ADS.json" , game:GetService("HttpService"):JSONEncode(Config))
+        writefile("CrazyDay/Character_ADS.json" , game:GetService("HttpService"):JSONEncode(Config))
         for i,v in pairs(Config) do
-            Fluent:Notify({Title = "Save Character",Content = "Config",SubContent = tostring(i).." "..tostring(v), Duration = 2.5})
             wait(1)
         end
     end
 
-    if isfile("Character_ADS.json") then
-        Config = game:GetService("HttpService"):JSONDecode(readfile("Character_ADS.json"))
+    if isfile("CrazyDay/Character_ADS.json") then
+        Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
     end
+
+    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
 
     Tabs.Misc:AddButton({
         Title = "SAVE CHARACTER",
@@ -194,6 +199,8 @@ function DestroyKuy()
             Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
             Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
             Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
+            Fluent:Notify({Title = "Save Success",Content = "Character ",SubContent = tostring(game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value.."\n"..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"
+            ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 5.5})
             Save_Config()
         end
     })
@@ -203,8 +210,8 @@ function DestroyKuy()
             while wait(1) do
                 pcall(function()
                     if Options.Auto_EquipCharacter.Value then
-                        if isfile("Character_ADS.json") then
-                            Config = game:GetService("HttpService"):JSONDecode(readfile("Character_ADS.json"))
+                        if isfile("CrazyDay/Character_ADS.json") then
+                            Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
                         end
                         for i,v in pairs(Config) do
                             if tostring(i) == "Character1" then
@@ -234,8 +241,32 @@ function DestroyKuy()
         Default = {nil},
     })
 
+    Tabs.Misc:AddDropdown("Select_Action_MaxCard", {
+        Title = "SELECT ACTION",
+        Values = {"STOP RETRY","LEAVE"},
+        Multi = false,
+        Default = 1,
+    })
     local SELL = Tabs.Misc:AddToggle("Auto_SellCard", {Title = "SELL SELECT CARDS", Default = false })   
-    Tabs.Misc:AddToggle("STOP_LEAVE_MAXCARD", {Title = "STOP // LEAVE IF MAX CARDS", Default = false }) 
+    Tabs.Misc:AddToggle("STOP_LEAVE_MAXCARD", {Title = "STOP RETRY // LEAVE IF MAX CARDS", Default = false }) 
+    local CardCheckOwner = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()  
+            if Options.STOP_LEAVE_MAXCARD.Value then
+                if tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
+                and Options.Select_Action_MaxCard.Value == "STOP RETRY"
+                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
+                    getgenv().StopReplay = true
+                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
+                and Options.Select_Action_MaxCard.Value == "LEAVE" 
+                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
+                game:GetService("TeleportService"):Teleport(6938803436)
+                end
+            end
+        end)
+    end
+end))
+
 
     function SellCard()
         if Options.Auto_SellCard.Value then
@@ -1349,6 +1380,7 @@ coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
         repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    table.clear(item_name)
     if not v:FindFirstChild("Gradient") then
     table.insert(item_name,v.Name.." [Common]")
 elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1414,7 +1446,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
               },
               {
                 ["name"] = "Other",
-                ["value"] = "Gem : "..Gem().." | ".."Coin : "..Coin(),
+                ["value"] = "Gem : "..Gem().."\n".."Coin : "..Coin(),
                 ["inline"] = true
                   
               },
@@ -1424,7 +1456,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       })
   local response = http_request or request or HttpPost or syn.request
   response({
-  Url = Options.Webhook.Value or getgenv().Webhook,
+  Url = Options.Webhook.Value,
   Method = "POST",
   Headers = {
       ["Content-Type"] = "application/json"
