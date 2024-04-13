@@ -70,8 +70,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "Anime Dimensions Simulator [Stats:Undetected]",
-    SubTitle = "Last Update April/12/2024 [YT:CrazyDay/edek#1004]",
+    Title = "Anime Dimensions Simulator",
+    SubTitle = "Last Update April/12/2024 [CrazyDay]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -94,7 +94,7 @@ local item_name = {}
 do
 
     Tabs.Main:AddDropdown("SelectDimension", {
-        Title = "Select Dimensions",
+        Title = "SELECT DIMENSIONS",
         Values = {"Titan Dimension","Demon Dimension","Curse Dimension","Villain Dimension","Sword Dimension",
         "Ghoul Dimension","Fate Dimension","Slime Dimension","Devil Dimension","Pirate Dimension",
         "Alien Dimension","Level Dimension"},
@@ -103,14 +103,14 @@ do
     })
 
     Tabs.Main:AddDropdown("SelectDifficulty", {
-        Title = "Select Difficulty",
+        Title = "SELECT DIFFICULTY",
         Values = {"Easy","Hard","Nightmare"},
         Multi = false,
         Default = 3,
     })
 
     local PlayChang = Tabs.Main:AddDropdown("PlayMode", {
-        Title = "Select Mode",
+        Title = "SELECT MODE",
         Values = {"Normal Mode","Safe Mode","Bring Mode"},
         Multi = false,
         Default = 1,
@@ -143,7 +143,7 @@ function DestroyKuy()
 
     Tabs.Main:AddSlider("Health", 
     {
-        Title = "Health % (Only Safe Mode) ",
+        Title = "HEALTH % (Only Safe Mode) ",
         Description = "Calculated as the max percentage of health",
         Default = 60,
         Min = 10,
@@ -152,8 +152,9 @@ function DestroyKuy()
         })
 
 
-
-    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "AUTO START // FARM", Default = getgenv().AutoStart_AutoFarm })
+    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "AUTO LEVEL", Default = false })
+    Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "AUTO START // FARM", Default = false })
+    Tabs.Main:AddToggle("Dodge_Skill", {Title = "DODGE SKILL", Default = false })
     Tabs.Main:AddToggle("FriendOnly", {Title = "FRIENDS ONLY", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "HARD CORE", Default = false })
     Tabs.Main:AddToggle("AutoRetry", {Title = "AUTO RETRY", Default = false })
@@ -326,18 +327,48 @@ function DestroyKuy()
         end
 
     end)
-    
+
+    local firesignal = function(signal, arg2)
+        if getconnections(signal) then
+            firesignal(signal, arg2)
+        end
+    end
+    function CloseCard()
+        for i,v in next,game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay:GetChildren() do
+            if v:IsA("ImageButton") and v.Name == "CardInventoryOverlayClose" then
+                return v
+          end
+       end
+    end
+    function UpgradeEquipCard()
+        for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetDescendants()) do
+            if v.Name == "CardImage" then 
+                if tostring(v.BackgroundColor3) == tostring("1, 0.87451, 0.654902")then
+         game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UpgradeCard",v.Parent.Name)
+            end
+        end
+        end     
+    end
 
     local CardEqip = Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "AUTO EQUIP BEST CARDS", Default = false })
-    Tabs.Misc:AddToggle("Auto_Upgard", {Title = "AUTO UPGARD EQUIP CARDS", Default = false })
+    local CardUpgard = Tabs.Misc:AddToggle("Auto_Upgard", {Title = "AUTO UPGARD EQUIP CARDS", Default = false })
 
     CardEqip:OnChanged(function()
-        if Options.Auto_EquipBestCard.Value then
+        if Options.Auto_EquipBestCard.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
         UnequipCard()
         repeat wait()
         EquipBestCard()
         until not Options.Auto_EquipBestCard.Value
     end
+end)
+
+CardUpgard:OnChanged(function()
+    if Options.Auto_Upgard.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+    repeat task.wait()
+        firesignal(CloseCard().MouseButton1Click,game.Players.LocalPlayer)
+        UpgradeEquipCard()
+    until not Options.Auto_Upgard.Value
+end
 end)
 
     local AssistSelect = Tabs.Skill:AddDropdown("SelectAssist", {
@@ -416,6 +447,16 @@ end)
         Default = 5,
     })
 
+    Tabs.Skill:AddSlider("DistanceToSkill", 
+    {
+        Title = "DISTANCE TO SKILL",
+        Description = "",
+        Default = 30,
+        Min = 10,
+        Max = 100,
+        Rounding = 0,
+        })
+
     Tabs.Skill:AddToggle("Auto_Skill_Assist", {Title = "AUTO SKILL // ASSIST", Default = false })
 
     
@@ -430,7 +471,7 @@ end)
         Finished = false, -- Only calls callback when you press enter
     })
 
-    Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "DUNGEON REWARD", Default = false })
+    Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "DUNGEON REWARD (ONLY DUNGEON)", Default = false })
     
     Tabs.Other:AddToggle("DashNoCd", {Title = "DASH NO CD", Default = false })
    local white = Tabs.Other:AddToggle("WhiteScreen", {Title = "AUTO WHITE SCREEN", Default = false })
@@ -625,9 +666,10 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
-            if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().RaidOpened and Options.AutoFarmAndStart.Value 
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+        if Options.AutoFarmAndStart.Value
+         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
+        not getgenv().RaidOpened and Options.AutoFarmAndStart.Value and not getgenv().CurrentBossRush and
+        not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -646,7 +688,6 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
 
-            end
             if Options.AutoRaid.Value and 
             not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
@@ -662,6 +703,23 @@ coroutine.resume(coroutine.create(function()
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
+            if Options.Auto_FreeBossRush.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text == "1 Free Entry Left" and not not getgenv().RaidOpened 
+            and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
+                getgenv().CurrentBossRush = true
+                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToBossRush")
+            end
+            if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
+            and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
+                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
+                    if v.ClassName == "ImageButton" and v.CharacterImage.ImageTransparency == 0 and
+                    v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value and 
+                    v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value then
+                        getgenv().CurrentSpeedRaid = true
+                        game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToShadowRaid",v.Name)
+                       end
+                end
+            end
+
        end)
      end
 end))
@@ -679,7 +737,9 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
+        if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230
+        and Options.AutoFarmAndStart.Value or Options.AutoRaid.Value or Options.Auto_FreeBossRush.Value 
+        or Options.Auto_SpeedRaid.Value then
             if getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
                 repeat task.wait()
                 Tween(game.Players.LocalPlayer.Character:FindFirstChild("Halor_1").CFrame * CFrame.new(0,-0.885,0) )
@@ -930,7 +990,7 @@ function Skill_First()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) == nil
-        and mag <= 30 and not getgenv().IFrame_MODE then
+        and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.First_Skill.Value))
         end 
@@ -948,7 +1008,7 @@ function Skill_Second()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text) == nil
-        and mag <= 30 and not getgenv().IFrame_MODE then
+        and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Second_Skill.Value))
         end 
@@ -968,7 +1028,7 @@ function Skill_Third()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text)  == nil
-        and mag <= 30 and not getgenv().IFrame_MODE then
+        and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Third_Skill.Value))
         end 
@@ -987,7 +1047,7 @@ function Skill_Fourth()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text)  == nil
-        and mag <= 30 and not getgenv().IFrame_MODE then
+        and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
             wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fourth_Skill.Value))
         end 
@@ -1005,7 +1065,7 @@ function Skill_Fifth()
                 pcall(function ()
             if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].Visible and
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].SkillName.Text)  == nil
-            and mag <= 30 and not getgenv().IFrame_MODE then
+            and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
                 wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fifth_Skill.Value))
         end 
@@ -1063,7 +1123,7 @@ coroutine.resume(coroutine.create(function()
             if v:FindFirstChildOfClass("BillboardGui") then
                 pcall(function ()
             local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
-            if getgenv().Assist_1 and mag <= 30 
+            if getgenv().Assist_1 and mag <= tonumber(Options.DistanceToSkill.Value) 
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.Visible and
             tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == "Dash" or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist1.SkillName.Text) == 0  then
@@ -1071,7 +1131,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
                 end)
             end  
-            if getgenv().Assist_2 and mag <= 30
+            if getgenv().Assist_2 and mag <= tonumber(Options.DistanceToSkill.Value)
                 and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.Visible and
                 tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == "Dash" or 
                 tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillAssist2.SkillName.Text) == 0  then
@@ -1079,7 +1139,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseAssistSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
             end)
         end   
-            if getgenv().Fruit_1 and mag <= 30
+            if getgenv().Fruit_1 and mag <= tonumber(Options.DistanceToSkill.Value)
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.Visible and 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == nil or
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit1.SkillName.Text) == 0  then
@@ -1087,7 +1147,7 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseFruitSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
             end)
         end  
-            if getgenv().Fruit_2 and mag <= 30
+            if getgenv().Fruit_2 and mag <= tonumber(Options.DistanceToSkill.Value)
             and game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.Visible and not 
             tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == nil or 
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder.SkillFruit2.SkillName.Text) == 0  then
@@ -1107,8 +1167,8 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
-                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
+                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options.Dodge_Skill.Value then
+                    if Options.Dodge_Skill.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.25,0,2.25)
@@ -1139,8 +1199,8 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Folders.Debris.ChildAdded:Connect(function(v)
             pcall(function()
-                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon then
-                    if not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
+                if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options.Dodge_Skill.Value then
+                    if Options.Dodge_Skill.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
                     local side = math.clamp(2.5,0,2.5)
@@ -1170,6 +1230,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     repeat wait() until Options.AutoFarmAndStart.Value
+    repeat wait() until game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230
     for i,v in next,game.Workspace.GameMap:GetDescendants() do
         if v:IsA("BasePart") then
             v.CanCollide = false
