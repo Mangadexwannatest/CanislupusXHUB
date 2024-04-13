@@ -920,7 +920,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
             game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
                         repeat task.wait()
