@@ -238,6 +238,8 @@ function DestroyKuy()
                             DificulitySelect:SetValue("Nightmare")
                             DimenSionSelect:SetValue("Level Dimension")
                         end
+                        wait(2.5)
+                        getgenv().CanGo_ByLevel = true
                     end
                 end)
 
@@ -800,8 +802,8 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
-         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
+        if Options.AutoFarmAndStart.Value
+        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
         not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
@@ -817,6 +819,23 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
 
+            if Options.AUTO_LEVEL_SELECT.Value
+            and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
+            not getgenv().RaidOpened and not getgenv().CurrentBossRush and
+            not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 
+            and getgenv().CanGo_ByLevel then
+                    local args = {
+                        [1] = "CreateRoom",
+                        [2] = {
+                            ["Difficulty"] = Options.SelectDifficulty.Value,
+                            ["FriendsOnly"] = Options.FriendOnly.Value,
+                            ["MapName"] = Options.SelectDimension.Value,
+                            ["Hardcore"] = Options.HardCore.Value
+                        }
+                    }
+                    
+                    game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
+                end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
