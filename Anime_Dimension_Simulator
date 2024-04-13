@@ -1279,7 +1279,7 @@ end)
 end
 
 coroutine.resume(coroutine.create(function()
-        while task.wait(0.1) do
+        while task.wait(0.225) do
             pcall(function()
                 if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     Skill_First()
