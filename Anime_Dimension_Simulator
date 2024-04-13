@@ -246,6 +246,8 @@ function DestroyKuy()
                         end
                     end
                 end)
+                wait(60000000000)
+                break
             end
         end))
 
@@ -476,9 +478,10 @@ end))
         end     
     end
 
-function Slot1() for i,v in next,One:GetChildren() do if v.Name == "Slot1" and tostring(v.ItemImage.Image) == "" then return true  end end end
-function Slot2() for i,v in next,One:GetChildren() do if v.Name == "Slot2" and tostring(v.ItemImage.Image) == "" then return true  end end end
-function Slot3() for i,v in next,One:GetChildren() do if v.Name == "Slot3" and tostring(v.ItemImage.Image) == "" then return true  end end end
+    function Slot1() for i,v in next,game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay:GetChildren() do if v.Name == "Slot1" and tostring(v.ItemImage.Image) == "" then return true  end end end
+    function Slot2() for i,v in next,game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay:GetChildren() do if v.Name == "Slot2" and tostring(v.ItemImage.Image) == "" then return true  end end end
+    function Slot3() for i,v in next,game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay:GetChildren() do if v.Name == "Slot3" and tostring(v.ItemImage.Image) == "" then return true  end end end
+    
 
     local CardEqip = Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "AUTO EQUIP BEST CARDS", Default = false })
     local CardUpgard = Tabs.Misc:AddToggle("Auto_Upgard", {Title = "AUTO UPGARD EQUIP CARDS", Default = false })
@@ -489,9 +492,6 @@ function Slot3() for i,v in next,One:GetChildren() do if v.Name == "Slot3" and t
         UnequipCard()
         repeat wait()
         EquipBestCard()
-        if not Slot1() and not Slot2() and not Slot3() then
-            getgenv().CanGoNowISUS = true
-        end
         until not Options.Auto_EquipBestCard.Value
     end
 end)
@@ -837,8 +837,8 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.Auto_EquipBestCard.Value then 
-            repeat wait() until getgenv().CanGoNowISUS
-            warn("PAI DI")
+            repeat wait() until not Slot1() and not Slot2() and not Slot3()
+            warn("EquipSussce Can Go now")
         else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
