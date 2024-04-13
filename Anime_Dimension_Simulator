@@ -836,9 +836,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.Auto_EquipBestCard.Value then 
-            repeat wait() until not Slot1() and not Slot2() and not Slot3()
-            warn("EquipSussce Can Go now")
+        if Options.Auto_EquipBestCard.Value and not not Slot1() and not Slot2() and not Slot3() then
         else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
