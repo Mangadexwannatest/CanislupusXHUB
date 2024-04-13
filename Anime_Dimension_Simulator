@@ -502,7 +502,7 @@ end)
         Title = "SELECT ASSIST",
         Values = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
         Multi = true,
-        Default = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
+        Default = {nil},
     })
 
     AssistSelect:OnChanged(function(Value)
