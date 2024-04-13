@@ -59,6 +59,7 @@ function EquipBestCard()
     end     
 end
 
+
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 game.Workspace.Folders.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Head"):WaitForChild("PlayerHealthBarGui")
@@ -483,13 +484,22 @@ end))
     local CardEqip = Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "AUTO EQUIP BEST CARDS", Default = false })
     local CardUpgard = Tabs.Misc:AddToggle("Auto_Upgard", {Title = "AUTO UPGARD EQUIP CARDS", Default = false })
 
+local LOL = {}
+for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+    if not v.Name:lower():match("cardinventory") and v.ClassName == "ImageButton" then
+        table.insert(LOL,v.Name)
+    end
+end
+
     CardEqip:OnChanged(function()
         if Options.Auto_EquipBestCard.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
         getgenv().WorkingForDoing = true
         UnequipCard()
         repeat task.wait()
         EquipBestCard()
-        if not Slot1() and not Slot2() and not Slot3() and getgenv().CanCountFornow then
+        if #LOL >= 3 and getgenv().CanCountFornow and not Slot1() and not Slot2() and not Slot3() then
+            getgenv().WorkingForDoing = false
+        elseif #LOL < 3 and getgenv().CanCountFornow and not Slot1() or not Slot2() or not Slot3() then
             getgenv().WorkingForDoing = false
         end
         until not Options.Auto_EquipBestCard.Value
