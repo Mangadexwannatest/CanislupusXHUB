@@ -89,7 +89,7 @@ local Tabs = {
 }
 
 local Options = Fluent.Options
-local item_name = {}
+local item_name = {"None"}
 
 do
 
@@ -130,6 +130,9 @@ function DestroyKuy()
             ADDKUY()
         elseif Value ~= "Bring Mode" then
             DestroyKuy()
+        elseif Value ~= "Safe Mode" then
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
+            getgenv().SAFE_MODE = false
         end
     end)
 
@@ -178,12 +181,7 @@ function DestroyKuy()
     local Config = {}
     local CharacterSSSS = {}
 
-    local CharacterHere = Tabs.Misc:AddDropdown("CHARACTER", {
-        Title = "CHARACTER SAVE",
-        Values = {Config["Character1"],Config["Character2"],Config["Character3"]},
-        Multi = true,
-        Default = {nil},
-    })
+
     function Save_Config()
         writefile("CrazyDay/Character_ADS.json" , game:GetService("HttpService"):JSONEncode(Config))
         for i,v in pairs(Config) do
@@ -195,6 +193,8 @@ function DestroyKuy()
         Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
     end
 
+    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
+
     Tabs.Misc:AddButton({
         Title = "SAVE CHARACTER",
         Description = nil,
@@ -202,26 +202,17 @@ function DestroyKuy()
             Config["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
             Config["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
             Config["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
+            Fluent:Notify({Title = "Save Success",Content = "Character ",SubContent = tostring(game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value.."\n"..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"
+            ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 5.5})
             Save_Config()
-            if #CharacterSSSS ~= 0 then
-                table.clear(CharacterSSSS)
-            end
-        table.insert(CharacterSSSS,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
-        ,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
-        ,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value)
-        CharacterHere:Close()
-        CharacterHere:SetValue(nil)
-        CharacterHere:SetValues(CharacterSSSS)
         end
     })
-
-    Tabs.Misc:AddToggle("Auto_EquipCharacter", {Title = "AUTO EQUIP CHARACTER", Default = false })
 
     coroutine.resume(coroutine.create(function()
         pcall(function()
             while wait(1) do
                 pcall(function()
-                    if Options.Auto_EquipCharacter.Value then
+                    if Options.Auto_EquipCharacter.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                         if isfile("CrazyDay/Character_ADS.json") then
                             Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
                         end
@@ -315,7 +306,7 @@ end))
 
 
     SELL:OnChanged(function ()
-        if Options.Auto_SellCard.Value then
+        if Options.Auto_SellCard.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
             SellCard()
         end
     end)
@@ -516,7 +507,16 @@ end)
 
     Tabs.Webhook:AddToggle("AutoWebhook_Dungeon", {Title = "DUNGEON REWARD (ONLY DUNGEON)", Default = false })
     
-    Tabs.Other:AddToggle("DashNoCd", {Title = "DASH NO CD", Default = false })
+    local Dash = Tabs.Other:AddToggle("DashNoCd", {Title = "DASH NO CD", Default = false })
+    Dash:OnChanged(function()
+        if Options.DashNoCd.Value then
+            game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = true
+        else
+            game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = false
+        end
+    end)
+
+
    local white = Tabs.Other:AddToggle("WhiteScreen", {Title = "AUTO WHITE SCREEN", Default = false })
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "AUTO REJOIN IF ERROR", Default = false })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "CLOSE GUI AFTER EXECUTE", Default = false })
@@ -679,7 +679,7 @@ end
 end
 
 function TweenKUY(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/75,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestKuy().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 
@@ -1392,6 +1392,9 @@ coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
         repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    if item_name[1] == "None" then
+        table.clear(item_name)
+    end
     if not v:FindFirstChild("Gradient") then
     table.insert(item_name,v.Name.." [Common]")
 elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1444,6 +1447,12 @@ BBody = game:GetService("HttpService"):JSONEncode({
                   
               },
               {
+                ["name"] = "Card",
+                ["value"] = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardsOwned.Text.."/"..game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.MaxCardsOwned.Text,
+                ["inline"] = false
+                  
+              },
+              {
                 ["name"] = "Username",
                 ["value"] = "||**"..game.Players.LocalPlayer.Name.."**||",
                 ["inline"] = true
@@ -1457,7 +1466,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
               },
               {
                 ["name"] = "Other",
-                ["value"] = "Gem : "..Gem().." | ".."Coin : "..Coin(),
+                ["value"] = "Gem : "..Gem().."\n".."Coin : "..Coin(),
                 ["inline"] = true
                   
               },
@@ -1467,7 +1476,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       })
   local response = http_request or request or HttpPost or syn.request
   response({
-  Url = Options.Webhook.Value or getgenv().Webhook,
+  Url = Options.Webhook.Value,
   Method = "POST",
   Headers = {
       ["Content-Type"] = "application/json"
@@ -1500,35 +1509,28 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.PlayMode.Value == "Safe Mode" and Options.AutoFarmAndStart.Value then
+        if Options.PlayMode.Value == "Safe Mode" then
 local Health = game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text
 local HpSplit = string.split(Health, "/")
 local HealthPercent = Options.Health.Value * (HpSplit[2] / 100)
 if tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) <= tonumber(HealthPercent) then
     getgenv().SAFE_MODE = true
-    game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
     TweenPart(game.Workspace:FindFirstChild("SAFE_PART"),game.Workspace:FindFirstChild("SAFE_PART"))
+    game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
 else
     getgenv().SAFE_MODE = false
     game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
     
             end
         end
+        if Options.PlayMode.Value ~= "Safe Mode" and getgenv().SAFE_MODE then
+            getgenv().SAFE_MODE = false
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
+            
+        end
     end)
 end
 end))
-
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function()
-        
-                if Options.DashNoCd then
-                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = true
-                else
-                    game.ReplicatedStorage[game.Players.LocalPlayer.Name .. "StatDisplay"].No_DashCooldown.Value = false
-                end
-            end)
-        end
-    end))
 
 coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.OnTeleport:Connect(function(State)
