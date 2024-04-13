@@ -850,24 +850,25 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.Auto_EquipCharacter.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-if isfile("CrazyDay/Character_ADS.json") then
-    Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
-end
-wanr("L")
-getgenv().DuringForCharacter = true
+        if Options.Auto_EquipCharacter.Value and 
+        game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 
+        and isfile("CrazyDay/Character_ADS.json") then
+        Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
 for i,v in next,Config do 
-    if tostring(i) == "Character1" and  game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == v then
+    getgenv().DuringForCharacter = true
+    if tostring(i) == "Character1" and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= v then
+        getgenv().DuringForCharacter = true
+    else
         getgenv().DuringForCharacter = false
-    end
-end
-end
-end)
-if not getgenv().DuringForCharacter then
-    break
-    warn("break")
-end
-end
+                  end
+               end
+           end
+        end)
+        if getgenv().DuringForCharacter == false then
+            warn("break character")
+            break
+         end
+     end
 end))
 
 coroutine.resume(coroutine.create(function()
