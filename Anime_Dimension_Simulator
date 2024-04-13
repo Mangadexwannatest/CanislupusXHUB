@@ -831,9 +831,10 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(2.5) do pcall(function ()
-        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
-        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
+    while wait(.15) do pcall(function ()
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
+            
+        if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
         not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
@@ -848,17 +849,18 @@ coroutine.resume(coroutine.create(function()
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
+        end
 
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
+            
 
             if Options.AutoRaid.Value and 
             not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-                wait(2.5)
-                local args = {
+            local args = {
                     [1] = "CreateRoom",
                     [2] = {
                         ["Difficulty"] = "Easy",
