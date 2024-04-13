@@ -476,6 +476,10 @@ end))
         end     
     end
 
+function Slot1() for i,v in next,One:GetChildren() do if v.Name == "Slot1" and tostring(v.ItemImage.Image) == "" then return true  end end end
+function Slot2() for i,v in next,One:GetChildren() do if v.Name == "Slot2" and tostring(v.ItemImage.Image) == "" then return true  end end end
+function Slot3() for i,v in next,One:GetChildren() do if v.Name == "Slot3" and tostring(v.ItemImage.Image) == "" then return true  end end end
+
     local CardEqip = Tabs.Misc:AddToggle("Auto_EquipBestCard", {Title = "AUTO EQUIP BEST CARDS", Default = false })
     local CardUpgard = Tabs.Misc:AddToggle("Auto_Upgard", {Title = "AUTO UPGARD EQUIP CARDS", Default = false })
 
@@ -485,6 +489,9 @@ end))
         UnequipCard()
         repeat wait()
         EquipBestCard()
+        if not Slot1() and not Slot2() and not Slot3() then
+            getgenv().CanGoNowISUS = true
+        end
         until not Options.Auto_EquipBestCard.Value
     end
 end)
@@ -807,7 +814,32 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(5) do pcall(function ()
+    while wait() do pcall(function ()
+        if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
+        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
+                if v.ClassName == "ImageButton" and v.CharacterImage.ImageTransparency == 0 and
+                v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value and 
+                v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value then
+                    getgenv().CurrentSpeedRaid = true
+                    game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToShadowRaid",v.Name)
+                elseif Options.Auto_FreeBossRush.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text == "1 Free Entry Left" and not not getgenv().RaidOpened 
+                    and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
+                        getgenv().CurrentBossRush = true
+                        game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToBossRush")
+                   end
+            end
+        end
+    end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if Options.Auto_EquipBestCard.Value then 
+            repeat wait() until getgenv().CanGoNowISUS
+            warn("PAI DI")
+        else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
@@ -845,26 +877,14 @@ coroutine.resume(coroutine.create(function()
                 
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
-            if Options.Auto_FreeBossRush.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text == "1 Free Entry Left" and not not getgenv().RaidOpened 
-            and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
-                getgenv().CurrentBossRush = true
-                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToBossRush")
-            end
-            if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
-            and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
-                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
-                    if v.ClassName == "ImageButton" and v.CharacterImage.ImageTransparency == 0 and
-                    v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value and 
-                    v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value then
-                        getgenv().CurrentSpeedRaid = true
-                        game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToShadowRaid",v.Name)
-                       end
-                end
-            end
-
+        end
        end)
      end
 end))
+
+
+
+        
 function TweenPart(part,goal)
     game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((part.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = goal.CFrame}):Play()
 end
@@ -1494,7 +1514,9 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.
     if item_name[1] == "None" then
         table.clear(item_name)
     end
-    if not v:FindFirstChild("Gradient") then
+    if v.Name == "RaidCurrency" or v.Name == "Gem" then
+    else
+    if not v:FindFirstChild("Gradient") then 
     table.insert(item_name,v.Name.." [Common]")
 elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
         table.insert(item_name,v.Name.." [Uncommon]")
@@ -1506,6 +1528,7 @@ elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278
     table.insert(item_name,v.Name.." [Legendary]")
 else
     table.insert(item_name,v.Name.." [Mythic]")
+       end
     end
 end)
 end)
