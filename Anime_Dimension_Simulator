@@ -803,6 +803,7 @@ if getgenv().RaidOpened and not game:GetService("Players").LocalPlayer.PlayerGui
     game:GetService("TeleportService"):Teleport(6938803436)
 elseif getgenv().RaidOpened and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and Options.Select_Action_Raid.Value == "STOP RETRY" then
     getgenv().StopReplay = true
+    getgenv().RaidOpened = true
 end
 end
 end)
@@ -832,8 +833,24 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.15) do pcall(function ()
-        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
+        if Options.AutoRaid.Value and 
+        not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
+        and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+        local args = {
+                [1] = "CreateRoom",
+                [2] = {
+                    ["Difficulty"] = "Easy",
+                    ["FriendsOnly"] = Options.FriendOnly.Value,
+                    ["MapName"] = Options.SelectRaid.Value,
+                    ["Hardcore"] = false
+                }
+            }
             
+            game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
+        end
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
+            if getgenv().RaidOpened then 
+            else
         if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
         not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
@@ -850,28 +867,11 @@ coroutine.resume(coroutine.create(function()
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
             end
         end
-
+    end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
-            
-
-            if Options.AutoRaid.Value and 
-            not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-            local args = {
-                    [1] = "CreateRoom",
-                    [2] = {
-                        ["Difficulty"] = "Easy",
-                        ["FriendsOnly"] = Options.FriendOnly.Value,
-                        ["MapName"] = Options.SelectRaid.Value,
-                        ["Hardcore"] = false
-                    }
-                }
-                
-                game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-        end
        end)
      end
 end))
