@@ -816,8 +816,10 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.55) do pcall(function ()
+        if getgenv().WorkingForDoing or getgenv().RaidOpened then 
+        else
         if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
-        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
+        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush and not getgenv().WorkingForDoing then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
                 if v.ClassName == "ImageButton" and v.CharacterImage.ImageTransparency == 0 and
                 v.Name ~= game.ReplicatedStorage[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value and 
@@ -825,9 +827,10 @@ coroutine.resume(coroutine.create(function()
                     getgenv().CurrentSpeedRaid = true
                     game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToShadowRaid",v.Name)
                 elseif Options.Auto_FreeBossRush.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text == "1 Free Entry Left" and not not getgenv().RaidOpened 
-                    and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
+                    and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().WorkingForDoing then
                         getgenv().CurrentBossRush = true
                         game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportToBossRush")
+                      end
                    end
             end
         end
