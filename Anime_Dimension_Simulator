@@ -39,11 +39,9 @@ function ADDKUY()
 end
 
 function UnequipCard()
-    task.wait()
     for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetDescendants()) do
         if v.Name == "CardImage" then
-        if tostring(v.BackgroundColor3) == tostring("1, 0.87451, 0.654902") or tostring(v.BackgroundColor3) == tostring("1, 1, 1") then
-            task.wait()
+        if tostring(v.BackgroundColor3) == tostring("1, 0.87451, 0.654902") then
             game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Parent.Name)
             end
         end
@@ -814,7 +812,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
+    while wait(1.5) do pcall(function ()
         if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentBossRush then
             for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
@@ -835,8 +833,8 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.Auto_EquipBestCard.Value and not not Slot1() and not Slot2() and not Slot3() then
+    while wait(2.5) do pcall(function ()
+        if Options.Auto_EquipBestCard.Value then
         else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
@@ -863,6 +861,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoRaid.Value and 
             not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
             and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
+                wait(2.5)
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
