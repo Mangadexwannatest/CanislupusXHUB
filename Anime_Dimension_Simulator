@@ -1169,7 +1169,6 @@ function Skill_First()
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].Visible and
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) == nil
         and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
-            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.First_Skill.Value))
         end 
     end)
@@ -1185,9 +1184,10 @@ function Skill_Second()
                 pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].Visible and
+        tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.First_Skill.Value].SkillName.Text) ~= nil and
+
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text) == nil
         and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
-            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Second_Skill.Value))
         end 
     end)
@@ -1205,9 +1205,10 @@ function Skill_Third()
                 pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].Visible and
+        tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Second_Skill.Value].SkillName.Text) ~= nil and
+
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text)  == nil
         and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
-            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Third_Skill.Value))
         end 
     end)
@@ -1216,6 +1217,9 @@ function Skill_Third()
 end)
 end
 
+if tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill1"].SkillName.Text) ~= nil then
+    warn("WORK")
+end
 
 function Skill_Fourth()
     pcall(function ()
@@ -1224,9 +1228,10 @@ function Skill_Fourth()
                 pcall(function ()
         local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
         if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].Visible and
+        tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Third_Skill.Value].SkillName.Text) ~= nil and
+        
         tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text)  == nil
         and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
-            wait(.1)
             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options.Fourth_Skill.Value))
         end 
     end)
@@ -1242,6 +1247,8 @@ function Skill_Fifth()
             if v:FindFirstChildOfClass("BillboardGui") then
                 pcall(function ()
             if game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].Visible and
+            tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fourth_Skill.Value].SkillName.Text) ~= nil and
+
             tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill"..Options.Fifth_Skill.Value].SkillName.Text)  == nil
             and mag <= tonumber(Options.DistanceToSkill.Value) and not getgenv().IFrame_MODE then
                 wait(.1)
