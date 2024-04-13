@@ -220,7 +220,7 @@ function DestroyKuy()
                             task.wait(.5)
                             CreatLLL()
                         elseif Lvl > 40 and Lvl < 46 then
-                            Options.SelectDifficulty.Value = "Nightmare")
+                            Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Curse Dimension"
                             task.wait(.5)
                             CreatLLL()
