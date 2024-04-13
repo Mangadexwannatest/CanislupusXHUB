@@ -155,154 +155,118 @@ function DestroyKuy()
         })
 
 
-   local LevelDetech = Tabs.Main:AddToggle("AUTO_LEVEL_SELECT", {Title = "AUTO LEVEL MAP SELECT", Default = false })
+    Tabs.Main:AddToggle("AUTO_LEVEL_SELECT", {Title = "AUTO LEVEL MAP SELECT", Default = false })
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "AUTO START // FARM", Default = false })
     Tabs.Main:AddToggle("Dodge_Skill", {Title = "DODGE SKILL", Default = false })
     Tabs.Main:AddToggle("FriendOnly", {Title = "FRIENDS ONLY", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "HARD CORE", Default = false })
     Tabs.Main:AddToggle("AutoRetry", {Title = "AUTO RETRY", Default = false })
 
-    function CreatLLL()
-                    local args = {
-                        [1] = "CreateRoom",
-                        [2] = {
-                            ["Difficulty"] = Options.SelectDifficulty.Value,
-                            ["FriendsOnly"] = Options.FriendOnly.Value,
-                            ["MapName"] = Options.SelectDimension.Value,
-                            ["Hardcore"] = Options.HardCore.Value
-                        }
-                    }
-                    
-                    game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer(unpack(args))
-    end
 
-    LevelDetech:OnChanged(function()
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()  
         if Options.AUTO_LEVEL_SELECT.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                         Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
                         if Lvl > 0 and Lvl < 6 then
                             Options.SelectDifficulty.Value ="Easy"
                             Options.SelectDimension.Value = "Titan Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 5 and Lvl < 11 then
                             Options.SelectDifficulty.Value = "Hard"
                             Options.SelectDimension.Value = "Titan Dimension"
-                            task.wait(.5)
-                            CreatLLL()
                         elseif Lvl > 10 and Lvl < 16 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Titan Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 15 and Lvl < 21 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Demon Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 20 and Lvl < 26 then
                             Options.SelectDifficulty.Value = "Hard"
                             Options.SelectDimension.Value = "Demon Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 25 and Lvl < 31 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Demon Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 30 and Lvl < 36 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Curse Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 35 and Lvl < 41 then
                             Options.SelectDifficulty.Value = "Hard"
                             Options.SelectDimension.Value = "Curse Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 40 and Lvl < 46 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Curse Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 45 and Lvl < 51 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Villain Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 50 and Lvl < 56 then
                             Options.SelectDifficulty.Value = "Hard"
                             Options.SelectDimension.Value = "Villain Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 55 and Lvl < 61 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Villain Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 60 and Lvl < 68 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Sword Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 67 and Lvl < 76 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Sword Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 75 and Lvl < 83 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Ghoul Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 82 and Lvl < 91 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Ghoul Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 90 and Lvl < 98 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Fate Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 97 and Lvl < 106 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Fate Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 105 and Lvl < 113 then
                             Options.SelectDifficulty.Value = "Easy"
                             Options.SelectDimension.Value = "Slime Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 112 and Lvl < 121 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Slime Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 120 and Lvl < 131 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Devil Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 130 and Lvl < 141 then
                             Options.SelectDifficulty.Value ="Nightmare"
                             Options.SelectDimension.Value = "Pirate Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 140 and Lvl < 151 then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value ="Alien Dimension"
-                            task.wait(.5)
-                            CreatLLL()
+
                         elseif Lvl > 150  then
                             Options.SelectDifficulty.Value = "Nightmare"
                             Options.SelectDimension.Value = "Level Dimension"
-                            task.wait(.5)
-                            CreatLLL()
                         end
                     end
                 end)
-
+            end
+        end))
 
     Tabs.Main:AddSection("Raid")
 
@@ -861,8 +825,8 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value and not Options.AUTO_LEVEL_SELECT.Value
+    while wait(1.5) do pcall(function ()
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
         not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
