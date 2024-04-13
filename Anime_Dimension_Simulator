@@ -169,99 +169,77 @@ function DestroyKuy()
         if Options.AUTO_LEVEL_SELECT.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                         Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
                         if Lvl > 0 and Lvl < 6 then
-                            Options.SelectDifficulty.Value ="Easy"
-                            Options.SelectDimension.Value = "Titan Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Titan Dimension")
                         elseif Lvl > 5 and Lvl < 11 then
-                            Options.SelectDifficulty.Value = "Hard"
-                            Options.SelectDimension.Value = "Titan Dimension"
+                            DificulitySelect:SetValue("Hard")
+                            DimenSionSelect:SetValue("Titan Dimension")
                         elseif Lvl > 10 and Lvl < 16 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Titan Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Titan Dimension")
                         elseif Lvl > 15 and Lvl < 21 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Demon Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Demon Dimension")
                         elseif Lvl > 20 and Lvl < 26 then
-                            Options.SelectDifficulty.Value = "Hard"
-                            Options.SelectDimension.Value = "Demon Dimension"
-
+                            DificulitySelect:SetValue("Hard")
+                            DimenSionSelect:SetValue("Demon Dimension")
                         elseif Lvl > 25 and Lvl < 31 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Demon Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Demon Dimension")
                         elseif Lvl > 30 and Lvl < 36 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Curse Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Curse Dimension")
                         elseif Lvl > 35 and Lvl < 41 then
-                            Options.SelectDifficulty.Value = "Hard"
-                            Options.SelectDimension.Value = "Curse Dimension"
-
+                            DificulitySelect:SetValue("Hard")
+                            DimenSionSelect:SetValue("Curse Dimension")
                         elseif Lvl > 40 and Lvl < 46 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Curse Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Curse Dimension")
                         elseif Lvl > 45 and Lvl < 51 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Villain Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Villain Dimension")
                         elseif Lvl > 50 and Lvl < 56 then
-                            Options.SelectDifficulty.Value = "Hard"
-                            Options.SelectDimension.Value = "Villain Dimension"
-
+                            DificulitySelect:SetValue("Hard")
+                            DimenSionSelect:SetValue("Villain Dimension")
                         elseif Lvl > 55 and Lvl < 61 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Villain Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Villain Dimension")
                         elseif Lvl > 60 and Lvl < 68 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Sword Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Sword Dimension")
                         elseif Lvl > 67 and Lvl < 76 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Sword Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Sword Dimension")
                         elseif Lvl > 75 and Lvl < 83 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Ghoul Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Ghoul Dimension")
                         elseif Lvl > 82 and Lvl < 91 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Ghoul Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Ghoul Dimension")
                         elseif Lvl > 90 and Lvl < 98 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Fate Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Fate Dimension")
                         elseif Lvl > 97 and Lvl < 106 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Fate Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Fate Dimension")
                         elseif Lvl > 105 and Lvl < 113 then
-                            Options.SelectDifficulty.Value = "Easy"
-                            Options.SelectDimension.Value = "Slime Dimension"
-
+                            DificulitySelect:SetValue("Easy")
+                            DimenSionSelect:SetValue("Slime Dimension")
                         elseif Lvl > 112 and Lvl < 121 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Slime Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Slime Dimension")
                         elseif Lvl > 120 and Lvl < 131 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Devil Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Devil Dimension")
                         elseif Lvl > 130 and Lvl < 141 then
-                            Options.SelectDifficulty.Value ="Nightmare"
-                            Options.SelectDimension.Value = "Pirate Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Pirate Dimension")
                         elseif Lvl > 140 and Lvl < 151 then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value ="Alien Dimension"
-
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Alien Dimension")
                         elseif Lvl > 150  then
-                            Options.SelectDifficulty.Value = "Nightmare"
-                            Options.SelectDimension.Value = "Level Dimension"
+                            DificulitySelect:SetValue("Nightmare")
+                            DimenSionSelect:SetValue("Level Dimension")
                         end
                     end
                 end)
