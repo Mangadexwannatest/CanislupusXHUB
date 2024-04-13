@@ -155,16 +155,18 @@ function DestroyKuy()
         })
 
 
-   local LevelDetech = Tabs.Main:AddToggle("AUTO_LEVEL_SELECT", {Title = "AUTO LEVEL MAP SELECT", Default = false })
+    Tabs.Main:AddToggle("AUTO_LEVEL_SELECT", {Title = "AUTO LEVEL MAP SELECT", Default = false })
     Tabs.Main:AddToggle("AutoFarmAndStart", {Title = "AUTO START // FARM", Default = false })
     Tabs.Main:AddToggle("Dodge_Skill", {Title = "DODGE SKILL", Default = false })
     Tabs.Main:AddToggle("FriendOnly", {Title = "FRIENDS ONLY", Default = false })
     Tabs.Main:AddToggle("HardCore", {Title = "HARD CORE", Default = false })
     Tabs.Main:AddToggle("AutoRetry", {Title = "AUTO RETRY", Default = false })
 
-    LevelDetech:OnChanged(function()
+
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()  
         if Options.AUTO_LEVEL_SELECT.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
-            repeat wait()
                         Lvl = game.Players.LocalPlayer.leaderstats.Level.Value
                         if Lvl > 0 and Lvl < 6 then
                             DificulitySelect:SetValue("Easy")
@@ -239,10 +241,10 @@ function DestroyKuy()
                             DificulitySelect:SetValue("Nightmare")
                             DimenSionSelect:SetValue("Level Dimension")
                         end
-                    until not Options.AUTO_LEVEL_SELECT.Value or game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
                     end
                 end)
-
+            end
+        end))
 
     Tabs.Main:AddSection("Raid")
 
@@ -496,7 +498,7 @@ end)
         Title = "SELECT ASSIST",
         Values = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
         Multi = true,
-        Default = {nil},
+        Default = {"Assist 1","Assist 2","Fruit 1","Fruit 2"},
     })
 
     AssistSelect:OnChanged(function(Value)
@@ -801,10 +803,10 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value
-         and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
-        not getgenv().RaidOpened and Options.AutoFarmAndStart.Value and not getgenv().CurrentBossRush and
+    while wait(1.5) do pcall(function ()
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value
+        and not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
+        not getgenv().RaidOpened and not getgenv().CurrentBossRush and
         not getgenv().CurrentSpeedRaid and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                 local args = {
                     [1] = "CreateRoom",
@@ -922,7 +924,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if Options.AutoFarmAndStart.Value then
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
             game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
                         repeat task.wait()
