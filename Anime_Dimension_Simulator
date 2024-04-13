@@ -1623,8 +1623,9 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if Options.PlayMode.Value == "Safe Mode" and Options.Auto_SpeedRaid.Value or Options.Auto_FreeBossRush.Value or Options.AUTO_LEVEL_SELECT.Value
-        or Options.AutoRaid.Value then
+        if Options.PlayMode.Value == "Safe Mode" then 
+        if Options.Auto_SpeedRaid.Value or Options.Auto_FreeBossRush.Value or Options.AUTO_LEVEL_SELECT.Value
+        or Options.AutoRaid.Value or Options.AutoFarmAndStart.Value then
 local Health = game.Players.LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text
 local HpSplit = string.split(Health, "/")
 local HealthPercent = Options.Health.Value * (HpSplit[2] / 100)
@@ -1641,7 +1642,7 @@ else
         if Options.PlayMode.Value ~= "Safe Mode" and getgenv().SAFE_MODE then
             getgenv().SAFE_MODE = false
             game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
-            
+        end
         end
     end)
 end
