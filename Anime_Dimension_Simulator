@@ -133,6 +133,7 @@ function DestroyKuy()
             ADDKUY()
         elseif Value ~= "Bring Mode" then
             DestroyKuy()
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
         elseif Value ~= "Safe Mode" then
             game.Players.LocalPlayer.Character.Humanoid:ChangeState(nil)
             getgenv().SAFE_MODE = false
