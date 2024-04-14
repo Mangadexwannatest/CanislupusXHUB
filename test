@@ -854,11 +854,9 @@ coroutine.resume(coroutine.create(function()
         game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 
         and isfile("CrazyDay/Character_ADS.json") then
         Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
-for i,v in next,Config do 
-    getgenv().DuringForCharacter = true
-    if tostring(i) == "Character1" and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= v then
         getgenv().DuringForCharacter = true
-    else
+for i,v in next,Config do 
+    if tostring(i) == "Character1" and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == v then
         getgenv().DuringForCharacter = false
                   end
                end
@@ -875,11 +873,12 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait(.15) do pcall(function ()
-        if getgenv().WorkingForDoing or getgenv().RaidOpened or getgenv().DuringForCharacter then
+        if getgenv().WorkingForDoing or getgenv().DuringForCharacter then
+            warn("WAITITITI")
         else
         if Options.AutoRaid.Value and 
         not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
-        and not getgenv().WorkingForDoing and 
+        and not getgenv().WorkingForDoing and not getgenv().DuringForCharacter and
         game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
         local args = {
                 [1] = "CreateRoom",
@@ -895,7 +894,8 @@ coroutine.resume(coroutine.create(function()
         end
     end
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
-            if getgenv().RaidOpened or getgenv().WorkingForDoing then 
+            if getgenv().RaidOpened or getgenv().WorkingForDoing or getgenv().DuringForCharacter then 
+                warn("AWDWADDAD")
             else
         if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and 
         not getgenv().RaidOpened and not getgenv().CurrentBossRush and
