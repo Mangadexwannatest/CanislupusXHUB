@@ -1740,7 +1740,10 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     ]]
     if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
-        end
+    end
+    if State == Enum.TeleportState.Started and Options.AutoExecuteScript.Value then
+        QueueOnTeleport(script)
+    end
 end)
 end))
 
