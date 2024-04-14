@@ -947,11 +947,26 @@ coroutine.resume(coroutine.create(function()
                 until not getgenv().STOP_Farm or getgenv().Break_Farm  or getgenv().SAFE_MODE
             else
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm and not getgenv().Break_Farm 
-and not getgenv().SAFE_MODE then
+and not getgenv().SAFE_MODE 
+and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= "Naruto" 
+and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= "Sasuke" then
     repeat task.wait()
 Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) )
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
+or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == "Naruto"
+or game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == "Sasuke"
+
+elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == true and not getgenv().STOP_Farm and not getgenv().Break_Farm 
+and not getgenv().SAFE_MODE 
+and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == "Naruto" 
+or game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == "Sasuke" then
+    repeat task.wait()
+Tween(getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-1.25) * CFrame.Angles(math.rad(0),1800,0) )
+until game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= "Naruto" and 
+game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value ~= "Sasuke" and
+getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
+
 
 elseif Options.PlayMode.Value == "Normal Mode" and
  game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm
