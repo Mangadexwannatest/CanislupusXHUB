@@ -188,9 +188,6 @@ function Tween(P)
     game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
-function TweenXX(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
-end
 
 local ScreenGui = Instance.new("ScreenGui")
 local TextLabel = Instance.new("TextLabel")
@@ -218,7 +215,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             and c.Name ~= "DamageList" and c.Name ~= "Target" and c.Name ~= "Level"
             and c.Name ~= "Weapon" and c.Name ~= "OnBleedDamage" and c.Name ~= "OnFireDamage" 
             and c.Name ~= "IFrame" and c.Name ~= "WalkDisable" and c.Name ~= "Action"
-            then
+            and not getgenv().STOP_Dodge then
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Enemy Skill . . ."..c.Name
             repeat wait() until not v.Parent
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Disconnect . . ."..v.Name
@@ -228,24 +225,25 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     end    
 end)
 
-local Discon2
+
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
-        Discon2 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "WalkDisable" or c.Name == "Action" and not getgenv().STOP_Dodge
+        game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
+            if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
+            wait(1)
             getgenv().Dodge = false
             repeat wait() until not v.Parent
-            Discon2:Disconnect()
+
             end
         end)
     end    
 end)
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "WalkDisable" or c.Name == "Action" then
+    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
         repeat wait() until not v.Parent
@@ -258,15 +256,14 @@ coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
-        if Options.Farm.Value and not getgenv().Dodge then
+            if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
+                repeat task.wait()
+                    Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,70,0)  )
+                until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
+        elseif Options.Farm.Value and not getgenv().Dodge then
             repeat task.wait()
             Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,10)  )
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
-        end
-        if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
-            repeat task.wait()
-                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,50,0)  )
-            until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
     end)
@@ -305,102 +302,34 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while wait() do pcall(function()
+	while wait(.25) do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
-		if getgenv().AutoSkillZ  then
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 and getclosest().Humanoid.Health > 0 then
+		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
-                    end
-                    end
+        end
+        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
+        end
+        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
+        end
+        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
+        end
+        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
+        end
                 end
                end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while wait() do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-        else
-		if getgenv().AutoSkillX  then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 and getclosest().Humanoid.Health > 0 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
-                    end
-                    end
-                end
-            end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while wait() do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-        else
-		if getgenv().AutoSkillC  then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 and getclosest().Humanoid.Health > 0 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
-                    end
-                end
-            end
-
-            end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while wait() do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-        else
-
-		if getgenv().AutoSkillV  then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 and getclosest().Humanoid.Health > 0 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
-                    end
-                end
-            end
-		end   
-        end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while wait() do pcall(function()
-		if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-        else
-        if getgenv().AutoSkillF then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 and getclosest().Humanoid.Health > 0 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
-                    end
-                end
-            end
-            end
 		   end
 	   end)
 	end
