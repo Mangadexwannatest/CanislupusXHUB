@@ -237,7 +237,7 @@ local Discon2
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
         Discon2 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "Action" and c.Name ~= "ActiveMugenV2"
+            if c.Name == "IFrame" and c.Name ~= "ActiveMugenV2"
             and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
@@ -254,7 +254,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
 end)
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "Action" and v.Name ~= "ActiveMugenV2" and v.Name ~= "HakariBuff" then
+    if v.Name == "IFrame" and v.Name ~= "ActiveMugenV2" and v.Name ~= "HakariBuff" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
         repeat wait() until not v.Parent
@@ -283,7 +283,7 @@ coroutine.resume(coroutine.create(function()
                 setfflag("HumanoidParallelRemoveNoPhysics", "false")
                 setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
                 game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,-7.5,0) * CFrame.Angles(math.rad(90),0,0) )
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,7.5)  )
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
         if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
@@ -291,7 +291,7 @@ coroutine.resume(coroutine.create(function()
                 setfflag("HumanoidParallelRemoveNoPhysics", "false")
                 setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
                 game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,-75,0) * CFrame.Angles(math.rad(90),0,0) )
+                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,75,0)  )
             until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
@@ -358,7 +358,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 40 then
+                    if dist <= 30 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
                     end
@@ -378,7 +378,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 40 then
+                    if dist <= 30 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
                     end
@@ -398,7 +398,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 40 then
+                    if dist <= 30 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
                     end
@@ -420,7 +420,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 40 then
+                    if dist <= 30 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
                     end
@@ -440,7 +440,7 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 40 then
+                    if dist <= 30 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
                     end
