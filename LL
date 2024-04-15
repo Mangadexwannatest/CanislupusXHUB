@@ -232,7 +232,6 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
-            getgenv().STOP_Dodge = false
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
 
@@ -257,16 +256,33 @@ coroutine.resume(coroutine.create(function()
         else
             if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 repeat task.wait()
-                    Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,100,0)  )
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
                 until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.Farm.Value and not getgenv().Dodge then
             repeat task.wait()
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,14)  )
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,14)
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
     end)
 end
+end))
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        warn("HOOK SEND TP DATA")
+local metatable = getrawmetatable(game)
+local nc = metatable.namecall
+setreadonly(metatable, false)
+metatable.namecall = newcclosure(function(self, ...)
+        local args = {...} 
+    if tostring(self) == "SendTPData" or self == "SendTPData" or string.find(self,"SendTPData") then
+        return wait(9e9)
+      end
+    return nc(self,...)
+end)
+setreadonly(metatable, true)
+end)
 end))
 
 coroutine.resume(coroutine.create(function()
