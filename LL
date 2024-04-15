@@ -197,10 +197,9 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Effects.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5" 
-                or string.find(v.Name,"Fire") then
+                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5"  then
                      getgenv().TeleportToSafe = true
-                     wait(5)
+                     wait(1.5)
                      getgenv().TeleportToSafe = false
                 end
             end)
@@ -210,22 +209,39 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if Options.Farm.Value then
-            if getgenv().TeleportToSafe then
-            else
+        if Options.Farm.Value and not getgenv().TeleportToSafe then
             repeat task.wait()
             Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,5) )
             until getgenv().TeleportToSafe or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
         end
-             if getgenv().TeleportToSafe then
-                repeat task.wait()
-            TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,150,0) )
+        if Options.Farm.Value and getgenv().TeleportToSafe then
+            repeat task.wait()
+                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,100,0) )
             until not getgenv().TeleportToSafe or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
-             end
         end
     end)
 end
 end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
+    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
+    NO_CLIP_PART.Name = "CrazyDay_NO"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(2,1,2)
+elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and  getgenv().TeleportToSafe and Options.Farm.Value then
+    repeat
+        wait()
+        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not getgenv().TeleportToSafe or not Options.Farm.Value
+    end
+end)
+end
+end))
+
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
