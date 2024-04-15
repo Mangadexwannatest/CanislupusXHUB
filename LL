@@ -186,11 +186,11 @@ function getclosest()
 end
 
 function Tween(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/200,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 function TweenXX(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/250,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -220,16 +220,11 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             and c.Name ~= "Weapon" and c.Name ~= "OnBleedDamage" and c.Name ~= "OnFireDamage" 
             and c.Name ~= "IFrame" and c.Name ~= "WalkDisable" and c.Name ~= "Action"
             then
-                if c.Name == "ActiveMugenV2" then
-                    getgenv().Dodge = true
+                if c.Name == "ActiveMugenV2" and not getgenv().STOP_Dodge then
                     game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = ": WAIT FOR MUGEN OF ENEMY DISABLE :"
                     repeat wait() until not c.Parent
-                    getgenv().Dodge = false
-                else
-            game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = c.Name
-            getgenv().Dodge = true
-            wait(1)
-            getgenv().Dodge = false
+            elseif not getgenv().STOP_Dodge and c.Name ~= "ActiveMugenV2" then
+            game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Enemy Skill"..c.Name
             repeat wait() until not v.Parent
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Disconnect . . ."..v.Name
             Discon1:Disconnect()
@@ -239,7 +234,46 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     end    
 end)
 
+local Discon2
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
+    if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+        Discon2 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
+            if c.Name == "IFrame" or c.Name == "Action" or c.Name == "WalkDisable" or c.Name == "JumpDisable" and c:FindFirstChild("ActiveMugenV2") == nil
+            and not getgenv().STOP_Dodge
+            then
+            getgenv().Dodge = true 
+            repeat wait() until not c.Parent
+            getgenv().Dodge = false
+            elseif c.Name == "ActiveMugenV2" and not getgenv().STOP_Dodge then
+                getgenv().Dodge = true
+                repeat wait() until not c.Parent
+                getgenv().Dodge = false
+            Discon2:Disconnect()
+            end
+        end)
+    end    
+end)
 
+game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
+    if v.Name == "IFrame" or v.Name == "Action" or v.Name == "WalkDisable" or v.Name == "JumpDisable" and v:FindFirstChild("ActiveMugenV2") == nil 
+    and v:FindFirstChild("HakariBuff") == nil then
+        getgenv().STOP_Dodge = true
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
+        repeat wait() until not v.Parent
+        getgenv().STOP_Dodge = false
+    elseif v.Name == "ActiveMugenV2" then
+        getgenv().STOP_Dodge = true
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active MugenV2 . . ."
+        repeat wait() until not v.Parent
+        getgenv().STOP_Dodge = false
+
+    elseif v.Name == "HakariBuff" then
+        getgenv().STOP_Dodge = true
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active HakariBuff . . ."
+        repeat wait() until not v.Parent
+        getgenv().STOP_Dodge = false
+    end
+end)
 
 
 coroutine.resume(coroutine.create(function()
@@ -251,10 +285,10 @@ coroutine.resume(coroutine.create(function()
             Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,5) )
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
         end
-        if Options.Farm.Value and getgenv().Dodge then
+        if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
             repeat task.wait()
                 TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,120,5) )
-            until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
+            until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge
         end
     end
     end)
@@ -548,29 +582,29 @@ end))
         end
     end))
 
-coroutine.resume(coroutine.create(function()
-game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-    local script = 
-    [[
-        repeat wait() until game:IsLoaded()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
-
-    local success = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
-     end)
-     
-     print(success)
-     if not success then
-        wait(20)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
-     end
-    ]]
-    if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-        QueueOnTeleport(script)
-        end
-end)
-end))
+    coroutine.resume(coroutine.create(function()
+        game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+            local script = 
+            [[
+                repeat wait() until game:IsLoaded()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+        
+            local success = pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+             end)
+             
+             print(success)
+             if not success then
+                wait(20)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+             end
+            ]]
+            if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+                QueueOnTeleport(script)
+                end
+        end)
+        end))
 
 
 end
