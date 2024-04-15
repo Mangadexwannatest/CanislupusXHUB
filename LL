@@ -242,11 +242,11 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
-            repeat wait() until not c.Parent
+            repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
             elseif c.Name == "ActiveMugenV2" and not getgenv().STOP_Dodge then
                 getgenv().Dodge = true
-                repeat wait() until not c.Parent
+                repeat wait() until not c.Parent or getgenv().STOP_Dodge
                 getgenv().Dodge = false
             Discon2:Disconnect()
             end
