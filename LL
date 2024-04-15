@@ -84,18 +84,6 @@ do
      local T  = Tabs.Main:AddToggle("Farm", {Title = "FARm TEST", Default = false })
 
 
-
-     T:OnChanged(function()
-        if Options.Farm.Value then
-            setfflag("HumanoidParallelRemoveNoPhysics", "false")
-            setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
-            game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-        else
-            game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(nil)
-        end
-     end)
-
-
     SkillDropdown:OnChanged(function(Value)
         local Values = {}
         for Value, State in next, Value do
@@ -209,7 +197,8 @@ coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Effects.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5" then
+                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5" 
+                or string.find(v.Name,"Fire") then
                      getgenv().TeleportToSafe = true
                      wait(5)
                      getgenv().TeleportToSafe = false
@@ -222,20 +211,15 @@ end))
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if Options.Farm.Value then
-            if not getgenv().TeleportToSafe then
+            if getgenv().TeleportToSafe then
+            else
             repeat task.wait()
-                setfflag("HumanoidParallelRemoveNoPhysics", "false")
-                setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
-                game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,5,0)* CFrame.Angles(math.rad(-90),0,0) )
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,5) )
             until getgenv().TeleportToSafe or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
-             end
+        end
              if getgenv().TeleportToSafe then
                 repeat task.wait()
-                    setfflag("HumanoidParallelRemoveNoPhysics", "false")
-                    setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "false")
-                    game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
-            TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,150,0)* CFrame.Angles(math.rad(-90),0,0) )
+            TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,150,0) )
             until not getgenv().TeleportToSafe or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
              end
         end
