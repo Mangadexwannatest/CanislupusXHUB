@@ -6,6 +6,7 @@ repeat wait() until game.ReplicatedStorage:FindFirstChild("ToolsHandle")
 
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
+    getgenv().STOP_Dodge = true
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -185,12 +186,9 @@ function getclosest()
 end
 
 function Tween(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
-function TweenXX(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
-end
 
 local ScreenGui = Instance.new("ScreenGui")
 local TextLabel = Instance.new("TextLabel")
@@ -235,9 +233,9 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
-            repeat wait() until not c.Parent or getgenv().STOP_Dodge
+            getgenv().STOP_Dodge = false
+            repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
-            repeat wait() until not v.Parent
 
             end
         end)
@@ -247,12 +245,12 @@ end)
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
     if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" then
         getgenv().STOP_Dodge = true
+        getgenv().Dodge = false
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
-        repeat wait() until not v.Parent
+        repeat task.wait() until not v.Parent
         getgenv().STOP_Dodge = false
     end
 end)
-
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
@@ -260,17 +258,37 @@ coroutine.resume(coroutine.create(function()
         else
             if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 repeat task.wait()
-                    TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,50,0)  )
+                    Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,100,0)  )
                 until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
-        elseif Options.Farm.Value and not getgenv().Dodge then
+        elseif Options.Farm.Value and not getgenv().Dodge and getgenv().STOP_Dodge then
             repeat task.wait()
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,10)  )
-            until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,14.5)  )
+            until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or not getgenv().STOP_Dodge
         end
     end
     end)
 end
 end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()  
+if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
+    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
+    NO_CLIP_PART.Name = "CrazyDay_NO"
+    NO_CLIP_PART.CanCollide = true
+    NO_CLIP_PART.Anchored = true
+    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Size = Vector3.new(2,1,2)
+elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
+    repeat
+        task.wait()
+        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+     until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO")
+    end
+end)
+end
+end))
+
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -285,14 +303,17 @@ coroutine.resume(coroutine.create(function()
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
                 if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
                 and not getgenv().NoEquip then
+                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
                 if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25
                 and not getgenv().NoEquip  then
+                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
                 if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
                 and not getgenv().NoEquip then
+                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end       
                 end
@@ -310,23 +331,28 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
+		if getgenv().AutoSkillZ  and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
         end
-        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillX and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
         end
-        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillC and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
         end
-        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillV and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
         end
-        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillF and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
         end
