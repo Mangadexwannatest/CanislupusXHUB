@@ -230,7 +230,7 @@ if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
     NO_CLIP_PART.Name = "CrazyDay_NO"
     NO_CLIP_PART.CanCollide = true
     NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
+    NO_CLIP_PART.Transparency = 0
     NO_CLIP_PART.Size = Vector3.new(2,1,2)
 elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and  getgenv().TeleportToSafe and Options.Farm.Value then
     repeat
