@@ -79,7 +79,6 @@ do
         Default = {nil},
     })
 
-     Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Attack", Default = false })
      local T  = Tabs.Main:AddToggle("Farm", {Title = "King Trial", Default = false })
      Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
      Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
@@ -233,12 +232,12 @@ local Discon2
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
         Discon2 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "WalkDisable" and not getgenv().STOP_Dodge
+            if c.Name == "WalkDisable" or c.Name == "Action" and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+            repeat wait() until not v.Parent
             Discon2:Disconnect()
             end
         end)
@@ -246,13 +245,11 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
 end)
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "WalkDisable" then
+    if v.Name == "WalkDisable" or c.Name == "Action" then
         getgenv().STOP_Dodge = true
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
         repeat wait() until not v.Parent
         getgenv().STOP_Dodge = false
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
     end
 end)
 
@@ -263,12 +260,12 @@ coroutine.resume(coroutine.create(function()
         else
         if Options.Farm.Value and not getgenv().Dodge then
             repeat task.wait()
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,7.5)  )
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,10)  )
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
         if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
             repeat task.wait()
-                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,75,0)  )
+                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,50,0)  )
             until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
@@ -308,27 +305,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.35) do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-        else
-		if Options.AutoAttack.Value then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 15 and getclosest().Humanoid.Health > 0 then
-            game:GetService'VirtualUser':CaptureController()
-            game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
-                    end
-                    end
-                end
-            end
-            end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.5) do pcall(function()
+	while wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
 		if getgenv().AutoSkillZ  then
@@ -348,7 +325,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.75) do pcall(function()
+	while wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
 		if getgenv().AutoSkillX  then
@@ -368,7 +345,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.55) do pcall(function()
+	while wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
 		if getgenv().AutoSkillC  then
@@ -389,7 +366,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.75) do pcall(function()
+	while wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
 
@@ -410,7 +387,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.55) do pcall(function()
+	while wait() do pcall(function()
 		if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
         if getgenv().AutoSkillF then
