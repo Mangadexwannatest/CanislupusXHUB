@@ -13,7 +13,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/07/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
+    SubTitle = "Last Update April/15/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -23,7 +23,6 @@ local Window = Fluent:CreateWindow({
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
-    Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
     Other = Window:AddTab({ Title = "Other", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "" })
 }
@@ -80,8 +79,9 @@ do
         Default = {nil},
     })
 
-     Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Attack", Default = false })
-     local T  = Tabs.Main:AddToggle("Farm", {Title = "FARm TEST", Default = false })
+     local T  = Tabs.Main:AddToggle("Farm", {Title = "King Trial", Default = false })
+     Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
+     Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
 
 
     SkillDropdown:OnChanged(function(Value)
@@ -152,8 +152,8 @@ do
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/07/2024",
-        Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Auto Close Gui After Execute\n[+] Auto Execute Script\n     [-] Working for some executor"
+        Title = "Last Update April/15/2024",
+        Content = "[+] King Trial"
     })
     
 end
@@ -185,42 +185,94 @@ function getclosest()
 end
 
 function Tween(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/200,Enum.EasingStyle.Linear),{CFrame = P}):Play()
-end
-
-function TweenXX(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/350,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/100,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 
-coroutine.resume(coroutine.create(function()
-    pcall(function()
-        Workspace.Effects.ChildAdded:Connect(function(v)
-            pcall(function()
-                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5"  then
-                     getgenv().TeleportToSafe = true
-                     wait(1.5)
-                     getgenv().TeleportToSafe = false
-                end
-            end)
+local ScreenGui = Instance.new("ScreenGui")
+local TextLabel = Instance.new("TextLabel")
+ScreenGui.Parent = game:WaitForChild("CoreGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Name = "StatusZuz"
+TextLabel.Parent = ScreenGui
+TextLabel.BackgroundColor3 = Color3.fromRGB(170, 170, 0)
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.643817306, 0, 0.0141843967, 0)
+TextLabel.Size = UDim2.new(0.248521537, 0, 0.100000009, 0)
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "_____________"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextSize = 14.000
+
+local Discon1
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
+    if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Connection . . ."..v.Name
+        Discon1 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
+            if c.Name ~= "CombatAction" and c.Name ~= "JumpDisable" 
+            and c.Name ~= "InCombat" and c.Name ~= "EquipType" and c.Name ~= "Race"
+            and c.Name ~= "DamageList" and c.Name ~= "Target" and c.Name ~= "Level"
+            and c.Name ~= "Weapon" and c.Name ~= "OnBleedDamage" and c.Name ~= "OnFireDamage" 
+            and c.Name ~= "IFrame" and c.Name ~= "WalkDisable" and c.Name ~= "Action"
+            and not getgenv().STOP_Dodge then
+            game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Enemy Skill . . ."..c.Name
+            repeat wait() until not v.Parent
+            game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Disconnect . . ."..v.Name
+            Discon1:Disconnect()
+            end
         end)
-    end)
-end))
+    end    
+end)
+
+
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
+    if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+        game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
+            if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
+            then
+            getgenv().Dodge = true 
+            repeat wait() until not c.Parent or getgenv().STOP_Dodge
+            wait(1)
+            getgenv().Dodge = false
+
+            end
+        end)
+    end    
+end)
+
+game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
+    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" then
+        getgenv().STOP_Dodge = true
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
+        repeat wait() until not v.Parent
+        getgenv().STOP_Dodge = false
+    end
+end)
+
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if Options.Farm.Value then
+        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
+        else
+            if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
+                repeat task.wait()
+                    Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,70,0)  )
+                until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
+        elseif Options.Farm.Value and not getgenv().Dodge then
             repeat task.wait()
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,5) )
-            TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,100,0) )
-            until not Options.Farm.Value or getclosest().Humanoid.Health <= 0
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,10)  )
+            until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
+    end
     end)
 end
 end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
+        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then 
+        else
             for i,v in next, BackPackGet do
                 local MeleeTable = table.find(MeeleeWeapon,v.Name)
                 local SwordTable = table.find(SwordWeapon,v.Name)
@@ -239,7 +291,8 @@ coroutine.resume(coroutine.create(function()
                 if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
                 and not getgenv().NoEquip then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                        end
+                end       
+                end
                     end
                 end
             end
@@ -248,103 +301,34 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-	while task.wait(.35) do pcall(function()
-		if Options.AutoAttack.Value and not getgenv().STOP then
+	while wait(.25) do pcall(function()
+        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
+        else
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 25 then
-            game:GetService'VirtualUser':CaptureController()
-            game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
-                    end
-                end
-            end
-            end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.5) do pcall(function()
-		if getgenv().AutoSkillZ and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <=25 then
+		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
-                    end
+        end
+        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
+        end
+        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
+        end
+        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
+        end
+        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
+        end
                 end
                end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillX and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 25 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
-                    end
-                end
-            end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.55) do pcall(function()
-		if getgenv().AutoSkillC and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 25 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
-                    end
-                end
-
-            end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.75) do pcall(function()
-		if getgenv().AutoSkillV and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 25 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
-                    end
-                end
-            end
-		   end
-	   end)
-	end
-end))
-
-coroutine.resume(coroutine.create(function()
-	while task.wait(.55) do pcall(function()
-		if getgenv().AutoSkillF and not getgenv().STOP then
-            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 25 then
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
-                    end
-                end
-            end
 		   end
 	   end)
 	end
@@ -426,19 +410,65 @@ end))
         end)
     end))
 
-coroutine.resume(coroutine.create(function()
-game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-    local script = 
-    [[
-        repeat wait() until game:IsLoaded()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua'))()
-    ]]
-    if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-        QueueOnTeleport(script)
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoKenhaki.Value then
+                for i,v in pairs(game.Lighting:GetChildren()) do
+                    if v.Name == "KenHaki" then
+                        if v.Enabled == false then
+                            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                            repeat
+                                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                local args = {[1] = "KenHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
+                wait(1.35)    
+            until v.Enabled == true
+                        end
+                    end
+                end
+              end   
+           end)   
         end
-end)
-end))
+    end))
+    
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoBusohaki.Value then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                for i,v in pairs(game.Workspace.Lives[game.Players.LocalPlayer.Name]:GetChildren()) do
+                    if v.Name == "Right Arm" and v:FindFirstChild("Haki") == nil then 
+                        game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                local args = {[1] = "BusoHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
+                
+                    end
+                end
+              end  
+          end)   
+        end
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+            local script = 
+            [[
+                repeat wait() until game:IsLoaded()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+        
+            local success = pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+             end)
+             
+             print(success)
+             if not success then
+                wait(20)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+             end
+            ]]
+            if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+                QueueOnTeleport(script)
+                end
+        end)
+        end))
 
 
 end
