@@ -258,20 +258,17 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
         repeat wait() until not v.Parent
-        wait(.25)
         getgenv().STOP_Dodge = false
     elseif v.Name == "ActiveMugenV2" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active MugenV2 . . ."
         repeat wait() until not v.Parent
-        wait(.25)
         getgenv().STOP_Dodge = false
 
     elseif v.Name == "HakariBuff" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active HakariBuff . . ."
         repeat wait() until not v.Parent
-        wait(.25)
         getgenv().STOP_Dodge = false
     end
 end)
