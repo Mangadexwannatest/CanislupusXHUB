@@ -190,7 +190,7 @@ function Tween(P)
 end
 
 function TweenXX(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/125,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -220,9 +220,12 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             and c.Name ~= "Weapon" and c.Name ~= "OnBleedDamage" and c.Name ~= "OnFireDamage" 
             and c.Name ~= "IFrame" and c.Name ~= "WalkDisable" and c.Name ~= "Action"
             then
-                if c.Name == "ActiveMugenV2" and not getgenv().STOP_Dodge then
+                if c.Name == "ActiveMugenV2" then
+                    getgenv().Dodge = true
                     game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = ": WAIT FOR MUGEN OF ENEMY DISABLE :"
                     repeat wait() until not c.Parent
+                    wait(1)
+                    getgenv().Dodge = false
             elseif not getgenv().STOP_Dodge and c.Name ~= "ActiveMugenV2" then
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Enemy Skill"..c.Name
             repeat wait() until not v.Parent
@@ -238,11 +241,12 @@ local Discon2
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
         Discon2 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "IFrame" or c.Name == "Action" or c.Name == "WalkDisable" or c.Name == "JumpDisable" and c:FindFirstChild("ActiveMugenV2") == nil
+            if c.Name == "IFrame" and c.Name == "Action" and c:FindFirstChild("ActiveMugenV2") == nil
             and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
+            wait(1)
             getgenv().Dodge = false
             elseif c.Name == "ActiveMugenV2" and not getgenv().STOP_Dodge then
                 getgenv().Dodge = true
@@ -255,22 +259,24 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
 end)
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "IFrame" or v.Name == "Action" or v.Name == "WalkDisable" or v.Name == "JumpDisable" and v:FindFirstChild("ActiveMugenV2") == nil 
-    and v:FindFirstChild("HakariBuff") == nil then
+    if v.Name == "IFrame" and v.Name == "Action" and v.Name ~= "ActiveMugenV2" and v.Name ~= "HakariBuff" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
         repeat wait() until not v.Parent
+        wait(1)
         getgenv().STOP_Dodge = false
     elseif v.Name == "ActiveMugenV2" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active MugenV2 . . ."
         repeat wait() until not v.Parent
+        wait(1)
         getgenv().STOP_Dodge = false
 
     elseif v.Name == "HakariBuff" then
         getgenv().STOP_Dodge = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Active HakariBuff . . ."
         repeat wait() until not v.Parent
+        wait(1)
         getgenv().STOP_Dodge = false
     end
 end)
@@ -287,7 +293,7 @@ coroutine.resume(coroutine.create(function()
         end
         if Options.Farm.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
             repeat task.wait()
-                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,120,5) )
+                TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,75,5) )
             until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge
         end
     end
