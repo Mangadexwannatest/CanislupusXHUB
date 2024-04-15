@@ -81,7 +81,7 @@ do
     })
 
      Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Attack", Default = false })
-     Tabs.Main:AddToggle("Farm", {Title = "FARm TEST", Default = false })
+     local T  = Tabs.Main:AddToggle("Farm", {Title = "FARm TEST", Default = false })
 
 
     SkillDropdown:OnChanged(function(Value)
@@ -188,13 +188,18 @@ function Tween(P)
     game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/200,Enum.EasingStyle.Linear),{CFrame = P}):Play()
 end
 
+function TweenXX(P)
+    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/350,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+end
+
+
 coroutine.resume(coroutine.create(function()
     pcall(function()
         Workspace.Effects.ChildAdded:Connect(function(v)
             pcall(function()
-                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5" then
+                if v.Name == "1" or v.Name == "2" or v.Name == "3" or v.Name == "4" or v.Name == "5"  then
                      getgenv().TeleportToSafe = true
-                     wait(5)
+                     wait(1.5)
                      getgenv().TeleportToSafe = false
                 end
             end)
@@ -203,11 +208,12 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
+    while task.wait() do pcall(function ()
         if Options.Farm.Value then
             repeat task.wait()
-            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,5,0)* CFrame.Angles(math.rad(-90),0,0) )
-            until getgenv().TeleportToSafe or not Options.Farm.Value or getclosest().Humanoid.Health <= 0
+            Tween(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,5) )
+            TweenXX(getclosest().HumanoidRootPart.CFrame * CFrame.new(0,100,0) )
+            until not Options.Farm.Value or getclosest().Humanoid.Health <= 0
         end
     end)
 end
