@@ -363,7 +363,6 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
-            getgenv().CheckForSome = true
             end
         end)
     end    
@@ -387,26 +386,10 @@ end
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
     pcall(function ()
-    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable" and v:FindFirstChild("Stun") == nil 
-    and not getgenv().PlayerStun then
+    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable"  then
         getgenv().STOP_Dodge = true
-        getgenv().Dodge = false
-        repeat task.wait() until not v.Parent or getgenv().PlayerStun or v:FindFirstChild("Stun")
+        repeat task.wait() until not v.Parent 
         getgenv().STOP_Dodge = false
-        if getgenv().CheckForSome and not getgenv().PlayerStun then
-            Check_To_Dodge()
-            getgenv().CheckForSome = false
-        end
-    elseif v.Name == "Stun" then
-        getgenv().Dodge = true
-        getgenv().STOP_Dodge = false
-        getgenv().PlayerStun = true
-        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Stuning Mode"
-        repeat
-            task.wati()
-        until not v.Parent
-        getgenv().PlayerStun = false
-        getgenv().Dodge = false
     end
     if v.Name ~= "CombatAction" and v.Name ~= "JumpDisable" 
     and v.Name ~= "InCombat" and v.Name ~= "EquipType" and v.Name ~= "Race"
