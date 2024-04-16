@@ -203,7 +203,8 @@
                 pcall(function ()
                 if v.Name == CriminalCheck().Name and Options.Dodge_Skill_BountyHunt.Value then
                     ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
-                        if c.Name == "Action" or c.Name == "IFrame" and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
+                        if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable" 
+                        and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
                             getgenv().Dodge_Criminal = true
                         repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
                         getgenv().Dodge_Criminal = false
@@ -626,7 +627,7 @@
 
         function Click()
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-            wait(.35)
+            wait(1)
             game:GetService'VirtualUser':CaptureController()
             game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
         end
@@ -1777,28 +1778,19 @@
         end))
 
     coroutine.resume(coroutine.create(function()
-        game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-            local script = 
-            [[
-                repeat wait() until game:IsLoaded()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
-        
-            local success = pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
-             end)
-             
-             print(success)
-             if not success then
-                wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
-             end
-            ]]
-            if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-                QueueOnTeleport(script)
-                end
-        end)
-        end))
+    game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+        local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+        local script = 
+        [[
+            repeat wait() until game:IsLoaded()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/CanisLupusXL/CanislupusXHub/main/SecondPieceTestTrail.lua'))()
+        ]]
+        if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+            QueueOnTeleport(script)
+            end
+    end)
+    end))
+
 
         end -- End Of If
 
