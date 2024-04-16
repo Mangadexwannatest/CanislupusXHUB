@@ -256,10 +256,9 @@ end)
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
+            if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable"
             then
             getgenv().Dodge = true 
-            getgenv().STOP_Dodge = false
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
             getgenv().CheckForSome = true
@@ -272,14 +271,16 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
     if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" and v:FindFirstChild("Stun") == nil 
     and not getgenv().PlayerStun then
         getgenv().STOP_Dodge = true
+        getgenv().Dodge = false
         repeat task.wait() until not v.Parent or getgenv().PlayerStun or v:FindFirstChild("Stun")
         getgenv().STOP_Dodge = false
-        if getgenv().CheckForSome then
+        if getgenv().CheckForSome and not getgenv().PlayerStun then
             getgenv().Dodge = true 
             getgenv().CheckForSome = false
         end
     elseif v:FindFirstChild("Stun") and v.Name == "Stun" then
         getgenv().Dodge = true
+        getgenv().STOP_Dodge = false
         getgenv().PlayerStun = true
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Stuning Mode"
         repeat
