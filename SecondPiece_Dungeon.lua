@@ -456,11 +456,15 @@ end))
 
 function Click()
     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-    wait(1.15)
-        game:GetService'VirtualUser':CaptureController()
-        game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
+    for i,v in pairs(game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:GetChildren()) do
+        if v.Name == "IFrame" or v.Name == "Action" or v.Name == "WalkDisable" then
+        else
+            wait(.75)
+    game:GetService'VirtualUser':CaptureController()
+    game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
+        end
+    end
 end
-
 coroutine.resume(coroutine.create(function()
 	while task.wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
