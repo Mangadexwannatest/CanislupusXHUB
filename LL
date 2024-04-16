@@ -4,7 +4,7 @@ game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("H
 game.ReplicatedStorage:WaitForChild("ToolsHandle")
 repeat wait() until game.ReplicatedStorage:FindFirstChild("ToolsHandle")
 
-if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+if game.CoreGui:FindFirstChild("CrazyDay") == nil and game.PlaceId == 16644455867 then
     warn("Loading Gui..")
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -547,11 +547,13 @@ end))
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
         
             local success = pcall(function()
+                if game.PlaceId == 16644455867 then
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+                end
              end)
              
              print(success)
-             if not success then
+             if not success and game.PlaceId == 16644455867 then
                 wait(20)
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
              end
