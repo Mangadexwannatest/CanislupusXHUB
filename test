@@ -87,9 +87,9 @@ end))
 do
     local QuestDDD = Tabs.Main:AddDropdown("SelectQuest", {
         Title = "Select Quest",
-        Values = QuestTable,
+        Values = {"Bandit Leader","Bandit","Clown Pirate","Marine","Monkey","Monkey King","Snow Bandit"},
         Multi = false,
-        Default = nil,
+        Default = 1,
     })
 
     local function Get_Mon_QuestID()
@@ -133,7 +133,6 @@ do
         Default = {nil},
     })
 
-     Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Attack", Default = false })
      Tabs.Main:AddToggle("AutoChests", {Title = "Auto Chest", Default = false })
 
      Tabs.Main:AddSection("Portal")
@@ -173,9 +172,9 @@ do
     
     local ConnectCriminal
     game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
-        if v.Name == CriminalCheck() then
+        if v.Name == CriminalCheck().Name then
+            warn('START BOUNTY TASK')
             getgenv().InBossHunt = true
-            warn("START BOSS HUNT")
             ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
                 if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" 
                 and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
@@ -184,8 +183,8 @@ do
                 getgenv().Dodge_Criminal = false
                 end
             end)
-            repeat wait() until not v.Parent
-            warn("END BOSS HUNT")
+            repeat wait() until not v.Parent or v.Humanoid.Health <= 0
+            warn('ENDED BOUNTY TASK')
             getgenv().InBossHunt = false
             getgenv().Dodge_Criminal = false
             ConnectCriminal:Disconnect()
