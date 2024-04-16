@@ -274,8 +274,38 @@ TextLabel.Text = "_____________"
 TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel.TextSize = 14.000
 
+
+coroutine.resume(coroutine.create(function()
+    game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+        if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 then
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    if v.Humanoid.Health <= 0 then
+                        v:Destroy()
+                end
+            end
+        end
+        end
+    end)
+end))
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
+                game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
+                repeat wait() until game:IsLoaded()
+                wait(.5)
+                getgenv().Started = true
+                end
+        end) 
+        if getgenv().Started then
+        break
+        end
+        end
+    end))
+
 local Discon1
-game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Connection . . ."..v.Name
@@ -297,12 +327,41 @@ end)
 end)
 
 
+local Amout = {}
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
+    if v.Name:match("Shadow") then
+        table.insert(Amout,v.Name)
+    end
+end)
+
+game.ReplicatedStorage.Settings.ChildRemoved:Connect(function(v)
+    if v.Name:match("Shadow") then
+        table.clear(Amout)
+        table.insert(Amout,v.Name)
+    end
+end)
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if #Amout == 1 and game.PlaceId == 16644455867 then
+            getgenv().Distance = 7
+        elseif #Amout ~= 1 and game.PlaceId == 16644455867 then
+            getgenv().Distance = 15
+        elseif game.PlaceId ~= 16644455867 then
+            getgenv().Distance = 7
+
+        end
+    end)
+end
+end))
+
+
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
             if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable"
-            then
+            and not getgenv().STOP_Dodge then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
@@ -330,26 +389,14 @@ end
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
     pcall(function ()
-    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable" and v:FindFirstChild("Stun") == nil 
-    and not getgenv().PlayerStun then
+    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable"  then
         getgenv().STOP_Dodge = true
-        getgenv().Dodge = false
-        repeat task.wait() until not v.Parent or getgenv().PlayerStun or v:FindFirstChild("Stun")
+        repeat task.wait() until not v.Parent 
         getgenv().STOP_Dodge = false
-        if getgenv().CheckForSome and not getgenv().PlayerStun then
+        if getgenv().CheckForSome then
             Check_To_Dodge()
             getgenv().CheckForSome = false
         end
-    elseif v.Name == "Stun" then
-        getgenv().Dodge = true
-        getgenv().STOP_Dodge = false
-        getgenv().PlayerStun = true
-        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Stuning Mode"
-        repeat
-            task.wati()
-        until not v.Parent
-        getgenv().PlayerStun = false
-        getgenv().Dodge = false
     end
     if v.Name ~= "CombatAction" and v.Name ~= "JumpDisable" 
     and v.Name ~= "InCombat" and v.Name ~= "EquipType" and v.Name ~= "Race"
@@ -362,6 +409,7 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
 end)
 
 coroutine.resume(coroutine.create(function()
+    getgenv().Distance = 7
     while task.wait() do pcall(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
@@ -373,7 +421,7 @@ coroutine.resume(coroutine.create(function()
         elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(7,15))
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,getgenv().Distance)
             until getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
@@ -381,23 +429,18 @@ coroutine.resume(coroutine.create(function()
 end
 end))
 
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-local metatable = getrawmetatable(game)
-local nc = metatable.namecall
-setreadonly(metatable, false)
-warn("HOOK SEND TP DATA")
-metatable.namecall = newcclosure(function(self, ...)
-        local args = {...} 
-    if tostring(self) == "SendTPData" or self == "SendTPData" or string.find(self,"SendTPData") then
+local a = getrawmetatable(game)
+local backs =  a.__namecall
+local Macro = {}
+setreadonly(a,false)
+a.__namecall = newcclosure(function(self,...)
+    if tostring(self) == "SendTPData"  then
+        print("Bypass Anti_Cheat")
         return wait(9e9)
-      end
-    return nc(self,...)
+    end
+    return backs(self,...)
 end)
-setreadonly(metatable, true)
-end)
-end))
+setreadonly(a,true)
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
