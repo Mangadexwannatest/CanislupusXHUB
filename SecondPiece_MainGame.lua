@@ -694,9 +694,9 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoChests.Value and not getgenv().STOP_Chest then
+                if Options.AutoChests.Value then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                        if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) then
+                        if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) and not getgenv().STOP_Chest then
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
                             fireproximityprompt(v)
                             getgenv().STOP = true
@@ -1097,7 +1097,7 @@ end
                         if not getgenv().STOP and getgenv().Dodge_Criminal then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,150,0)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                             or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt
 
