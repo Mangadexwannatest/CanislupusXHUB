@@ -565,23 +565,18 @@
         Window:SelectTab(1)
         SaveManager:LoadAutoloadConfig()
 
-        coroutine.resume(coroutine.create(function()
-            pcall(function ()
-                warn("HOOK SEND TP DATA")
-        local metatable = getrawmetatable(game)
-        local nc = metatable.namecall
-        setreadonly(metatable, false)
-        metatable.namecall = newcclosure(function(self, ...)
-                local args = {...} 
+        local a = getrawmetatable(game)
+        local backs =  a.__namecall
+        local Macro = {}
+        setreadonly(a,false)
+        a.__namecall = newcclosure(function(self,...)
             if tostring(self) == "SendTPData" or self == "SendTPData" or string.find(self,"SendTPData") then
+                print("Bypass Anti_Cheat")
                 return wait(9e9)
             end
-            return nc(self,...)
+            return backs(self,...)
         end)
-        setreadonly(metatable, true)
-        end)
-        end))
-
+        setreadonly(a,true)
 
         function getclosest()
             local MinDistance = math.huge
