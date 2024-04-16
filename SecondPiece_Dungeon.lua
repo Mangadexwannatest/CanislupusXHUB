@@ -274,6 +274,36 @@ TextLabel.Text = "_____________"
 TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel.TextSize = 14.000
 
+
+coroutine.resume(coroutine.create(function()
+    game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+        if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 then
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
+                    if v.Humanoid.Health <= 0 then
+                        v:Destroy()
+                end
+            end
+        end
+        end
+    end)
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
+                game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
+                repeat wait() until game:IsLoaded()
+                wait(.5)
+                getgenv().Started = true
+                end
+        end) 
+        if getgenv().Started then
+        break
+        end
+        end
+    end))
+
 local Discon1
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
@@ -304,8 +334,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable"
             then
             getgenv().Dodge = true 
-            repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
-            task.wait(.135)
+            repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
             getgenv().CheckForSome = true
             end
@@ -314,15 +343,13 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
 end)
 end)
 
-
 function Check_To_Dodge()
     for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
         if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
             for _,vv in next,v:GetChildren() do
                 if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
                     getgenv().Dodge = true 
-                    repeat task.wait() until not vv.Parentw
-                    task.wait(.135)
+                    repeat wait() until not vv.Parentw
                     getgenv().Dodge = false
                     getgenv().CheckForSome = true
                 end
@@ -371,12 +398,12 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoPortal.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(math.random(1,5),125,7.5)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,-200,5)
                 until not getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,13.5)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(7,15))
             until getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
@@ -415,6 +442,7 @@ elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and game
     repeat
         task.wait()
         game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
      until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or game.PlaceId ~= 16644455867
     end
 end)
