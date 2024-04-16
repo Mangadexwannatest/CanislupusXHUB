@@ -421,23 +421,18 @@ coroutine.resume(coroutine.create(function()
 end
 end))
 
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-local metatable = getrawmetatable(game)
-local nc = metatable.namecall
-setreadonly(metatable, false)
-warn("HOOK SEND TP DATA")
-metatable.namecall = newcclosure(function(self, ...)
-        local args = {...} 
+local a = getrawmetatable(game)
+local backs =  a.__namecall
+local Macro = {}
+setreadonly(a,false)
+a.__namecall = newcclosure(function(self,...)
     if tostring(self) == "SendTPData" or self == "SendTPData" or string.find(self,"SendTPData") then
+        print("Bypass Anti_Cheat")
         return wait(9e9)
-      end
-    return nc(self,...)
+    end
+    return backs(self,...)
 end)
-setreadonly(metatable, true)
-end)
-end))
+setreadonly(a,true)
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()  
