@@ -694,9 +694,7 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if getgenv().STOP_Chest then 
-                else
-                if Options.AutoChests.Value then
+                if Options.AutoChests.Value and not getgenv().STOP_Chest then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
                         if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) then
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
@@ -705,7 +703,6 @@ end
                             repeat wait() until not v.Parent
                             if not getgenv().STOP_Chest then
                             getgenv().STOP = false
-                            end
                         end
                         end
                         end            
