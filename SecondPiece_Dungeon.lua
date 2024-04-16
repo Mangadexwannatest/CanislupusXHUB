@@ -428,7 +428,7 @@ local backs =  a.__namecall
 local Macro = {}
 setreadonly(a,false)
 a.__namecall = newcclosure(function(self,...)
-    if tostring(self) == "SendTPData" or self == "SendTPData" or string.find(self,"SendTPData") then
+    if tostring(self) == "SendTPData"  then
         print("Bypass Anti_Cheat")
         return wait(9e9)
     end
