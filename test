@@ -800,10 +800,10 @@ coroutine.resume(coroutine.create(function()
             and not getgenv().InMerchant then
                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                     if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
-                                    if Get_Mon_QuestID() then
+                                    if Get_Mon_QuestID().Name then
                                             repeat task.wait()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                                        until not Get_Mon_QuestID() or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
+                                        until not Get_Mon_QuestID().Name or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
                                         or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
                             end
                         end
@@ -996,16 +996,16 @@ end))
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
             if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant then
-                if CriminalCheck() and not getgenv().STOP and getgenv().Dodge_Criminal then
+                if CriminalCheck().Name and not getgenv().STOP and getgenv().Dodge_Criminal then
                     repeat task.wait()
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
-                    until not CriminalCheck() or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
+                    until not CriminalCheck().Name or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                     or not getgenv().Dodge_Criminal or getgenv().InMerchant
 
-                elseif CriminalCheck() and not getgenv().STOP and not getgenv().Dodge_Criminal then
+                elseif CriminalCheck().Name and not getgenv().STOP and not getgenv().Dodge_Criminal then
                     repeat task.wait()
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
-                    until not CriminalCheck() or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
+                    until not CriminalCheck().Name or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                     or getgenv().InMerchant or getgenv().Dodge_Criminal
                 end
              end
