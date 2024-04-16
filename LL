@@ -4,7 +4,34 @@ game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("H
 game.ReplicatedStorage:WaitForChild("ToolsHandle")
 repeat wait() until game.ReplicatedStorage:FindFirstChild("ToolsHandle")
 
-if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+if game.PlaceId ~= 16644455867 then
+    repeat wait() until game:IsLoaded()
+    repeat task.wait() until game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name)
+    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+    game.ReplicatedStorage:WaitForChild("ToolsHandle")
+    repeat wait() until game.ReplicatedStorage:FindFirstChild("ToolsHandle")
+    local CrazyDay = Instance.new("ScreenGui")
+    local TextLabel = Instance.new("TextLabel")
+    CrazyDay.Name = "CrazyDay"
+    CrazyDay.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    CrazyDay.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    TextLabel.Parent = CrazyDay
+    TextLabel.BackgroundColor3 = Color3.fromRGB(152, 152, 114)
+    TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    TextLabel.BorderSizePixel = 0
+    TextLabel.Position = UDim2.new(0.274865657, 0, 0.185579196, 0)
+    TextLabel.Size = UDim2.new(0.472983956, 0, 0.472340554, 0)
+    TextLabel.Font = Enum.Font.Unknown
+    TextLabel.Text = "Only used in dungeons"
+    TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    TextLabel.TextScaled = true
+    TextLabel.TextSize = 100.000
+    TextLabel.TextWrapped = true
+    wait(3.5)
+    CrazyDay:Destroy()
+end
+
+if game.CoreGui:FindFirstChild("CrazyDay") == nil and game.PlaceId == 16644455867 then
     warn("Loading Gui..")
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -13,7 +40,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/15/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
+    SubTitle = "Last Update April/16/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -232,21 +259,41 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" and not getgenv().STOP_Dodge
             then
             getgenv().Dodge = true 
+            getgenv().STOP_Dodge = false
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
-
+            getgenv().CheckForSome = true
             end
         end)
     end    
 end)
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" then
+    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" and v:FindFirstChild("Stun") == nil 
+    and not getgenv().PlayerStun then
         getgenv().STOP_Dodge = true
-        getgenv().Dodge = false
-        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill. . ."
-        repeat task.wait() until not v.Parent
+        repeat task.wait() until not v.Parent or getgenv().PlayerStun or v:FindFirstChild("Stun")
         getgenv().STOP_Dodge = false
+        if getgenv().CheckForSome then
+            getgenv().Dodge = true 
+            getgenv().CheckForSome = false
+        end
+    elseif v:FindFirstChild("Stun") and v.Name == "Stun" then
+        getgenv().Dodge = true
+        getgenv().PlayerStun = true
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Stuning Mode"
+        repeat
+            task.wati()
+        until not v.Parent
+        getgenv().PlayerStun = false
+        getgenv().Dodge = false
+    end
+    if v.Name ~= "CombatAction" and v.Name ~= "JumpDisable" 
+    and v.Name ~= "InCombat" and v.Name ~= "EquipType" and v.Name ~= "Race"
+    and v.Name ~= "DamageList" and v.Name ~= "Target" and v.Name ~= "Level"
+    and v.Name ~= "Weapon" and v.Name ~= "OnBleedDamage" and v.Name ~= "OnFireDamage" 
+    and v.Name ~= "IFrame" and v.Name ~= "WalkDisable" and v.Name ~= "Action" and v.Name ~= "Stun" then
+        game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill . . ."..v.Name
     end
 end)
 
@@ -260,13 +307,14 @@ coroutine.resume(coroutine.create(function()
                 until not getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.Farm.Value and not getgenv().Dodge then
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,14)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,8.5)
             until getgenv().Dodge or not Options.Farm.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
     end)
 end
 end))
+
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
@@ -346,30 +394,35 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-		if getgenv().AutoSkillZ  and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
         end
-        if getgenv().AutoSkillX and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
         end
-        if getgenv().AutoSkillC and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
         end
-        if getgenv().AutoSkillV and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
         end
-        if getgenv().AutoSkillF and dist <= 17.5 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
+        end
+        if dist <= 10 and getclosest().Humanoid.Health > 0 then
+            task.wait(.3)
+            game:GetService'VirtualUser':CaptureController()
+            game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
         end
                 end
                end
