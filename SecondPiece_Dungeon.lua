@@ -343,10 +343,12 @@ end)
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if #Amout == 1 then
+        if #Amout == 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 7
-        elseif #Amout ~= 1 then
-            getgenv().Distance = 15
+        elseif #Amout ~= 1 and game.PlaceId == 16644455867 then
+            getgenv().Distance = 17.5
+        elseif game.PlaceId ~= 16644455867 then
+            getgenv().Distance = 7
 
         end
     end)
@@ -407,7 +409,7 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
 end)
 
 coroutine.resume(coroutine.create(function()
-    getgenv().Distance = 7.15
+    getgenv().Distance = 7
     while task.wait() do pcall(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
