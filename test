@@ -145,7 +145,7 @@ do
     local function CriminalCheck()
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
             if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
-                return v.Name
+                return v
             end
         end        
     end
@@ -154,6 +154,7 @@ do
     game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
         if v.Name == CriminalCheck() then
             getgenv().InBossHunt = true
+            warn("START BOSS HUNT")
             ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
                 if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" 
                 and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
@@ -162,9 +163,10 @@ do
                 getgenv().Dodge_Criminal = false
                 end
             end)
-            repeat wait() until not v.Parent
+            repeat wait() until not v.Parent or CriminalCheck().Humanoid.Health <= 0
             warn("END BOSS HUNT")
             getgenv().InBossHunt = false
+            getgenv().Dodge_Criminal = false
             ConnectCriminal:Disconnect()
         end
     end)
