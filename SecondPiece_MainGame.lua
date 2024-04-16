@@ -187,7 +187,7 @@
                 for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
                     if v.Name ==  CriminalCheck().Name  then
                         for _,vv in next,v:GetChildren() do
-                            if vv.Name == "Action" or vv.Name == "IFrame" then
+                            if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
                                 getgenv().Dodge_Criminal = true 
                                 repeat task.wait() until not vv.Parent
                                 getgenv().Dodge_Criminal = false
@@ -240,7 +240,7 @@
 
             game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
                 pcall(function ()
-                if v.Name == "Action" or v.Name == "IFrame"
+                if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable"
                 and Options.Dodge_Skill_BountyHunt.Value then
                     getgenv().STOP_Dodge = true
                     getgenv().Dodge_Criminal = false
