@@ -336,7 +336,9 @@ end)
 
 game.ReplicatedStorage.Settings.ChildRemoved:Connect(function(v)
     if v.Name:match("Shadow") then
+        if #Amout < 1 then
         table.clear(Amout)
+        end
         table.insert(Amout,v.Name)
     end
 end)
@@ -344,7 +346,7 @@ end)
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if #Amout == 1 and game.PlaceId == 16644455867 then
-            getgenv().Distance = 7
+            getgenv().Distance = 8.85
         elseif #Amout ~= 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 17.5
         elseif game.PlaceId ~= 16644455867 then
