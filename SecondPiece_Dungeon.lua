@@ -305,7 +305,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             then
             getgenv().Dodge = true 
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
-            wait(.175)
+            task.wait(.135)
             getgenv().Dodge = false
             getgenv().CheckForSome = true
             end
@@ -322,7 +322,7 @@ function Check_To_Dodge()
                 if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
                     getgenv().Dodge = true 
                     repeat task.wait() until not vv.Parentw
-                    wait(.175)
+                    task.wait(.135)
                     getgenv().Dodge = false
                     getgenv().CheckForSome = true
                 end
