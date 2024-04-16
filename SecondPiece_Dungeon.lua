@@ -345,14 +345,16 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if #Amout == 1 then
             getgenv().Distance = 7
-        else
+        elseif #Amout ~= 1 then
             getgenv().Distance = 15
+        elseif not Amout then
+            getgenv().Distance = 7
         end
     end)
 end
 end))
 
-
+getgenv().Distance = 7
 
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
