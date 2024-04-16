@@ -183,16 +183,15 @@
                         repeat wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
                         getgenv().Dodge_Criminal = false
                         end
+                        repeat wait() until not v.Parent
+                        print("Disconnect : "..v.Name)
+                        getgenv().InBossHunt = false
+                        getgenv().Dodge_Criminal = false
+                        ConnectCriminal:Disconnect()
                     end)
-                    repeat wait() until not v.Parent or CriminalCheck().Humanoid.Health <= 0
-                    warn('ENDED BOUNTY TASK')
-                    getgenv().InBossHunt = false
-                    getgenv().Dodge_Criminal = false
-                    ConnectCriminal:Disconnect()
             end
             end)
             end)
-
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()  
             if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
@@ -509,7 +508,7 @@
 
             UpdateLog:AddParagraph({
                 Title = "Last Update April/07/2024",
-                Content = "[*] Fixed Auto Quest\n[+] King's Trial"
+                Content = "[*] Fixed Auto Quest\n[+] King's Trial\n[+]Dodge Skill (Bounty Task Only)"
             })
             
 
