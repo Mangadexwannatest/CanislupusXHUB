@@ -700,11 +700,7 @@ end
                             repeat task.wait()
                             fireproximityprompt(v)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
-                            getgenv().STOP = true
                             until not v.Parent
-                            if not getgenv().STOP_Chest then
-                            getgenv().STOP = false
-                        end
                         end
                         end            
                     end
