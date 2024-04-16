@@ -697,10 +697,11 @@ end
                 if Options.AutoChests.Value then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
                         if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) and not getgenv().STOP_Chest then
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
+                            repeat task.wait()
                             fireproximityprompt(v)
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
                             getgenv().STOP = true
-                            repeat wait() until not v.Parent
+                            until not v.Parent
                             if not getgenv().STOP_Chest then
                             getgenv().STOP = false
                         end
