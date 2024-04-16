@@ -649,7 +649,7 @@ end
         end))
         
         coroutine.resume(coroutine.create(function()
-            while task.wait() do pcall(function()
+            while task.wait(.15) do pcall(function()
                 if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
                 else
                 if getgenv().AutoSkillV and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
