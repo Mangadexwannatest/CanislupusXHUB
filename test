@@ -169,25 +169,32 @@
                     end
                 end        
             end
+
+            game.Workspace.Lives.ChildAdded:Connect(function(v)
+                pcall(function ()
+                if v.Name == CriminalCheck().Name then
+                    getgenv().InBossHunt = true
+                    warn("START BOSS HUNT")
+                    repeat task.wait() until not v.Parent or v.Humanoid.Health <= 0
+                    getgenv().InBossHunt = false
+                    warn("ENED BOSS HUNT")
+                end
+                end)
+            end)
             
             local ConnectCriminal
             game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
                 pcall(function ()
-                if v.Name == CriminalCheck().Name then
-                    warn('START BOUNTY TASK')
-                    getgenv().InBossHunt = true
+                if v.Name == CriminalCheck().Name and Options.Dodge_Skill_BountyHunt.Value then
                     ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
                         if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" 
-                        and not getgenv().STOP_Dodge  then
+                        and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
                             getgenv().Dodge_Criminal = true
-                        repeat wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
+                        repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
                         getgenv().Dodge_Criminal = false
-                        end
-                        repeat wait() until not v.Parent
-                        print("Disconnect : "..v.Name)
-                        getgenv().InBossHunt = false
-                        getgenv().Dodge_Criminal = false
+                        repeat wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
                         ConnectCriminal:Disconnect()
+                        end
                     end)
             end
             end)
@@ -204,8 +211,10 @@
             elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and Options.Dodge_Skill_BountyHunt.Value then
                 repeat
                     task.wait()
+                    game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = true
                     game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
                  until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not Options.Dodge_Skill_BountyHunt.Value
+                 game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = false
                 end
             end)
             end
@@ -625,6 +634,7 @@
                     game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
                 end
                 if dist <= 10 and getclosest().Humanoid.Health > 0 then
+                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                     Click()
                 end
                         end
