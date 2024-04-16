@@ -455,12 +455,8 @@ coroutine.resume(coroutine.create(function()
 end))
 
 function Dist()
-    for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-        if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-            local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-            return dist
-        end
-    end
+    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getclosest().HumanoidRootPart.Position).Magnitude
+    return dist
 end
 
 coroutine.resume(coroutine.create(function()
