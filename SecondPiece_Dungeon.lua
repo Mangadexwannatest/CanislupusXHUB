@@ -287,7 +287,7 @@ coroutine.resume(coroutine.create(function()
         end
         end
     end)
-    end))
+end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
@@ -305,7 +305,7 @@ coroutine.resume(coroutine.create(function()
     end))
 
 local Discon1
-game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Connection . . ."..v.Name
@@ -325,6 +325,33 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     end    
 end)
 end)
+
+
+local Amout = {}
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
+    if v.Name:match("Shadow") then
+        table.insert(Amout,v.Name)
+    end
+end)
+
+game.ReplicatedStorage.Settings.ChildRemoved:Connect(function(v)
+    if v.Name:match("Shadow") then
+        table.clear(Amout)
+        table.insert(Amout,v.Name)
+    end
+end)
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if #Amout == 1 then
+            getgenv().Distance = 7
+        else
+            getgenv().Distance = 15
+        end
+    end)
+end
+end))
+
 
 
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
@@ -403,7 +430,7 @@ coroutine.resume(coroutine.create(function()
         elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(7,15))
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,getgenv().Distance)
             until getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
