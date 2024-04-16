@@ -346,7 +346,7 @@ coroutine.resume(coroutine.create(function()
         if #Amout == 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 7
         elseif #Amout ~= 1 and game.PlaceId == 16644455867 then
-            getgenv().Distance = 15
+            getgenv().Distance = 17.5
         elseif game.PlaceId ~= 16644455867 then
             getgenv().Distance = 7
 
