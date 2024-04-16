@@ -472,33 +472,31 @@ coroutine.resume(coroutine.create(function()
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                    if dist <= 30 then
-        if getgenv().AutoSkillV then
+        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
         end
-		if getgenv().AutoSkillZ  then
+		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
 			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
         end
-        if getgenv().AutoSkillX then
+        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
         end
-        if getgenv().AutoSkillC then
+        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
         end
-        if getgenv().AutoSkillF then
+        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
         end
-    end
         if dist <= 10 and getclosest().Humanoid.Health > 0 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             Click()
