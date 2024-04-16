@@ -182,18 +182,33 @@
                 end
                 end)
             end)
+
+            function Check_To_Dodge()
+                for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
+                    if v.Name ==  CriminalCheck().Name  then
+                        for _,vv in next,v:GetChildren() do
+                            if vv.Name == "Action" or vv.Name == "IFrame" then
+                                getgenv().Dodge_Criminal = true 
+                                repeat task.wait() until not vv.Parent
+                                getgenv().Dodge_Criminal = false
+                                getgenv().CheckForSome = true
+                            end
+                        end
+                    end
+                end
+            end
             
             local ConnectCriminal
             game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
                 pcall(function ()
                 if v.Name == CriminalCheck().Name and Options.Dodge_Skill_BountyHunt.Value then
                     ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
-                        if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable" 
-                        and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
+                        if c.Name == "Action" or c.Name == "IFrame" and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
                             getgenv().Dodge_Criminal = true
                         repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
                         getgenv().Dodge_Criminal = false
-                        repeat wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
+                        getgenv().CheckForSome = true
+                        repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
                         ConnectCriminal:Disconnect()
                         end
                     end)
@@ -224,12 +239,16 @@
 
             game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
                 pcall(function ()
-                if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable"  
+                if v.Name == "Action" or v.Name == "IFrame"
                 and Options.Dodge_Skill_BountyHunt.Value then
                     getgenv().STOP_Dodge = true
                     getgenv().Dodge_Criminal = false
                     repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
                     getgenv().STOP_Dodge = false
+                    if getgenv().CheckForSome then
+                        Check_To_Dodge()
+                        getgenv().CheckForSome = false
+                    end
             end
         end)
             end)
@@ -597,6 +616,7 @@
         end))
 
         function Click()
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             wait(.35)
             game:GetService'VirtualUser':CaptureController()
             game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
@@ -813,6 +833,7 @@
                             if v.Name == "Quest" then
                                 if v.Value == Options.SelectQuest.Value then
                                     if getgenv().NoQuest and not getgenv().DontAcceptQuest then
+                                        game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                                         repeat 
                                             wait()
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
@@ -835,6 +856,7 @@
                     and not getgenv().InMerchant then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                             if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
+                                game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                                                     repeat task.wait()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 until Get_Mon_QuestID().Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
@@ -855,6 +877,7 @@
                             or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  
                             and not getgenv().InMerchant then
                                 if v.Humanoid.Health > 0 then
+                                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                                     repeat
                                         task.wait()
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
@@ -874,12 +897,12 @@
                 while wait() do pcall(function ()
                     if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
                     and not getgenv().InMerchant then
-                        game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                             if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
                             and not getgenv().STOP and not getgenv().InBossHunt
                             and not getgenv().InMerchant  then
                                 if v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
+                                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                                     repeat task.wait()
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                         getgenv().DontAcceptQuest = true
@@ -1015,6 +1038,7 @@
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
                     and not getgenv().InMerchant and not CriminalCheck() then
                             if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() then
+                                game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                                 repeat 
                                 wait(.85)
                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
@@ -1030,17 +1054,19 @@
             
 
             coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function ()
+                while task.wait() do pcall(function ()
                     if getgenv().STOP then
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt then
                         if not getgenv().STOP and getgenv().Dodge_Criminal then
+                            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                             or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt
 
                         elseif not getgenv().STOP and not getgenv().Dodge_Criminal then
+                            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
