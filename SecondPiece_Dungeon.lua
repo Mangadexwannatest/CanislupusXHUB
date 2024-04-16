@@ -459,48 +459,55 @@ function Dist()
     return dist
 end
 
-coroutine.resume(coroutine.create(function()
-	while task.wait() do pcall(function()
+function FindPlayerSkill()
     for i,v in pairs(game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:GetChildren()) do
         if v.Name == "IFrame" or v.Name == "Action" or v.Name == "WalkDisable" then
+            return true
+        end
+    end
+end
+
+coroutine.resume(coroutine.create(function()
+	while task.wait() do pcall(function()
+        if not FindPlayerSkill() then
         else
             if Dist() <= 10 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-            wait(.75)
+            wait(.5)
     game:GetService'VirtualUser':CaptureController()
     game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
-            end
         end
     end
 end)
 end
 end))
 
+
 coroutine.resume(coroutine.create(function()
     while task.wait(.15) do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
-        if getgenv().AutoSkillV and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillV and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
         end
-        if getgenv().AutoSkillZ and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillZ and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
         end
-        if getgenv().AutoSkillX and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillX and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
         end
-        if getgenv().AutoSkillC and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillC and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
         end
-        if getgenv().AutoSkillF and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
+        if getgenv().AutoSkillF and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
