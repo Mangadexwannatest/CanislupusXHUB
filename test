@@ -85,12 +85,33 @@ for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
 end))
 
 do
-    Tabs.Main:AddDropdown("SelectQuest", {
+    local QuestDDD = Tabs.Main:AddDropdown("SelectQuest", {
         Title = "Select Quest",
         Values = QuestTable,
         Multi = false,
         Default = nil,
     })
+
+    local function Get_Mon_QuestID()
+        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+            if Options.SelectQuest.Value == "Bandit" and v.Name:match(Options.SelectQuest.Value) and not v.Name:match("Snow") and not v.Name:match("Leader") and v.Humanoid.Health > 0 then
+                return v
+            elseif Options.SelectQuest.Value == "Bandit Leader" and v.Name:match(Options.SelectQuest.Value) and not v.Name:match("Snow") and v.Humanoid.Health > 0 then
+                return v
+            elseif  Options.SelectQuest.Value == "Clown Pirate" and v.Name:match(Options.SelectQuest.Value) and v.Humanoid.Health > 0 then
+                return v
+            elseif Options.SelectQuest.Value == "Marine" and v.Name:match(Options.SelectQuest.Value) and not v.Name:match("Lieutenant") and v.Humanoid.Health > 0 then
+                return v
+            elseif Options.SelectQuest.Value == "Monkey" and v.Name:match(Options.SelectQuest.Value) and not v.Name:match("King") and v.Humanoid.Health > 0 then
+                return v
+            elseif Options.SelectQuest.Value == "Monkey King" and v.Name:match(Options.SelectQuest.Value) and v.Humanoid.Health > 0 then
+                return v
+            elseif Options.SelectQuest.Value == "Snow Bandit" and v.Name:match(Options.SelectQuest.Value) and not v.Name:match("Leader") and v.Humanoid.Health > 0 then
+                return v
+            end
+         end
+    end
+    
 
     Tabs.Main:AddToggle("AutoQuest", {Title = "Auto Quest", Default = false })
     Tabs.Main:AddToggle("AutoGem", {Title = "Auto Gem", Default = false })
@@ -129,7 +150,7 @@ do
         Tabs.Main:AddDropdown("DungeonSelect", {
         Title = "Select World",
         Description = "[Legendary Only]",
-        Values = {"Tokyo Prefectural Jujutsu High School","King Trial"},
+        Values = {"Tokyo Prefectural Jujutsu High School","King's Trial"},
         Multi = false,
         Default = 1,
     })
@@ -163,7 +184,7 @@ do
                 getgenv().Dodge_Criminal = false
                 end
             end)
-            repeat wait() until not v.Parent or CriminalCheck().Humanoid.Health <= 0
+            repeat wait() until not v.Parent
             warn("END BOSS HUNT")
             getgenv().InBossHunt = false
             getgenv().Dodge_Criminal = false
@@ -780,15 +801,11 @@ coroutine.resume(coroutine.create(function()
             and not getgenv().InMerchant then
                 for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                     if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
-                                for _,mon in pairs(game.Workspace.Lives:GetChildren()) do
-                                    if mon.Name:match(Options.SelectQuest.Value) then
-                                        if mon.Humanoid.Health > 0 then
+                                    if Get_Mon_QuestID() then
                                             repeat task.wait()
-                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mon.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                                        until mon.Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
+                                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                        until not Get_Mon_QuestID() or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
                                         or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
-                                    end
-                                end
                             end
                         end
                     end
