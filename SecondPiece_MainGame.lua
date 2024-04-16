@@ -207,6 +207,7 @@
                         and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
                             getgenv().Dodge_Criminal = true
                         repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
+                        wait(.25)
                         getgenv().Dodge_Criminal = false
                         getgenv().CheckForSome = true
                         repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
@@ -656,57 +657,21 @@ end
                     game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
                     game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
                 end
-                   end
-               end)
-            end
-        end))
-        
-        coroutine.resume(coroutine.create(function()
-            while task.wait() do pcall(function()
-                if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-                else
                 if getgenv().AutoSkillZ and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
                     game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
                 end
-                   end
-               end)
-            end
-        end))
-        
-        coroutine.resume(coroutine.create(function()
-            while task.wait() do pcall(function()
-                if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-                else
                 if getgenv().AutoSkillX and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
                     game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
                 end
-                   end
-               end)
-            end
-        end))
-        
-        coroutine.resume(coroutine.create(function()
-            while task.wait() do pcall(function()
-                if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-                else
                 if getgenv().AutoSkillC and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
                     game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
                 end
-                   end
-               end)
-            end
-        end))
-        
-        coroutine.resume(coroutine.create(function()
-            while task.wait() do pcall(function()
-                if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
-                else
                 if getgenv().AutoSkillF and Dist() <= 30 and getclosest().Humanoid.Health > 0 then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
@@ -716,6 +681,7 @@ end
                end)
             end
         end))
+    
 
         coroutine.resume(coroutine.create(function()
             while task.wait() do pcall(function ()
