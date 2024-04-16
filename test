@@ -172,7 +172,8 @@
 
             game.Workspace.Lives.ChildAdded:Connect(function(v)
                 pcall(function ()
-                if v.Name == CriminalCheck().Name then
+                    wait(.5)
+                    if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
                     getgenv().InBossHunt = true
                     warn("START BOSS HUNT")
                     repeat task.wait() until not v.Parent or v.Humanoid.Health <= 0
@@ -725,7 +726,7 @@
                     for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
                         if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
                             local clickThis = v.Parent.Parent.ProximityPrompt
-                            if getgenv().EnterNow and not getgenv().InBossHunt then
+                            if getgenv().EnterNow  then
                                 repeat task.wait()
                                 fireproximityprompt(clickThis)
                                 until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil
@@ -1009,6 +1010,8 @@
             
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
+                    if getgenv().STOP then 
+                    else
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
                     and not getgenv().InMerchant and not CriminalCheck() then
                             if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() then
@@ -1019,6 +1022,7 @@
                                     until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
                                     or getgenv().InMerchant or CriminalCheck()
                                 end
+                                end
                         end
                     end)
                 end
@@ -1027,6 +1031,8 @@
 
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                    if getgenv().STOP then
+                    else
                     if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt then
                         if not getgenv().STOP and getgenv().Dodge_Criminal then
                             repeat task.wait()
@@ -1039,6 +1045,7 @@
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                             or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt
+                        end
                         end
                     end
                 end)
