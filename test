@@ -174,7 +174,6 @@
             game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
                 pcall(function ()
                 if v.Name == CriminalCheck().Name then
-                    pcall(function ()
                     warn('START BOUNTY TASK')
                     getgenv().InBossHunt = true
                     ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
@@ -185,12 +184,11 @@
                         getgenv().Dodge_Criminal = false
                         end
                     end)
-                    repeat wait() until not v.Parent or not Options.AutoBountyHunter.Value or CriminalCheck().Humanoid.Health <= 0
+                    repeat wait() until not v.Parent or CriminalCheck().Humanoid.Health <= 0
                     warn('ENDED BOUNTY TASK')
                     getgenv().InBossHunt = false
                     getgenv().Dodge_Criminal = false
                     ConnectCriminal:Disconnect()
-                end)
             end
             end)
             end)
@@ -219,12 +217,10 @@
                 pcall(function ()
                 if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable"  
                 and Options.Dodge_Skill_BountyHunt.Value then
-                    pcall(function ()
                     getgenv().STOP_Dodge = true
                     getgenv().Dodge_Criminal = false
                     repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
                     getgenv().STOP_Dodge = false
-                end)
             end
         end)
             end)
@@ -513,7 +509,7 @@
 
             UpdateLog:AddParagraph({
                 Title = "Last Update April/07/2024",
-                Content = "[+] Auto Merchant\n[+] Webhook Merchant\n[+] Auto Spawn Portal\n[+] Auto Close Gui After Execute\n[+] Auto Execute Script\n     [-] Working for some executor"
+                Content = "[*] Fixed Auto Quest\n[+] King's Trial"
             })
             
 
@@ -1005,14 +1001,14 @@
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
-                    and not getgenv().InMerchant then
-                            if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown then
+                    and not getgenv().InMerchant and not CriminalCheck() then
+                            if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() then
                                 repeat 
                                 wait(.85)
                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                     fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                     until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
-                                    or getgenv().InMerchant
+                                    or getgenv().InMerchant or CriminalCheck()
                                 end
                         end
                     end)
