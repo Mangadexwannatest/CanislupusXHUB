@@ -347,24 +347,23 @@ coroutine.resume(coroutine.create(function()
             getgenv().Distance = 7
         elseif #Amout ~= 1 then
             getgenv().Distance = 15
-        elseif not Amout then
-            getgenv().Distance = 7
+
         end
     end)
 end
 end))
 
-getgenv().Distance = 7
 
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
             if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable"
-            then
+            and not getgenv().STOP_Dodge then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
+            getgenv().CheckForSome = true
             end
         end)
     end    
@@ -392,6 +391,10 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
         getgenv().STOP_Dodge = true
         repeat task.wait() until not v.Parent 
         getgenv().STOP_Dodge = false
+        if getgenv().CheckForSome then
+            Check_To_Dodge()
+            getgenv().CheckForSome = false
+        end
     end
     if v.Name ~= "CombatAction" and v.Name ~= "JumpDisable" 
     and v.Name ~= "InCombat" and v.Name ~= "EquipType" and v.Name ~= "Race"
@@ -404,6 +407,7 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
 end)
 
 coroutine.resume(coroutine.create(function()
+    getgenv().Distance = 7.15
     while task.wait() do pcall(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
