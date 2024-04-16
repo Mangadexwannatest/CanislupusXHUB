@@ -305,6 +305,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             then
             getgenv().Dodge = true 
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
+            wait(.175)
             getgenv().Dodge = false
             getgenv().CheckForSome = true
             end
@@ -320,7 +321,8 @@ function Check_To_Dodge()
             for _,vv in next,v:GetChildren() do
                 if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
                     getgenv().Dodge = true 
-                    repeat task.wait() until not vv.Parent
+                    repeat task.wait() until not vv.Parentw
+                    wait(.175)
                     getgenv().Dodge = false
                     getgenv().CheckForSome = true
                 end
@@ -369,12 +371,12 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoPortal.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(math.random(1,5),125,7.5)
                 until not getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(10,12))
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,13.5)
             until getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
