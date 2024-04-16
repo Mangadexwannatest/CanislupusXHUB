@@ -4,7 +4,7 @@ game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("H
 game.ReplicatedStorage:WaitForChild("ToolsHandle")
 repeat wait() until game.ReplicatedStorage:FindFirstChild("ToolsHandle")
 
-if game.CoreGui:FindFirstChild("CrazyDay") == nil and game.PlaceId == 16644455867 then
+if game.CoreGui:FindFirstChild("CrazyDay") == nil and game.PlaceId ~= 15049111150 then
     warn("Loading Gui..")
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -23,6 +23,7 @@ local Window = Fluent:CreateWindow({
 
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
     Other = Window:AddTab({ Title = "Other", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "" })
 }
@@ -123,6 +124,63 @@ do
 
     end)
 
+    Tabs.Webhook:AddInput("WebhookLink", {
+        Title = "Webhook",
+        Description = "Link",
+        Default = nil,
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+    })
+
+    Tabs.Webhook:AddToggle("AutoWebhookDungeon", {Title = "Auto Dungeon Reward", Default = false })
+    Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
+    Tabs.Webhook:AddToggle("AutoWebhookMerchant", {Title = "Auto Merchant Reward", Default = false })
+
+    Tabs.Webhook:AddButton({
+        Title = "Webhook",
+        Description = nil,
+        Callback = function()
+            local timeInfo = os.date("*t")                                    
+            BBody = game:GetService("HttpService"):JSONEncode({
+                content = nil,
+                embeds = {{
+                    ["author"] = {
+                        ["name"] = "Second Piece Notify",
+                        ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                    },
+                    ["title"] = "Second Piece", 
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                    ["footer"] = {
+                        ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                    
+                    },
+                    ["color"] = tonumber(0xFFD700),
+                    ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                    ["fields"] = {
+                    
+                                    {
+                            ["name"] = "Webhook!",
+                            ["value"] = "Webhook!",
+                            ["inline"] = false
+                            
+                        },
+                        
+                    }
+                    }}
+                })
+            local response = syn.request({
+            Url = Options.WebhookLink.Value,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = BBody
+            })    
+        end
+    })
+
 
 
         Tabs.Other:AddSection("Locations")
@@ -147,13 +205,24 @@ do
             end})
 
     Tabs.Other:AddSection("Other")
+    Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
+    local white = Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
+    Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+
+    white:OnChanged(function()
+        if Options.AutoWhiteScreen.Value then
+            game:GetService("RunService"):Set3dRenderingEnabled(false)
+        else
+            game:GetService("RunService"):Set3dRenderingEnabled(true)
+        end
+    end)
 
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/15/2024",
-        Content = "[+] King Trial"
+        Title = "Last Update April/16/2024",
+        Content = "[*] Fixed Auto Quest\n[+] King's Trial\n[+]Dodge Skill (Bounty Task Only)"
     })
     
 end
@@ -207,7 +276,8 @@ TextLabel.TextSize = 14.000
 
 local Discon1
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
-    if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+    pcall(function ()
+    if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Connection . . ."..v.Name
         Discon1 = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
             if c.Name ~= "CombatAction" and c.Name ~= "JumpDisable" 
@@ -215,7 +285,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
             and c.Name ~= "DamageList" and c.Name ~= "Target" and c.Name ~= "Level"
             and c.Name ~= "Weapon" and c.Name ~= "OnBleedDamage" and c.Name ~= "OnFireDamage" 
             and c.Name ~= "IFrame" and c.Name ~= "WalkDisable" and c.Name ~= "Action"
-            and not getgenv().STOP_Dodge then
+            and not getgenv().STOP_Dodge and not getgenv().PlayerStun then
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Enemy Skill . . ."..c.Name
             repeat wait() until not v.Parent
             game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Disconnect . . ."..v.Name
@@ -224,12 +294,14 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
         end)
     end    
 end)
+end)
 
 
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
-    if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+    pcall(function ()
+    if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "Action" or c.Name == "IFrame" or c.Name == "JumpDisable" or c.Name == "WalkDisable"
+            if c.Name == "Action" or c.Name == "IFrame"
             then
             getgenv().Dodge = true 
             repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
@@ -239,13 +311,14 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
         end)
     end    
 end)
+end)
 
 
 function Check_To_Dodge()
     for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
-        if v.Name:match("Shadow") and game.PlaceId == 16644455867 then
+        if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
             for _,vv in next,v:GetChildren() do
-                if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "JumpDisable" or vv.Name == "WalkDisable" then
+                if vv.Name == "Action" or vv.Name == "IFrame" then
                     getgenv().Dodge = true 
                     repeat task.wait() until not vv.Parent
                     getgenv().Dodge = false
@@ -257,7 +330,8 @@ function Check_To_Dodge()
 end
 
 game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-    if v.Name == "Action" or v.Name == "IFrame" or v.Name == "JumpDisable" or v.Name == "WalkDisable" and v:FindFirstChild("Stun") == nil 
+    pcall(function ()
+    if v.Name == "Action" or v.Name == "IFrame" and v:FindFirstChild("Stun") == nil 
     and not getgenv().PlayerStun then
         getgenv().STOP_Dodge = true
         getgenv().Dodge = false
@@ -284,21 +358,23 @@ game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connec
     and v.Name ~= "Weapon" and v.Name ~= "OnBleedDamage" and v.Name ~= "OnFireDamage" 
     and v.Name ~= "IFrame" and v.Name ~= "WalkDisable" and v.Name ~= "Action" and v.Name ~= "Stun" then
         game.CoreGui:FindFirstChild("StatusZuz"):FindFirstChild("TextLabel").Text = "Player Using Skill . . ."..v.Name
-    end
+        end
+    end)
 end)
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil 
-        or game.PlaceId ~= 16644455867 then
+        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
             if Options.King_Trial.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 repeat task.wait()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
                 until not getgenv().Dodge or not Options.King_Trial.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.King_Trial.Value and not getgenv().Dodge then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,9.5)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(10,12))
             until getgenv().Dodge or not Options.King_Trial.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
@@ -357,17 +433,17 @@ coroutine.resume(coroutine.create(function()
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
                 if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
                 and not getgenv().NoEquip then
-                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
                 if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25
                 and not getgenv().NoEquip  then
-                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end
                 if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
                 and not getgenv().NoEquip then
-                    game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
                 end       
                 end
@@ -379,44 +455,48 @@ coroutine.resume(coroutine.create(function()
 end))
 
 function Click()
-        wait(.55)
+    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+    wait(.35)
         game:GetService'VirtualUser':CaptureController()
         game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
 end
 
 coroutine.resume(coroutine.create(function()
-	while wait(.1) do pcall(function()
+	while task.wait() do pcall(function()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
             for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                 if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
                     local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-		if getgenv().AutoSkillZ  and dist <= 30 and getclosest().Humanoid.Health > 0 then
-            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
-        end
-        if getgenv().AutoSkillX and dist <= 30 and getclosest().Humanoid.Health > 0 then
-            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-            game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
-        end
-        if getgenv().AutoSkillC and dist <= 30 and getclosest().Humanoid.Health > 0 then
-            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-            game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
-			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
-        end
-        if getgenv().AutoSkillV and dist <= 30 and getclosest().Humanoid.Health > 0 then
-            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+                    if dist <= 30 then
+        if getgenv().AutoSkillV then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "V", false, nil)
         end
-        if getgenv().AutoSkillF and dist <= 30 and getclosest().Humanoid.Health > 0 then
-            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+		if getgenv().AutoSkillZ  then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+			game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "Z", false, nil)
+        end
+        if getgenv().AutoSkillX then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "X", false, nil)
+        end
+        if getgenv().AutoSkillC then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, nil)
+			game:GetService("VirtualInputManager"):SendKeyEvent(false, "C", false, nil)
+        end
+        if getgenv().AutoSkillF then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
 			game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
         end
+    end
         if dist <= 10 and getclosest().Humanoid.Health > 0 then
+            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             Click()
         end
                 end
@@ -538,24 +618,226 @@ end))
         end
     end))
 
+    function Webhook()
+        local timeInfo = os.date("*t")
+        local Full = table.concat(RewardCollage,"\n[+1] ")
+        BBody = game:GetService("HttpService"):JSONEncode({
+            content = nil,
+            embeds = {{
+                ["author"] = {
+                    ["name"] = "CrazyDay",
+                    ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                },
+                ["title"] = "Second Piece", 
+                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                ["footer"] = {
+                    ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                
+                },
+                ["color"] = tonumber(0xFFD700),
+                ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                ["fields"] = {
+                
+                                {
+                        ["name"] = "Dungeon Reward",
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                        ["inline"] = false
+                        
+                    },
+                    
+                }
+                }}
+            })
+        local response = http_request or request or HttpPost or syn.request
+        response({
+        Url = Options.WebhookLink.Value,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = BBody
+        })    
+
+    end
+
+    function WebhookQuestTask()
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
+    if v.ClassName == "Frame" then
+    for _,v2 in pairs(v:GetDescendants()) do
+    if v2.Name == "WorldModel" then
+        for l,v3 in pairs(v2:GetChildren()) do
+            local timeInfo = os.date("*t")
+            
+            BBody = game:GetService("HttpService"):JSONEncode({
+                content = nil,
+                embeds = {{
+                    ["author"] = {
+                        ["name"] = "CrazyDay",
+                        ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                    },
+                    ["title"] = "Second Piece", 
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                    ["footer"] = {
+                        ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                    
+                    },
+                    ["color"] = tonumber(0xFFD700),
+                    ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                    ["fields"] = {
+                    
+                                    {
+                            ["name"] = "Quest Hunter Reward",
+                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..v3.Name,
+                            ["inline"] = false
+                            
+                        },
+                        
+                    }
+                    }}
+                })
+            local response = http_request or request or HttpPost or syn.request
+            response({
+            Url = Options.WebhookLink.Value,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = BBody
+            })    
+        end
+        end
+    end
+    end
+    end
+    end
+
+    function WebhookMerchant()
+        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
+            if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
+                local Split_V = string.split(v.Text.Text, ">")
+                local Split_A = string.split(Split_V[2], "<")
+        local timeInfo = os.date("*t")
+        BBody = game:GetService("HttpService"):JSONEncode({
+            content = nil,
+            embeds = {{
+                ["author"] = {
+                    ["name"] = "CrazyDay",
+                    ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                },
+                ["title"] = "Second Piece", 
+                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                ["footer"] = {
+                    ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                
+                },
+                ["color"] = tonumber(0xFFD700),
+                ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                ["fields"] = {
+                
+                                {
+                        ["name"] = "Traveling Merchant",
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..Split_A[1],
+                        ["inline"] = false
+                        
+                    },
+                    
+                }
+                }}
+            })
+        local response = http_request or request or HttpPost or syn.request
+        response({
+        Url = Options.WebhookLink.Value,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = BBody
+        })    
+    end
+    end
+    end
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function ()
+            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
+            if Options.AutoWebhookDungeon.Value and game.PlaceId ~= 15049111150 then
+                wait(.15)
+            for i,v in next,game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren() do
+                if v.ClassName == "Frame" then
+                    for a,b in next,v:GetDescendants() do
+                        if b.Name == "WorldModel" then
+                            for c,d in next,b:GetChildren() do
+                                table.insert(RewardCollage,d.Name)
+                                warn("Insert")
+                            end
+                            end
+                    end
+                end
+            end
+        end
+        end)
+    end)
+    end))
+
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function ()
+            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
+                wait(.35)
+            if Options.AutoWebhookBountyTask.Value and game.PlaceId == 15049111150 then
+                WebhookQuestTask()
+                end
+            end)
+        end)
+    end))
+        
+
+    coroutine.resume(coroutine.create(function()
+        pcall(function () 
+            game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
+            if Options.AutoWebhookDungeon.Value and game.PlaceId ~= 15049111150 then
+                if string.find(game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,"Ended") then
+                wait(1)
+            Webhook()
+                end
+                end
+            end)
+        end)
+    end))
+
+
+    coroutine.resume(coroutine.create(function()
+            pcall(function()
+                    game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+                        if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+                            if Options.AutoRejoinError.Value then
+                            game:GetService("TeleportService"):Teleport(15049111150)
+                            end
+                        end
+                    end)
+                end)
+        end))
+
+
     coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer.OnTeleport:Connect(function(State)
             local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
             local script = 
             [[
                 repeat wait() until game:IsLoaded()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
         
             local success = pcall(function()
-                if game.PlaceId == 16644455867 then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
-                end
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
              end)
              
              print(success)
-             if not success and game.PlaceId == 16644455867 then
+             if not success then
                 wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
              end
             ]]
             if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
