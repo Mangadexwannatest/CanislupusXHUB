@@ -80,7 +80,7 @@ do
         Default = {nil},
     })
 
-     local T  = Tabs.Main:AddToggle("King_Trial", {Title = "King Trial", Default = false })
+     Tabs.Main:AddToggle("AutoPortal", {Title = "Auto Portal", Default = false })
      Tabs.Main:AddToggle("AutoKenhaki", {Title = "Auto Ken Haki", Default = false })
      Tabs.Main:AddToggle("AutoBusohaki", {Title = "Auto Buso Haki", Default = false })
 
@@ -366,16 +366,16 @@ coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
         else
-            if Options.King_Trial.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
+            if Options.AutoPortal.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 repeat task.wait()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,85,0)
-                until not getgenv().Dodge or not Options.King_Trial.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
-        elseif Options.King_Trial.Value and not getgenv().Dodge then
+                until not getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
+        elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             repeat task.wait()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,math.random(10,12))
-            until getgenv().Dodge or not Options.King_Trial.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
+            until getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         end
     end
     end)
@@ -828,16 +828,16 @@ end))
             local script = 
             [[
                 repeat wait() until game:IsLoaded()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
         
             local success = pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
              end)
              
              print(success)
              if not success then
                 wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/LL"))()
              end
             ]]
             if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
