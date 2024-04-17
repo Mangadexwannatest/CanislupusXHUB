@@ -13,7 +13,7 @@
 
         local Window = Fluent:CreateWindow({
             Title = "Second Piece",
-            SubTitle = "Last Update April/16/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
+            SubTitle = "Last Update April/17/2024 [YT:CrazyDay/edek#1004] - user at your own risk",
             TabWidth = 160,
             Size = UDim2.fromOffset(580, 460),
             Acrylic = false,
@@ -134,6 +134,55 @@
             })
 
             Tabs.Main:AddToggle("AutoChests", {Title = "Auto Chest", Default = false })
+            Tabs.Main:AddToggle("AutoMining", {Title = "Auto Mining", Default = false })
+
+            coroutine.resume(coroutine.create(function()
+                while wait() do pcall(function ()
+                    if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or getgenv().BossJustSpawn or getgenv().InMerchant  then
+                        getgenv().InMining = false
+                        if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
+                        and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+                            repeat wait()
+                            game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
+                            getgenv().InMining = false
+                            until game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil or
+                            game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil
+                        end
+                    else
+
+                    if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
+                    and not getgenv().InBossHunt and not getgenv().STOP and not  getgenv().BossJustSpawn and not getgenv().InMerchant  then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
+                    if getgenv().QuestHuntOnCoolDown and
+                    game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
+                    and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
+                        repeat wait()
+                            getgenv().InMining = true
+                    game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
+                        until game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining")
+                        or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil
+                    end
+
+                    elseif not Options.AutoMining.Value and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
+                    and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+                        getgenv().InMining = false
+                        repeat wait()
+                            game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
+                            getgenv().InMining = false
+                        until Options.AutoMining.Value or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil
+                        or game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil
+
+                       end
+                       if not getgenv().InMining and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
+                       and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+                        game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
+                        
+                       end
+                    end
+                end)
+            end
+        end
+    ))
 
             Tabs.Main:AddSection("Portal")
 
@@ -547,8 +596,8 @@
             local UpdateLog = Tabs.Other:AddSection("Update Log")
 
             UpdateLog:AddParagraph({
-                Title = "Last Update April/16/2024",
-                Content = "[*] Fixed Auto Quest\n[+] King's Trial\n[+]Dodge Skill (Bounty Task Only)"
+                Title = "Last Update April/17/2024",
+                Content = "[*] Fixed Auto Merchant\n[+] Auto Mining"
             })
             
 
@@ -685,23 +734,24 @@ end
                end)
             end
         end))
-    
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoChests.Value then
+                if Options.AutoChests.Value and not getgenv().InMerchant and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                        if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) and not getgenv().STOP_Chest then
+                        if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text) == game.Players.LocalPlayer.Name and not getgenv().STOP then
                             repeat task.wait()
                             fireproximityprompt(v)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
-                            until not v.Parent
-                        end
+                            getgenv().InChest = true
+                            until not v.Parent or getgenv().InMerchant or getgenv().STOP
                         end            
                     end
+                end
                 end)  
             end 
         end))
+
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
@@ -745,19 +795,16 @@ end
                     for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
                         if getgenv().Common and v.Name == "1" and not getgenv().InPorTal then
                                 getgenv().STOP = true
-                                getgenv().STOP_Chest = true
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                                 getgenv().EnterNow = true
                             end
                         if getgenv().Uncommon and v.Name == "2" and not getgenv().InPorTal then
                                 getgenv().STOP = true
-                                getgenv().STOP_Chest = true
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                                 getgenv().EnterNow = true
                             end
                         if getgenv().Legendary and v.Name == "3" and v.BillboardGui.TextLabel.Text == Options.DungeonSelect.Value and not getgenv().InPorTal then
                                 getgenv().STOP = true
-                                getgenv().STOP_Chest = true
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                                 getgenv().EnterNow = true
                             end
@@ -840,7 +887,7 @@ end
                 while wait() do
                     pcall(function ()
                         if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown 
-                        and not getgenv().InMerchant then
+                        and not getgenv().InMerchant and not getgenv().InMining  then
                             for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
                                 if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                                     getgenv().NoQuest = true
@@ -856,7 +903,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant then
+                    and not getgenv().InMerchant and not getgenv().InMining  then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                             if v.Name == "Quest" then
                                 if v.Value == Options.SelectQuest.Value then
@@ -866,7 +913,7 @@ end
                                             wait()
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
                                         fireproximityprompt(v.Parent)
-                                        until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
+                                        until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining 
                                     end
                                 end
                             end
@@ -881,14 +928,15 @@ end
             coroutine.resume(coroutine.create(function()
                 while  wait() do pcall(function ()
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant then
+                    and not getgenv().InMerchant and not getgenv().InMining  then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                             if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
                                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                                     repeat task.wait()
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 until Get_Mon_QuestID().Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
-                                                or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
+                                                or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining
+                                                
                                 end
                             end
                         end
@@ -899,7 +947,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant then
+                    and not getgenv().InMerchant and not getgenv().InMining  then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                             if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
                             or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  
@@ -911,7 +959,7 @@ end
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                         getgenv().DontAcceptQuest = true
                                 until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
-                                    getgenv().DontAcceptQuest = false or getgenv().InMerchant
+                                    getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining 
                                 end
                             end
                             end
@@ -924,7 +972,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant then
+                    and not getgenv().InMerchant  then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                             if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
                             and not getgenv().STOP and not getgenv().InBossHunt
@@ -935,9 +983,11 @@ end
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                                         getgenv().DontAcceptQuest = true
                                         getgenv().StopFarmGem = true
-                                        until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant
+                                        getgenv().BossJustSpawn = true
+                                        until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant 
                                         getgenv().DontAcceptQuest = false   
                                         getgenv().StopFarmGem = false
+                                        getgenv().BossJustSpawn = false
                                 end
                             end
                         end
@@ -1064,15 +1114,16 @@ end
                     if getgenv().STOP then 
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
-                    and not getgenv().InMerchant and not CriminalCheck() then
+                    and not getgenv().InMerchant and not CriminalCheck()  then
                             if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() then
                                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                 repeat 
                                 wait(.85)
+                                getgenv().InMining = false
                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                     fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                     until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
-                                    or getgenv().InMerchant or CriminalCheck()
+                                    or getgenv().InMerchant or CriminalCheck() 
                                 end
                                 end
                         end
@@ -1086,19 +1137,19 @@ end
                     if getgenv().STOP then
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt then
-                        if not getgenv().STOP and getgenv().Dodge_Criminal then
+                        if not getgenv().STOP and getgenv().Dodge_Criminal  then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,150,0)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                            or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt
+                            or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt 
 
-                        elseif not getgenv().STOP and not getgenv().Dodge_Criminal then
+                        elseif not getgenv().STOP and not getgenv().Dodge_Criminal  then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                            or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt
+                            or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt 
                         end
                         end
                     end
@@ -1476,180 +1527,158 @@ end
                 end
             end))
             
-
-
-                
+                local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
                 coroutine.resume(coroutine.create(function()
                     while wait() do pcall(function ()
                     if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren()) do
-                                if getgenv().MerchantTicket1 and v.Name == "[Tier 1] Summon Ticket" then
+                                if getgenv().MerchantTicket1 and IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-                                    v:Destroy()
-                                    wait(1)
+                                    until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantTicket1 or IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") == nil
+                                    or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantTicket2 and v.Name == "[Tier 2] Summon Ticket" then
+                                if getgenv().MerchantTicket2 and IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantTicket2 or IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantTicket3 and v.Name == "[Tier 3] Summon Ticket" then
+                                if getgenv().MerchantTicket3 and IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantTicket3 or IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().DemonRemove  and v.Name == "Demon Fruit Remove Potion" then
+                                if getgenv().DemonRemove  and IntertFaceMerChant:FindFirstChild("Demon Fruit Remove Potion") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Demon Fruit Remove Potion")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().DemonRemove or IntertFaceMerChant:FindFirstChild("Demon Fruit Remove Potion") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().ArtifactRemove  and v.Name == "Artifact Remove Potion" then
+                                if getgenv().ArtifactRemove  and IntertFaceMerChant:FindFirstChild("Artifact Remove Potion") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Artifact Remove Potion")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().ArtifactRemove or IntertFaceMerChant:FindFirstChild("Artifact Remove Potion") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantBusoHaki  and v.Name == "Busoshoku Haki Book" then
+                                if getgenv().MerchantBusoHaki  and IntertFaceMerChant:FindFirstChild("Busoshoku Haki Book") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Busoshoku Haki Book")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantBusoHaki or IntertFaceMerChant:FindFirstChild("Busoshoku Haki Book") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantKenHaki  and v.Name == "Kenbunshoku Haki Book" then
+                                if getgenv().MerchantKenHaki  and IntertFaceMerChant:FindFirstChild("Kenbunshoku Haki Book") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Kenbunshoku Haki Book")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantKenHaki or IntertFaceMerChant:FindFirstChild("Kenbunshoku Haki Book") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantInfOrb and v.Name == "Infinity Orb" then
+                                if getgenv().MerchantInfOrb and IntertFaceMerChant:FindFirstChild("Infinity Orb") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Infinity Orb")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantInfOrb or IntertFaceMerChant:FindFirstChild("Infinity Orb") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantSukuna and v.Name == "Sukuna Finger" then
+                                if getgenv().MerchantSukuna and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantSukuna or IntertFaceMerChant:FindFirstChild("Sukuna Finger") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantFishRod and v.Name == "Fishing Rod" then
+                                if getgenv().MerchantFishRod and IntertFaceMerChant:FindFirstChild("Fishing Rod") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Fishing Rod")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantFishRod or IntertFaceMerChant:FindFirstChild("Fishing Rod") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantLightOrb and v.Name == "Lightning Orb" then
+                                if getgenv().MerchantLightOrb and IntertFaceMerChant:FindFirstChild("Lightning Orb") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Lightning Orb")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantLightOrb or IntertFaceMerChant:FindFirstChild("Lightning Orb") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantHolyGrail  and v.Name == "Holy Grail" then
+                                if getgenv().MerchantHolyGrail  and IntertFaceMerChant:FindFirstChild("Holy Grail") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Holy Grail")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Holy Grail")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantHolyGrail or IntertFaceMerChant:FindFirstChild("Holy Grail") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantOperation  and v.Name == "Operation Fruit" then
+                                if getgenv().MerchantOperation  and IntertFaceMerChant:FindFirstChild("Operation Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Operation")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantOperation or IntertFaceMerChant:FindFirstChild("Operation Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantGodLight and v.Name == "God Light Fruit" then
+                                if getgenv().MerchantGodLight and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantGodLight or IntertFaceMerChant:FindFirstChild("God Light Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantSolar and v.Name == "Solar Fruit" then
+                                if getgenv().MerchantSolar and IntertFaceMerChant:FindFirstChild("Solar Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Solar")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantSolar or IntertFaceMerChant:FindFirstChild("Solar Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantLight  and v.Name == "Light Fruit" then
+                                if getgenv().MerchantLight  and IntertFaceMerChant:FindFirstChild("Light Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Light")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantLight or IntertFaceMerChant:FindFirstChild("Light Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantFlame and v.Name == "Flame Fruit" then
+                                if getgenv().MerchantFlame and IntertFaceMerChant:FindFirstChild("Flame Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Flame")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantFlame or IntertFaceMerChant:FindFirstChild("Flame Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
-                                if getgenv().MerchantQuake  and v.Name == "Quake Fruit" then
+                                if getgenv().MerchantQuake  and IntertFaceMerChant:FindFirstChild("Quake Fruit") then
+                                    repeat wait()
                                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
-                                    wait(.25)
-                                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","Quake")
-                                    v:Destroy()
-                                    wait(1)
+                                until not Options.AutoBuyMerchantItem.Value or not getgenv().MerchantQuake or IntertFaceMerChant:FindFirstChild("Quake Fruit") == nil
+                                or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
                                 end
                                 if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                                    wait(10)
+                                    wait(11.5)
                                     getgenv().AlrBuy = true
                                     getgenv().InMerchant = false
-                                end
                         end
                     end
                 end)
