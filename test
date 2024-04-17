@@ -465,6 +465,7 @@
                 table.clear(ItemInDropdown)
                 for Value, State in next, Value do
                     table.insert(ItemInDropdown, Value)
+                    print(table.concat(ItemInDropdown," : " ))
                 end
             end)
 
@@ -1445,7 +1446,7 @@ end
                 local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
                 coroutine.resume(coroutine.create(function()
                     while wait() do pcall(function ()
-                    if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 then
                         for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                             local FindItem = table.find(ItemInDropdown,v.Name)
                             if FindItem  then
