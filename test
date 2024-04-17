@@ -138,7 +138,8 @@
 
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
-                    if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or getgenv().BossJustSpawn or getgenv().InMerchant then
+                    if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or getgenv().BossJustSpawn or getgenv().InMerchant or getgenv().InChest then
+                        getgenv().InMining = false
                         if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                         and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
                             repeat wait()
@@ -150,7 +151,7 @@
                     else
 
                     if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
-                    and not getgenv().InBossHunt and not getgenv().STOP and not  getgenv().BossJustSpawn and not getgenv().InMerchant then
+                    and not getgenv().InBossHunt and not getgenv().STOP and not  getgenv().BossJustSpawn and not getgenv().InMerchant and not getgenv().InChest then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
                     if getgenv().QuestHuntOnCoolDown and
                     game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
@@ -732,22 +733,25 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoChests.Value then
+                if Options.AutoChests.Value and not getgenv().InMerchant and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
                         if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text == game.Players.LocalPlayer.Name) and not getgenv().STOP then
-                            getgenv().InChest = true
                             repeat task.wait()
                             fireproximityprompt(v)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
-                            until not v.Parent
-                        else
+                            getgenv().InChest = true
+                            until not v.Parent or getgenv().InMerchant or getgenv().STOP
                             getgenv().InChest = false
                         end
                         end            
                     end
+                if not Options.AutoChests.Value and getgenv().InChest then
+                    getgenv().InChest = false
+                end
                 end)  
             end 
         end))
+
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
