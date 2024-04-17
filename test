@@ -47,20 +47,20 @@ do
         Callback = function()
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(Values,v.Name)
-                if FindItem and MerchantEnabled then
+                if FindItem  then
                     local split = string.split(v.Name," ")
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
 
                 ---------------- // Black List Dog Item \\ --------------
 
-                if table.find(Values,"God Light Fruit") and MerchantEnabled then
+                if table.find(Values,"God Light Fruit")  then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
-                elseif table.find(Values,"[Tier 1] Summon Ticket") and MerchantEnabled then
+                elseif table.find(Values,"[Tier 1] Summon Ticket")  then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-                elseif table.find(Values,"[Tier 2] Summon Ticket") and MerchantEnabled then
+                elseif table.find(Values,"[Tier 2] Summon Ticket")  then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-                elseif table.find(Values,"[Tier 3] Summon Ticket") and MerchantEnabled then
+                elseif table.find(Values,"[Tier 3] Summon Ticket")  then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
                 end 
               end
