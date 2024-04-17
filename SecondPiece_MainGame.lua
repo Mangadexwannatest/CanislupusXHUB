@@ -388,6 +388,10 @@
             })
 
             MerchantDropdown:OnChanged(function(Value)
+                local Values = {}
+                for Value, State in next, Value do
+                    table.insert(Values, Value)
+                end
                 if table.find(Values,"[Tier 1] Summon Ticket") and not getgenv().MerchantTicket1 then
                     getgenv().MerchantTicket1 = true
                 end
