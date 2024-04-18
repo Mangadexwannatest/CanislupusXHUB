@@ -607,8 +607,9 @@ end
                 else
                 if Options.AutoKenhaki.Value and game.Lighting:FindFirstChild("KenHaki").Enabled == false then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                repeat wait(1.35)
+                repeat
                 game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer("KenHaki")  
+                wait(1.35)
                 until game.Lighting:FindFirstChild("KenHaki").Enabled == true or not Options.AutoKenhaki.Value
                     end
                 end   
