@@ -1041,7 +1041,7 @@ end
             
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
-                    if getgenv().STOP then 
+                    if getgenv().STOP or getgenv().InMerchant then 
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
                     and not getgenv().InMerchant and not CriminalCheck() and not Chestawd()  then
@@ -1053,7 +1053,7 @@ end
                                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                                     fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                                     until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
-                                    or getgenv().InMerchant or CriminalCheck() or Chestawd()
+                                    or getgenv().InMerchant or CriminalCheck() or Chestawd() or getgenv().InMerchant
                                 end
                                 end
                         end
@@ -1064,7 +1064,7 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
-                    if getgenv().STOP or Chestawd() then
+                    if getgenv().STOP or Chestawd() or getgenv().InMerchant then
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt and not Chestawd() then
                         if not getgenv().STOP and getgenv().Dodge_Criminal  then
@@ -1072,14 +1072,14 @@ end
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,150,0)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                            or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt or Chestawd()
+                            or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant
 
                         elseif not getgenv().STOP and not getgenv().Dodge_Criminal  then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                             until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                            or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt or Chestawd()
+                            or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant
                         end
                         end
                     end
@@ -1612,7 +1612,7 @@ end
                 for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                     if v.Name == "Traveling merchant" then
                     repeat
-                    wait()
+                    wait(1)
                     fireproximityprompt(v.HumanoidRootPart.Merchant)
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
                     getgenv().InMerchant = true
@@ -1658,7 +1658,11 @@ end
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
                             local split = string.split(v.Name," ")
+                            repeat task.wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
+                            wait(.155)
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
+                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                         end
                                               ---------------- // Black List Dog Item \\ --------------
