@@ -462,9 +462,11 @@
                 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                     repeat wait()
                         getgenv().InMining = true
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
                 game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
                     until game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining")
-                    or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil
+                    or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil or not Options.AutoMining.Value
+                    or CheckBossSpawn() or getgenv().InMerchant or Chestawd()
                 end
 
                 elseif not Options.AutoMining.Value and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
@@ -1227,15 +1229,14 @@ end
 
 
 
-        coroutine.resume(coroutine.create(function()
-            pcall(function ()
         game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-            if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
-            if v.Name == "NotifyText" and string.find(v.Text.Text,"Mining") then
+            pcall(function ()
+            if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
+            and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" then
                 pcall(function ()
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
-                local timeInfo = os.date("*t")                                    
+                local timeInfo = os.date("*t")                               
                 BBody = game:GetService("HttpService"):JSONEncode({
                     content = nil,
                     embeds = {{
@@ -1273,11 +1274,10 @@ end
                 Body = BBody
                 })  
             end)
-                end
             end
         end)
     end)
-    end))
+
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
@@ -1575,6 +1575,8 @@ end
                 if dist >= 20 then
                     wait(12)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                    getgenv().JustSend = false
+                    getgenv().JustInsert = false
                 end
             end
                 end
@@ -1629,8 +1631,10 @@ end
 
     end
     function WebhookMerchant()
+        if getgenv().JustSend then 
+        else
         local timeInfo = os.date("*t")
-        local ItemIn = table.concat(Travelingitem,"\nYou received : ")
+        local ItemIn = table.concat(Travelingitem,"\n")
         BBody = game:GetService("HttpService"):JSONEncode({
             content = nil,
             embeds = {{
@@ -1651,7 +1655,7 @@ end
                 
                                 {
                         ["name"] = "Traveling Merchant",
-                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..ItemIn,
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..ItemIn,
                         ["inline"] = false
                         
                     },
@@ -1669,6 +1673,7 @@ end
         Body = BBody
         })    
     end
+    end
 
 
         coroutine.resume(coroutine.create(function()
@@ -1679,16 +1684,30 @@ end
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
                 table.insert(Travelingitem,Split_A[1])
-                repeat wait() until not getgenv().InMerchant
-                wait(1)
-                WebhookMerchant()
-                table.clear(Travelingitem)
+                getgenv().JustInsert = true
             end
             end)
         end)
         end)
     end))
-    
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoWebhookMerchant.Value and getgenv().JustInsert then
+                if not getgenv().InMerchant then
+                    wait(1)
+                    if #Travelingitem >= 1 then
+                        WebhookMerchant()
+                        getgenv().JustSend = true
+                        table.clear(Travelingitem)
+                        getgenv().JustInsert = false
+                    end
+                end
+            end
+         end)
+        end
+    end))
+
         
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
