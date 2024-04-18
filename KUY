@@ -424,6 +424,7 @@
                 firesignal(signal, arg2)
             end
         end
+    
 
         function Chestawd()
             if Options.AutoChests.Value then
@@ -1596,9 +1597,10 @@ end
                 for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                     if v.Name == "Traveling merchant" then
                     repeat
-                    wait(1)
+                    wait(.5)
                     fireproximityprompt(v.HumanoidRootPart.Merchant)
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
+                    firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
                     getgenv().InMerchant = true
                     until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
                     getgenv().InMerchant = false
@@ -1636,6 +1638,15 @@ end
             end)
         end
     end))
+
+    ItemInDropdown = {"Fishing Rod","Lightning Orb"}
+    for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
+        local FindItem = table.find(ItemInDropdown,v.Name)
+        if FindItem  then
+            print(v.Name)
+        end
+    end
+
         
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
@@ -1647,13 +1658,15 @@ end
                     for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
+                            repeat wait()
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            firesignal(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.Close.Close.MouseButton1Click,game.Players.LocalPlayer)
-                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
+                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
+                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
                         end
-                                              ---------------- // Black List Dog Item \\ --------------
+                        ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
                             repeat wait()
