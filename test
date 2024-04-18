@@ -1651,19 +1651,21 @@ end
                     for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
-                            repeat task.wait()
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled or FindItem == nil
-                        ---------------- // Black List Dog Item \\ --------------
+                            repeat wait()
+                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                                wait(1)
+                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = true
+                            until getgenv().AlrBuy or not getgenv().InMerchant
+                      end
+                                              ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
                             repeat wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
                             until not table.find(ItemInDropdown,"God Light Fruit") or IntertFaceMerChant:FindFirstChild("God Light Fruit") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
-                            getgenv().AlrBuy = true
-                            getgenv().InMerchant = false
                         end
                         if table.find(ItemInDropdown,"[Tier 1] Summon Ticket") and IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") then
                             repeat wait()
@@ -1674,25 +1676,18 @@ end
                             repeat wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
                         until not table.find(ItemInDropdown,"[Tier 2] Summon Ticket") or IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
-                        getgenv().AlrBuy = true
-                        getgenv().InMerchant = false
                     end
                         if table.find(ItemInDropdown,"[Tier 3] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") then
                             repeat wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
                         until not table.find(ItemInDropdown,"[Tier 3] Summon Ticket") or IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
-                        getgenv().AlrBuy = true
-                        getgenv().InMerchant = false
                     end
                        
                         if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
                             repeat wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
                         until not table.find(ItemInDropdown,"Sukuna Finger") or IntertFaceMerChant:FindFirstChild("Sukuna Finger") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
-                        getgenv().AlrBuy = true
-                        getgenv().InMerchant = false
                     end 
-                      end
                     end
                     if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                             wait(11.5)
