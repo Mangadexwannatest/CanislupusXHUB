@@ -597,21 +597,13 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if not Options.AutoKenhaki.Value then
+                if not Options.AutoKenhaki.Value or game.Lighting:FindFirstChild("KenHaki").Enabled == true then
                 else
-                if Options.AutoKenhaki.Value then
-                    for i,v in pairs(game.Lighting:GetChildren()) do
-                        if v.Name == "KenHaki" then
-                            if v.Enabled == false then
-                                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                                repeat
-                                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    local args = {[1] = "KenHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
-                    wait(1.35)    
-                until v.Enabled == true
-            end
-                            end
-                        end
+                if Options.AutoKenhaki.Value and game.Lighting:FindFirstChild("KenHaki").Enabled == false then
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                repeat wait(1.35)
+                game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer("KenHaki")  
+                until game.Lighting:FindFirstChild("KenHaki").Enabled == true or not Options.AutoKenhaki.Value
                     end
                 end   
             end)   
@@ -620,15 +612,12 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if not Options.AutoBusohaki.Value then
+                if not Options.AutoBusohaki.Value or game.Players.LocalPlayer.Character:FindFirstChild("Right Arm"):FindFirstChild("Haki") then
                 else
                 if Options.AutoBusohaki.Value then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    for i,v in pairs(game.Workspace.Lives[game.Players.LocalPlayer.Name]:GetChildren()) do
-                        if v.Name == "Right Arm" and v:FindFirstChild("Haki") == nil then 
-                            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    local args = {[1] = "BusoHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
-                        end
+                    if game.Players.LocalPlayer.Character:FindFirstChild("Right Arm"):FindFirstChild("Haki") == nil then
+                    game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer("BusoHaki")
                         end
                     end
                 end  
