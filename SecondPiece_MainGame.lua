@@ -1606,15 +1606,20 @@ end
             end)
         end))
 
+        function FindMerChant()
+            for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+                if v.Name == "Traveling merchant" then
+                    return v
+                end
+            end
+        end
+
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoBuyMerchantItem.Value and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled and not getgenv().AlrBuy and not getgenv().STOP then
+                if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                         if v.Name == "Traveling merchant" then
-                        if not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                            fireproximityprompt(v.HumanoidRootPart.Merchant)
-                        end
                     repeat
                     task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
@@ -1622,11 +1627,15 @@ end
                     until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
                     getgenv().InMerchant = false
                 end
+                if game.Workspace.NPC:FindFirstChild("Traveling merchant") and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    fireproximityprompt(FindMerChant().HumanoidRootPart.Merchant)
+                end
             end
                 end
             end)
         end
         end))
+
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
@@ -1661,11 +1670,6 @@ end
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            repeat wait()
-                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
-                                wait(1)
-                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = true
-                            until getgenv().AlrBuy or not getgenv().InMerchant
                       end
                                               ---------------- // Black List Dog Item \\ --------------
         
