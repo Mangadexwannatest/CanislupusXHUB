@@ -419,6 +419,12 @@
             end    
         end
 
+        local firesignal = function(signal, arg2)
+            if getconnections(signal) then
+                firesignal(signal, arg2)
+            end
+        end
+
         function Chestawd()
             if Options.AutoChests.Value then
             for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
@@ -1505,11 +1511,11 @@ end
                     if k.Name == "PlayerGui" and k:FindFirstChild("ItemUseUI") ~= nil and k:FindFirstChild("DungeonSelect") == nil and not getgenv().EnterNow 
                     and not getgenv().STOPPressYes then
                         getgenv().STOPUserTicket = true
-                        firesignal(k.ItemUseUI.Interface.ItemFrame.Menu.Yes.MouseButton1Click)
+                        firesignal(k.ItemUseUI.Interface.ItemFrame.Menu.Yes.MouseButton1Click,game.Players.LocalPlayer)
                     end
                     if k.Name == "PlayerGui" and k:FindFirstChild("DungeonSelect") ~= nil and not getgenv().EnterNow then 
                         getgenv().STOPPressYes = true
-                        firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Down)
+                        firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Down,game.Players.LocalPlayer)
                     end
                     end
                 end
@@ -1643,8 +1649,9 @@ end
                             local split = string.split(v.Name," ")
                             repeat task.wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            wait(.155)
+                            task.wait(.1)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
+                            firesignal(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.Close.Close.MouseButton1Click,game.Players.LocalPlayer)
                             until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                         end
