@@ -1233,8 +1233,8 @@ end
             if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
             if v.Name == "NotifyText" and string.find(v.Text.Text,"Mining") then
                 pcall(function ()
-                local Split_V = string.split(v.Text.Text, ">")
-                local Split_A = string.split(Split_V[2], "<")
+                local CCC = string.split(v.Text.Text, ">")
+                local XXX = string.split(CCC[2], "<")
                 local timeInfo = os.date("*t")                                    
                 BBody = game:GetService("HttpService"):JSONEncode({
                     content = nil,
@@ -1256,7 +1256,7 @@ end
                         
                                         {
                                 ["name"] = "Mining Reward",
-                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
+                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..XXX[1],
                                 ["inline"] = false
                                 
                             },
