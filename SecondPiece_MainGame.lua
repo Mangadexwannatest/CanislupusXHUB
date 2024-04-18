@@ -1227,15 +1227,14 @@ end
 
 
 
-        coroutine.resume(coroutine.create(function()
-            pcall(function ()
         game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-            if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
-            if v.Name == "NotifyText" and string.find(v.Text.Text,"Mining") then
+            pcall(function ()
+            if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
+            and v.Name == "NotifyText" then
                 pcall(function ()
-                local CCC = string.split(v.Text.Text, ">")
-                local XXX = string.split(CCC[2], "<")
-                local timeInfo = os.date("*t")                                    
+                local Split_V = string.split(v.Text.Text, ">")
+                local Split_A = string.split(Split_V[2], "<")
+                local timeInfo = os.date("*t")                               
                 BBody = game:GetService("HttpService"):JSONEncode({
                     content = nil,
                     embeds = {{
@@ -1256,7 +1255,7 @@ end
                         
                                         {
                                 ["name"] = "Mining Reward",
-                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..XXX[1],
+                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
                                 ["inline"] = false
                                 
                             },
@@ -1273,11 +1272,10 @@ end
                 Body = BBody
                 })  
             end)
-                end
             end
         end)
     end)
-    end))
+
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
@@ -1576,6 +1574,7 @@ end
                     wait(12)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
                     getgenv().JustSend = false
+                    getgenv().JustInsert = false
                 end
             end
                 end
@@ -1683,16 +1682,28 @@ end
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
                 table.insert(Travelingitem,Split_A[1])
-                repeat wait() until not getgenv().InMerchant
-                if #Travelingitem >= 1 then
-                WebhookMerchant()
-                getgenv().JustSend = true
-                table.clear(Travelingitem)
-                end
+                getgenv().JustInsert = true
             end
             end)
         end)
         end)
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function ()
+            if Options.AutoWebhookMerchant.Value and getgenv().JustInsert then
+                if not getgenv().InMerchant then
+                    wait(1)
+                    if #Travelingitem >= 1 then
+                        WebhookMerchant()
+                        getgenv().JustSend = true
+                        table.clear(Travelingitem)
+                        getgenv().JustInsert = false
+                    end
+                end
+            end
+         end)
+        end
     end))
 
         
