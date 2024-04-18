@@ -1627,7 +1627,7 @@ end
                     until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
                     getgenv().InMerchant = false
                 end
-                if game.Workspace.NPC:FindFirstChild("Traveling merchant") and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                if FindMerChant() and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     fireproximityprompt(FindMerChant().HumanoidRootPart.Merchant)
                 end
             end
