@@ -424,6 +424,7 @@
                 firesignal(signal, arg2)
             end
         end
+    
 
         function Chestawd()
             if Options.AutoChests.Value then
@@ -607,8 +608,9 @@ end
                 else
                 if Options.AutoKenhaki.Value and game.Lighting:FindFirstChild("KenHaki").Enabled == false then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                repeat wait(1.35)
+                repeat
                 game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer("KenHaki")  
+                wait(1.35)
                 until game.Lighting:FindFirstChild("KenHaki").Enabled == true or not Options.AutoKenhaki.Value
                     end
                 end   
@@ -1647,14 +1649,11 @@ end
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
                             local split = string.split(v.Name," ")
-                            repeat task.wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            task.wait(.1)
-                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                            firesignal(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.Close.Close.MouseButton1Click,game.Players.LocalPlayer)
-                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                         end
+                        firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
                                               ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
