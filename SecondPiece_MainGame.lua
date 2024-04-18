@@ -1679,6 +1679,10 @@ end
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
                 table.insert(Travelingitem,Split_A[1])
+                repeat wait() until not getgenv().InMerchant
+                wait(1)
+                WebhookMerchant()
+                table.clear(Travelingitem)
             end
             end)
         end)
