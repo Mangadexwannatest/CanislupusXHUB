@@ -355,7 +355,7 @@
                         content = nil,
                         embeds = {{
                             ["author"] = {
-                                ["name"] = "Second Piece Notify",
+                                ["name"] = "CrazyDay",
                                 ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
                             },
                             ["title"] = "Second Piece", 
@@ -403,7 +403,7 @@
                         content = nil,
                         embeds = {{
                             ["author"] = {
-                                ["name"] = "Second Piece Notify",
+                                ["name"] = "CrazyDay",
                                 ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
                             },
                             ["title"] = "Second Piece", 
@@ -1699,6 +1699,7 @@ end
                             wait(11.5)
                             getgenv().AlrBuy = true
                             getgenv().InMerchant = false
+                            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
                     end
                 end
             end)
