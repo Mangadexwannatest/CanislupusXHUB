@@ -1575,8 +1575,6 @@ end
                 if dist >= 20 then
                     wait(12)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
-                    getgenv().JustSend = false
-                    getgenv().JustInsert = false
                 end
             end
                 end
@@ -1681,7 +1679,6 @@ end
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
                 table.insert(Travelingitem,Split_A[1])
-                getgenv().JustInsert = true
             end
             end)
         end)
@@ -1690,16 +1687,12 @@ end
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if Options.AutoWebhookMerchant.Value and getgenv().JustInsert then
-                if not getgenv().InMerchant then
+            if Options.AutoWebhookMerchant.Value and getgenv().InMerchant then
+                repeat wait() until not getgenv().InMerchant
                     wait(1)
-                    if #Travelingitem >= 1 then
                         WebhookMerchant()
                         wait(1)
                         table.clear(Travelingitem)
-                    end
-                    wait(600)
-                end
             end
          end)
         end
