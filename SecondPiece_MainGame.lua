@@ -1638,6 +1638,15 @@ end
             end)
         end
     end))
+
+    ItemInDropdown = {"Fishing Rod","Lightning Orb"}
+    for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
+        local FindItem = table.find(ItemInDropdown,v.Name)
+        if FindItem  then
+            print(v.Name)
+        end
+    end
+
         
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
@@ -1649,9 +1658,10 @@ end
                     for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
+                            repeat wait()
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                         end
                         ---------------- // Black List Dog Item \\ --------------
