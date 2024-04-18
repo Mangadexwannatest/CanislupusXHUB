@@ -1230,7 +1230,7 @@ end
         game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
             pcall(function ()
             if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
-            and v.Name == "NotifyText" then
+            and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" then
                 pcall(function ()
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
