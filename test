@@ -136,9 +136,18 @@
             Tabs.Main:AddToggle("AutoChests", {Title = "Auto Chest", Default = false })
             Tabs.Main:AddToggle("AutoMining", {Title = "Auto Mining", Default = false })
 
+            local function CheckBossSpawn()
+                for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                    if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") then
+                    return v.Name
+                end
+                end    
+            end
+            
+
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
-                    if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or getgenv().BossJustSpawn or getgenv().InMerchant  then
+                    if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant  then
                         getgenv().InMining = false
                         if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                         and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
@@ -151,9 +160,9 @@
                     else
 
                     if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
-                    and not getgenv().InBossHunt and not getgenv().STOP and not  getgenv().BossJustSpawn and not getgenv().InMerchant  then
+                    and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
-                    if getgenv().QuestHuntOnCoolDown and
+                    if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and
                     game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                     and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                         repeat wait()
@@ -388,6 +397,7 @@
             game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
                 if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
                 if v.Name == "NotifyText" then
+                    pcall(function ()
                     local Split_V = string.split(v.Text.Text, ">")
                     local Split_A = string.split(Split_V[2], "<")
                     local timeInfo = os.date("*t")                                    
@@ -411,7 +421,7 @@
                             
                                             {
                                     ["name"] = "Mining Reward",
-                                    ["value"] = "[Mining Mastery Increased]\n"..Split_A[1],
+                                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
                                     ["inline"] = false
                                     
                                 },
@@ -427,6 +437,7 @@
                     },
                     Body = BBody
                     })  
+                end)
                     end
                 end
             end)
@@ -550,13 +561,9 @@
                     for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
-                            repeat wait()
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            until not FindItem or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
-                            getgenv().AlrBuy = true
-                            getgenv().InMerchant = false
                         ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
@@ -1036,11 +1043,9 @@ end
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,7)
                                         getgenv().DontAcceptQuest = true
                                         getgenv().StopFarmGem = true
-                                        getgenv().BossJustSpawn = true
                                         until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant 
                                         getgenv().DontAcceptQuest = false   
                                         getgenv().StopFarmGem = false
-                                        getgenv().BossJustSpawn = false
                                 end
                             end
                         end
