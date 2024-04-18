@@ -151,7 +151,7 @@
                 if Options.AutoChests.Value then
                 for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
                     if v.Name == "Handle" and tostring(v.Owner.Text.Text) == game.Players.LocalPlayer.Name then
-                        return v
+                        return true
                     end
                     end
                 end    
@@ -173,9 +173,9 @@
                     else
 
                     if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
-                    and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and Chestawd() == nil then
+                    and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd() then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
-                    if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and Chestawd() == nil and
+                    if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and not Chestawd() and
                     game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                     and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                         repeat wait()
@@ -578,7 +578,7 @@
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled or FindItem == nil
                         ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
@@ -813,14 +813,17 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Chestawd() then 
+                else
                 if Options.AutoChests.Value and not getgenv().InMerchant and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
-                        if v.Name == "ProximityPrompt" and not getgenv().STOP and Chestawd() then
+                        if v.Name == "ProximityPrompt" and tostring(v.Parent.Owner.Text.Text) == game.Players.LocalPlayer.Name and not getgenv().STOP then
                             repeat task.wait()
                             fireproximityprompt(v)
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Chestawd().CFrame
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
                             getgenv().InChest = true
-                            until not v.Parent or getgenv().InMerchant or getgenv().STOP or Chestawd() == nil
+                            until not v.Parent or getgenv().InMerchant or getgenv().STOP or not Chestawd()
+                           end
                         end            
                     end
                 end
@@ -963,7 +966,7 @@ end
                 while wait() do
                     pcall(function ()
                         if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown 
-                        and not getgenv().InMerchant and not getgenv().InMining  and Chestawd() == nil then
+                        and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                             for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
                                 if v.Name == "PlayerGui" and v:FindFirstChild("QuestUI") == nil then
                                     getgenv().NoQuest = true
@@ -979,7 +982,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant and not getgenv().InMining and Chestawd() == nil then
+                    and not getgenv().InMerchant and not getgenv().InMining and not Chestawd() then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                             if v.Name == "Quest" then
                                 if v.Value == Options.SelectQuest.Value then
@@ -1004,7 +1007,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while  wait() do pcall(function ()
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant and not getgenv().InMining  and Chestawd() == nil then
+                    and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
                             if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
                                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -1023,7 +1026,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant and not getgenv().InMining  and Chestawd() == nil then
+                    and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                             if string.find(v.Name,BossTable[1]) or string.find(v.Name,BossTable[2]) 
                             or string.find(v.Name,BossTable[3]) or string.find(v.Name,BossTable[4])  
@@ -1048,7 +1051,7 @@ end
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
                     if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
-                    and not getgenv().InMerchant and Chestawd() == nil then
+                    and not getgenv().InMerchant and not Chestawd() then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                             if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
                             and not getgenv().STOP and not getgenv().InBossHunt
@@ -1188,8 +1191,8 @@ end
                     if getgenv().STOP then 
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
-                    and not getgenv().InMerchant and not CriminalCheck() and Chestawd() == nil  then
-                            if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() and Chestawd() == nil then
+                    and not getgenv().InMerchant and not CriminalCheck() and not Chestawd()  then
+                            if not getgenv().STOP and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not CriminalCheck() and not Chestawd() then
                                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                 repeat 
                                 wait(.85)
@@ -1210,7 +1213,7 @@ end
                 while task.wait() do pcall(function ()
                     if getgenv().STOP or Chestawd() then
                     else
-                    if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt and Chestawd() == nil then
+                    if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt and not Chestawd() then
                         if not getgenv().STOP and getgenv().Dodge_Criminal  then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
