@@ -1232,7 +1232,7 @@ end
         game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
             pcall(function ()
             if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
-            and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" then
+            and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" and not string.find(v.Text.Text,"on cooldown") then
                 pcall(function ()
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
@@ -1631,8 +1631,6 @@ end
 
     end
     function WebhookMerchant()
-        if getgenv().JustSend then 
-        else
         local timeInfo = os.date("*t")
         local ItemIn = table.concat(Travelingitem,"\n")
         BBody = game:GetService("HttpService"):JSONEncode({
@@ -1673,7 +1671,6 @@ end
         Body = BBody
         })    
     end
-    end
 
 
         coroutine.resume(coroutine.create(function()
@@ -1698,10 +1695,10 @@ end
                     wait(1)
                     if #Travelingitem >= 1 then
                         WebhookMerchant()
-                        getgenv().JustSend = true
+                        wait(1)
                         table.clear(Travelingitem)
-                        getgenv().JustInsert = false
                     end
+                    wait(600)
                 end
             end
          end)
