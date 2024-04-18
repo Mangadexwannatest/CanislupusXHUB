@@ -166,98 +166,6 @@
             Tabs.Main:AddToggle("AutoBountyHunter", {Title = "Auto Bounty Task", Default = false })
             Tabs.Main:AddToggle("Dodge_Skill_BountyHunt", {Title = "Dodge Skill [Bounty Task Only]", Default = false })
 
-            function CriminalCheck()
-                for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                    if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
-                        return v
-                    end
-                end        
-            end
-
-            game.Workspace.Lives.ChildAdded:Connect(function(v)
-                pcall(function ()
-                    wait(.5)
-                    if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
-                    getgenv().InBossHunt = true
-                    warn("START BOSS HUNT")
-                    repeat task.wait() until not v.Parent or v.Humanoid.Health <= 0
-                    getgenv().InBossHunt = false
-                    warn("ENED BOSS HUNT")
-                end
-                end)
-            end)
-
-            function Check_To_Dodge()
-                for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
-                    if v.Name ==  CriminalCheck().Name  then
-                        for _,vv in next,v:GetChildren() do
-                            if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
-                                getgenv().Dodge_Criminal = true 
-                                repeat task.wait() until not vv.Parent
-                                getgenv().Dodge_Criminal = false
-                                getgenv().CheckForSome = true
-                            end
-                        end
-                    end
-                end
-            end
-            
-            local ConnectCriminal
-            game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
-                pcall(function ()
-                if v.Name == CriminalCheck().Name and Options.Dodge_Skill_BountyHunt.Value then
-                    ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
-                        if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable" 
-                        and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
-                            getgenv().Dodge_Criminal = true
-                        repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
-                        wait(.25)
-                        getgenv().Dodge_Criminal = false
-                        getgenv().CheckForSome = true
-                        repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
-                        ConnectCriminal:Disconnect()
-                        end
-                    end)
-            end
-            end)
-            end)
-            coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function ()  
-            if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
-                local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
-                NO_CLIP_PART.Name = "CrazyDay_NO"
-                NO_CLIP_PART.CanCollide = true
-                NO_CLIP_PART.Anchored = true
-                NO_CLIP_PART.Transparency = 1
-                NO_CLIP_PART.Size = Vector3.new(2,1,2)
-            elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and Options.Dodge_Skill_BountyHunt.Value then
-                repeat
-                    task.wait()
-                    game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = true
-                    game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
-                 until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not Options.Dodge_Skill_BountyHunt.Value
-                 game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = false
-                end
-            end)
-            end
-            end))
-            
-
-            game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
-                pcall(function ()
-                if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable"
-                and Options.Dodge_Skill_BountyHunt.Value then
-                    getgenv().STOP_Dodge = true
-                    getgenv().Dodge_Criminal = false
-                    repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
-                    getgenv().STOP_Dodge = false
-                    if getgenv().CheckForSome then
-                        Check_To_Dodge()
-                        getgenv().CheckForSome = false
-                    end
-            end
-        end)
-            end)
 
 
             PortalDropdown:OnChanged(function(Value)
@@ -333,62 +241,14 @@
                 Finished = false, -- Only calls callback when you press enter
             })
 
-            Tabs.Webhook:AddToggle("AutoWebhookDungeon", {Title = "Auto Dungeon Reward", Default = false })
-            Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Auto Bounty Task Reward", Default = false })
-            Tabs.Webhook:AddToggle("AutoWebhookMerchant", {Title = "Auto Merchant Reward", Default = false })
-            Tabs.Webhook:AddToggle("MiningWebhook", {Title = "Auto Mining Reward", Default = false })
-
-            coroutine.resume(coroutine.create(function()
-                pcall(function ()
-            game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-                if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
-                if v.Name == "NotifyText" then
-                    pcall(function ()
-                    local Split_V = string.split(v.Text.Text, ">")
-                    local Split_A = string.split(Split_V[2], "<")
-                    local timeInfo = os.date("*t")                                    
-                    BBody = game:GetService("HttpService"):JSONEncode({
-                        content = nil,
-                        embeds = {{
-                            ["author"] = {
-                                ["name"] = "Second Piece Notify",
-                                ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                            },
-                            ["title"] = "Second Piece", 
-                            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
-                            ["footer"] = {
-                                ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-                                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
-                            
-                            },
-                            ["color"] = tonumber(0xFFD700),
-                            ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-                            ["fields"] = {
-                            
-                                            {
-                                    ["name"] = "Mining Reward",
-                                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
-                                    ["inline"] = false
-                                    
-                                },
-                                
-                            }
-                            }}
-                        })
-                    local response = syn.request({
-                    Url = Options.WebhookLink.Value,
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json"
-                    },
-                    Body = BBody
-                    })  
-                end)
-                    end
-                end
-            end)
-        end)
-        end))
+            Tabs.Webhook:AddToggle("AutoWebhookDungeon", {Title = "Dungeon Reward", Default = false })
+            Tabs.Webhook:AddToggle("AutoWebhookBountyTask", {Title = "Bounty Task Reward", Default = false })
+            Tabs.Webhook:AddToggle("AutoWebhookMerchant", {Title = "Merchant Reward", Default = false })
+            Tabs.Webhook:AddToggle("MiningWebhook", {Title = "Mining Reward", Default = false })
+            Tabs.Webhook:AddParagraph({
+                Title = "Chest Reward",
+                Content = "(WAIT FOR UPDATE)"
+            })
 
             Tabs.Webhook:AddButton({
                 Title = "Webhook",
@@ -399,7 +259,7 @@
                         content = nil,
                         embeds = {{
                             ["author"] = {
-                                ["name"] = "Second Piece Notify",
+                                ["name"] = "CrazyDay",
                                 ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
                             },
                             ["title"] = "Second Piece", 
@@ -503,7 +363,7 @@
 
             UpdateLog:AddParagraph({
                 Title = "Last Update April/18/2024",
-                Content = "[*]Auto Update Merchant Item\n[+] Webhook Mining"
+                Content = "[*] Auto Update Merchant Item\n[*] Fixed Auto Chest\n[*] Fixed Auto Mining\n[+] Webhook Mining"
             })
             
 
@@ -587,7 +447,7 @@
                 if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
                 and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd() then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
-                if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and not Chestawd() and
+                if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and not Chestawd() and not getgenv().InMerchant and
                 game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                     repeat wait()
@@ -1086,6 +946,98 @@ end
         end))
 
 
+        function CriminalCheck()
+            for i,v in pairs(game.Workspace.Lives:GetChildren()) do
+                if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
+                    return v
+                end
+            end        
+        end
+
+        game.Workspace.Lives.ChildAdded:Connect(function(v)
+            pcall(function ()
+                wait(.5)
+                if v.Name:match("Criminal") and v.Humanoid.Health > 0 and v.TaskBy.Value == game.Players.LocalPlayer.Name then
+                getgenv().InBossHunt = true
+                warn("START BOSS HUNT")
+                repeat task.wait() until not v.Parent or v.Humanoid.Health <= 0
+                getgenv().InBossHunt = false
+                warn("ENED BOSS HUNT")
+            end
+            end)
+        end)
+
+        function Check_To_Dodge()
+            for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
+                if v.Name ==  CriminalCheck().Name  then
+                    for _,vv in next,v:GetChildren() do
+                        if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
+                            getgenv().Dodge_Criminal = true 
+                            repeat task.wait() until not vv.Parent
+                            getgenv().Dodge_Criminal = false
+                            getgenv().CheckForSome = true
+                        end
+                    end
+                end
+            end
+        end
+        
+        local ConnectCriminal
+        game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
+            pcall(function ()
+            if v.Name == CriminalCheck().Name and Options.Dodge_Skill_BountyHunt.Value then
+                ConnectCriminal = game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function(c)
+                    if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable" 
+                    and not getgenv().STOP_Dodge and Options.Dodge_Skill_BountyHunt.Value then
+                        getgenv().Dodge_Criminal = true
+                    repeat task.wait() until not c.Parent or getgenv().STOP_Dodge or not Options.Dodge_Skill_BountyHunt.Value
+                    wait(.25)
+                    getgenv().Dodge_Criminal = false
+                    getgenv().CheckForSome = true
+                    repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
+                    ConnectCriminal:Disconnect()
+                    end
+                end)
+        end
+        end)
+        end)
+        coroutine.resume(coroutine.create(function()
+            while wait() do pcall(function ()  
+        if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
+            local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
+            NO_CLIP_PART.Name = "CrazyDay_NO"
+            NO_CLIP_PART.CanCollide = true
+            NO_CLIP_PART.Anchored = true
+            NO_CLIP_PART.Transparency = 1
+            NO_CLIP_PART.Size = Vector3.new(2,1,2)
+        elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and Options.Dodge_Skill_BountyHunt.Value then
+            repeat
+                task.wait()
+                game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = true
+                game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
+             until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not Options.Dodge_Skill_BountyHunt.Value
+             game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = false
+            end
+        end)
+        end
+        end))
+        
+
+        game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name].ChildAdded:Connect(function (v)
+            pcall(function ()
+            if v.Name == "Action" or v.Name == "IFrame" or v.Name == "WalkDisable"
+            and Options.Dodge_Skill_BountyHunt.Value then
+                getgenv().STOP_Dodge = true
+                getgenv().Dodge_Criminal = false
+                repeat task.wait() until not v.Parent or not Options.Dodge_Skill_BountyHunt.Value
+                getgenv().STOP_Dodge = false
+                if getgenv().CheckForSome then
+                    Check_To_Dodge()
+                    getgenv().CheckForSome = false
+                end
+        end
+    end)
+        end)
             
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
@@ -1337,6 +1289,59 @@ end
         end
         end
         end
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
+            if Options.MiningWebhook.Value and getgenv().QuestHuntOnCoolDown
+            and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+            if v.Name == "NotifyText" then
+                pcall(function ()
+                local Split_V = string.split(v.Text.Text, ">")
+                local Split_A = string.split(Split_V[2], "<")
+                local timeInfo = os.date("*t")                                    
+                BBody = game:GetService("HttpService"):JSONEncode({
+                    content = nil,
+                    embeds = {{
+                        ["author"] = {
+                            ["name"] = "CrazyDay",
+                            ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                        },
+                        ["title"] = "Second Piece", 
+                        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                        ["footer"] = {
+                            ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                        
+                        },
+                        ["color"] = tonumber(0xFFD700),
+                        ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                        ["fields"] = {
+                        
+                                        {
+                                ["name"] = "Mining Reward",
+                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
+                                ["inline"] = false
+                                
+                            },
+                            
+                        }
+                        }}
+                    })
+                local response = syn.request({
+                Url = Options.WebhookLink.Value,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = BBody
+                })  
+            end)
+                end
+            end
+        end)
+    end)
+    end))
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
@@ -1604,22 +1609,25 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-                if Options.AutoBuyMerchantItem.Value and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled and not getgenv().AlrBuy and not getgenv().STOP then
+                if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
                     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                         if v.Name == "Traveling merchant" then
                     repeat
-                    wait()
+                    task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
-                    fireproximityprompt(v.HumanoidRootPart.Merchant)
                     getgenv().InMerchant = true
-                    until not Options.AutoBuyMerchantItem.Value or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled or getgenv().AlrBuy or getgenv().STOP
+                    until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
                     getgenv().InMerchant = false
+                end
+                if game.Workspace.NPC:FindFirstChild("Traveling merchant") and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    fireproximityprompt(game.Workspace.NPC:FindFirstChild("Traveling merchant").HumanoidRootPart.Merchant)
                 end
             end
                 end
             end)
         end
         end))
+
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
@@ -1654,10 +1662,8 @@ end
                             local split = string.split(v.Name," ")
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            repeat wait()
-                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
-                                wait(1)
-                                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = true
+                            repeat wait(1)
+                                fireproximityprompt(game.Workspace.NPC:FindFirstChild("Traveling merchant").HumanoidRootPart.Merchant)
                             until getgenv().AlrBuy or not getgenv().InMerchant
                       end
                                               ---------------- // Black List Dog Item \\ --------------
@@ -1693,6 +1699,7 @@ end
                             wait(11.5)
                             getgenv().AlrBuy = true
                             getgenv().InMerchant = false
+                            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
                     end
                 end
             end)
