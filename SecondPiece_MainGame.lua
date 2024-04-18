@@ -250,58 +250,6 @@
                 Content = "(WAIT FOR UPDATE)"
             })
 
-            coroutine.resume(coroutine.create(function()
-                pcall(function ()
-            game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-                if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
-                if v.Name == "NotifyText" then
-                    pcall(function ()
-                    local Split_V = string.split(v.Text.Text, ">")
-                    local Split_A = string.split(Split_V[2], "<")
-                    local timeInfo = os.date("*t")                                    
-                    BBody = game:GetService("HttpService"):JSONEncode({
-                        content = nil,
-                        embeds = {{
-                            ["author"] = {
-                                ["name"] = "CrazyDay",
-                                ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                            },
-                            ["title"] = "Second Piece", 
-                            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
-                            ["footer"] = {
-                                ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-                                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
-                            
-                            },
-                            ["color"] = tonumber(0xFFD700),
-                            ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-                            ["fields"] = {
-                            
-                                            {
-                                    ["name"] = "Mining Reward",
-                                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
-                                    ["inline"] = false
-                                    
-                                },
-                                
-                            }
-                            }}
-                        })
-                    local response = syn.request({
-                    Url = Options.WebhookLink.Value,
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json"
-                    },
-                    Body = BBody
-                    })  
-                end)
-                    end
-                end
-            end)
-        end)
-        end))
-
             Tabs.Webhook:AddButton({
                 Title = "Webhook",
                 Description = nil,
@@ -1341,6 +1289,59 @@ end
         end
         end
         end
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
+            if Options.MiningWebhook.Value and getgenv().QuestHuntOnCoolDown
+            and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+            if v.Name == "NotifyText" then
+                pcall(function ()
+                local Split_V = string.split(v.Text.Text, ">")
+                local Split_A = string.split(Split_V[2], "<")
+                local timeInfo = os.date("*t")                                    
+                BBody = game:GetService("HttpService"):JSONEncode({
+                    content = nil,
+                    embeds = {{
+                        ["author"] = {
+                            ["name"] = "CrazyDay",
+                            ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                        },
+                        ["title"] = "Second Piece", 
+                        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                        ["footer"] = {
+                            ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                        
+                        },
+                        ["color"] = tonumber(0xFFD700),
+                        ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                        ["fields"] = {
+                        
+                                        {
+                                ["name"] = "Mining Reward",
+                                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
+                                ["inline"] = false
+                                
+                            },
+                            
+                        }
+                        }}
+                    })
+                local response = syn.request({
+                Url = Options.WebhookLink.Value,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = BBody
+                })  
+            end)
+                end
+            end
+        end)
+    end)
+    end))
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
