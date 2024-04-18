@@ -46,6 +46,7 @@
         local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
         local RewardCollage = {}
         local ItemInDropdown = {}
+        local Travelingitem = {}
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
@@ -363,7 +364,7 @@
 
             UpdateLog:AddParagraph({
                 Title = "Last Update April/18/2024",
-                Content = "[*] Auto Update Merchant Item\n[*] Fixed Auto Chest\n[*] Fixed Auto Mining\n[+] Webhook Mining\n[*] Fixed Auto Merchant lag/not buy items"
+                Content = "[*] Auto Update Merchant Item\n[*] Fixed Auto Chest\n[*] Fixed Auto Mining\n[+] Webhook Mining\n[*] Fixed Auto Merchant lag/not buy items\n[*] Fixed Webhook Traveling"
             })
             
 
@@ -1224,52 +1225,7 @@ end
         end
         end
 
-        function WebhookMerchant()
-            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
-                if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
-                    local Split_V = string.split(v.Text.Text, ">")
-                    local Split_A = string.split(Split_V[2], "<")
-            local timeInfo = os.date("*t")
-            BBody = game:GetService("HttpService"):JSONEncode({
-                content = nil,
-                embeds = {{
-                    ["author"] = {
-                        ["name"] = "CrazyDay",
-                        ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-                    },
-                    ["title"] = "Second Piece", 
-                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
-                    ["footer"] = {
-                        ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-                        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
-                    
-                    },
-                    ["color"] = tonumber(0xFFD700),
-                    ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-                    ["fields"] = {
-                    
-                                    {
-                            ["name"] = "Traveling Merchant",
-                            ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..Split_A[1],
-                            ["inline"] = false
-                            
-                        },
-                        
-                    }
-                    }}
-                })
-            local response = http_request or request or HttpPost or syn.request
-            response({
-            Url = Options.WebhookLink.Value,
-            Method = "POST",
-            Headers = {
-                ["Content-Type"] = "application/json"
-            },
-            Body = BBody
-            })    
-        end
-        end
-        end
+
 
         coroutine.resume(coroutine.create(function()
             pcall(function ()
@@ -1448,17 +1404,6 @@ end
         end))
 
 
-            coroutine.resume(coroutine.create(function()
-                pcall(function ()
-            game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-                pcall(function () 
-                if Options.AutoWebhookMerchant.Value and v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
-                    WebhookMerchant()
-                end
-                end)
-            end)
-            end)
-        end))
         
 
 
@@ -1639,14 +1584,107 @@ end
         end
     end))
 
-    ItemInDropdown = {"Fishing Rod","Lightning Orb"}
-    for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
-        local FindItem = table.find(ItemInDropdown,v.Name)
-        if FindItem  then
-            print(v.Name)
-        end
+
+    
+    function Webhook()
+        local timeInfo = os.date("*t")
+        local Full = table.concat(RewardCollage,"\n[+1] ")
+        BBody = game:GetService("HttpService"):JSONEncode({
+            content = nil,
+            embeds = {{
+                ["author"] = {
+                    ["name"] = "CrazyDay",
+                    ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                },
+                ["title"] = "Second Piece", 
+                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                ["footer"] = {
+                    ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                
+                },
+                ["color"] = tonumber(0xFFD700),
+                ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                ["fields"] = {
+                
+                                {
+                        ["name"] = "Dungeon Reward",
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
+                        ["inline"] = false
+                        
+                    },
+                    
+                }
+                }}
+            })
+        local response = http_request or request or HttpPost or syn.request
+        response({
+        Url = Options.WebhookLink.Value,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = BBody
+        })    
+
+    end
+    function WebhookMerchant()
+        local timeInfo = os.date("*t")
+        local ItemIn = table.concat(Travelingitem,"\nYou received : ")
+        BBody = game:GetService("HttpService"):JSONEncode({
+            content = nil,
+            embeds = {{
+                ["author"] = {
+                    ["name"] = "CrazyDay",
+                    ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
+                },
+                ["title"] = "Second Piece", 
+                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
+                ["footer"] = {
+                    ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
+                    ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
+                
+                },
+                ["color"] = tonumber(0xFFD700),
+                ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
+                ["fields"] = {
+                
+                                {
+                        ["name"] = "Traveling Merchant",
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..ItemIn,
+                        ["inline"] = false
+                        
+                    },
+                    
+                }
+                }}
+            })
+        local response = http_request or request or HttpPost or syn.request
+        response({
+        Url = Options.WebhookLink.Value,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = BBody
+        })    
     end
 
+
+        coroutine.resume(coroutine.create(function()
+            pcall(function ()
+        game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
+            pcall(function () 
+            if Options.AutoWebhookMerchant.Value and v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and getgenv().InMerchant then
+                local Split_V = string.split(v.Text.Text, ">")
+                local Split_A = string.split(Split_V[2], "<")
+                table.insert(Travelingitem,Split_A[1])
+            end
+            end)
+        end)
+        end)
+    end))
+    
         
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
