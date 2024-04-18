@@ -1293,9 +1293,8 @@ end
         coroutine.resume(coroutine.create(function()
             pcall(function ()
         game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
-            if Options.MiningWebhook.Value and getgenv().QuestHuntOnCoolDown
-            and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
-            if v.Name == "NotifyText" then
+            if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+            if v.Name == "NotifyText" and string.find(v.Text.Text,"Mining") then
                 pcall(function ()
                 local Split_V = string.split(v.Text.Text, ">")
                 local Split_A = string.split(Split_V[2], "<")
@@ -1618,8 +1617,7 @@ end
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
                 if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
-                    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
-                        if v.Name == "Traveling merchant" then
+                    if FindMerChant() then
                     repeat
                     task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
@@ -1630,7 +1628,6 @@ end
                 if FindMerChant() and not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     fireproximityprompt(FindMerChant().HumanoidRootPart.Merchant)
                 end
-            end
                 end
             end)
         end
