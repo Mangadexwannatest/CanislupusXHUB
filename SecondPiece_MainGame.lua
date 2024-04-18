@@ -432,6 +432,8 @@
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Options.AutoMining.Value then 
+                else
                 if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
                     getgenv().InMining = false
                     if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
@@ -470,7 +472,7 @@
                    if not getgenv().InMining and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                    and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
                     game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
-                    
+                    end
                    end
                 end
             end)
@@ -595,6 +597,8 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Options.AutoKenhaki.Value then
+                else
                 if Options.AutoKenhaki.Value then
                     for i,v in pairs(game.Lighting:GetChildren()) do
                         if v.Name == "KenHaki" then
@@ -605,6 +609,7 @@ end
                     local args = {[1] = "KenHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
                     wait(1.35)    
                 until v.Enabled == true
+            end
                             end
                         end
                     end
@@ -615,22 +620,34 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Options.AutoBusohaki.Value then
+                else
                 if Options.AutoBusohaki.Value then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     for i,v in pairs(game.Workspace.Lives[game.Players.LocalPlayer.Name]:GetChildren()) do
                         if v.Name == "Right Arm" and v:FindFirstChild("Haki") == nil then 
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     local args = {[1] = "BusoHaki"}game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer(unpack(args))
-                    
+                        end
                         end
                     end
                 end  
             end)   
             end
         end))
+        
+        function FINDPortal()
+            for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
+                if v:IsA("BasePart") then
+                    return true
+                end
+            end
+        end
 
         coroutine.resume(coroutine.create(function()
             while task.wait() do pcall(function ()
+                if FINDPortal() == nil then
+                else
                 if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InPorTal then
                     for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
                         if getgenv().Common and v.Name == "1" and not getgenv().InPorTal then
@@ -647,6 +664,7 @@ end
                                 getgenv().STOP = true
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,-8,0)
                                 getgenv().EnterNow = true
+                        end
                             end
                         end
                     end
@@ -657,6 +675,8 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if FINDPortal() == nil then 
+                else
                 if Options.AutoPortal.Value and game.PlaceId == 15049111150  then
                     for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
                         if v.Name == "Frame" and v:FindFirstChild(game.Players.LocalPlayer.Name) == nil then
@@ -666,6 +686,7 @@ end
                                 fireproximityprompt(clickThis)
                                 until v:FindFirstChild(game.Players.LocalPlayer.Name) ~= nil
                             getgenv().InPorTal = true
+                            end
                         end
                         end
                     end
@@ -674,58 +695,11 @@ end
             end
         end))
 
-        coroutine.resume(coroutine.create(function()
-            game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
-                if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 then
-                    for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                        if v.ClassName == "Model" and v.Name ~= game.Players.LocalPlayer.Name then
-                            if v.Humanoid.Health <= 0 then
-                                v:Destroy()
-                        end
-                    end
-                end
-                end
-            end)
-            end))
-            
-            
-            coroutine.resume(coroutine.create(function()
-                while task.wait() do pcall(function ()
-                    if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 then
-                    if getclosest().Humanoid.Health > 0 and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
-                        repeat 
-                            task.wait()
-                            game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
-                        until getclosest().Humanoid.Health <= 0 or not Options.AutoPortal.Value
-                        end
-                    end
-                    end)  
-                    if Options.AutoPortal.Value and game.PlaceId ==  15049111150 then
-                    print("Not In Dungeon. . .")
-                        break
-                    end
-                end
-            end))
-
-            coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function ()
-                    if Options.AutoPortal.Value and game.PlaceId ~= 15049111150 and not getgenv().Started then
-                        game:GetService("ReplicatedStorage").Remotes.Ready:FireServer()
-                        repeat wait() until game:IsLoaded()
-                        wait(.5)
-                        getgenv().Started = true
-                        end
-                end) 
-                if getgenv().Started then
-                break
-                end
-                end
-            end))
-
             coroutine.resume(coroutine.create(function()
                 while wait() do
                     pcall(function ()
+                        if not Options.AutoQuest.Value or getgenv().STOP or getgenv().DontAcceptQuest then 
+                        else
                         if Options.AutoQuest.Value and not getgenv().DontAcceptQuest  and game.PlaceId == 15049111150 and not getgenv().STOP and getgenv().QuestHuntOnCoolDown 
                         and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                             for i,v in pairs(game.Players.LocalPlayer:GetChildren()) do 
@@ -733,6 +707,7 @@ end
                                     getgenv().NoQuest = true
                                 elseif v:FindFirstChild("QuestUI") ~= nil then
                                     getgenv().NoQuest = false
+                                end
                                 end
                             end
                         end
@@ -742,6 +717,8 @@ end
             
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                    if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt then
+                    else
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
                     and not getgenv().InMerchant and not getgenv().InMining and not Chestawd() then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
@@ -755,6 +732,7 @@ end
                                         fireproximityprompt(v.Parent)
                                         until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining or Chestawd()
                                     end
+                                    end
                                 end
                             end
                         end
@@ -767,6 +745,8 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while  wait() do pcall(function ()
+                    if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt then
+                    else
                     if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
                     and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                         for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
@@ -776,7 +756,7 @@ end
                                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
                                                 until Get_Mon_QuestID().Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
                                                 or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining or Chestawd()
-                                                
+                                            end
                                 end
                             end
                         end
@@ -786,6 +766,8 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                    if not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().STOP or getgenv().InBossHunt then
+                    else
                     if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
                     and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -800,6 +782,7 @@ end
                                         getgenv().DontAcceptQuest = true
                                 until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
                                     getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining  or Chestawd()
+                                    end
                                 end
                             end
                             end
@@ -811,6 +794,8 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                    if not Options.AutoBossSpawn.Value or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() == nil then
+                    else
                     if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
                     and not getgenv().InMerchant and not Chestawd() then
                         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -826,25 +811,21 @@ end
                                         until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or Chestawd()
                                         getgenv().DontAcceptQuest = false   
                                         getgenv().StopFarmGem = false
+                                    end
                                 end
                             end
+                        end
+                        if not Options.AutoBossSpawn.Value and getgenv().DontAcceptQuest then
+                            getgenv().DontAcceptQuest = false
+                        end
+                        if not Options.AutoBossSpawn.Value and getgenv().StopFarmGem then
+                            getgenv().StopFarmGem = false
                         end
                     end
                 end)
                 end
             end))
             
-            coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function ()
-                    if not Options.AutoBossSpawn.Value and getgenv().DontAcceptQuest then
-                        getgenv().DontAcceptQuest = false
-                    end
-                    if not Options.AutoBossSpawn.Value and getgenv().StopFarmGem then
-                        getgenv().StopFarmGem = false
-                    end 
-                end) 
-                end
-            end))
             
             coroutine.resume(coroutine.create(function()
                 pcall(function ()
@@ -921,6 +902,8 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while wait(1) do pcall(function ()
+                    if not Options.AutoBountyHunter.Value then 
+                    else
                     if Options.AutoBountyHunter.Value  then
                         local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
                         if dist <= 15 then
@@ -940,6 +923,7 @@ end
                             if getgenv().STOP and TimeChecker ~= 0 then
                                 TimeChecker = 0
                                 end
+                            end
                         end
                     end) 
             end
@@ -1003,6 +987,8 @@ end
         end)
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()  
+        if not Options.Dodge_Skill_BountyHunt.Value then 
+                else
         if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
             local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
             NO_CLIP_PART.Name = "CrazyDay_NO"
@@ -1017,6 +1003,7 @@ end
                 game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
              until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not Options.Dodge_Skill_BountyHunt.Value
              game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = false
+            end
             end
         end)
         end
@@ -1041,7 +1028,7 @@ end
             
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
-                    if getgenv().STOP or getgenv().InMerchant then 
+                    if getgenv().STOP or getgenv().InMerchant or not Options.AutoBountyHunter.Value then 
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
                     and not getgenv().InMerchant and not CriminalCheck() and not Chestawd()  then
@@ -1064,7 +1051,7 @@ end
 
             coroutine.resume(coroutine.create(function()
                 while task.wait() do pcall(function ()
-                    if getgenv().STOP or Chestawd() or getgenv().InMerchant then
+                    if getgenv().STOP or Chestawd() or getgenv().InMerchant or not Options.AutoBountyHunter.Value then
                     else
                     if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt and not Chestawd() then
                         if not getgenv().STOP and getgenv().Dodge_Criminal  then
@@ -1087,22 +1074,19 @@ end
                 end
             end))
             
-            
-            coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function ()
-                    if Options.AutoBountyHunter.Value then
-                        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
-                            if v.ClassName == "Frame" then
-                                getgenv().QuestHuntOnCoolDown = true
-                                getgenv().InBossHunt = false
-                                wait(30.5)
-                                getgenv().QuestHuntOnCoolDown = false
-                            end
-                        end
-                    end
-                end) 
+
+            game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame.ChildAdded:Connect(function(v)
+                pcall(function ()
+                if v.ClassName == "Frame" and Options.AutoBountyHunter.Value then
+                    pcall(function ()
+                        getgenv().QuestHuntOnCoolDown = true
+                        getgenv().InBossHunt = false
+                        wait(30.5)
+                        getgenv().QuestHuntOnCoolDown = false
+                    end)
                 end
-            end))
+                end)
+            end)
 
             local function onCharacterAdded(character)
                 local player = game:GetService("Players").LocalPlayer
@@ -1467,26 +1451,24 @@ end
         end))
 
 
-
-                coroutine.resume(coroutine.create(function()
-                    while wait() do pcall(function ()
-                        if Options.AutoWebhookMerchant.Value and game.PlaceId == 15049111150 then
-                            if game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame:GetChildren()) do
-                                if v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
-                                    WebhookMerchant()
-                                    wait(1)
-                                end
-                                end
-                            end
-                        end
-                    end)
+            coroutine.resume(coroutine.create(function()
+                pcall(function ()
+            game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
+                pcall(function () 
+                if Options.AutoWebhookMerchant.Value and v.Name == "NotifyText" and string.find(v.Text.Text,"You received") then
+                    WebhookMerchant()
                 end
-            end))
+                end)
+            end)
+            end)
+        end))
+        
 
 
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                if not Options.AutoSpawnPortal.Value then 
+                else
                 if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Interface.Inventory.ItemsFrame:GetChildren()) do
                         for _,k in pairs(game.Players.LocalPlayer:GetChildren()) do 
@@ -1540,6 +1522,7 @@ end
                         getgenv().STOPPressYes = true
                         firesignal(k.DungeonSelect.Interface.Frame.List[Options.DungeonSelect.Value].Label.MouseButton1Down)
                     end
+                    end
                 end
             end
         end
@@ -1552,6 +1535,8 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+            if not Options.AutoSpawnPortal.Value then 
+            else
             if Options.AutoSpawnPortal.Value and game.PlaceId == 15049111150 and not getgenv().EnterNow then
                 
                 if  getgenv().Legendary and getgenv().SpawnLegend and getgenv().SpawnLegendDetech 
@@ -1587,6 +1572,7 @@ end
                 game:GetService("ReplicatedStorage").Remotes.EquipItem:FireServer("[Common] Portal Summon Ticket")
             end
             end
+            end
         end)
     end
     end))
@@ -1608,6 +1594,8 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP then 
+                else
                 if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
                 for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                     if v.Name == "Traveling merchant" then
@@ -1619,6 +1607,7 @@ end
                     until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
                     getgenv().InMerchant = false
                 end
+            end
                     end
                 end
             end)
@@ -1628,6 +1617,8 @@ end
 
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
+                if not Options.AutoBuyMerchantItem.Value then 
+                else
                 if game.PlaceId == 15049111150 then
                     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                 if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().InMerchant then
@@ -1642,6 +1633,7 @@ end
                     wait(12)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
                 end
+            end
                 end
                     end
                 end
@@ -1652,6 +1644,8 @@ end
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function ()
+                if not Options.AutoBuyMerchantItem.Value then  
+                else
                 if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("NPC"):FindFirstChild("Traveling merchant"):FindFirstChild("HumanoidRootPart").Position).Magnitude
                     for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
@@ -1696,10 +1690,10 @@ end
                     end
                     if DISTSTUCK <= 12.5 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                             wait(11)
-                            warn("EXIXT")
                             getgenv().AlrBuy = true
                             getgenv().InMerchant = false
                             game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                    end
                     end
                 end
             end)
