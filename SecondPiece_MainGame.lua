@@ -1575,6 +1575,7 @@ end
                 if dist >= 20 then
                     wait(12)
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                    getgenv().JustSend = false
                 end
             end
                 end
@@ -1629,8 +1630,10 @@ end
 
     end
     function WebhookMerchant()
+        if getgenv().JustSend then 
+        else
         local timeInfo = os.date("*t")
-        local ItemIn = table.concat(Travelingitem,"\nYou received : ")
+        local ItemIn = table.concat(Travelingitem,"\n")
         BBody = game:GetService("HttpService"):JSONEncode({
             content = nil,
             embeds = {{
@@ -1651,7 +1654,7 @@ end
                 
                                 {
                         ["name"] = "Traveling Merchant",
-                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\nYou received : "..ItemIn,
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n"..ItemIn,
                         ["inline"] = false
                         
                     },
@@ -1669,6 +1672,7 @@ end
         Body = BBody
         })    
     end
+    end
 
 
         coroutine.resume(coroutine.create(function()
@@ -1680,15 +1684,17 @@ end
                 local Split_A = string.split(Split_V[2], "<")
                 table.insert(Travelingitem,Split_A[1])
                 repeat wait() until not getgenv().InMerchant
-                wait(1)
+                if #Travelingitem >= 1 then
                 WebhookMerchant()
+                getgenv().JustSend = true
                 table.clear(Travelingitem)
+                end
             end
             end)
         end)
         end)
     end))
-    
+
         
             local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
             coroutine.resume(coroutine.create(function()
