@@ -424,6 +424,7 @@
                 firesignal(signal, arg2)
             end
         end
+    
 
         function Chestawd()
             if Options.AutoChests.Value then
@@ -1596,7 +1597,7 @@ end
                 for i,v in pairs(game.Workspace.NPC:GetChildren()) do
                     if v.Name == "Traveling merchant" then
                     repeat
-                    wait(1)
+                    task.wait()
                     fireproximityprompt(v.HumanoidRootPart.Merchant)
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
                     getgenv().InMerchant = true
@@ -1648,15 +1649,14 @@ end
                         local FindItem = table.find(ItemInDropdown,v.Name)
                         if FindItem  then
                             local split = string.split(v.Name," ")
-                            repeat task.wait()
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                            task.wait(.1)
-                            game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                            firesignal(game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.Close.Close.MouseButton1Click,game.Players.LocalPlayer)
-                            until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                             game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                         end
-                                              ---------------- // Black List Dog Item \\ --------------
+                        repeat wait()
+                        firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
+                        until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy
+                        ---------------- // Black List Dog Item \\ --------------
         
                         if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
                             repeat wait()
