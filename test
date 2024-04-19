@@ -238,7 +238,7 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
 SaveManager:LoadAutoloadConfig()
 
-function getclosest()
+local function getclosest()
     local MinDistance = math.huge
        local ClosestObject
        for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -329,27 +329,24 @@ end)
 
 local Amout = {}
 game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
+    pcall(function ()
     if v.Name:match("Shadow") then
         table.insert(Amout,v.Name)
-        warn(#Amout,getgenv().Distance)
-    end
-end)
-
-game.ReplicatedStorage.Settings.ChildRemoved:Connect(function(v)
-    if v.Name:match("Shadow") then
+        repeat wait() until not v.Parent
         if #Amout ~= 0 then
-        table.clear(Amout)
+            table.clear(Amout)
         end
         table.insert(Amout,v.Name)
-        print(#Amout,getgenv().Distance)
+        warn("Amout : "..#Amout,"Distance : "..getgenv().Distance)
     end
+end)
 end)
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if #Amout == 1 and game.PlaceId == 16644455867 then
-            getgenv().Distance = 8
-        elseif #Amout ~= 1 and game.PlaceId == 16644455867 then
+            getgenv().Distance = 8.75
+        elseif #Amout > 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 17.5
         elseif game.PlaceId ~= 16644455867 then
             getgenv().Distance = 7
@@ -364,7 +361,7 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "Action" or c.Name == "IFrame" or v.Name == "WalkDisable"
+            if c.Name == "Action" or c.Name == "IFrame"
             and not getgenv().STOP_Dodge then
             getgenv().Dodge = true 
             repeat wait() until not c.Parent or getgenv().STOP_Dodge
@@ -380,7 +377,7 @@ function Check_To_Dodge()
     for i,v in pairs(game.ReplicatedStorage.Settings:GetChildren()) do
         if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
             for _,vv in next,v:GetChildren() do
-                if vv.Name == "Action" or vv.Name == "IFrame" or vv.Name == "WalkDisable" then
+                if vv.Name == "Action" or vv.Name == "IFrame" then
                     getgenv().Dodge = true 
                     repeat wait() until not vv.Parentw
                     getgenv().Dodge = false
