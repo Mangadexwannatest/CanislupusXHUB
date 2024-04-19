@@ -958,9 +958,7 @@ tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"
 tweenBOSS:Play()
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke"
-if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
 tweenBOSS:Cancel()
-end
 
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and not getgenv().STOP_Farm and not getgenv().Break_Farm 
 and not getgenv().SAFE_MODE and CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke" then
@@ -969,9 +967,8 @@ tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"
 tweenBOSS:Play()
 until CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" and getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0
 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
-if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+
 tweenBOSS:Cancel()
-end
 
 elseif Options.PlayMode.Value == "Normal Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
@@ -980,9 +977,9 @@ tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"]
 tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Normal Mode"
-if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+
 tweenMon:Cancel()
-end
+
 
 elseif  Options.PlayMode.Value == "Safe Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible 
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
@@ -991,9 +988,9 @@ tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"]
 tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Safe Mode"
-if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+
 tweenMon:Cancel()
-end
+
 
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
@@ -1021,9 +1018,8 @@ coroutine.resume(coroutine.create(function()
                         until
                         game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
                         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
-                        if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+                        
                             tweenMon:Cancel()
-                        end
                     end
             end
             
