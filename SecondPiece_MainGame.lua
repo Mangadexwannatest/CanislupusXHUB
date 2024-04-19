@@ -454,8 +454,9 @@
                     end
                 else
 
-                if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd() 
-                and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining")
+                if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd()  then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Part_Detechtions").CFrame
+                if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining")
                 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                     repeat wait()
                 getgenv().InMining = true
@@ -466,6 +467,7 @@
                     or CheckBossSpawn() or getgenv().InMerchant or Chestawd() or not getgenv().QuestHuntOnCoolDown or getgenv().InBossHunt
                     or getgenv().STOP
                 end
+            end
                    if not getgenv().InMining and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                    and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
                     game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
