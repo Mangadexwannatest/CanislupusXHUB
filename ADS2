@@ -934,10 +934,10 @@ coroutine.resume(coroutine.create(function()
 end)
 end))
 
-
-local tween_s = game:service"TweenService"
 local tweenMon
+local tweenBring
 local tweenBOSS
+local tween_s = game:service"TweenService"
 
 function CharacterNameSSS()
     if game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value then
@@ -994,18 +994,16 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if not Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
-        else
+        if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
-            game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-                        repeat task.wait()
-                        tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
-                        until
-                        game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
-                        or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
-                        tweenMon:Cancel()
+            not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+            and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
+            tweenBring = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
+            if game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
+            or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+            tweenBring:Cancel()
             end
-            
+        end
         end
     end)
     end
