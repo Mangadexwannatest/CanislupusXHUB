@@ -486,7 +486,8 @@
                    end
                 end
                 local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("Part_Detechtions").Position).Magnitude
-                if dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+                if Options.AutoMining.Value and dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
+                and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
                 game.Players.LocalPlayer.Character.Humanoid.Health = 0
                 end
             end)
