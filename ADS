@@ -936,7 +936,7 @@ end))
 
 
 local tween_s = game:service"TweenService"
-local tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], info, {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new()})
+local tweenMon
 local tweenBOSS
 
 function CharacterNameSSS()
