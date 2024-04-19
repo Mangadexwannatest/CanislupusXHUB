@@ -466,7 +466,7 @@
                 game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
                     until game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining")
                     or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil or not Options.AutoMining.Value
-                    or CheckBossSpawn() or getgenv().InMerchant or Chestawd()
+                    or CheckBossSpawn() or getgenv().InMerchant or Chestawd() or not getgenv().QuestHuntOnCoolDown
                 end
 
                 elseif not Options.AutoMining.Value and game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
