@@ -456,13 +456,13 @@
 
                 if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown 
                 and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd() then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Part_Detechtions").CFrame
                 if getgenv().QuestHuntOnCoolDown and CheckBossSpawn() == nil and not Chestawd() and not getgenv().InMerchant and
                 game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") 
                 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
                     repeat wait()
                         getgenv().InMining = true
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Part_Detechtions").CFrame
                 game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
                     until game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining")
                     or game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining") == nil or not Options.AutoMining.Value
@@ -485,11 +485,30 @@
                     end
                    end
                 end
+                local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("Part_Detechtions").Position).Magnitude
+                if dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+                game.Players.LocalPlayer.Character.Humanoid.Health = 0
+                end
             end)
         end
     end
 ))
 
+     while true do wait()
+        if not game.Workspace:FindFirstChild("Part_Detechtions") then
+        local NO_CLIP_PART = Instance.new("Part",game.Workspace)
+        NO_CLIP_PART.Name = "Part_Detechtions"
+        NO_CLIP_PART.CanCollide = false
+        NO_CLIP_PART.Anchored = true
+        NO_CLIP_PART.Transparency = 1
+        NO_CLIP_PART.Size = Vector3.new(3,10,3)
+        NO_CLIP_PART.CFrame = CFrame.new(-848.71759, 34.1361351, 1140.66943, 0.999684393, 5.45161427e-09, -0.0251219478, -4.90989382e-09, 1, 2.16253202e-08, 0.0251219478, -2.14951488e-08, 0.999684393)
+        end
+        if game.Workspace:FindFirstChild("Part_Detechtions") then
+        break
+        end
+     end
+         
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
                     for i,v in next, BackPackGet do
