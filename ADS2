@@ -934,10 +934,10 @@ coroutine.resume(coroutine.create(function()
 end)
 end))
 
-local tweenMon
-local tweenBring
-local tweenBOSS
+
 local tween_s = game:service"TweenService"
+local tweenMon
+local tweenBOSS
 
 function CharacterNameSSS()
     if game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value then
@@ -953,33 +953,45 @@ if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.Boss
 and not getgenv().SAFE_MODE and CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" then
     repeat task.wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) })
+tweenBOSS:Play()
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke"
+if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
 tweenBOSS:Cancel()
+end
 
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and not getgenv().STOP_Farm and not getgenv().Break_Farm 
 and not getgenv().SAFE_MODE and CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke" then
     repeat task.wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-1.25) * CFrame.Angles(math.rad(0),1800,0) })
+tweenBOSS:Play()
 until CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" and getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0
 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
+if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
 tweenBOSS:Cancel()
+end
 
 elseif Options.PlayMode.Value == "Normal Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
 repeat task.wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Y-6.25) * CFrame.Angles(math.rad(0),1800,0) })
+tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Normal Mode"
+if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
 tweenMon:Cancel()
+end
 
 elseif  Options.PlayMode.Value == "Safe Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible 
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
 repeat task.wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.35,0) * CFrame.Angles(math.rad(0),1800,0) })
+tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Safe Mode"
+if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
 tweenMon:Cancel()
+end
 
 elseif  Options.PlayMode.Value == "Bring Mode" and 
 game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
@@ -998,12 +1010,17 @@ coroutine.resume(coroutine.create(function()
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
             not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
             and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-            tweenBring = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
-            if game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
-            or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
-            tweenBring:Cancel()
+                        repeat task.wait()
+                        tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
+                        tweenMon:Play()
+                        until
+                        game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
+                        or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+                        if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
+                            tweenMon:Cancel()
+                        end
             end
-        end
+            
         end
     end)
     end
@@ -1386,14 +1403,14 @@ coroutine.resume(coroutine.create(function()
                     if Options.Dodge_Skill.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(2.25,0,2.25)
+                    local side = math.clamp(3.5,0,10)
                     local Sizeto = v.Size + Vector3.new(side,175,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.335),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.125),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1727,8 +1744,10 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
      end
     ]]
-    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started and Options.AutoExecuteScript.Value then
+    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started then 
+    if Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
+    end
     end
 
 end)
