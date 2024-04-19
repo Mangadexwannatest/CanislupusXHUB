@@ -1734,8 +1734,10 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
      end
     ]]
-    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started and Options.AutoExecuteScript.Value then
+    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started then 
+    if Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
+    end
     end
 
 end)
