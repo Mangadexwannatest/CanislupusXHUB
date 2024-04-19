@@ -948,7 +948,9 @@ print(CharacterNameSSS())
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.AutoFarmAndStart.Value or Options.AutoRaid.Value or Options.Auto_FreeBossRush.Value or Options.Auto_SpeedRaid.Value or Options.AUTO_LEVEL_SELECT.Value then
+if getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE then 
+else
+if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.AutoFarmAndStart.Value or Options.AutoRaid.Value or Options.Auto_FreeBossRush.Value or Options.Auto_SpeedRaid.Value or Options.AUTO_LEVEL_SELECT.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and not getgenv().STOP_Farm and not getgenv().Break_Farm 
 and not getgenv().SAFE_MODE and CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" then
     repeat task.wait()
@@ -1000,12 +1002,15 @@ game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHea
     end
 end
 end
+end
 end)
 end
 end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
+        if getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE then 
+        else
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
             not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
@@ -1019,6 +1024,7 @@ coroutine.resume(coroutine.create(function()
                         if not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
                             tweenMon:Cancel()
                         end
+                    end
             end
             
         end
@@ -1103,6 +1109,7 @@ Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
         repeat wait() until not part.Parent
+        wait(.1)
         getgenv().STOP_Farm = false
     end
 end)
@@ -1402,14 +1409,14 @@ coroutine.resume(coroutine.create(function()
                     if Options.Dodge_Skill.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3.5,0,10)
+                    local side = math.clamp(3.25,0,10)
                     local Sizeto = v.Size + Vector3.new(side,175,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.125),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.2),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
