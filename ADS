@@ -937,7 +937,6 @@ end))
 
 local tween_s = game:service"TweenService"
 local tweenMon
-local tweenBring
 local tweenBOSS
 
 function CharacterNameSSS()
@@ -954,6 +953,7 @@ if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.Boss
 and not getgenv().SAFE_MODE and CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" then
     repeat task.wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) })
+tweenBOSS:Play()
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke"
 tweenBOSS:Cancel()
@@ -962,6 +962,7 @@ elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.
 and not getgenv().SAFE_MODE and CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke" then
     repeat task.wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-1.25) * CFrame.Angles(math.rad(0),1800,0) })
+tweenBOSS:Play()
 until CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" and getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0
 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE
 tweenBOSS:Cancel()
@@ -970,6 +971,7 @@ elseif Options.PlayMode.Value == "Normal Mode" and not game:GetService("Players"
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
 repeat task.wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Y-6.25) * CFrame.Angles(math.rad(0),1800,0) })
+tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Normal Mode"
 tweenMon:Cancel()
@@ -978,6 +980,7 @@ elseif  Options.PlayMode.Value == "Safe Mode" and not game:GetService("Players")
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
 repeat task.wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.35,0) * CFrame.Angles(math.rad(0),1800,0) })
+tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 or getgenv().STOP_Farm or getgenv().Break_Farm or getgenv().SAFE_MODE or Options.PlayMode.Value ~= "Safe Mode"
 tweenMon:Cancel()
@@ -997,13 +1000,15 @@ coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT then
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
-            game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible == false and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
+            not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
+            and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
                         repeat task.wait()
-                        tweenBring = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
+                        tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
+                        tweenMon:Play()
                         until
                         game.Workspace:FindFirstChild("Head_Kuy") or Options.PlayMode.Value ~= "Bring Mode" or getgenv().STOP_Farm or getgenv().Break_Farm
                         or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
-                        tweenBring:Cancel()
+                        tweenMon:Cancel()
             end
             
         end
@@ -1087,6 +1092,8 @@ local function CheckTouch(KUB)
 Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
+        tweenMon:Cancel()
+        tweenBOSS:Cancel()
         repeat task.wait() until not part.Parent
         task.wait(.15)
         getgenv().STOP_Farm = false
@@ -1729,8 +1736,10 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
      end
     ]]
-    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started and Options.AutoExecuteScript.Value then
+    if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started then 
+    if Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
+    end
     end
 
 end)
