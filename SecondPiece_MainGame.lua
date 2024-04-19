@@ -1556,7 +1556,7 @@ coroutine.resume(coroutine.create(function()
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
             repeat
-            wait(.5)
+            wait()
             fireproximityprompt(v.HumanoidRootPart.Merchant)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
             firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
@@ -1723,7 +1723,7 @@ end))
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
                 if FindItem  then
-                    repeat wait()
+                    repeat task.wait()
                     local split = string.split(v.Name," ")
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
@@ -1734,30 +1734,25 @@ end))
                 ---------------- // Black List Dog Item \\ --------------
 
                 if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
-                    repeat wait()
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
-                    until not table.find(ItemInDropdown,"God Light Fruit") or IntertFaceMerChant:FindFirstChild("God Light Fruit") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+
                 end
                 if table.find(ItemInDropdown,"[Tier 1] Summon Ticket") and IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") then
-                    repeat wait()
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-                until not table.find(ItemInDropdown,"[Tier 1] Summon Ticket") or IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+
                 end
                 if table.find(ItemInDropdown,"[Tier 2] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") then
-                    repeat wait()
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-                until not table.find(ItemInDropdown,"[Tier 2] Summon Ticket") or IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+            
             end
                 if table.find(ItemInDropdown,"[Tier 3] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") then
-                    repeat wait()
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
-                until not table.find(ItemInDropdown,"[Tier 3] Summon Ticket") or IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+             
             end
                
                 if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
-                    repeat wait()
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
-                until not table.find(ItemInDropdown,"Sukuna Finger") or IntertFaceMerChant:FindFirstChild("Sukuna Finger") == nil or not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
+           
             end 
             end
             if DISTSTUCK <= 12.5 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
