@@ -327,27 +327,24 @@ end)
 end)
 
 local Amout = {}
-coroutine.resume(coroutine.create(function()
-    while wait(1) do pcall(function ()
-        for i,v in next,game.ReplicatedStorage.Settings:GetChildren() do
-            if v.Name:match("Shadow") and #Amout == 0 then
-                table.insert(Amout,v.Name)
-            repeat wait() until not v.Parent 
-            if #Amout > 1 then
-                table.clear(Amout)
-            end
+game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
+    wait(.25)
+    if v.Name:match("Shadow") or string.find(v.Name,"Shadow") then
+        table.insert(Amout,v.Name)
+        repeat wait() until not v.Parent
+        if #Amout > 1 then
+            table.clear(Amout)
             table.insert(Amout,v.Name)
             print(#Amout)
-               end
-            end
-        end)
+            print(getgenv().Distance)
+        end
     end
-end))
+end)
 
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if #Amout == 1 and game.PlaceId == 16644455867 then
+        if #Amout <= 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 8.75
         elseif #Amout > 1 and game.PlaceId == 16644455867 then
             getgenv().Distance = 17.5
@@ -364,9 +361,9 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function (v)
     pcall(function ()
     if v.Name:match("Shadow") and game.PlaceId ~= 15049111150 then
         game.ReplicatedStorage.Settings[v.Name].ChildAdded:Connect(function (c)
-            if c.Name == "Action" or c.Name == "IFrame" then
+            if c.Name == "Action" or c.Name == "IFrame" and not getgenv().STOP_Dodge then
             getgenv().Dodge = true 
-            repeat task.wait() until not c.Parent or getgenv().STOP_Dodge
+            repeat wait() until not c.Parent or getgenv().STOP_Dodge
             getgenv().Dodge = false
             getgenv().CheckForSome = true
             end
@@ -419,7 +416,7 @@ coroutine.resume(coroutine.create(function()
             if Options.AutoPortal.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 repeat task.wait()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,300,5)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getclosest().HumanoidRootPart.CFrame * CFrame.new(0,0,125)
                 until not getgenv().Dodge or not Options.AutoPortal.Value or getclosest().Humanoid.Health <= 0 or getgenv().STOP_Dodge or game.Players.LocalPlayer.Character.Humanoid.Health <= 0
         elseif Options.AutoPortal.Value and not getgenv().Dodge then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
