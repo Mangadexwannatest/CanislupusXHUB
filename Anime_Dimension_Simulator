@@ -1102,8 +1102,7 @@ local function CheckTouch(KUB)
 Dd.Touched:Connect(function(part)
     if part.Name == "DodgePart" then
         getgenv().STOP_Farm = true
-        repeat task.wait() until not part.Parent
-        task.wait(.15)
+        repeat wait() until not part.Parent
         getgenv().STOP_Farm = false
     end
 end)
@@ -1417,8 +1416,8 @@ coroutine.resume(coroutine.create(function()
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
-                    repeat task.wait() until not v.Parent
-                    task.wait(.25)
+                    repeat wait() until not v.Parent
+                    wait(.125)
                     a:Destroy()
                 end
                 end
