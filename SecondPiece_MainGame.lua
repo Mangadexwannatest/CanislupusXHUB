@@ -1555,6 +1555,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
+            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
             repeat
             wait()
             fireproximityprompt(v.HumanoidRootPart.Merchant)
@@ -1712,6 +1713,14 @@ while wait() do pcall(function ()
 end
 end))
 
+function CheckMerChant()
+    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+        if v.Name == "Traveling merchant" then
+            return v
+        end
+    end
+end
+
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
@@ -1719,7 +1728,6 @@ end))
         if not Options.AutoBuyMerchantItem.Value then  
         else
         if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("NPC"):FindFirstChild("Traveling merchant"):FindFirstChild("HumanoidRootPart").Position).Magnitude
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
                 if FindItem  then
@@ -1755,8 +1763,9 @@ end))
            
             end 
             end
-            if DISTSTUCK <= 12.5 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                    wait(11)
+            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
+            if DISTSTUCK <= 15 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                    wait(7.5)
                     getgenv().AlrBuy = true
                     getgenv().InMerchant = false
                     game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
