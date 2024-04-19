@@ -1270,9 +1270,6 @@ function Skill_Third()
 end)
 end
 
-if tonumber(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder["Skill1"].SkillName.Text) ~= nil then
-    warn("WORK")
-end
 
 function Skill_Fourth()
     pcall(function ()
@@ -1332,7 +1329,7 @@ end)
 end
 
 coroutine.resume(coroutine.create(function()
-        while task.wait(0.225) do
+        while task.wait(0.115) do
             pcall(function()
                 if Options.Auto_Skill_Assist.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     Skill_First()
