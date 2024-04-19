@@ -225,7 +225,7 @@ do
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/18/2024",
+        Title = "Last Update April/19/2024",
         Content = "[*] Auto Update Merchant Item\n[*] Fixed Auto Chest\n[*] Fixed Auto Mining\n[+] Webhook Mining\n[*] Fixed Auto Merchant lag/not buy items\n[*] Fixed Webhook Traveling"
     })
     
