@@ -1702,9 +1702,11 @@ while wait() do pcall(function ()
     if Options.AutoWebhookMerchant.Value and getgenv().InMerchant then
         repeat wait() until not getgenv().InMerchant
             wait(1)
+            if #Travelingitem ~= 0 then
                 WebhookMerchant()
                 wait(1)
                 table.clear(Travelingitem)
+            end
     end
  end)
 end
@@ -1721,18 +1723,18 @@ end
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
+        local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
         while wait() do pcall(function ()
         if not Options.AutoBuyMerchantItem.Value then  
         else
-        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DISTSTUCK <= 20 then
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
-                if FindItem  then
+                if FindItem then
                     local split = string.split(v.Name," ")
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                    repeat wait()
+                    task.wait(.1)
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                    until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                 end
                 ---------------- // Black List Dog Item \\ --------------
 
@@ -1757,7 +1759,6 @@ end
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
            
             end
-            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
             if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     wait(7.5)
                     getgenv().AlrBuy = true
