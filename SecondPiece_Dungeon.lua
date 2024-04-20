@@ -257,10 +257,38 @@ local function getclosest()
        return ClosestObject
 end
 
-function Tween(P)
-    game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getclosest().HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/150,Enum.EasingStyle.Linear),{CFrame = P}):Play()
+
+local DiscccccccLAWLDA
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        getgenv().STOP_ALL = true
+        print("PLAYER DEADE : STOP ALL")
+        DiscccccccLAWLDA = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(1)
+                getgenv().STOP_ALL = false
+                print("PLAYER SPAWN : START ALL")
+                DiscccccccLAWLDA:Disconnect()
+        end)
+    end)
 end
 
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+            end
+        end
+        end)
+end))
 
 local ScreenGui = Instance.new("ScreenGui")
 local TextLabel = Instance.new("TextLabel")
@@ -418,7 +446,7 @@ end)
 coroutine.resume(coroutine.create(function()
     getgenv().Distance = 7
     while task.wait() do pcall(function ()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
+        if getgenv().STOP_ALL then
         else
             if Options.AutoPortal.Value and getgenv().Dodge and not getgenv().STOP_Dodge then
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -472,7 +500,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then 
+        if getgenv().STOP_ALL then 
         else
             for i,v in next, BackPackGet do
                 local MeleeTable = table.find(MeeleeWeapon,v.Name)
@@ -519,7 +547,7 @@ end
 
 coroutine.resume(coroutine.create(function()
 	while task.wait() do pcall(function()
-        if FindPlayerSkill() then
+        if getgenv().STOP_ALL then
         else
         if Dist() <= 10 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -535,7 +563,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait(.15) do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil  then
+        if getgenv().STOP_ALL  then
         else
         if getgenv().AutoSkillV and Dist() <= 999 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -633,7 +661,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoKenhaki.Value or game.Lighting:FindFirstChild("KenHaki").Enabled == true then
+        if not Options.AutoKenhaki.Value or game.Lighting:FindFirstChild("KenHaki").Enabled == true or getgenv().STOP_ALL then
         else
         if Options.AutoKenhaki.Value and game.Lighting:FindFirstChild("KenHaki").Enabled == false then
         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -649,7 +677,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoBusohaki.Value or game.Players.LocalPlayer.Character:FindFirstChild("Right Arm"):FindFirstChild("Haki") then
+        if not Options.AutoBusohaki.Value or game.Players.LocalPlayer.Character:FindFirstChild("Right Arm"):FindFirstChild("Haki") or getgenv().STOP_ALL then
         else
         if Options.AutoBusohaki.Value then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
