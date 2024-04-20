@@ -1555,14 +1555,12 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
-            repeat
-            wait(1)
-            fireproximityprompt(v.HumanoidRootPart.Merchant)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
+            repeat wait(1) 
+            fireproximityprompt(v.HumanoidRootPart.Merchant) 
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
             getgenv().InMerchant = true
-            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
-            getgenv().InMerchant = false
+            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled 
+            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
         end
     end
             end
@@ -1763,7 +1761,7 @@ end
             end 
             end
             local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
-            if DISTSTUCK <= 15 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+            if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     wait(7.5)
                     getgenv().AlrBuy = true
                     getgenv().InMerchant = false
