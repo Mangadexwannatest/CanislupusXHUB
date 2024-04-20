@@ -440,7 +440,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoMining.Value then 
+        if not Options.AutoMining.Value or getgenv().STOP then 
         else
         if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
             getgenv().InMining = false
@@ -477,13 +477,9 @@ coroutine.resume(coroutine.create(function()
         if Chestawd() or CheckBossSpawn() or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().STOP then   
         else
         local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("Part_Detechtions").Position).Magnitude
-        if Options.AutoMining.Value and dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
+        if dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
         and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
-            wait(5)
-            if game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
-            and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
         game.Players.LocalPlayer.Character.Humanoid.Health = 0
-            end
         end
         end
     end)
@@ -1102,6 +1098,7 @@ end)
         end)
     end)
 
+    local CHeckDie
     local function onCharacterAdded(character)
         local player = game:GetService("Players").LocalPlayer
         local humanoid = character:WaitForChild("Humanoid", 5)
@@ -1109,13 +1106,15 @@ end)
             return
         end
         humanoid.Died:Connect(function()
-            if Options.AutoBountyHunter.Value then
-                game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+            if not getgenv().STOP then
+            getgenv().STOP = true
+            print("PLAYER DIED : STOP ALL")
+            CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    wait(.5)
-                    getgenv().InBossHunt = false
-                    getgenv().QuestHuntOnCoolDown = false
-                    getgenv().InMerchant = false
+                    wait(1)
+                    getgenv().STOP = false
+                    print("PLAYER SPAWN : START ALL")
+                    CHeckDie:Disconnect()
                 end)
             end
         end)
