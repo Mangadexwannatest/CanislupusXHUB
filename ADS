@@ -1712,10 +1712,11 @@ while wait() do pcall(function ()
 end
 end))
 
-function CheckMerChant()
+function DistOfMerchant()
     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
         if v.Name == "Traveling merchant" then
-            return v
+            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            return DISTSTUCK
         end
     end
 end
@@ -1723,30 +1724,49 @@ end
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
-        local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
         while wait() do pcall(function ()
         if not Options.AutoBuyMerchantItem.Value then  
         else
-        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and CheckMerChant() and not getgenv().AlrBuy  then
+        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DistOfMerchant() <= 20 then
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
                 if FindItem then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                end
-                if FindItem then
                     local split = string.split(v.Name," ")
+                    print('BUY')
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
                 end
                 ---------------- // Black List Dog Item \\ --------------
 
-            if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                    wait(7.5)
-                    getgenv().AlrBuy = true
-                    getgenv().InMerchant = false
-                    game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+                if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
+
+                end
+                if table.find(ItemInDropdown,"[Tier 1] Summon Ticket") and IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
+
+                end
+                if table.find(ItemInDropdown,"[Tier 2] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
+            
+            end
+                if table.find(ItemInDropdown,"[Tier 3] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
+             
+            end
+               
+                if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
+           
             end
 
             end
+            end
+            if DistOfMerchant() <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+                wait(7.5)
+                getgenv().AlrBuy = true
+                getgenv().InMerchant = false
+                game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
             end
         end
     end)
