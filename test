@@ -13,7 +13,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/20/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/18/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -1587,6 +1587,11 @@ coroutine.resume(coroutine.create(function()
         if dist >= 20 then
             wait(12)
             game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+        elseif dist <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+            wait(7.5)
+            getgenv().AlrBuy = true
+            getgenv().InMerchant = false
+            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
         end
     end
         end
@@ -1712,10 +1717,11 @@ while wait() do pcall(function ()
 end
 end))
 
-function CheckMerChant()
+function DistOfMerchant()
     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
         if v.Name == "Traveling merchant" then
-            return v
+            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            return DISTSTUCK
         end
     end
 end
@@ -1723,18 +1729,15 @@ end
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
-        local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
         while wait() do pcall(function ()
-        if not Options.AutoBuyMerchantItem.Value then  
+        if not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP then  
         else
-        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DISTSTUCK <= 20 then
+        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DistOfMerchant() <= 20 and not getgenv().AlrBuy then
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
                 if FindItem then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                end
-                if FindItem then
                     local split = string.split(v.Name," ")
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
                 end
                 ---------------- // Black List Dog Item \\ --------------
@@ -1759,12 +1762,6 @@ end
                 if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
            
-            end
-            if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                    wait(7.5)
-                    getgenv().AlrBuy = true
-                    getgenv().InMerchant = false
-                    game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
             end
 
             end
