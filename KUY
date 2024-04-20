@@ -394,7 +394,7 @@ a.__namecall = newcclosure(function(self,...)
 end)
 setreadonly(a,true)
 
-function getclosest()
+local function getclosest()
     local MinDistance = math.huge
     local ClosestObject
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -408,6 +408,40 @@ function getclosest()
     end
     return ClosestObject
 end
+
+local CHeckDie
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        if not getgenv().STOP then
+        getgenv().STOP = true
+        print("PLAYER DIED : STOP ALL")
+        CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(1)
+                getgenv().STOP = false
+                print("PLAYER SPAWN : START ALL")
+                CHeckDie:Disconnect()
+            end)
+        end
+    end)
+end
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+            end
+        end
+        end)
+end))
 
 local function CheckBossSpawn()
     if Options.AutoBossSpawn.Value then
@@ -440,7 +474,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoMining.Value then 
+        if not Options.AutoMining.Value or getgenv().STOP then 
         else
         if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
             getgenv().InMining = false
@@ -477,13 +511,9 @@ coroutine.resume(coroutine.create(function()
         if Chestawd() or CheckBossSpawn() or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().STOP then   
         else
         local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("Part_Detechtions").Position).Magnitude
-        if Options.AutoMining.Value and dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
+        if dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
         and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
-            wait(5)
-            if game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
-            and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
         game.Players.LocalPlayer.Character.Humanoid.Health = 0
-            end
         end
         end
     end)
@@ -1102,36 +1132,6 @@ end)
         end)
     end)
 
-    local function onCharacterAdded(character)
-        local player = game:GetService("Players").LocalPlayer
-        local humanoid = character:WaitForChild("Humanoid", 5)
-        if not humanoid then
-            return
-        end
-        humanoid.Died:Connect(function()
-            if Options.AutoBountyHunter.Value then
-                game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    wait(.5)
-                    getgenv().InBossHunt = false
-                    getgenv().QuestHuntOnCoolDown = false
-                    getgenv().InMerchant = false
-                end)
-            end
-        end)
-    end
-    
-    coroutine.resume(coroutine.create(function()
-        pcall(function ()
-    game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
-    do 
-        local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
-        if alreadyExistingCharacter then
-            onCharacterAdded(alreadyExistingCharacter )
-                end
-            end
-            end)
-    end))
 
     coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -1555,15 +1555,17 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
             repeat
-            wait()
+            wait(1)
             fireproximityprompt(v.HumanoidRootPart.Merchant)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
             getgenv().InMerchant = true
             until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
+            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
             getgenv().InMerchant = false
+            repeat wait()
+                firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
+            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP 
         end
     end
             end
@@ -1764,7 +1766,7 @@ end
             end 
             end
             local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
-            if DISTSTUCK <= 15 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+            if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     wait(7.5)
                     getgenv().AlrBuy = true
                     getgenv().InMerchant = false
