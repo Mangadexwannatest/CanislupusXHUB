@@ -1555,15 +1555,13 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
-            repeat
-            wait()
-            fireproximityprompt(v.HumanoidRootPart.Merchant)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0)
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
+            repeat wait(1) 
+            fireproximityprompt(v.HumanoidRootPart.Merchant) 
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
             getgenv().InMerchant = true
-            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP
-            getgenv().InMerchant = false
+            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled 
+            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
         end
     end
             end
@@ -1589,6 +1587,11 @@ coroutine.resume(coroutine.create(function()
             local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
         if dist >= 20 then
             wait(12)
+            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+        elseif dist <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+            wait(7.5)
+            getgenv().AlrBuy = true
+            getgenv().InMerchant = false
             game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
         end
     end
@@ -1705,18 +1708,21 @@ while wait() do pcall(function ()
     if Options.AutoWebhookMerchant.Value and getgenv().InMerchant then
         repeat wait() until not getgenv().InMerchant
             wait(1)
+            if #Travelingitem ~= 0 then
                 WebhookMerchant()
                 wait(1)
                 table.clear(Travelingitem)
+            end
     end
  end)
 end
 end))
 
-function CheckMerChant()
+function DistOfMerchant()
     for i,v in pairs(game.Workspace.NPC:GetChildren()) do
         if v.Name == "Traveling merchant" then
-            return v
+            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            return DISTSTUCK
         end
     end
 end
@@ -1725,17 +1731,13 @@ end
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-        if not Options.AutoBuyMerchantItem.Value then  
+        if not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP then  
         else
-        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
+        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DistOfMerchant() <= 20 and not getgenv().AlrBuy then
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
-                if FindItem  then
-                    repeat task.wait()
+                if FindItem then
                     local split = string.split(v.Name," ")
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
-                    until not Options.AutoBuyMerchantItem.Value or not game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
                 end
@@ -1761,14 +1763,8 @@ end
                 if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
            
-            end 
             end
-            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CheckMerChant().HumanoidRootPart.Position).Magnitude
-            if DISTSTUCK <= 15 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-                    wait(7.5)
-                    getgenv().AlrBuy = true
-                    getgenv().InMerchant = false
-                    game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+
             end
             end
         end
