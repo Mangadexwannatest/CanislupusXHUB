@@ -1555,7 +1555,7 @@ coroutine.resume(coroutine.create(function()
         if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
         for i,v in pairs(game.Workspace.NPC:GetChildren()) do
             if v.Name == "Traveling merchant" then
-            repeat wait(.2) 
+            repeat wait(1) 
             fireproximityprompt(v.HumanoidRootPart.Merchant) 
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
             getgenv().InMerchant = true
@@ -1720,6 +1720,7 @@ function CheckMerChant()
     end
 end
 
+getgenv().AlrBuy = false
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
     coroutine.resume(coroutine.create(function()
@@ -1727,38 +1728,18 @@ end
         while wait() do pcall(function ()
         if not Options.AutoBuyMerchantItem.Value then  
         else
-        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and DISTSTUCK <= 20 then
+        if Options.AutoBuyMerchantItem.Value and game.PlaceId == 15049111150 and CheckMerChant() and not getgenv().AlrBuy  then
             for i,v in next,game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame:GetChildren() do
                 local FindItem = table.find(ItemInDropdown,v.Name)
                 if FindItem then
+                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
+                end
+                if FindItem then
                     local split = string.split(v.Name," ")
                     game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",split[1])
-                    task.wait(.1)
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant",v.Name)
                 end
                 ---------------- // Black List Dog Item \\ --------------
 
-                if table.find(ItemInDropdown,"God Light Fruit") and IntertFaceMerChant:FindFirstChild("God Light Fruit") then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","GodLight")
-
-                end
-                if table.find(ItemInDropdown,"[Tier 1] Summon Ticket") and IntertFaceMerChant:FindFirstChild("[Tier 1] Summon Ticket") then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Common] Portal Summon Ticket")
-
-                end
-                if table.find(ItemInDropdown,"[Tier 2] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 2] Summon Ticket") then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Rare] Portal Summon Ticket")
-            
-            end
-                if table.find(ItemInDropdown,"[Tier 3] Summon Ticket")  and IntertFaceMerChant:FindFirstChild("[Tier 3] Summon Ticket") then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","[Legendary] Portal Summon Ticket")
-             
-            end
-               
-                if table.find(ItemInDropdown,"Sukuna Finger") and IntertFaceMerChant:FindFirstChild("Sukuna Finger") then
-                    game:GetService("ReplicatedStorage").Remotes.BuyItem:FireServer("Traveling Merchant","SukunaFinger")
-           
-            end
             if DISTSTUCK <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
                     wait(7.5)
                     getgenv().AlrBuy = true
