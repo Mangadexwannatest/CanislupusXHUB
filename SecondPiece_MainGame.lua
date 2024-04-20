@@ -394,7 +394,7 @@ a.__namecall = newcclosure(function(self,...)
 end)
 setreadonly(a,true)
 
-function getclosest()
+local function getclosest()
     local MinDistance = math.huge
     local ClosestObject
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -408,6 +408,40 @@ function getclosest()
     end
     return ClosestObject
 end
+
+local CHeckDie
+local function onCharacterAdded(character)
+    local player = game:GetService("Players").LocalPlayer
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if not humanoid then
+        return
+    end
+    humanoid.Died:Connect(function()
+        if not getgenv().STOP then
+        getgenv().STOP = true
+        print("PLAYER DIED : STOP ALL")
+        CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+                game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
+                wait(1)
+                getgenv().STOP = false
+                print("PLAYER SPAWN : START ALL")
+                CHeckDie:Disconnect()
+            end)
+        end
+    end)
+end
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+do 
+    local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
+    if alreadyExistingCharacter then
+        onCharacterAdded(alreadyExistingCharacter )
+            end
+        end
+        end)
+end))
 
 local function CheckBossSpawn()
     if Options.AutoBossSpawn.Value then
@@ -1098,39 +1132,6 @@ end)
         end)
     end)
 
-    local CHeckDie
-    local function onCharacterAdded(character)
-        local player = game:GetService("Players").LocalPlayer
-        local humanoid = character:WaitForChild("Humanoid", 5)
-        if not humanoid then
-            return
-        end
-        humanoid.Died:Connect(function()
-            if not getgenv().STOP then
-            getgenv().STOP = true
-            print("PLAYER DIED : STOP ALL")
-            CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-                    game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                    wait(1)
-                    getgenv().STOP = false
-                    print("PLAYER SPAWN : START ALL")
-                    CHeckDie:Disconnect()
-                end)
-            end
-        end)
-    end
-    
-    coroutine.resume(coroutine.create(function()
-        pcall(function ()
-    game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
-    do 
-        local alreadyExistingCharacter = game:GetService("Players").LocalPlayer.Character
-        if alreadyExistingCharacter then
-            onCharacterAdded(alreadyExistingCharacter )
-                end
-            end
-            end)
-    end))
 
     coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
