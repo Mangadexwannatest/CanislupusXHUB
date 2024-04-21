@@ -518,6 +518,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
+    while wait() do
     pcall(function ()
         if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible then
         else
@@ -525,9 +526,10 @@ coroutine.resume(coroutine.create(function()
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
         elseif Options.SPEED.Value and Options.Speed.Value == "1X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "1X" then
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+               end
             end
-        end
-    end)
+         end)
+      end
 end))
 
 
