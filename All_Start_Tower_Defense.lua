@@ -126,57 +126,8 @@
         Default = 1,
     })
 
-    local SPEEDSET = Tabs.Main:AddToggle("SPEED", {Title = "Auto speed", Default = false })
+    Tabs.Main:AddToggle("SPEED", {Title = "Auto speed", Default = false })
     Tabs.Main:AddToggle("MissionEnded", {Title = "Auto MissionEnded", Default = false })
-
-    local function SpeedX_Change()
-        if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible and Options.SPEED.Value then
-            Fluent:Notify({
-            Title = "NOT IN DUNGEON",
-            Content = "RETURN",
-            SubContent = nil,
-            Duration = 5 
-            })
-            else
-                repeat wait() until game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible
-            if Options.SPEED.Value and Options.Speed.Value == "2X" then
-            repeat wait()
-            game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
-            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value
-            elseif Options.SPEED.Value and Options.Speed.Value == "1X" then
-            repeat wait()
-            game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
-            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value
-               end
-           end
-    end
-
-
-    XSPEED:OnChanged(function(Value)
-        SpeedX_Change()
-    end)
-
-    SPEEDSET:OnChanged(function()
-        if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible and Options.SPEED.Value then
-        Fluent:Notify({
-        Title = "NOT IN DUNGEON",
-        Content = "RETURN",
-        SubContent = nil,
-        Duration = 5 
-        })
-        else
-            repeat wait() until game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible
-        if Options.SPEED.Value and Options.Speed.Value == "2X" then
-        repeat wait()
-        game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
-        until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value
-        elseif Options.SPEED.Value and Options.Speed.Value == "1X" then
-        repeat wait()
-        game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
-        until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value
-           end
-       end
-end)
 
 
     Action:OnChanged(function(Value)
@@ -549,6 +500,38 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
+local firesignal = function(signal, arg2)
+    if getconnections(signal) then
+        firesignal(signal, arg2)
+    end
+end
+
+coroutine.resume(coroutine.create(function()
+    game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
+        repeat wait(0.25) until Options.MissionEnded.Value
+        if Options.MissionEnded.Value then
+            repeat wait(0.15)
+            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
+            until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.MissionEnded.Value
+        end
+    end)
+end))
+
+coroutine.resume(coroutine.create(function()
+    pcall(function ()
+        if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible then
+        else
+        if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+            game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+        elseif Options.SPEED.Value and Options.Speed.Value == "1X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "1X" then
+            game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+            end
+        end
+    end)
+end))
+
+
+
 coroutine.resume(coroutine.create(function()
     game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
@@ -570,23 +553,6 @@ coroutine.resume(coroutine.create(function()
         if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
             QueueOnTeleport(script)
             end
-    end)
-end))
-
-local firesignal = function(signal, arg2)
-    if getconnections(signal) then
-        firesignal(signal, arg2)
-    end
-end
-
-coroutine.resume(coroutine.create(function()
-    game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
-        repeat wait(0.25) until Options.MissionEnded.Value
-        if Options.MissionEnded.Value then
-            repeat wait(0.15)
-            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
-            until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.MissionEnded.Value
-        end
     end)
 end))
 
