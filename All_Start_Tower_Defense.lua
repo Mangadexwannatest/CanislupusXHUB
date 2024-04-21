@@ -520,12 +520,17 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do
     pcall(function ()
-        if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible then
+        if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
+        tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
         else
         if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+            repeat wait(1)
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
         elseif Options.SPEED.Value and Options.Speed.Value == "1X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "1X" then
+            repeat wait(1)
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
                end
             end
          end)
