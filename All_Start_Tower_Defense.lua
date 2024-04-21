@@ -127,24 +127,7 @@
     })
 
     local SPEEDSET = Tabs.Main:AddToggle("SPEED", {Title = "Auto speed", Default = false })
-    local EndMission = Tabs.Main:AddToggle("MissionEnded", {Title = "Auto MissionEnded", Default = false })
-
-    local firesignal = function(signal, arg2)
-        if getconnections(signal) then
-            firesignal(signal, arg2)
-        end
-    end
-
-    task.spawn(function()
-        game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
-            repeat wait(0.25) until Options.MissionEnded.Value
-            if Options.MissionEnded.Value then
-                repeat wait(0.15)
-                firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
-                until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.MissionEnded.Value
-            end
-        end)
-    end)
+    Tabs.Main:AddToggle("MissionEnded", {Title = "Auto MissionEnded", Default = false })
 
     local function SpeedX_Change()
         if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible and Options.SPEED.Value then
@@ -587,6 +570,23 @@ coroutine.resume(coroutine.create(function()
         if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
             QueueOnTeleport(script)
             end
+    end)
+end))
+
+local firesignal = function(signal, arg2)
+    if getconnections(signal) then
+        firesignal(signal, arg2)
+    end
+end
+
+coroutine.resume(coroutine.create(function()
+    game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
+        repeat wait(0.25) until Options.MissionEnded.Value
+        if Options.MissionEnded.Value then
+            repeat wait(0.15)
+            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
+            until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.MissionEnded.Value
+        end
     end)
 end))
 
