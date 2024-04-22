@@ -690,42 +690,62 @@ TextButton.TextWrapped = true
 end)
 end))
 
-local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+function unload_ui()
+    while wait() do
+        if Fluent.Unloaded then 
+        game.CoreGui:FindFirstChild("Close/Open"):Destroy()
+            break 
+         end
+    end
+end
+coroutine.resume(coroutine.create(unload_ui))
+
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-if game.CoreGui:FindFirstChild("CrazyDay") == nil then
-for i,v in pairs(game.CoreGui:GetChildren()) do
-    if v.Name == "ScreenGui" then
+     if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+     for i,v in pairs(game.CoreGui:GetChildren()) do
+        if v.Name == "ScreenGui" then
         for _,k in next, v:GetDescendants() do
-            if k.Name == "TextLabel" and string.find(k.Text,"Anime Dimensions") then
+              if k.Name == "TextLabel" and string.find(k.Text,"Anime Dimensions") then
                 k.Parent.Parent.Parent.Parent.Name = "CrazyDay"
-                warn("Found Ui. . .")  
-               end
-            end
-        end
+                   warn("Found Ui. . .")  
+                   end
+                 end
+              end
+          end
+       end
+   end)
+         if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
+           warn("break")
+       break
+      end
     end
-end
-end)
-if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
-print("break")
-break
-end
-end
 end))
 
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-Button.TouchTap:Connect(function()
-for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled then
-            v.Visible = not v.Visible
-                end
-            end
-        end)
+task.spawn(function ()
+    local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+    if game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled then
+        warn('TouchEnabled')
+    Button.TouchTap:Connect(function()
+    for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+            if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled then
+                v.Visible = not v.Visible
+                        end
+                    end
+            end)
+        end
+    if game:GetService("UserInputService").KeyboardEnabled  then
+        warn('KeyboardEnabled')
+    Button.MouseButton1Click:Connect(function()
+    for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+            if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").KeyboardEnabled  then
+                v.Visible = not v.Visible
+                        end
+                    end
+            end)
+        end
     end)
-end))
 
 local function getClosestBoss()
     local dist, thing = math.huge
@@ -953,7 +973,7 @@ else
 if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.AutoFarmAndStart.Value or Options.AutoRaid.Value or Options.Auto_FreeBossRush.Value or Options.Auto_SpeedRaid.Value or Options.AUTO_LEVEL_SELECT.Value then
 if game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and not getgenv().STOP_Farm and not getgenv().Break_Farm 
 and not getgenv().SAFE_MODE and CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" then
-    repeat task.wait()
+    repeat wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-5) * CFrame.Angles(math.rad(0),1800,0) })
 tweenBOSS:Play()
 until getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0 or not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
@@ -962,7 +982,7 @@ tweenBOSS:Cancel()
 
 elseif game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and not getgenv().STOP_Farm and not getgenv().Break_Farm 
 and not getgenv().SAFE_MODE and CharacterNameSSS() == "Naruto" or CharacterNameSSS() == "Sasuke" then
-    repeat task.wait()
+    repeat wait()
 tweenBOSS = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestBoss().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestBoss().HumanoidRootPart.CFrame * CFrame.new(0,0,-1.25) * CFrame.Angles(math.rad(0),1800,0) })
 tweenBOSS:Play()
 until CharacterNameSSS() ~= "Naruto" and CharacterNameSSS() ~= "Sasuke" and getClosestBoss().EnemyHealthBarGui.HealthText.Text <= 0
@@ -972,7 +992,7 @@ tweenBOSS:Cancel()
 
 elseif Options.PlayMode.Value == "Normal Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
-repeat task.wait()
+repeat wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Y-6.25) * CFrame.Angles(math.rad(0),1800,0) })
 tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
@@ -983,7 +1003,7 @@ tweenMon:Cancel()
 
 elseif  Options.PlayMode.Value == "Safe Mode" and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible 
 and not getgenv().STOP_Farm and not getgenv().Break_Farm and not getgenv().SAFE_MODE then
-repeat task.wait()
+repeat wait()
 tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((getClosestMob().HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = getClosestMob().HumanoidRootPart.CFrame * CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+6.35,0) * CFrame.Angles(math.rad(0),1800,0) })
 tweenMon:Play()
 until getClosestMob().EnemyHealthBarGui.HealthText.Text <= 0 or game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
@@ -1012,7 +1032,7 @@ coroutine.resume(coroutine.create(function()
             if Options.PlayMode.Value == "Bring Mode" and game.Workspace:FindFirstChild("Head_Kuy") == nil and
             not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
             and not getgenv().STOP_Farm and not getgenv().Break_Farm  then
-                        repeat task.wait()
+                        repeat wait()
                         tweenMon = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new((NameT1().Position - game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude/100, Enum.EasingStyle.Linear), {CFrame = NameT1().CFrame * CFrame.new(0,0,6.35) })
                         tweenMon:Play()
                         until
