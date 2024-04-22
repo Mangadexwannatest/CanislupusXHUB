@@ -428,7 +428,6 @@ end))
 
 function unload_ui()
     while wait() do
-        print("something")
         if Fluent.Unloaded then 
         game.CoreGui:FindFirstChild("Close/Open"):Destroy()
             break 
