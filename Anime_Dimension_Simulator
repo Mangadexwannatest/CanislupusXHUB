@@ -690,7 +690,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/23/2024",
-        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter"
+        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 14:14"
     })
 
     white:OnChanged(function()
@@ -952,8 +952,7 @@ end))
 coroutine.resume(coroutine.create(function()
     task.wait(2)
     while wait(0.5) do pcall(function ()
-        if  getgenv().RaidOpened or getgenv().WorkingForDoing or getgenv().DuringForCharacter or getgenv().CurrentBossRush 
-        or getgenv().CurrentSpeedRaid or game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
+        if  getgenv().WorkingForDoing or getgenv().DuringForCharacter or game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then
         else
         if Options.AutoRaid.Value and 
         not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and getgenv().RaidOpened and Options.AutoRaid.Value 
@@ -974,7 +973,8 @@ coroutine.resume(coroutine.create(function()
         end
     end
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
-        if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentSpeedRaid then
+        if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentSpeedRaid 
+        and not getgenv().RaidOpened and not  getgenv().DuringForCharacter and not getgenv().WorkingForDoing and not getgenv().CurrentBossRush then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -989,7 +989,8 @@ coroutine.resume(coroutine.create(function()
             end
         end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 and not getgenv().WorkingForDoing and not getgenv().CurrentSpeedRaid then
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 and not getgenv().WorkingForDoing 
+            and not  getgenv().DuringForCharacter then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
        end)
