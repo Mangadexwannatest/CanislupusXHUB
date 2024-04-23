@@ -1035,11 +1035,11 @@ coroutine.resume(coroutine.create(function()
                 method = CFrame.new(getClosestBoss().HumanoidRootPart.CFrame)
             else
             if Options.METHOD_FARM.Value == "Behind"  then
-                method = CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Z+4.25)
+                method = CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Z+5)
             elseif Options.METHOD_FARM.Value == "Over" then
-                method = CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+4.25,0) * CFrame.Angles(math.rad(-90),0,0)
+                method = CFrame.new(0,getClosestMob().HumanoidRootPart.Size.Y+4.95,0) * CFrame.Angles(math.rad(-90),0,0)
             elseif Options.METHOD_FARM.Value == "Front" then
-                method = CFrame.new(0,0,-getClosestMob().HumanoidRootPart.Size.Z-4.25) * CFrame.Angles(math.rad(0),1800,0)
+                method = CFrame.new(0,0,-getClosestMob().HumanoidRootPart.Size.Z-5) * CFrame.Angles(math.rad(0),1800,0)
                 end
             end
         elseif not Options.Auto_Set_Distance.Value then
@@ -1339,7 +1339,7 @@ coroutine.resume(coroutine.create(function()
         pcall(function()
 if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
     if Options.AutoFarmAndStart.Value or Options.AutoRaid.Value or Options.Auto_FreeBossRush.Value or Options.Auto_SpeedRaid.Value or Options.AUTO_LEVEL_SELECT.Value  or Options.Auto_RaidChallange.Value
-    and Options.METHOD_FARM.Value == 'Over' and not getgenv().SAFE_MODE and not getgenv().Break_Farm then
+    then
 
         game.Players.LocalPlayer.Character.Humanoid.PlatformStand=true
         bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
@@ -1359,12 +1359,6 @@ if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and gam
                 v.Velocity, v.RotVelocity = V3, V3
                  end
               end
-            end
-            if Options.METHOD_FARM.Value ~= 'Over' or getgenv().SAFE_MODE or getgenv().Break_Farm then
-                game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
-                bv.Parent = nil
-                velocity.Parent = nil
-                gyros.Parent = nil
             end
          end
       end)
@@ -1556,26 +1550,6 @@ coroutine.resume(coroutine.create(function()
             end)
         end)
     end)
-end))
-
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
-    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
-    NO_CLIP_PART.Name = "CrazyDay_NO"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 
-and Options.METHOD_FARM.Value ~= 'Over' then
-    repeat
-        wait()
-        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
-     until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or Options.METHOD_FARM.Value == 'Over'
-    end
-end)
-end
 end))
 
 
