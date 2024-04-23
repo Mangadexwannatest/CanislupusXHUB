@@ -1919,12 +1919,9 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
      end
     ]]
-    repeat wait() until Options.AutoExecuteScript.Value
-    repeat wait() until State == Enum.TeleportState.InProgress
-    if Options.AutoExecuteScript.Value then
+    if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
     end
-
 end)
 end))
 
