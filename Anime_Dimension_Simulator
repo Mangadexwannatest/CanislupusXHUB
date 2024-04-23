@@ -1226,6 +1226,7 @@ local function CheckTouch()
             getgenv().STOP_Farm = true
             Cancolllll(true)
             repeat task.wait() until not part.Parent
+            task.wait(1)
             getgenv().STOP_Farm = false
             Cancolllll(false)
         end
@@ -1543,8 +1544,7 @@ coroutine.resume(coroutine.create(function()
                     a.CanCollide = true
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
-                    repeat task.wait() until not v.Parent
-                    task.wait(0.875)
+                    repeat wait() until not v.Parent
                     a:Destroy()
                 end
                 end
