@@ -1235,7 +1235,7 @@ local function CheckTouch()
             getgenv().STOP_Farm = true
             Cancolllll(true)
             repeat task.wait() until not part.Parent
-            task.wait(1)
+            task.wait(0.5)
             getgenv().STOP_Farm = false
             Cancolllll(false)
         end
