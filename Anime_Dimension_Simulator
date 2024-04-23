@@ -1807,7 +1807,6 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
                 sum = sum + num[i]
             end
             name_count = tostring(i)..': x'..tonumber(sum)
-            table.remove(Other_Num,table.find(Other_Num,'None'))
             table.insert(Other_Num,name_count)
         end
     end
