@@ -1226,7 +1226,7 @@ local function CheckTouch()
             getgenv().STOP_Farm = true
             Cancolllll(true)
             repeat wait() until not part.Parent
-            task.wait(1)
+            task.wait(0.95)
             getgenv().STOP_Farm = false
             Cancolllll(false)
         end
@@ -1545,7 +1545,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat task.wait() until not v.Parent
-                    task.wait(0.45)
+                    task.wait(0.55)
                     a:Destroy()
                 end
                 end
@@ -1602,7 +1602,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 local OtherItem = {"None"}
-local Other_Num = {}
+local Other_Num = {"None"}
 
 
 game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
@@ -1694,6 +1694,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResul
                     sum = sum + num[i]
                 end
                 name_count = tostring(i)..': x'..tonumber(sum)
+                table.remove(Other_Num,table.find(Other_Num,'None'))
                 table.insert(Other_Num,name_count)
             end
         end
@@ -1780,6 +1781,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
                 sum = sum + num[i]
             end
             name_count = tostring(i)..': x'..tonumber(sum)
+            table.remove(Other_Num,table.find(Other_Num,'None'))
             table.insert(Other_Num,name_count)
         end
     end
