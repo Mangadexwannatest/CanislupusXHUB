@@ -97,11 +97,17 @@ repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Play
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
 
-    if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension") then
+    if not isfolder('CrazyDay') then
         repeat wait()
-        makefolder("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension")
-        until isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension")
-        warn('CREATED FILE')
+        makefolder('CrazyDay')
+        until isfolder('CrazyDay')
+    end
+    if isfolder('CrazyDay') then
+        if not isfolder('CrazyDay/'..game.Players.LocalPlayer.Name.."_Anime_Dimension") then
+            repeat wait()
+            makefolder('/CrazyDay/'..game.Players.LocalPlayer.Name.."_Anime_Dimension")
+            until isfolder('/CrazyDay/'..game.Players.LocalPlayer.Name.."_Anime_Dimension")
+        end
     end
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -343,7 +349,7 @@ function DestroyKuy()
             CharacterConfig["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
             Fluent:Notify({Title = "Save Success",Content = "Character ",SubContent = tostring(game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value.."\n"..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"
             ..game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value), Duration = 5.5})
-            writefile("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension/Character.lua", game:GetService("HttpService"):JSONEncode(CharacterConfig))
+            writefile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/Character.lua", game:GetService("HttpService"):JSONEncode(CharacterConfig))
         end
     })
 
@@ -352,7 +358,7 @@ function DestroyKuy()
                     repeat wait() until Options.Auto_EquipCharacter.Value
                     if Options.Auto_EquipCharacter.Value and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 then
                         repeat wait()
-                            local File = readfile("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension/Character.lua")
+                            local File = readfile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/Character.lua")
                             getgenv().Character = game:GetService("HttpService"):JSONDecode(File)
                             local char = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"]
                                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCharacter",tostring(getgenv().Character['Character1']))
@@ -690,7 +696,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/23/2024",
-        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 14:14"
+        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 16:02"
     })
 
     white:OnChanged(function()
@@ -707,7 +713,7 @@ InterfaceManager:SetLibrary(Fluent)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 InterfaceManager:SetFolder("CrazyDay")
-SaveManager:SetFolder("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension")
+SaveManager:SetFolder("CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension")
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
@@ -892,8 +898,8 @@ coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if Options.Auto_EquipCharacter.Value and 
         game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 
-        and isfile("CrazyDay/Character_ADS.json") then
-        Config = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/Character_ADS.json"))
+        and isfile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/Character.lua") then
+        Config = game:GetService("HttpService"):JSONDecode(readfile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/Character.lua"))
         getgenv().DuringForCharacter = true
 for i,v in next,Config do 
     if tostring(i) == "Character1" and game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value == v then
@@ -918,7 +924,7 @@ coroutine.resume(coroutine.create(function()
         if not getgenv().CurrentBossRush then
         local Free = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text
         BossRuhsTicketCheck['Free'] = Free
-        writefile("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension/BossRush.lua", game:GetService("HttpService"):JSONEncode(BossRuhsTicketCheck))
+        writefile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/BossRush.lua", game:GetService("HttpService"):JSONEncode(BossRuhsTicketCheck))
            end
     end)
     if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 or getgenv().CurrentBossRush then
@@ -1557,12 +1563,11 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
-
 coroutine.resume(coroutine.create(function()
         while wait(1) do
             pcall(function()
                 if Options.AutoRetry.Value then
-                    local File = readfile("CrazyDay/"..game.Players.LocalPlayer.Name.." Anime Dimension/BossRush.lua")
+                    local File = readfile("/CrazyDay/"..game.Players.LocalPlayer.Name.."_Anime_Dimension/BossRush.lua")
                     getgenv().BossRead = game:GetService("HttpService"):JSONDecode(File)
                     if getgenv().BossRead['Free'] == '1 Free Entry Left' then
                     else
