@@ -1706,6 +1706,7 @@ function Coin() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.
     return v.Gold.Text end end end
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+    pcall(function()
     if Options.AutoWebhook_Raid.Value then
         wait(1.25)
             for i,v in pairs(OtherItem) do
@@ -1791,8 +1792,10 @@ BBody = game:GetService("HttpService"):JSONEncode({
 })  
 end
 end)
+end)
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+    pcall(function()
     if Options.AutoWebhook_Dungeon.Value then
         wait(1.25)
         for i,v in pairs(OtherItem) do
@@ -1877,6 +1880,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
   Body = BBody
 })  
 end
+end)
 end)
 
 
