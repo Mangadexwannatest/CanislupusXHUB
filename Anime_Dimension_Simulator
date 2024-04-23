@@ -1626,6 +1626,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
                 OtherItem[v.Name] = {}
+                table.remove(Other_Num,table.find(Other_Num,'None'))
             end
             table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
         end
@@ -1671,6 +1672,7 @@ Check_Raid_GUI().ChildAdded:Connect(function(v)
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
                 OtherItem[v.Name] = {}
+                table.remove(Other_Num,table.find(Other_Num,'None'))
             end
             table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
         end
@@ -1717,7 +1719,6 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResul
                     sum = sum + num[i]
                 end
                 name_count = tostring(i)..': x'..tonumber(sum)
-                table.remove(Other_Num,table.find(Other_Num,'None'))
                 table.insert(Other_Num,name_count)
                 end
             end
