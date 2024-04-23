@@ -837,16 +837,12 @@ end
 
 
 coroutine.resume(coroutine.create(function()
-    while wait() do
+    while task.wait() do
     pcall(function()
-        if not Options.AutoRaid.Value then 
-            getgenv().RaidOpened = false
-        else
-                if tonumber(os.date("!*t").min) <= 9 then
+                if tonumber(os.date("!*t").min) <= 9 and Options.AutoRaid.Value then
                     getgenv().RaidOpened = true
                 else
                     getgenv().RaidOpened = false
-                end
             end
         end)
     end
@@ -854,7 +850,7 @@ end))
 
 
 coroutine.resume(coroutine.create(function()
-    while wait() do
+    while wait(1) do
     pcall(function()
         if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.AutoLeaveIfRaid.Value then
 if getgenv().RaidOpened and not game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible and Options.Select_Action_Raid.Value == "LEAVE" then
