@@ -1621,7 +1621,9 @@ end)
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
     if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
-        table.remove(item_name,table.find(item_name,'None'))
+        repeat wait()
+            table.remove(item_name,table.find(item_name,'None'))
+            until not table.find(item_name,'None')
     if not v:FindFirstChild("Gradient") then 
         table.insert(item_name,v.Name.." [Common]")
     elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1661,7 +1663,9 @@ end)
 
 Check_Raid_GUI().ChildAdded:Connect(function(v)
     if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
+        repeat wait()
         table.remove(item_name,table.find(item_name,'None'))
+        until not table.find(item_name,'None')
     if not v:FindFirstChild("Gradient") then 
         table.insert(item_name,v.Name.." [Common]")
     elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
@@ -1906,18 +1910,14 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
     local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
     local script = 
     [[
-        repeat wait() until game:IsLoaded()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
-
     local success = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
-     end)
-     
-     print(success)
-     if not success then
-        wait(20)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
-     end
+    repeat wait() until game:IsLoaded()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
+    end)
+    if not success then
+    wait(20)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
+    end
     ]]
     if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
@@ -1927,3 +1927,4 @@ end))
 
 
 end -- End Of Do
+
