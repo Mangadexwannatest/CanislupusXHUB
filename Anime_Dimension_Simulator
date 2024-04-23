@@ -696,7 +696,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/23/2024",
-        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 16:02"
+        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 16:02\n[*] Fixed Raid Webhook"
     })
 
     white:OnChanged(function()
@@ -1609,7 +1609,7 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
-local OtherItem = {"None"}
+local OtherItem = {}
 local Other_Num = {"None"}
 
 
@@ -1617,11 +1617,6 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
-        repeat wait()
-            if table.find(OtherItem,'None') then
-            table.remove(OtherItem,table.find(OtherItem,'None'))
-            end
-        until not table.find(OtherItem,'None')
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
                 OtherItem[v.Name] = {}
@@ -1667,11 +1662,6 @@ end
 
 Check_Raid_GUI().ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
-        repeat wait()
-            if table.find(OtherItem,'None') then
-            table.remove(OtherItem,table.find(OtherItem,'None'))
-            end
-        until not table.find(OtherItem,'None')
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
                 OtherItem[v.Name] = {}
@@ -1713,7 +1703,7 @@ function Coin() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
     if Options.AutoWebhook_Raid.Value then
         wait(1.25)
-        if not table.find(OtherItem,'None') then
+        if #OtherItem ~= 0 then
             for i,v in pairs(OtherItem) do
                 local num = v
                 local sum = 0
@@ -1800,7 +1790,7 @@ end)
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
     if Options.AutoWebhook_Dungeon.Value then
         wait(1.25)
-        if not table.find(OtherItem,'None') then
+        if #OtherItem ~= 0 then
         for i,v in pairs(OtherItem) do
             local num = v
             local sum = 0
