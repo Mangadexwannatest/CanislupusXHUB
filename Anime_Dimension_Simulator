@@ -86,6 +86,12 @@ local function getClosestBoss()
     return thing
 end
 
+game:WaitForChild('Workspace'):WaitForChild('GameMap')
+for i,v in next,game.Workspace.GameMap:GetDescendants() do
+    if v.Name:match('Barrie') then
+        v:Destroy()
+    end
+end
 
 repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
@@ -1237,6 +1243,7 @@ local function TocuhEnd()
     game.Players.LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
         if part.Name == "Teleport_Part_Boss" and getgenv().Break_Farm then
             repeat wait() until not getgenv().SAFE_MODE
+            task.wait(2.75)
             getgenv().Touch = true
             getgenv().Break_Farm = false
         end
@@ -1608,9 +1615,13 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
+        repeat wait()
+            if table.find(OtherItem,'None') then
+            table.remove(OtherItem,table.find(OtherItem,'None'))
+            end
+        until not table.find(OtherItem,'None')
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
-                table.remove(OtherItem,table.find(OtherItem,'None'))
                 OtherItem[v.Name] = {}
             end
             table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
@@ -1619,51 +1630,12 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.
 end)
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+    pcall(function ()
     if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
         repeat wait()
+            if table.find(item_name,'None') then
             table.remove(item_name,table.find(item_name,'None'))
-            until not table.find(item_name,'None')
-    if not v:FindFirstChild("Gradient") then 
-        table.insert(item_name,v.Name.." [Common]")
-    elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
-            table.insert(item_name,v.Name.." [Uncommon]")
-    elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
-            table.insert(item_name,v.Name.." [Rare]")
-    elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
-            table.insert(item_name,v.Name.." [Epic]")
-    elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
-        table.insert(item_name,v.Name.." [Legendary]")
-    else
-        table.insert(item_name,v.Name.." [Mythic]")
-        end    
-    end
-end)
-
-
-function Check_Raid_GUI()
-    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame:GetDescendants()) do
-        if v.Name == "RaidRewardGridFrame" and v.Parent.Name == 'Shadow' then
-            return v
-        end
-    end
-end
-
-Check_Raid_GUI().ChildAdded:Connect(function(v)
-    if not v:IsA("UIGridLayout") then
-        if tonumber(v.LevelReq.Text) then
-            if not OtherItem[v.Name] then
-                table.remove(OtherItem,table.find(OtherItem,'None'))
-                OtherItem[v.Name] = {}
             end
-            table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
-        end
-    end
-end)
-
-Check_Raid_GUI().ChildAdded:Connect(function(v)
-    if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
-        repeat wait()
-        table.remove(item_name,table.find(item_name,'None'))
         until not table.find(item_name,'None')
     if not v:FindFirstChild("Gradient") then 
         table.insert(item_name,v.Name.." [Common]")
@@ -1680,6 +1652,56 @@ Check_Raid_GUI().ChildAdded:Connect(function(v)
         end    
     end
 end)
+end)
+
+
+function Check_Raid_GUI()
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame:GetDescendants()) do
+        if v.Name == "RaidRewardGridFrame" and v.Parent.Name == 'Shadow' then
+            return v
+        end
+    end
+end
+
+Check_Raid_GUI().ChildAdded:Connect(function(v)
+    if not v:IsA("UIGridLayout") then
+        repeat wait()
+            if table.find(OtherItem,'None') then
+            table.remove(OtherItem,table.find(OtherItem,'None'))
+            end
+        until not table.find(OtherItem,'None')
+        if tonumber(v.LevelReq.Text) then
+            if not OtherItem[v.Name] then
+                OtherItem[v.Name] = {}
+            end
+            table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
+        end
+    end
+end)
+
+Check_Raid_GUI().ChildAdded:Connect(function(v)
+    if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
+        repeat wait()
+            if table.find(item_name,'None') then
+            table.remove(item_name,table.find(item_name,'None'))
+            end
+        until not table.find(item_name,'None')
+    if not v:FindFirstChild("Gradient") then 
+        table.insert(item_name,v.Name.." [Common]")
+    elseif tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
+            table.insert(item_name,v.Name.." [Uncommon]")
+    elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
+            table.insert(item_name,v.Name.." [Rare]")
+    elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
+            table.insert(item_name,v.Name.." [Epic]")
+    elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
+        table.insert(item_name,v.Name.." [Legendary]")
+    else
+        table.insert(item_name,v.Name.." [Mythic]")
+        end    
+    end
+end)
+
 
 function Gem() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame:GetChildren() do if v.Name == "CoinBlack" and i == 14 then
     return v.Gem.Text end end end
