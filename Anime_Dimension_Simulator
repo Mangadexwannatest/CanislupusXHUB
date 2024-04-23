@@ -1609,9 +1609,9 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
 
 game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
-        table.remove(OtherItem,table.find(OtherItem,'None'))
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
+                table.remove(OtherItem,table.find(OtherItem,'None'))
                 OtherItem[v.Name] = {}
             end
             table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
@@ -1649,9 +1649,9 @@ end
 
 Check_Raid_GUI().ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
-        table.remove(OtherItem,table.find(OtherItem,'None'))
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
+                table.remove(OtherItem,table.find(OtherItem,'None'))
                 OtherItem[v.Name] = {}
             end
             table.insert(OtherItem[v.Name] , tonumber(v.LevelReq.Text))
