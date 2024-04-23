@@ -31,23 +31,27 @@
    getgenv().Recording = {}
    local Macro_Files = {}
    local Time
+   local HUB = '/CrazyDay/'..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense/Macro"
    do
 
-
-        if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense") then 
-            makefolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense")
-            warn('make main')
-        repeat wait() until isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense")
-        if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro") then
-            makefolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro")
-            warn('make second')
+        if not isfolder("CrazyDay") then 
+        repeat wait()
+            makefolder("CrazyDay")
+        until isfolder("CrazyDay")
+        warn('make folder 1')
         end
-    end
+        if isfolder("CrazyDay") then
+            if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense") then
+                repeat wait()
+                makefolder("/CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense")
+            until isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense")
+            warn('make folder 2')
+            end
+        end
+
     function MakeFolder()
-        if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro") 
-        and isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense") then 
-            makefolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro")
-            warn('make second')
+        if not isfolder(HUB) then 
+            makefolder(HUB)
         end
     end
 
@@ -55,12 +59,11 @@
         repeat 
             MakeFolder()
             wait() 
-        until isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro")
-        if isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro") then
-            local List = listfiles("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro")
+        until isfolder(HUB)
+        if isfolder(HUB) then
+            local List = listfiles(HUB)
             for i,v in next,List do
-                local Sp = v:split('/') local sp = Sp[4]:split(".")
-                table.insert(Macro_Files,sp[1])
+                table.insert(Macro_Files,string.split(v,"/")[5]:split(".")[1])
                     end
                 end
             end
@@ -90,7 +93,7 @@
         Numeric = false,
         Finished = true,
         Callback = function(bool)
-            writefile(string.format("/CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro/%s.lua", bool)	, "")
+            writefile(string.format(HUB.."/%s.lua", bool)	, "")
             table.clear(Macro_Files)
             List()
             MacroOptions:SetValue(nil)
@@ -180,13 +183,12 @@
                 Content = "Macro name",
                 SubContent = Options.OptionsMacro.Value,
                 Duration = 5 })
-                writefile(string.format("/CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode(getgenv().Recording))
+                writefile(string.format(HUB.."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode(getgenv().Recording))
         end
     end)
 
     local function Wave()
-        local split1 = game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text:split('/')
-        return split1[1]:split(' ')
+        return string.split(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text,'/')[1]:split(' ')[2]
     end
 
     local function Money()
@@ -201,7 +203,7 @@
         if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
             if v:FindFirstChild("UpgradeTag").Value >= 0 then
                 if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
-                table.insert(getgenv().Recording, {["Wave"] = Wave()[2] })
+                table.insert(getgenv().Recording, {["Wave"] = Wave() })
                 end
     
                 for ii,vv in next,game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.Unit:GetChildren() do
@@ -215,10 +217,8 @@
                 task.spawn(function ()
                 v:FindFirstChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
                     if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
-                    table.insert(getgenv().Recording, {["Wave"] = Wave()[2] })
-                    local split_cash1 = game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text:split('$')
-                    local split_cash2 = split_cash1[1]:split('-')
-                    table.insert(getgenv().Recording, {["Money"] = split_cash2[2] })
+                    table.insert(getgenv().Recording, {["Wave"] = Wave() })
+                    table.insert(getgenv().Recording, {["Money"] = string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2] })
 
                     table.insert(getgenv().Recording, {["Upgrade"] = {["Position"] = tostring(v:FindFirstChild("HumanoidRootPart").Position) ,["UpgradeTag"] = tonumber(v:FindFirstChild('UpgradeTag').Value), ["Unit"] = tostring(v.Name) }})
                     end
@@ -229,7 +229,7 @@
                         Time = tick()
                     end
                     if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
-                    table.insert(getgenv().Recording, {["Wave"] = Wave()[2] })
+                    table.insert(getgenv().Recording, {["Wave"] = Wave() })
                     table.insert(getgenv().Recording, {['Wait'] = tick() - Time})
                     Time = tick()
 
@@ -341,10 +341,9 @@ end)
     PlayToggle:OnChanged(function()
         if Options.Play.Value then
             repeat wait() until Options.OptionsMacro.Value ~= nil
-            for i,v in next, listfiles("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro") do
-                local split1 = v:split('/') local split2 = split1[4]:split('.')
-                if split2[1] == Options.OptionsMacro.Value then
-                    local File = readfile(string.format("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense/Macro/%s.lua",split2[1]))
+            for i,v in next, listfiles(HUB) do
+                if string.split(v,"/")[5]:split(".")[1] == Options.OptionsMacro.Value then
+                    local File = readfile(string.format(HUB.."/%s.lua",string.split(v,"/")[5]:split(".")[1]))
                     getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
                 end
             end
@@ -355,7 +354,7 @@ end)
                         if ii == "Wave" and getgenv().Wave_Read then
                             warn('WAIT FOR WAVE  : '..vv)
                             repeat task.wait() until tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-"
-                            repeat wait() until tonumber(Wave()[2]) >= tonumber(vv) or not getgenv().Wave_Read
+                            repeat wait() until tonumber(Wave()) >= tonumber(vv) or not getgenv().Wave_Read
                         elseif ii == "Money" and getgenv().Money_Read then
                             warn('WAIT FOR MONEY  : '..vv)
                             repeat wait() until tonumber(Money()) >= tonumber(vv) or not getgenv().Money_Read
@@ -394,7 +393,7 @@ InterfaceManager:SetLibrary(Fluent)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
 InterfaceManager:SetFolder("CrazyDay")
-SaveManager:SetFolder("CrazyDay/"..game.Players.LocalPlayer.Name.." All Star Tower Defense")
+SaveManager:SetFolder(HUB)
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
@@ -535,7 +534,6 @@ coroutine.resume(coroutine.create(function()
          end)
       end
 end))
-
 
 
 coroutine.resume(coroutine.create(function()
