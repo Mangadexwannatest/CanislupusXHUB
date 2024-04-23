@@ -1039,7 +1039,7 @@ coroutine.resume(coroutine.create(function()
         if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
         if Options.Auto_Set_Distance.Value then
             if game.Players.LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
-                method = CFrame.new(getClosestBoss().HumanoidRootPart.CFrame)
+                method = CFrame.new(0,0,0)
             else
             if Options.METHOD_FARM.Value == "Behind"  then
                 method = CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Z+5)
