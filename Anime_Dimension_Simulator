@@ -1368,6 +1368,12 @@ if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and gam
                 v.Velocity, v.RotVelocity = V3, V3
                  end
               end
+            elseif not Options.AutoFarmAndStart.Value and not Options.AutoRaid.Value and not Options.Auto_FreeBossRush.Value
+             and not Options.Auto_SpeedRaid.Value and not Options.AUTO_LEVEL_SELECT.Value  and not Options.Auto_RaidChallange.Value then
+                game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+                gyros.Parent = nil
+                bv.Parent = nil
+                velocity.Parent = nil
             end
          end
       end)
