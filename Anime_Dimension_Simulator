@@ -863,7 +863,7 @@ end
 end))
 
 coroutine.resume(coroutine.create(function()
-    while wait(0.15) do pcall(function ()
+    while wait() do pcall(function ()
         if getgenv().WorkingForDoing or getgenv().RaidOpened or game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible then 
         else
         if Options.Auto_SpeedRaid.Value and game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and not getgenv().RaidOpened
@@ -972,7 +972,7 @@ coroutine.resume(coroutine.create(function()
         end
     end
         if Options.AutoFarmAndStart.Value or Options.AUTO_LEVEL_SELECT.Value then
-        if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible  then
+        if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible and not getgenv().CurrentSpeedRaid then
                 local args = {
                     [1] = "CreateRoom",
                     [2] = {
@@ -987,7 +987,7 @@ coroutine.resume(coroutine.create(function()
             end
         end
             if not game.Players.LocalPlayer.PlayerGui.UniversalGui.TeleportingUI.Visible
-            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 and not getgenv().WorkingForDoing then
+            and game.PlaceId == 6938803436 or game.PlaceId == 7274690025 or game.PlaceId == 7338881230 and not getgenv().WorkingForDoing and not getgenv().CurrentSpeedRaid then
                 game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
             end
        end)
@@ -1919,8 +1919,8 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(State)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator"))()
      end
     ]]
-    repeat wait() until State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started
     repeat wait() until Options.AutoExecuteScript.Value
+    repeat wait() until State == Enum.TeleportState.InProgress
     if Options.AutoExecuteScript.Value then
         QueueOnTeleport(script)
     end
