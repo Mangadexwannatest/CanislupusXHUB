@@ -1225,8 +1225,7 @@ local function CheckTouch()
         if part.Name == "DodgePart" then
             getgenv().STOP_Farm = true
             Cancolllll(true)
-            repeat wait() until not part.Parent
-            task.wait(0.95)
+            repeat task.wait() until not part.Parent
             getgenv().STOP_Farm = false
             Cancolllll(false)
         end
@@ -1530,8 +1529,8 @@ coroutine.resume(coroutine.create(function()
                     if Options.Dodge_Skill.Value and not getgenv().SAFE_MODE and game.Workspace:FindFirstChild("Head_Kuy") == nil then
                     local op = v.Material
                     local a = v:Clone()
-                    local side = math.clamp(3,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,175,side)
+                    local side = math.clamp(2.85,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,100,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
@@ -1545,7 +1544,7 @@ coroutine.resume(coroutine.create(function()
                     a.Name = "DodgePart"
                     a.Parent = v.Parent
                     repeat task.wait() until not v.Parent
-                    task.wait(0.55)
+                    task.wait(0.875)
                     a:Destroy()
                 end
                 end
