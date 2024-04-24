@@ -436,7 +436,6 @@ end
 coroutine.resume(coroutine.create(unload_ui))
 
 
-local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -461,16 +460,17 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    pcall(function ()
-Button.TouchTap:Connect(function()
-for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled then
-            v.Visible = not v.Visible
+    local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
+    Button.InputBegan:Connect(function(input)
+        if  (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+    for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+            if v.Name == "Frame" and i == 2 then
+                v.Visible = not v.Visible
+                        end
                     end
                 end
-        end)
-    end)
-end))
+           end)
+    end))
 
 coroutine.resume(coroutine.create(function()
     pcall(function()
