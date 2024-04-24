@@ -197,11 +197,12 @@
     
 
     game.Workspace.Unit.ChildAdded:Connect(function(v)
+        pcall(function()
         if Options.Record.Value then
+            v:WaitForChild("Owner")
+            v:WaitForChild('UpgradeTag')
         v:WaitForChild("HumanoidRootPart") 
-        v:WaitForChild("Owner")
-        if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
-            if v:FindFirstChild("UpgradeTag").Value >= 0 then
+            if v:FindFirstChild("UpgradeTag").Value >= 0  and tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
                 if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
                 table.insert(getgenv().Recording, {["Wave"] = Wave() })
                 end
@@ -235,12 +236,12 @@
 
                     table.insert(getgenv().Recording, {["Sell"] = {["Unit"] = tostring(v.Name) , ['Position'] =  tostring(v:FindFirstChild("HumanoidRootPart").Position)}})
 
-                      end
+                          end
+                    end)
                  end)
-              end)
-            end
-        end
-    end  
+              end
+           end
+   end)
 end)
 
     local function PlaceUnit(CFrame,Unit)
