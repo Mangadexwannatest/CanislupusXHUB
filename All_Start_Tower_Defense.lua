@@ -352,36 +352,36 @@ end)
                 pcall(function()
             warn("PLAY MACRO",#getgenv().Playing)
 				for i = 1, #getgenv().Playing do
-					for ii, vv in pairs(getgenv().Playing[i]) do
-                        if ii == "Wave" and getgenv().Wave_Read then
-                            warn('WAIT FOR WAVE  : '..vv)
+					for i, v in pairs(getgenv().Playing[i]) do
+                        if i == "Wave" and getgenv().Wave_Read then
+                            warn('WAIT FOR WAVE  : '..v)
                             repeat task.wait() until tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-"
-                            repeat wait() until tonumber(Wave()) >= tonumber(vv) or not getgenv().Wave_Read
-                        elseif ii == "Money" and getgenv().Money_Read then
-                            warn('WAIT FOR MONEY  : '..vv)
-                            repeat wait() until tonumber(Money()) >= tonumber(vv) or not getgenv().Money_Read
-                        elseif ii == 'Wait' then
-                            warn('Wait : '..vv)
-                            task.wait(vv)
-                        elseif ii == "Place" then
+                            repeat wait() until tonumber(Wave()) >= tonumber(v) or not getgenv().Wave_Read
+                        elseif i == "Money" and getgenv().Money_Read then
+                            warn('WAIT FOR MONEY  : '..v)
+                            repeat wait() until tonumber(Money()) >= tonumber(v) or not getgenv().Money_Read
+                        elseif i == 'Wait' then
+                            warn('Wait : '..v)
+                            task.wait(v)
+                        elseif i == "Place" then
                                 repeat 
-                                local Unit = Verify_Unit(vv['Position'], vv['Unit']) 
-								PlaceUnit(stringtocf(vv["Position"]),vv["Unit"])
+                                local Unit = Verify_Unit(v['Position'], v['Unit']) 
+								PlaceUnit(stringtocf(v["Position"]),v["Unit"])
                                 task.wait(0.25)
                                 until Unit or not Options.Play.Value
-                                warn('Place Unit : '..vv['Unit'])
-                        elseif ii == "Upgrade" then
+                                warn('Place Unit : '..v['Unit'])
+                        elseif i == "Upgrade" then
                                 repeat 
-                                local Upgarde_check = Verify_Unit_Upgrade(vv['Position'],vv['UpgradeTag'])
-                                Upgrade(vv["Unit"],vv["Position"],vv["UpgradeTag"])
+                                local Upgarde_check = Verify_Unit_Upgrade(v['Position'],v['UpgradeTag'])
+                                Upgrade(v["Unit"],v["Position"],v["UpgradeTag"])
                                 task.wait(0.35)
                                 until Upgarde_check or not Options.Play.Value
-                        elseif  ii == "Sell" then
+                        elseif  i == "Sell" then
                                 repeat
-                                local Sell_Check =  Verify_Unit(vv['Position'],vv['Unit'])
-                                Sell(vv['Unit'],vv['Position'])
+                                local Sell_Check =  Verify_Unit(v['Position'],v['Unit'])
+                                Sell(v['Unit'],v['Position'])
                                 task.wait(0.35)
-                                warn('Sell Unit : '..vv['Unit'])
+                                warn('Sell Unit : '..v['Unit'])
                                 until not Sell_Check
                             end
                     end
