@@ -779,7 +779,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
-    local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
+    local Button = game.CoreGui:WaitForChild("Close/Open")
     Button.InputBegan:Connect(function(input)
         if  (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
     for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
