@@ -349,6 +349,7 @@ end)
                 end
             end
             task.spawn(function()
+                pcall(function()
             warn("PLAY MACRO",#getgenv().Playing)
 				for i = 1, #getgenv().Playing do
 					for ii, vv in pairs(getgenv().Playing[i]) do
@@ -385,8 +386,9 @@ end)
                             end
                     end
 				end
-			end)
-        end
+			 end)
+          end)
+       end
     end)
 
 SaveManager:SetLibrary(Fluent)
