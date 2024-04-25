@@ -865,9 +865,9 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoBossSpawn.Value or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() == nil then
+            if not Options.AutoBossSpawn.Value or getgenv().STOP or not CheckBossSpawn() then
             else
-            if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
+            if Options.AutoBossSpawn.Value and not getgenv().STOP
             and not getgenv().InMerchant and not Chestawd() then
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     for _,check in pairs(Boss_Main) do
@@ -877,7 +877,7 @@ end))
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
-                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or Chestawd()
+                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InMerchant or Chestawd()
                                 getgenv().DontAcceptQuest = false   
                                 getgenv().StopFarmGem = false
                             end
