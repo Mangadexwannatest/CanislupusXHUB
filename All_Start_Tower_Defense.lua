@@ -397,7 +397,7 @@ end)
 
  local function SkipWave(value)
     if tostring(value) == "true" then
- game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
+        firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.YesButton.MouseButton1Click,game.Players.LocalPlayer)
     elseif tostring(value) == "false" then
         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.NoButton.MouseButton1Click,game.Players.LocalPlayer)
     end
