@@ -13,7 +13,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/25/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/26/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -30,7 +30,6 @@ local Tabs = {
 
 local Options = Fluent.Options
 local Weapon = {}
-local BackPackGet = game.Players.LocalPlayer.Backpack:GetChildren()
 local GetPlayers = {}
 local QuestTable = {}
 local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
@@ -40,13 +39,7 @@ local Travelingitem = {}
 local Boss_Main = {}
 local method
 
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-for i,v in pairs(game.ReplicatedStorage.ToolsHandle:GetChildren()) do
-    table.insert(SwordWeapon,v.Name)
-    end
-end)
-end))
+
 coroutine.resume(coroutine.create(function()
     pcall(function ()
     for i,v in pairs(game.Players:GetChildren()) do
@@ -405,8 +398,8 @@ end)
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/25/2024",
-        Content = ""
+        Title = "Last Update April/26/2024",
+        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon"
     })
     
 
@@ -682,14 +675,14 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoKenhaki.Value or game.Lighting:FindFirstChild("KenHaki").Enabled == true then
+        if not Options.AutoKenhaki.Value or game.Lighting:FindFirstChild("KenHaki").Enabled then
         else
-        if Options.AutoKenhaki.Value and game.Lighting:FindFirstChild("KenHaki").Enabled == false then
+        if Options.AutoKenhaki.Value and not game.Lighting:FindFirstChild("KenHaki").Enabled then
         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
         repeat
         game:GetService("ReplicatedStorage").Remotes.SkillHolder:FireServer("KenHaki")  
         wait(1.35)
-        until game.Lighting:FindFirstChild("KenHaki").Enabled == true or not Options.AutoKenhaki.Value
+        until game.Lighting:FindFirstChild("KenHaki").Enabled or not Options.AutoKenhaki.Value
             end
         end   
     end)   
@@ -721,7 +714,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if FindPortal() then
+        if not FindPortal() then
         else
         if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InPorTal then
             for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
@@ -750,7 +743,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if FindPortal() then 
+        if not FindPortal() then 
         else
         if Options.AutoPortal.Value and game.PlaceId == 15049111150  then
             for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
@@ -821,7 +814,8 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while  wait() do pcall(function ()
-            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() then
+            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() or getgenv().InMining 
+            or not getgenv().QuestHuntOnCoolDown then
             else
             if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
@@ -843,7 +837,8 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() then
+            if not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() or getgenv().InMining 
+            or not getgenv().QuestHuntOnCoolDown then
             else
             if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
@@ -858,7 +853,8 @@ end))
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                         until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
-                            getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining  or Chestawd() or CheckBossSpawn()
+                        or getgenv().InMerchant or getgenv().InMining  or Chestawd() or CheckBossSpawn()
+                        getgenv().DontAcceptQuest = false
                             end
                         end
                     end
