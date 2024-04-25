@@ -2,9 +2,16 @@
    repeat wait() until game:IsLoaded()
    repeat wait(0.2) until game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("HUD")
    game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
+   game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote")
+
 
    if game.CoreGui:FindFirstChild("CrazyDay") == nil then
        warn("Loading Gui..")
+       local firesignal = function(signal, arg2)
+        if getconnections(signal) then
+            firesignal(signal, arg2)
+        end
+    end
    
    local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
    local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -13,7 +20,7 @@
    -- Ui
    local Window = Fluent:CreateWindow({
        Title = "All Star Tower Defense",
-       SubTitle = "Last Update April/21/2024 [YT:CrazyDay/edek#1004]",
+       SubTitle = "Last Update April/25/2024 [YT:CrazyDay/edek#1004]",
        TabWidth = 160,
        Size = UDim2.fromOffset(580, 460),
        Acrylic = true,
@@ -30,8 +37,8 @@
    local Options = Fluent.Options
    getgenv().Recording = {}
    local Macro_Files = {}
-   local Time
    local HUB = '/CrazyDay/'..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense/Macro"
+   
    do
 
         if not isfolder("CrazyDay") then 
@@ -80,9 +87,9 @@
     local Action = Tabs.Main:AddDropdown("Action", {
         Title = "Select Actions",
         Description = nil,
-        Values = {"Wave","Money"},
+        Values = {"Wave","Money","Time","GameSpeed","SkipWave","SkillAction(Wait For Update)"},
         Multi = true,
-        Default = {"Wave","Money"},
+        Default = {"Wave","Money","Time","GameSpeed","SkipWave"},
     })
 
     local Input = Tabs.Main:AddInput("Input", {
@@ -113,12 +120,12 @@
 
     Tabs.Main:AddSection('Other')
 
-    local XSPEED = Tabs.Main:AddDropdown("Speed", {
-        Title = "Select speed",
+    Tabs.Main:AddDropdown("Speed", {
+        Title = "Select Game Speed",
         Description = nil,
-        Values = {"1X","2X"},
+        Values = {"2X","3X"},
         Multi = false,
-        Default = 2,
+        Default = 1,
     })
     
         Tabs.Main:AddDropdown("Ended_Action", {
@@ -129,8 +136,8 @@
         Default = 1,
     })
 
-    Tabs.Main:AddToggle("SPEED", {Title = "Auto speed", Default = false })
-    Tabs.Main:AddToggle("MissionEnded", {Title = "Auto MissionEnded", Default = false })
+    Tabs.Main:AddToggle("SPEED", {Title = "Auto Game Speed", Default = false })
+    Tabs.Main:AddToggle("Replay_Return_Next", {Title = "Auto Replay // Return // Next", Default = false })
 
 
     Action:OnChanged(function(Value)
@@ -144,12 +151,35 @@
         if table.find(Values,"Money") and not getgenv().Money_Read then
             getgenv().Money_Read = true
         end 
+        if table.find(Values,"Time") and not getgenv().Time_Read then
+            getgenv().Time_Read = true
+        end 
+        if table.find(Values,"GameSpeed") and not getgenv().GameSpeed_Read then
+            getgenv().GameSpeed_Read = true
+        end 
+        if table.find(Values,"SkipWave") and not getgenv().SkipWave_Read then
+            getgenv().SkipWave_Read = true
+        end 
+
+
+
         if not table.find(Values,"Wave") and getgenv().Wave_Read then
             getgenv().Wave_Read = false
         end
         if not table.find(Values,"Money") and getgenv().Money_Read then
             getgenv().Money_Read = false
         end 
+        if not table.find(Values,"Time") and getgenv().Time_Read then
+            getgenv().Time_Read = false
+        end 
+        if not table.find(Values,"GameSpeed") and getgenv().GameSpeed_Read then
+            getgenv().GameSpeed_Read = false
+        end 
+        if not table.find(Values,"SkipWave") and not getgenv().SkipWave_Read then
+            getgenv().SkipWave_Read = true
+        end 
+
+
     end)
 
     Tabs.Main:AddParagraph({
@@ -166,6 +196,13 @@
     local white = Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "Auto Close Gui After Execute", Default = false })
     Tabs.Other:AddToggle("AutoExecuteScript", {Title = "Auto Execute Script", Default = false })
+    Tabs.Other:AddButton({
+        Title = "TELEPORT LOBBY",
+        Description = nil,
+        Callback = function()
+            game:GetService("TeleportService"):Teleport(4996049426)
+        end
+    })
 
     white:OnChanged(function()
         if Options.AutoWhiteScreen.Value then
@@ -194,18 +231,72 @@
     local function Money()
         return game.Players.LocalPlayer.Money.Value
     end
+
+    local function TimeX()
+        return tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text)
+    end
     
 
+    local Hour
+    local Minute
+    local Second
+    local GameSpeed
+    local TimeGet
+    task.spawn(function ()
+        while task.wait(1) do pcall(function()
+        --[[local GameTime = math.floor(workspace.DistributedGameTime+0.5)
+        Hour = math.floor(GameTime/(60^2))%24
+        Minute = math.floor(GameTime/(60^1))%60
+        Second = math.floor(GameTime/(60^0))%60]]
+        TimeGet = tonumber(Workspace.DistributedGameTime)
+            end)
+        end
+    end)
+    game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FastForward"):WaitForChild("TextLabel"):GetPropertyChangedSignal("Text"):Connect(function ()
+    pcall(function()
+        if Options.Record.Value then
+        if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
+        table.insert(getgenv().Recording, {["Wave"] = Wave() })
+        end
+        table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = "false" }})
+        table.insert(getgenv().Recording, {["GameSpeed"] = TimeX()})
+        end
+    end)
+end)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote"):WaitForChild("YesButton").InputBegan:Connect(function(input)
+    pcall(function ()
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        if Options.Record.Value then
+            if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
+            table.insert(getgenv().Recording, {["Wave"] = Wave() })
+            end
+            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX() }})
+            table.insert(getgenv().Recording, {["SkipWave"] = "true" })
+              end
+          end
+    end)
+end)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote"):WaitForChild("NoButton").InputBegan:Connect(function(input)
+    pcall(function ()
+        if Options.Record.Value then
+            if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
+            table.insert(getgenv().Recording, {["Wave"] = Wave() })
+            end
+            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX() }})
+            table.insert(getgenv().Recording, {["SkipWave"] = "false" })
+        end
+    end)
+end)
     game.Workspace.Unit.ChildAdded:Connect(function(v)
         pcall(function()
         if Options.Record.Value then
             v:WaitForChild("Owner")
-            v:WaitForChild('UpgradeTag')
         v:WaitForChild("HumanoidRootPart") 
-            if v:FindFirstChild("UpgradeTag").Value >= 0  and tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
+            if v:WaitForChild("UpgradeTag").Value >= 0  and tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
                 if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
                 table.insert(getgenv().Recording, {["Wave"] = Wave() })
                 end
+                table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX()}})
     
                 for ii,vv in next,game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.Unit:GetChildren() do
                     if vv:IsA("Frame") and tostring(vv.Unit.Value) == tostring(v.Name) then
@@ -213,30 +304,36 @@
                 table.insert(getgenv().Recording, {["Money"] = MONEY })
                     end
                 end
+                
                 table.insert(getgenv().Recording, {["Place"] = {["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position) , ["Unit"] = tostring(v.Name) }})
                 
                 task.spawn(function ()
-                v:FindFirstChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
+                v:WaitForChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
                     if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
+                    if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
                     table.insert(getgenv().Recording, {["Wave"] = Wave() })
-                    table.insert(getgenv().Recording, {["Money"] = string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2] })
+                    end
+                    table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX()}})
 
-                    table.insert(getgenv().Recording, {["Upgrade"] = {["Position"] = tostring(v:FindFirstChild("HumanoidRootPart").Position) ,["UpgradeTag"] = tonumber(v:FindFirstChild('UpgradeTag').Value), ["Unit"] = tostring(v.Name) }})
+                    table.insert(getgenv().Recording, {["Money"] = string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2] })
+                    table.insert(getgenv().Recording, {["Upgrade"] = {["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position) ,["UpgradeTag"] = tonumber(v:WaitForChild('UpgradeTag').Value), ["Unit"] = tostring(v.Name) }})
                     end
                 end)
                 v:GetPropertyChangedSignal("Parent"):Connect(function()
-                    Time = tick()
-                    if not Time then
-                        Time = tick()
-                    end
                     if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
+                    if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
                     table.insert(getgenv().Recording, {["Wave"] = Wave() })
-                    table.insert(getgenv().Recording, {['Wait'] = tick() - Time})
-                    Time = tick()
+                    end
+                    table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX()}})
 
-                    table.insert(getgenv().Recording, {["Sell"] = {["Unit"] = tostring(v.Name) , ['Position'] =  tostring(v:FindFirstChild("HumanoidRootPart").Position)}})
+                    table.insert(getgenv().Recording, {["Sell"] = {["Unit"] = tostring(v.Name) , ['Position'] =  tostring(v:WaitForChild("HumanoidRootPart").Position)}})
 
                           end
+                    end)
+                v:WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2"):GetPropertyChangedSignal('Value'):Connect(function ()
+                    if v.SpecialMove.Special_Enabled2 then
+                        
+                        end
                     end)
                  end)
               end
@@ -297,6 +394,14 @@ end)
          end
      end
  end
+
+ local function SkipWave(value)
+    if tostring(value) == "true" then
+ game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
+    elseif tostring(value) == "false" then
+        firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.NoButton.MouseButton1Click,game.Players.LocalPlayer)
+    end
+ end
         
     --[[ ไม่ใช้ละ ขก ลบ
         local function RotationPoint(String, Separator)
@@ -349,20 +454,62 @@ end)
                 end
             end
             task.spawn(function()
-                pcall(function()
             warn("PLAY MACRO",#getgenv().Playing)
 				for i = 1, #getgenv().Playing do
 					for i, v in pairs(getgenv().Playing[i]) do
-                        if i == "Wave" and getgenv().Wave_Read then
+                       if i == "Wave" and getgenv().Wave_Read then
                             warn('WAIT FOR WAVE  : '..v)
                             repeat task.wait() until tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-"
-                            repeat wait() until tonumber(Wave()) >= tonumber(v) or not getgenv().Wave_Read
+                            repeat task.wait() until tonumber(Wave()) >= tonumber(v) or not getgenv().Wave_Read or not Options.Play.Value
+                        elseif i == 'Time' and getgenv().Time_Read then
+                            if getgenv().GameSpeed_Read and not Options.SPEED.Value then 
+                                warn("Wait Time : "..v['Sec'])
+                                repeat task.wait()  until TimeGet >= v["Sec"] or not getgenv().Time_Read or not getgenv().GameSpeed_Read or not Options.Play.Value
+                            elseif not getgenv().GameSpeed_Read or Options.SPEED.Value then
+
+                            if v['CheckTime'] == "1X"  and not Options.SPEED.Value then
+                                warn("Wait Time : "..v['Sec'])
+                            repeat task.wait()  until TimeGet >= v["Sec"] or not getgenv().Time_Read or getgenv().GameSpeed_Read or not Options.Play.Value or Options.SPEED.Value
+                            elseif v['CheckTime'] == "2X"  then
+                                warn("W̶a̶i̶t̶ ̶T̶i̶m̶e̶ ̶:̶ ̶"..v["Sec"],"* Detech Speed Time : "..v["Sec"]/2)
+                            repeat task.wait()  until TimeGet >= v["Sec"]/2 or not getgenv().Time_Read or getgenv().GameSpeed_Reador or not Options.Play.Value
+                            elseif v['CheckTime'] == "3X" then
+                                warn("W̶a̶i̶t̶ ̶T̶i̶m̶e̶ ̶:̶ ̶"..v["Sec"],"* Detech Speed Time : "..v["Sec"]/3)
+                            repeat task.wait()  until TimeGet >= v["Sec"]/3 or not getgenv().Time_Read or getgenv().GameSpeed_Read or not Options.Play.Value
+                        end
+                    elseif Options.SPEED.Value then 
+                        if Options.Speed.Value == "2X" and v['CheckTime'] ~= "2X" then
+                            repeat task.wait()  until TimeGet >= v["Sec"]/2 or not getgenv().Time_Read or Options.SPEED.Value or not Options.Play.Value
+                            warn("W̶a̶i̶t̶ ̶T̶i̶m̶e̶ ̶:̶ ̶"..v["Sec"],"* Detech Speed Time : "..v["Sec"]/2," By Speed value")
+                        elseif Options.Speed.Value == "3X" and v['CheckTime'] ~= "3X" then
+                            repeat task.wait()  until TimeGet >= v["Sec"]/3 or not getgenv().Time_Read or Options.SPEED.Value or not Options.Play.Value
+                            warn("W̶a̶i̶t̶ ̶T̶i̶m̶e̶ ̶:̶ ̶"..v["Sec"],"* Detech Speed Time : "..v["Sec"]/3)
+                        end
+                    end
+                elseif i == "GameSpeed" and getgenv().GameSpeed_Read and not Options.SPEED.Value then
+                    if v ~= "1X" and TimeX() ~= v then
+                        repeat 
+                        game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+                        task.wait(1)
+                        until TimeX() == v or not getgenv().GameSpeed_Read or not Options.Play.Value or Options.SPEED.Value 
+                        warn("Game Speed : "..v) 
+                    elseif v ==  "1X" and TimeX() ~= v then
+                            repeat
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+                            task.wait(1)
+                            until TimeX() == v or not getgenv().GameSpeed_Read or not Options.Play.Value or Options.SPEED.Value
+                            warn("Game Speed : "..v)
+                        end
+                    elseif i == "SkipWave" and getgenv().SkipWave_Read and game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
+                            repeat 
+                                SkipWave(v)
+                                task.wait(0.2)
+                            until not game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible or not getgenv().SkipWave_Read or not Options.Play.Value
+                            warn('Skip Wave : '..v)
                         elseif i == "Money" and getgenv().Money_Read then
-                            warn('WAIT FOR MONEY  : '..v)
-                            repeat wait() until tonumber(Money()) >= tonumber(v) or not getgenv().Money_Read
-                        elseif i == 'Wait' then
-                            warn('Wait : '..v)
-                            task.wait(v)
+                            warn('WAIT FOR MONEY  : '..v) repeat task.wait() until tonumber(Money()) >= tonumber(v) or not getgenv().Money_Read
+
+
                         elseif i == "Place" then
                                 repeat 
                                 local Unit = Verify_Unit(v['Position'], v['Unit']) 
@@ -381,12 +528,11 @@ end)
                                 local Sell_Check =  Verify_Unit(v['Position'],v['Unit'])
                                 Sell(v['Unit'],v['Position'])
                                 task.wait(0.35)
-                                warn('Sell Unit : '..v['Unit'])
-                                until not Sell_Check
+                                until not Sell_Check or not Options.Play.Value
+                                warn("Sell Unit : "..v['Unit'])
                             end
                     end
 				end
-			 end)
           end)
        end
     end)
@@ -501,19 +647,13 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
-local firesignal = function(signal, arg2)
-    if getconnections(signal) then
-        firesignal(signal, arg2)
-    end
-end
-
 coroutine.resume(coroutine.create(function()
     game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
-        repeat wait(0.25) until Options.MissionEnded.Value
-        if Options.MissionEnded.Value then
+        repeat wait(0.25) until Options.Replay_Return_Next.Value
+        if Options.Replay_Return_Next.Value then
             repeat wait(0.15)
             firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
-            until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.MissionEnded.Value
+            until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.Replay_Return_Next.Value
         end
     end)
 end))
@@ -525,13 +665,23 @@ coroutine.resume(coroutine.create(function()
         tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
         else
         if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
-            repeat wait(1)
+            repeat
+                if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+            task.wait(1)
+            end
             until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
-        elseif Options.SPEED.Value and Options.Speed.Value == "1X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "1X" then
-            repeat wait(1)
+        elseif Options.SPEED.Value and Options.Speed.Value == "3X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" then
+            if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then 
+            else
+            repeat 
+                if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+            task.wait(1)
+                end
             until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
+            or not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275)
+                   end
                end
             end
          end)
