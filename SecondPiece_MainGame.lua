@@ -500,7 +500,7 @@ do
 end))
 
 
-function CheckBossSpawn()
+local function CheckBossSpawn()
     if Options.AutoBossSpawn.Value then
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
         for _,check in pairs(Boss_Main) do
@@ -518,7 +518,7 @@ local firesignal = function(signal, arg2)
 end
 
 
-function Chestawd()
+local function Chestawd()
     if Options.AutoChests.Value then
     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
         if v.Name == "Handle" and tostring(v.Owner.Text.Text) == game.Players.LocalPlayer.Name then
@@ -536,8 +536,11 @@ coroutine.resume(coroutine.create(function()
         getgenv().InMining = false
         else
         if Options.AutoMining.Value then
+            repeat
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Part_Detechtions").CFrame
         getgenv().InMining = true
+        task.wait()
+            until getgenv().InMining
         if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining")
         and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
             repeat wait()
@@ -868,18 +871,18 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoBossSpawn.Value or getgenv().STOP or not CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
+            if not Options.AutoBossSpawn.Value or getgenv().STOP or getgenv().InMerchant or Chestawd() or not CheckBossSpawn() then
             else
-            if Options.AutoBossSpawn.Value  then
+            if Options.AutoBossSpawn.Value and CheckBossSpawn() then
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     for _,check in pairs(Boss_Main) do
-                        if string.find(v.Name,check) and v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
+                        if string.find(v.Name,check) and v.Humanoid.Health > 0  then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
-                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InMerchant or Chestawd()
+                                until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InMerchant or Chestawd() or not CheckBossSpawn()
                                 getgenv().DontAcceptQuest = false   
                                 getgenv().StopFarmGem = false
                             end
