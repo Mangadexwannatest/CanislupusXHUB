@@ -398,10 +398,8 @@ end)
  local function SkipWave(var)
     if var == "true"  then
         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.YesButton.MouseButton1Click,game.Players.LocalPlayer)
-        warn("Just Skip")
     elseif var == "false"  then
         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.NoButton.MouseButton1Click,game.Players.LocalPlayer)
-        warn("Not Skip")
     end
  end
         
