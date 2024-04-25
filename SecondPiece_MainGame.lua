@@ -972,7 +972,8 @@ coroutine.resume(coroutine.create(function()
 
     coroutine.resume(coroutine.create(function()
         while wait(1) do pcall(function ()
-            if not Options.AutoBountyHunter.Value then 
+            if not Options.AutoBountyHunter.Value then
+                TimeChecker = 0
             else
             if Options.AutoBountyHunter.Value  then
                 local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace.NPC.Kuru.HumanoidRootPart.Position).Magnitude
@@ -1018,7 +1019,7 @@ game.Workspace.Lives.ChildAdded:Connect(function(v)
         repeat task.wait() until not v.Parent or v.Humanoid.Health <= 0
         getgenv().InBossHunt = false
         warn("ENED BOSS HUNT")
-    end
+        end
     end)
 end)
 
@@ -1165,49 +1166,6 @@ end)
     end
 end))
 
-function Webhook()
-    local timeInfo = os.date("*t")
-    local Full = table.concat(RewardCollage,"\n[+1] ")
-    BBody = game:GetService("HttpService"):JSONEncode({
-        content = nil,
-        embeds = {{
-            ["author"] = {
-                ["name"] = "CrazyDay",
-                ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-            },
-            ["title"] = "Second Piece", 
-            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
-            ["footer"] = {
-                ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-                ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
-            
-            },
-            ["color"] = tonumber(0xFFD700),
-            ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-            ["fields"] = {
-            
-                            {
-                    ["name"] = "Dungeon Reward",
-                    ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
-                    ["inline"] = false
-                    
-                },
-                
-            }
-            }}
-        })
-    local response = http_request or request or HttpPost or syn.request
-    response({
-    Url = Options.WebhookLink.Value,
-    Method = "POST",
-    Headers = {
-        ["Content-Type"] = "application/json"
-    },
-    Body = BBody
-    })    
-
-end
-
 function WebhookQuestTask()
 for i,v in pairs(game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren()) do
 if v.ClassName == "Frame" then
@@ -1236,7 +1194,7 @@ if v2.Name == "WorldModel" then
                 
                                 {
                         ["name"] = "Quest Hunter Reward",
-                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..v3.Name,
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+] "..v3.Name,
                         ["inline"] = false
                         
                     },
@@ -1267,8 +1225,6 @@ game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v
     if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
     and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" and not string.find(v.Text.Text,"on cooldown") then
         pcall(function ()
-        local Split_V = string.split(v.Text.Text, ">")
-        local Split_A = string.split(Split_V[2], "<")
         local timeInfo = os.date("*t")                               
         BBody = game:GetService("HttpService"):JSONEncode({
             content = nil,
@@ -1290,7 +1246,7 @@ game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v
                 
                                 {
                         ["name"] = "Mining Reward",
-                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..string.split(v.Text.Text, ">")[2].split("<")[1],
                         ["inline"] = false
                         
                     },
@@ -1315,29 +1271,6 @@ end)
 coroutine.resume(coroutine.create(function()
     pcall(function ()
         game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
-        if Options.AutoWebhookDungeon.Value and game.PlaceId ~= 15049111150 then
-            wait(.15)
-        for i,v in next,game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface.ItemRewardFrame:GetChildren() do
-            if v.ClassName == "Frame" then
-                for a,b in next,v:GetDescendants() do
-                    if b.Name == "WorldModel" then
-                        for c,d in next,b:GetChildren() do
-                            table.insert(RewardCollage,d.Name)
-                            warn("Insert")
-                        end
-                        end
-                end
-            end
-        end
-    end
-    end)
-end)
-end))
-
-
-coroutine.resume(coroutine.create(function()
-    pcall(function ()
-        game.Players.LocalPlayer.PlayerGui.ItemRewardGui.Interface:GetPropertyChangedSignal("Visible"):Connect(function()
             wait(.35)
         if Options.AutoWebhookBountyTask.Value and game.PlaceId == 15049111150 then
             WebhookQuestTask()
@@ -1346,20 +1279,6 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
     
-
-coroutine.resume(coroutine.create(function()
-    pcall(function () 
-        game.Players.LocalPlayer.PlayerGui.Dungeon.Wave:GetPropertyChangedSignal("Text"):Connect(function()
-        if Options.AutoWebhookDungeon.Value and game.PlaceId ~= 15049111150 then
-            if string.find(game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,"Ended") then
-            wait(1)
-        Webhook()
-            end
-            end
-        end)
-    end)
-end))
-
 
 coroutine.resume(coroutine.create(function()
         pcall(function()
@@ -1621,48 +1540,6 @@ end))
 
 
 
-function Webhook()
-local timeInfo = os.date("*t")
-local Full = table.concat(RewardCollage,"\n[+1] ")
-BBody = game:GetService("HttpService"):JSONEncode({
-    content = nil,
-    embeds = {{
-        ["author"] = {
-            ["name"] = "CrazyDay",
-            ["icon_url"] = "https://yt3.ggpht.com/ytc/AIdro_ka8akbqZkZq1vfNvenQ4CUg1mDkmo1msvUFaRTBbkl2AQ=s600-c-k-c0x00ffffff-no-rj-rp-mo"
-        },
-        ["title"] = "Second Piece", 
-        ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png",
-        ["footer"] = {
-            ["text"] = "Time : " .. timeInfo.hour .. ":" .. timeInfo.min,
-            ["icon_url"] = "https://tr.rbxcdn.com/514ca219675a6e1e89b4c205898db194/150/150/Image/Png"
-        
-        },
-        ["color"] = tonumber(0xFFD700),
-        ["url"] = "https://www.roblox.com/games/15049111150/X2-Second-Piece",
-        ["fields"] = {
-        
-                        {
-                ["name"] = "Dungeon Reward",
-                ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n[+1] "..Full.."\n"..game.Players.LocalPlayer.PlayerGui.Dungeon.Wave.Text,
-                ["inline"] = false
-                
-            },
-            
-        }
-        }}
-    })
-local response = http_request or request or HttpPost or syn.request
-response({
-Url = Options.WebhookLink.Value,
-Method = "POST",
-Headers = {
-    ["Content-Type"] = "application/json"
-},
-Body = BBody
-})    
-
-end
 function WebhookMerchant()
 local timeInfo = os.date("*t")
 local ItemIn = table.concat(Travelingitem,"\n")
@@ -1711,9 +1588,7 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
     pcall(function () 
     if Options.AutoWebhookMerchant.Value and v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and getgenv().InMerchant then
-        local Split_V = string.split(v.Text.Text, ">")
-        local Split_A = string.split(Split_V[2], "<")
-        table.insert(Travelingitem,Split_A[1])
+        table.insert(Travelingitem,string.split(v.Text.Text, ">")[2].split("<")[1])
     end
     end)
 end)
@@ -1727,7 +1602,7 @@ while wait() do pcall(function ()
             wait(1)
             if #Travelingitem ~= 0 then
                 WebhookMerchant()
-                wait(1)
+                task.wait(1)
                 table.clear(Travelingitem)
             end
     end
