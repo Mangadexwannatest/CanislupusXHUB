@@ -1225,6 +1225,8 @@ game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v
     if Options.MiningWebhook.Value and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") 
     and game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored and v.Name == "NotifyText" and not string.find(v.Text.Text,"on cooldown") then
         pcall(function ()
+            local Split_V = string.split(v.Text.Text, ">")
+            local Split_A = string.split(Split_V[2], "<")
         local timeInfo = os.date("*t")                               
         BBody = game:GetService("HttpService"):JSONEncode({
             content = nil,
@@ -1246,7 +1248,7 @@ game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v
                 
                                 {
                         ["name"] = "Mining Reward",
-                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..string.split(v.Text.Text, ">")[2].split("<")[1],
+                        ["value"] = "Username : ".."||**"..game.Players.LocalPlayer.Name.."**||".."\n".."[Mining Mastery Increased]\n".."You received : "..Split_A[1],
                         ["inline"] = false
                         
                     },
@@ -1586,7 +1588,9 @@ coroutine.resume(coroutine.create(function()
 game.Players.LocalPlayer.PlayerGui.NotifyUI.Frame.ChildAdded:Connect(function (v)
     pcall(function () 
     if Options.AutoWebhookMerchant.Value and v.Name == "NotifyText" and string.find(v.Text.Text,"You received") and getgenv().InMerchant then
-        table.insert(Travelingitem,string.split(v.Text.Text, ">")[2].split("<")[1])
+        local Split_V = string.split(v.Text.Text, ">")
+        local Split_A = string.split(Split_V[2], "<")
+        table.insert(Travelingitem,Split_A[1])
     end
     end)
 end)
