@@ -802,7 +802,7 @@ end))
     
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt then
+            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() then
             else
             if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not getgenv().InMining and not Chestawd() then
@@ -816,6 +816,7 @@ end))
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Parent.Parent.CFrame
                                 fireproximityprompt(v.Parent)
                                 until not Options.AutoQuest.Value or not getgenv().NoQuest or getgenv().DontAcceptQuest or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining or Chestawd()
+                                or CheckBossSpawn()
                             end
                             end
                         end
@@ -830,7 +831,7 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while  wait() do pcall(function ()
-            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt then
+            if not Options.AutoQuest.Value or getgenv().DontAcceptQuest or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() then
             else
             if Options.AutoQuest.Value and not getgenv().DontAcceptQuest and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
@@ -841,6 +842,7 @@ end))
                                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * method
                                         until Get_Mon_QuestID().Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
                                         or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining or Chestawd()
+                                        or CheckBossSpawn()
                                     end
                         end
                     end
@@ -851,7 +853,7 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().STOP or getgenv().InBossHunt then
+            if not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().STOP or getgenv().InBossHunt or CheckBossSpawn() then
             else
             if  Options.AutoGem.Value and not getgenv().StopFarmGem and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not getgenv().InMining  and not Chestawd() then
@@ -866,7 +868,7 @@ end))
                                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                         until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
-                            getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining  or Chestawd()
+                            getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining  or Chestawd() or CheckBossSpawn()
                             end
                         end
                     end
