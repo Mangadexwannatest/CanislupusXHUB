@@ -13,7 +13,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Second Piece",
-    SubTitle = "Last Update April/18/2024 [YT:CrazyDay/edek#1004]",
+    SubTitle = "Last Update April/25/2024 [YT:CrazyDay/edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -29,17 +29,7 @@ local Tabs = {
 }
 
 local Options = Fluent.Options
-local SwordWeapon = 
-{
-}
-local MeeleeWeapon = {
-    "Hakari","Natsu","Jiren","Choso","Gilgamesh","Itadori","Gon","Killua",
-    "Sukuna","Sukuna [Half Power]","Tatsumaki","Uraume","Gojo","Gojo [Unleashed]",
-    "Naruto","Combat"}
-local FruitsWeapon = {
-"Bomb","Smoke","Light","Sand","Flame","Quake",
-"GodLight","Operation","Solar"
-}
+local Weapon = {}
 local BackPackGet = game.Players.LocalPlayer.Backpack:GetChildren()
 local GetPlayers = {}
 local QuestTable = {}
@@ -47,6 +37,8 @@ local BossTable = {"Shank","Monkey King","Bandit Leader","Lieutenant Marine"}
 local RewardCollage = {}
 local ItemInDropdown = {}
 local Travelingitem = {}
+local Boss_Main = {}
+local method
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
@@ -55,7 +47,6 @@ for i,v in pairs(game.ReplicatedStorage.ToolsHandle:GetChildren()) do
     end
 end)
 end))
-
 coroutine.resume(coroutine.create(function()
     pcall(function ()
     for i,v in pairs(game.Players:GetChildren()) do
@@ -67,8 +58,8 @@ end))
 coroutine.resume(coroutine.create(function()
     pcall(function ()
 game.Players.ChildAdded:Connect(function ()
+    GetPlayers = {}
     for i,v in pairs(game.Players:GetChildren()) do
-    table.clear(GetPlayers)
     table.insert(GetPlayers,v.Name)
     end
         end)
@@ -87,12 +78,43 @@ for i,v in pairs(game.Workspace.Quest:GetDescendants()) do
 end))
 
 do
-    local QuestDDD = Tabs.Main:AddDropdown("SelectQuest", {
+    Tabs.Main:AddDropdown("SelectQuest", {
         Title = "Select Quest",
         Values = {"Bandit Leader","Bandit","Clown Pirate","Marine","Monkey","Monkey King","Snow Bandit"},
         Multi = false,
         Default = 1,
     })
+
+    local BossOption = Tabs.Main:AddDropdown("BossSelect", {
+        Title = "Select Boss",
+        Values = {"Cid","Kashimo","Sukuna","Natsu","Artoria","Gojo"},
+        Multi = true,
+        Default = {nil},
+    })
+
+    Tabs.Main:AddDropdown("Method", {
+        Title = "Select Method",
+        Values = {"Behind","Over"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Tabs.Main:AddSlider("DistanceForMon", 
+    {
+        Title = "Distance",
+        Description = nil,
+        Default = 6.45,
+        Min = 0,
+        Max = 10,
+        Rounding = 1,
+        })
+
+    BossOption:OnChanged(function(Value)
+        Boss_Main = {}
+        for Value, State in next, Value do
+            table.insert(Boss_Main, Value) 
+        end
+    end)
 
     function Get_Mon_QuestID()
         for i,v in pairs(game.Workspace.Lives:GetChildren()) do
@@ -117,11 +139,17 @@ do
 
     Tabs.Main:AddToggle("AutoQuest", {Title = "Auto Quest", Default = false })
     Tabs.Main:AddToggle("AutoGem", {Title = "Auto Gem", Default = false })
-    Tabs.Main:AddToggle("AutoBossSpawn", {Title = "Auto Boss Spawn", Default = false })
+    Tabs.Main:AddToggle("AutoBossSpawn", {Title = "Auto Select Boss", Default = false })
 
-    Tabs.Main:AddDropdown("Weapon", {
-        Title = "Select Weapons",
-        Values = {"Melee","Sword","DemonFruit"},
+    for i,v in pairs(game.Players.LocalPlayer:WaitForChild("Backpack"):GetChildren()) do
+        if v:IsA("Tool") then
+            table.insert(Weapon,v.Name)
+        end
+    end
+
+    local SelectWp = Tabs.Main:AddDropdown("WeaponSelect", {
+        Title = "Select Weapon",
+        Values = Weapon,
         Multi = false,
         Default = nil,
     })
@@ -137,6 +165,20 @@ do
 
     Tabs.Main:AddToggle("AutoChests", {Title = "Auto Chest", Default = false })
     Tabs.Main:AddToggle("AutoMining", {Title = "Auto Mining", Default = false })
+    Tabs.Main:AddButton({
+        Title = "Refresh Weapons",
+        Description = nil,
+        Callback = function()
+            Weapon = {}
+            for i,v in pairs(game.Players.LocalPlayer:WaitForChild("Backpack"):GetChildren()) do
+                if v:IsA("Tool") then
+                    table.insert(Weapon,v.Name)
+                    SelectWp:SetValue(nil)
+                    SelectWp:SetValues(Weapon)
+                end
+            end
+        end
+    })
 
 
 
@@ -313,7 +355,7 @@ do
 
 
 MerchantDropdown:OnChanged(function(Value)
-    table.clear(ItemInDropdown)
+    ItemInDropdown = {}
     for Value, State in next, Value do
         table.insert(ItemInDropdown, Value)
     end
@@ -363,8 +405,8 @@ end)
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/18/2024",
-        Content = "[*] Auto Update Merchant Item\n[*] Fixed Auto Chest\n[*] Fixed Auto Mining\n[+] Webhook Mining\n[*] Fixed Auto Merchant lag/not buy items\n[*] Fixed Webhook Traveling"
+        Title = "Last Update April/25/2024",
+        Content = "LLLLLLLL"
     })
     
 
@@ -432,6 +474,17 @@ local function onCharacterAdded(character)
 end
 
 coroutine.resume(coroutine.create(function()
+    while task.wait(0.25) do pcall(function ()
+        if Options.Method.Value == "Behind" then
+            method = CFrame.new(0,0,Options.DistanceForMon.Value)
+        elseif Options.Method.Value == "Over" then
+            method = CFrame.new(0,Options.DistanceForMon.Value,0) * CFrame.Angles(math.rad(-90),0,0)
+          end
+      end)
+    end
+end))
+
+coroutine.resume(coroutine.create(function()
     pcall(function ()
 game:GetService("Players").LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
 do 
@@ -475,6 +528,7 @@ end
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if not Options.AutoMining.Value or getgenv().STOP then 
+        getgenv().InMining = false
         else
         if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
             getgenv().InMining = false
@@ -508,13 +562,10 @@ coroutine.resume(coroutine.create(function()
             end
            end
         end
-        if Chestawd() or CheckBossSpawn() or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().STOP then   
-        else
-        local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Workspace:FindFirstChild("Part_Detechtions").Position).Magnitude
-        if dist <= 10 and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil 
-        and not game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored then
-        game.Players.LocalPlayer.Character.Humanoid.Health = 0
-        end
+        if Chestawd() or CheckBossSpawn() or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().STOP or not getgenv().InMining then
+            if not getgenv().InMining and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") then
+                game:GetService("Players").LocalPlayer.Character.InputHandle.Mining:FireServer()
+           end
         end
     end)
 end
@@ -536,27 +587,18 @@ break
 end
 end
  
+function Dist()
+    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getclosest().HumanoidRootPart.Position).Magnitude
+    return dist
+end
+
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-            for i,v in next, BackPackGet do
-                local MeleeTable = table.find(MeeleeWeapon,v.Name)
-                local SwordTable = table.find(SwordWeapon,v.Name)
-                local DemonFruitTable = table.find(FruitsWeapon,v.Name)
-                for _,c in next,game.Workspace.Lives:GetChildren() do
-                    if c.ClassName == "Model" and c.Name ~= game.Players.LocalPlayer.Name then
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - c.HumanoidRootPart.Position).Magnitude
-                if Options.Weapon.Value == "Melee" and MeleeTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
-                and not getgenv().NoEquip then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                end
-                if  Options.Weapon.Value == "Sword" and SwordTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25
-                and not getgenv().NoEquip  then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                end
-                if  Options.Weapon.Value == "DemonFruit" and DemonFruitTable and not game.Players.LocalPlayer.Character:FindFirstChild(v.Name) and dist <= 25 
-                and not getgenv().NoEquip then
-                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack:FindFirstChild(v.Name))
-                        end
+        if getgenv().NoEquip or Dist() > 30 or game.Players.LocalPlayer.Character:FindFirstChild(Options.WeaponSelect.Value) then
+        else
+            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if v.Name == Options.WeaponSelect.Value then
+                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild(Options.WeaponSelect.Value))
                     end
                 end
             end
@@ -564,10 +606,6 @@ coroutine.resume(coroutine.create(function()
     end
 end))
 
-function Dist()
-    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getclosest().HumanoidRootPart.Position).Magnitude
-    return dist
-end
 
 function FindPlayerSkill()
 for i,v in pairs(game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:GetChildren()) do
@@ -799,7 +837,7 @@ end))
                     if v.Name == "Quest" and v.Value == Options.SelectQuest.Value and not getgenv().NoQuest then
                         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                                             repeat task.wait()
-                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Get_Mon_QuestID().HumanoidRootPart.CFrame * method
                                         until Get_Mon_QuestID().Humanoid.Health <= 0 or not Options.AutoQuest.Value or getgenv().NoQuest or getgenv().DontAcceptQuest
                                         or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or getgenv().InMining or Chestawd()
                                     end
@@ -824,7 +862,7 @@ end))
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat
                                 task.wait()
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                         until v.Humanoid.Health <= 0 or not Options.AutoGem.Value or getgenv().StopFarmGem or getgenv().InBossHunt or getgenv().STOP or not getgenv().QuestHuntOnCoolDown
                             getgenv().DontAcceptQuest = false or getgenv().InMerchant or getgenv().InMining  or Chestawd()
@@ -845,13 +883,11 @@ end))
             if Options.AutoBossSpawn.Value and not getgenv().STOP and not getgenv().InBossHunt and getgenv().QuestHuntOnCoolDown and game.PlaceId == 15049111150 
             and not getgenv().InMerchant and not Chestawd() then
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-                    if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
-                    and not getgenv().STOP and not getgenv().InBossHunt
-                    and not getgenv().InMerchant  then
-                        if v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
+                    for _,check in pairs(Boss_Main) do
+                        if string.find(v.Name,check) and v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
                             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                             repeat task.wait()
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,7)
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * method
                                 getgenv().DontAcceptQuest = true
                                 getgenv().StopFarmGem = true
                                 until v.Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBossSpawn.Value or getgenv().InBossHunt or not getgenv().QuestHuntOnCoolDown or getgenv().InMerchant or Chestawd()
@@ -1030,28 +1066,23 @@ game.ReplicatedStorage.Settings.ChildAdded:Connect(function(v)
 end
 end)
 end)
+local bv = Instance.new("BodyVelocity")
 coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()  
-if not Options.Dodge_Skill_BountyHunt.Value then 
-        else
-if not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") then
-    local NO_CLIP_PART = Instance.new("Part",game.Players.LocalPlayer.Character)
-    NO_CLIP_PART.Name = "CrazyDay_NO"
-    NO_CLIP_PART.CanCollide = true
-    NO_CLIP_PART.Anchored = true
-    NO_CLIP_PART.Transparency = 1
-    NO_CLIP_PART.Size = Vector3.new(2,1,2)
-elseif game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") and Options.Dodge_Skill_BountyHunt.Value then
-    repeat
-        task.wait()
-        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = true
-        game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.5,0)
-     until not game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO") or not Options.Dodge_Skill_BountyHunt.Value
-     game.Players.LocalPlayer.Character:FindFirstChild("CrazyDay_NO").CanCollide = false
+    while wait() do
+        pcall(function()
+if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+    if Options.AutoGem.Value or Options.AutoQuest.Value or Options.AutoBossSpawn.Value or Options.AutoBountyHunter.Value then
+        game.Players.LocalPlayer.Character.Humanoid.PlatformStand=true
+        bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+        bv.MaxForce = Vector3.new(10000,10000,10000)
+        bv.Velocity = Vector3.new(0,0,0)
+    elseif not Options.AutoGem.Value and not Options.AutoQuest.Value and not Options.AutoBossSpawn.Value and not Options.AutoBountyHunter.Value then
+                game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+                bv.Parent = nil
+            end
+         end
+      end)
     end
-    end
-end)
-end
 end))
 
 
@@ -1080,9 +1111,9 @@ end)
                         game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                         getgenv().InMining = false
                         repeat 
-                        wait(.85)
                             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.NPC.Kuru.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
+                            task.wait(0.75)
                             until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
                             or getgenv().InMerchant or CriminalCheck() or Chestawd() or getgenv().InMerchant
                         end
@@ -1108,7 +1139,7 @@ end)
                 elseif not getgenv().STOP and not getgenv().Dodge_Criminal  then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     repeat task.wait()
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,0,7)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * method
                     until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
                     or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant
                 end
@@ -1380,43 +1411,41 @@ coroutine.resume(coroutine.create(function()
         end)
         end))
         
-        local Button = game.CoreGui:WaitForChild("Close/Open"):WaitForChild("TextButton")
-        
         coroutine.resume(coroutine.create(function()
             while wait() do pcall(function ()
-        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
-        for i,v in pairs(game.CoreGui:GetChildren()) do
-            if v.Name == "ScreenGui" then
-                for _,k in next, v:GetDescendants() do
-                    if k.Name == "TextLabel" and string.find(k.Text,"Second Piece") then
+               if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+                    for i,v in pairs(game.CoreGui:GetChildren()) do
+                    if v.Name == "ScreenGui" then
+                       for _,k in next, v:GetDescendants() do
+                        if k.Name == "TextLabel" and string.find(k.Text,"Second Piece") then
                         k.Parent.Parent.Parent.Parent.Name = "CrazyDay"
                         warn("Found Ui. . .")  
-                    end
-                    end
-                end
-            end
-        end
-    end)
-    if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
-        print("break")
-        break
-    end
-end
+                           end
+                      end
+                  end
+               end
+             end
+         end)
+           if game.CoreGui:FindFirstChild("CrazyDay") ~= nil then
+             warn("break")
+           break
+       end
+     end
 end))
 
 
 coroutine.resume(coroutine.create(function()
-    pcall(function ()
-Button.TouchTap:Connect(function()
-for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
-        if v.Name == "Frame" and i == 2 and game:GetService("UserInputService").TouchEnabled then
-            v.Visible = not v.Visible
+    local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
+    Button.InputBegan:Connect(function(input)
+        if  (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+    for i,v in pairs(game.CoreGui.CrazyDay:GetChildren()) do
+            if v.Name == "Frame" and i == 2 then
+                v.Visible = not v.Visible
+                        end
                     end
                 end
-        end)
-    end)
-end))
-
+           end)
+    end))
 
 
 
@@ -1777,16 +1806,14 @@ coroutine.resume(coroutine.create(function()
         local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
         local script = 
         [[
-            repeat wait() until game:IsLoaded()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
-    
         local success = pcall(function()
+            repeat wait() until game:IsLoaded()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
          end)
          
-         print(success)
          if not success then
             wait(20)
+            repeat wait() until game:IsLoaded()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/SecondPiece.lua"))()
          end
         ]]
