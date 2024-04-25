@@ -602,11 +602,11 @@ end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function()
-        if not FindPlayerSkill() then
+        if FindPlayerSkill() then
         else
             if Dist() <= 10 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-            wait(.5)
+           task.wait(0.5)
     game:GetService'VirtualUser':CaptureController()
     game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
         end
