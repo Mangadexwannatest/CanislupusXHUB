@@ -406,7 +406,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/25/2024",
-        Content = "Fixed Bug 21:48"
+        Content = ""
     })
     
 
@@ -705,17 +705,17 @@ coroutine.resume(coroutine.create(function()
     end
 end))
 
-function FINDPortal()
+local function FindPortal()
     for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
         if v:IsA("BasePart") then
-            return true
+            return v
         end
     end
 end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function ()
-        if FINDPortal() == nil then
+        if FindPortal() then
         else
         if Options.AutoPortal.Value and game.PlaceId == 15049111150 and not getgenv().InPorTal then
             for i,v in pairs(game.Workspace.World.Portal:GetChildren()) do
@@ -744,7 +744,7 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if FINDPortal() == nil then 
+        if FindPortal() then 
         else
         if Options.AutoPortal.Value and game.PlaceId == 15049111150  then
             for i,v in pairs(game.Workspace.World.Portal:GetDescendants()) do
