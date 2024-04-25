@@ -270,7 +270,7 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForCh
             if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
             table.insert(getgenv().Recording, {["Wave"] = Wave() })
             end
-            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX() }})
+            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = "false" }})
             table.insert(getgenv().Recording, {["SkipWave"] = "true" })
               end
           end
@@ -282,7 +282,7 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForCh
             if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
             table.insert(getgenv().Recording, {["Wave"] = Wave() })
             end
-            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = TimeX() }})
+            table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = "false" }})
             table.insert(getgenv().Recording, {["SkipWave"] = "false" })
         end
     end)
@@ -395,11 +395,13 @@ end)
      end
  end
 
- local function SkipWave(value)
-    if tostring(value) == "true" then
+ local function SkipWave(var)
+    if var == "true"  then
         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.YesButton.MouseButton1Click,game.Players.LocalPlayer)
-    elseif tostring(value) == "false" then
+        warn("Just Skip")
+    elseif var == "false"  then
         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.NoButton.MouseButton1Click,game.Players.LocalPlayer)
+        warn("Not Skip")
     end
  end
         
@@ -500,7 +502,8 @@ end)
                             until TimeX() == v or not getgenv().GameSpeed_Read or not Options.Play.Value or Options.SPEED.Value
                             warn("Game Speed : "..v)
                         end
-                    elseif i == "SkipWave" and getgenv().SkipWave_Read and game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
+                    elseif i == "SkipWave" and getgenv().SkipWave_Read then
+                        repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible
                             repeat 
                                 SkipWave(v)
                                 task.wait(0.2)
