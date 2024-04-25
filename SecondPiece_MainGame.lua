@@ -406,7 +406,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/25/2024",
-        Content = "LLLLLLLL"
+        Content = "Fixed Bug 21:48"
     })
     
 
@@ -865,10 +865,9 @@ end))
 
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()
-            if not Options.AutoBossSpawn.Value or getgenv().STOP or not CheckBossSpawn() then
+            if not Options.AutoBossSpawn.Value or getgenv().STOP or not CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
             else
-            if Options.AutoBossSpawn.Value and not getgenv().STOP
-            and not getgenv().InMerchant and not Chestawd() then
+            if Options.AutoBossSpawn.Value  then
                 for i,v in pairs(game.Workspace.Lives:GetChildren()) do
                     for _,check in pairs(Boss_Main) do
                         if string.find(v.Name,check) and v.Humanoid.Health > 0 and getgenv().QuestHuntOnCoolDown then
