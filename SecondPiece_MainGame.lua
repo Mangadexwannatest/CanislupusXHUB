@@ -496,17 +496,18 @@ do
         end)
 end))
 
+
 local function CheckBossSpawn()
     if Options.AutoBossSpawn.Value then
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
-        if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
-        then
-        return v
+        for _,check in pairs(Boss_Main) do
+            if string.find(v.Name,check) and v.Humanoid.Health > 0 then
+                return v
+                 end
+            end
         end
-    end
     end    
 end
-
 local firesignal = function(signal, arg2)
     if getconnections(signal) then
         firesignal(signal, arg2)
