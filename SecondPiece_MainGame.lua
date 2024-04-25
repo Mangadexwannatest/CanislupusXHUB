@@ -465,8 +465,11 @@ local function onCharacterAdded(character)
         CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                 wait(1)
-                getgenv().STOP = false
                 print("PLAYER SPAWN : START ALL")
+                repeat
+                    getgenv().STOP = false 
+                    wait()
+                until not getgenv().STOP
                 CHeckDie:Disconnect()
             end)
         end
@@ -493,11 +496,11 @@ do
         onCharacterAdded(alreadyExistingCharacter )
             end
         end
-        end)
+    end)
 end))
 
 
-local function CheckBossSpawn()
+function CheckBossSpawn()
     if Options.AutoBossSpawn.Value then
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
         for _,check in pairs(Boss_Main) do
@@ -520,7 +523,7 @@ function Chestawd()
     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
         if v.Name == "Handle" and tostring(v.Owner.Text.Text) == game.Players.LocalPlayer.Name then
             return v
-        end
+           end
         end
     end    
 end
