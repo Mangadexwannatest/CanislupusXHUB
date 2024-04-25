@@ -501,7 +501,7 @@ local function CheckBossSpawn()
     for i,v in pairs(game.Workspace.Lives:GetChildren()) do
         if v.Name:match("Natsu") or v.Name:match("Tatsumaki") or v.Name:match("Artoria") or v.Name:match("Sukuna") or v.Name:match("Gojo") or v.Name:match("Kashimo") 
         then
-        return v.Name
+        return v
         end
     end
     end    
@@ -518,7 +518,7 @@ function Chestawd()
     if Options.AutoChests.Value then
     for i,v in pairs(game.Workspace.Chests:GetDescendants()) do
         if v.Name == "Handle" and tostring(v.Owner.Text.Text) == game.Players.LocalPlayer.Name then
-            return true
+            return v
         end
         end
     end    
@@ -527,7 +527,7 @@ end
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
-        if not Options.AutoMining.Value or getgenv().STOP then 
+        if not Options.AutoMining.Value or getgenv().STOP or CheckBossSpawn() then 
         getgenv().InMining = false
         else
         if Options.AutoMining.Value and getgenv().InBossHunt or getgenv().STOP or CheckBossSpawn() or getgenv().InMerchant or Chestawd() then
@@ -542,7 +542,7 @@ coroutine.resume(coroutine.create(function()
             end
         else
 
-        if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() == nil and not getgenv().InMerchant  and not Chestawd()  then
+        if Options.AutoMining.Value and getgenv().QuestHuntOnCoolDown and not getgenv().InBossHunt and not getgenv().STOP and CheckBossSpawn() and not getgenv().InMerchant  and not Chestawd()  then
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild("Part_Detechtions").CFrame
         if game.Players.LocalPlayer.Character:FindFirstChild("InputHandle"):FindFirstChild("Mining")
         and game.ReplicatedStorage.Settings[game.Players.LocalPlayer.Name]:FindFirstChild("Mining") == nil then
@@ -1103,7 +1103,7 @@ end)
     
     coroutine.resume(coroutine.create(function()
         while task.wait() do pcall(function ()
-            if getgenv().STOP or getgenv().InMerchant or not Options.AutoBountyHunter.Value then 
+            if getgenv().STOP or getgenv().InMerchant or not Options.AutoBountyHunter.Value or CheckBossSpawn() then 
             else
             if Options.AutoBountyHunter.Value and not getgenv().InBossHunt and not getgenv().QuestHuntOnCoolDown and not getgenv().STOP
             and not getgenv().InMerchant and not CriminalCheck() and not Chestawd()  then
@@ -1115,7 +1115,7 @@ end)
                             fireproximityprompt(game.Workspace.NPC.Kuru.HumanoidRootPart.Task)
                             task.wait(0.75)
                             until getgenv().InBossHunt or getgenv().QuestHuntOnCoolDown or not Options.AutoBountyHunter.Value or getgenv().STOP 
-                            or getgenv().InMerchant or CriminalCheck() or Chestawd() or getgenv().InMerchant
+                            or getgenv().InMerchant or CriminalCheck() or Chestawd() or getgenv().InMerchant or CheckBossSpawn() 
                         end
                         end
                 end
@@ -1126,7 +1126,7 @@ end)
 
     coroutine.resume(coroutine.create(function()
         while task.wait() do pcall(function ()
-            if getgenv().STOP or Chestawd() or getgenv().InMerchant or not Options.AutoBountyHunter.Value then
+            if getgenv().STOP or Chestawd() or getgenv().InMerchant or not Options.AutoBountyHunter.Value or CheckBossSpawn() then
             else
             if Options.AutoBountyHunter.Value and not getgenv().STOP and not getgenv().InMerchant and getgenv().InBossHunt and not Chestawd() then
                 if not getgenv().STOP and getgenv().Dodge_Criminal  then
@@ -1134,14 +1134,14 @@ end)
                     repeat task.wait()
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * CFrame.new(0,150,0)
                     until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                    or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant
+                    or not getgenv().Dodge_Criminal or getgenv().InMerchant or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant or CheckBossSpawn()
 
                 elseif not getgenv().STOP and not getgenv().Dodge_Criminal  then
                     game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
                     repeat task.wait()
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CriminalCheck().HumanoidRootPart.CFrame * method
                     until CriminalCheck().Humanoid.Health <= 0 or getgenv().STOP or not Options.AutoBountyHunter.Value or game.PlaceId ~= 15049111150
-                    or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant
+                    or getgenv().InMerchant or getgenv().Dodge_Criminal or not getgenv().InBossHunt or Chestawd() or getgenv().InMerchant or CheckBossSpawn()
                 end
                 end
             end
