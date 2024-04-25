@@ -399,7 +399,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/26/2024",
-        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon"
+        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon\n[*] Fixed stop farm after merchant"
     })
     
 
@@ -1484,61 +1484,6 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP then 
-        else
-        if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
-        for i,v in pairs(game.Workspace.NPC:GetChildren()) do
-            if v.Name == "Traveling merchant" then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
-            repeat wait(1) 
-            fireproximityprompt(v.HumanoidRootPart.Merchant) 
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
-            getgenv().InMerchant = true
-            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled 
-            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
-        end
-    end
-            end
-        end
-    end)
-end
-end))
-
-
-coroutine.resume(coroutine.create(function()
-    while wait() do pcall(function ()
-        if not Options.AutoBuyMerchantItem.Value then 
-        else
-        if game.PlaceId == 15049111150 then
-            for i,v in pairs(game.Workspace.NPC:GetChildren()) do
-        if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().InMerchant then
-            getgenv().InMerchant = false
-        end
-        if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().AlrBuy then
-            getgenv().AlrBuy = false
-        end
-        if v.Name == "Traveling merchant" then 
-            local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-        if dist >= 20 then
-            wait(12)
-            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
-        elseif dist <= 20 or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled then
-            wait(7.5)
-            getgenv().AlrBuy = true
-            getgenv().InMerchant = false
-            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
-        end
-    end
-        end
-            end
-        end
-    end)
-end
-end))
-
-
 
 function WebhookMerchant()
 local timeInfo = os.date("*t")
@@ -1582,6 +1527,59 @@ Body = BBody
 })    
 end
 
+function DistOfMerchant()
+    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+        if v.Name == "Traveling merchant" then
+            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+            return DISTSTUCK
+        end
+    end
+end
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP then 
+            getgenv().InMerchant = false
+        else
+        if Options.AutoBuyMerchantItem.Value and not getgenv().AlrBuy and not getgenv().STOP then
+        for i,v in pairs(game.Workspace.NPC:GetChildren()) do
+            if v.Name == "Traveling merchant" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
+            repeat wait(1) 
+            fireproximityprompt(v.HumanoidRootPart.Merchant) 
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) 
+            getgenv().InMerchant = true
+            until not Options.AutoBuyMerchantItem.Value or getgenv().AlrBuy or getgenv().STOP or game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled 
+            firesignal(game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("MerchantUI"):FindFirstChild("Interface"):FindFirstChild("Merchant"):FindFirstChild("Close"):FindFirstChild("Close").MouseButton1Click,game.Players.LocalPlayer)
+        end
+    end
+            end
+        end
+    end)
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if not Options.AutoBuyMerchantItem.Value then 
+        else
+        if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().InMerchant then
+            getgenv().InMerchant = false
+        end
+        if game.Workspace.NPC:FindFirstChild("Traveling merchant") == nil and getgenv().AlrBuy then
+            getgenv().AlrBuy = false
+        end
+        if DistOfMerchant() <= 20 then
+            task.wait(8)
+            game.Players.LocalPlayer.PlayerGui.MerchantUI.Enabled = false
+            getgenv().AlrBuy = true
+            getgenv().InMerchant = false
+           end
+         end
+      end)
+    end
+end))
+
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
@@ -1610,14 +1608,6 @@ while wait() do pcall(function ()
 end
 end))
 
-function DistOfMerchant()
-    for i,v in pairs(game.Workspace.NPC:GetChildren()) do
-        if v.Name == "Traveling merchant" then
-            local DISTSTUCK = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-            return DISTSTUCK
-        end
-    end
-end
 
 
     local IntertFaceMerChant = game.Players.LocalPlayer.PlayerGui.MerchantUI.Interface.Merchant.ItemFrame
