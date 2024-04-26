@@ -575,11 +575,16 @@ end
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
+        if getgenv().STOP then
+            repeat wait() until not getgenv().STOP
+            task.wait(0.25)
+        else
         if getgenv().NoEquip or Dist() > 30 or game.Players.LocalPlayer.Character:FindFirstChild(Options.WeaponSelect.Value) then
         else
             for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                 if v.Name == Options.WeaponSelect.Value then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild(Options.WeaponSelect.Value))
+                        end
                     end
                 end
             end
@@ -599,6 +604,10 @@ end
 
 coroutine.resume(coroutine.create(function()
     while task.wait() do pcall(function()
+        if getgenv().STOP then
+            repeat wait() until not getgenv().STOP
+            task.wait(0.25)
+        else
         if FindPlayerSkill() then
         else
             if Dist() <= 10 then
@@ -606,6 +615,7 @@ coroutine.resume(coroutine.create(function()
            task.wait(0.5)
     game:GetService'VirtualUser':CaptureController()
     game:GetService'VirtualUser':Button1Down(Vector2.new(1200,672))
+            end
         end
     end
 end)
@@ -615,8 +625,11 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait(.15) do pcall(function()
-        if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 or game.Workspace.Lives:FindFirstChild(game.Players.LocalPlayer.Name) == nil 
-        or FindPlayerSkill()  then
+        if getgenv().STOP then
+            repeat wait() until not getgenv().STOP
+            task.wait(0.25)
+        else
+        if FindPlayerSkill()  then
         else
         if getgenv().AutoSkillV and Dist() <= 30 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -642,7 +655,8 @@ coroutine.resume(coroutine.create(function()
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
             game:GetService("VirtualInputManager"):SendKeyEvent(true, "F", false, nil)
             game:GetService("VirtualInputManager"):SendKeyEvent(false, "F", false, nil)
-        end
+                  end
+               end
            end
        end)
     end
