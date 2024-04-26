@@ -399,7 +399,7 @@ end)
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/26/2024",
-        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon\n[*] Fixed stop farm after merchant"
+        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon\n[*] Fixed stop farm after merchant\n[*] Fixed after player dead cna't using skill"
     })
     
 
