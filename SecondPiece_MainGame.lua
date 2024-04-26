@@ -457,12 +457,9 @@ local function onCharacterAdded(character)
         print("PLAYER DIED : STOP ALL")
         CHeckDie = game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
                 game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
-                wait(1)
+                task.wait(1.15)
                 print("PLAYER SPAWN : START ALL")
-                repeat
-                    getgenv().STOP = false 
-                    wait()
-                until not getgenv().STOP
+                getgenv().STOP = false
                 CHeckDie:Disconnect()
             end)
         end
