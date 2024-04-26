@@ -253,8 +253,9 @@ local SelectWp = Tabs.Main:AddDropdown("WeaponSelect", {
 
     UpdateLog:AddParagraph({
         Title = "Last Update April/26/2024",
-        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon"
+        Content = "[*] All Bug Shoud be fixed\n[*] Change traget boss spawn first\n[*] Fixed Attack Dummy in dungeon\n[*] Fixed stop farm after merchant\n[*] Fixed after player dead cna't using skill"
     })
+    
     
 end
 
@@ -480,12 +481,17 @@ end
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
+        if getgenv().STOP_ALL or FindPlayerSkill() then
+            repeat task.wait() until not getgenv().STOP_ALL
+            task.wait(0.25)
+        else
         if Dist() > 30 or game.Players.LocalPlayer.Character:FindFirstChild(Options.WeaponSelect.Value) then
         else
             for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                 if v.Name == Options.WeaponSelect.Value then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild(Options.WeaponSelect.Value))
-                    end
+                end    
+                end
                 end
             end
         end)
@@ -496,6 +502,8 @@ end))
 coroutine.resume(coroutine.create(function()
 	while task.wait() do pcall(function()
         if getgenv().STOP_ALL or FindPlayerSkill() then
+            repeat task.wait() until not getgenv().STOP_ALL
+            task.wait(0.25)
         else
         if Dist() <= 10 then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
@@ -511,7 +519,9 @@ end))
 
 coroutine.resume(coroutine.create(function()
     while task.wait(0.15) do pcall(function()
-        if getgenv().STOP_ALL  then
+        if getgenv().STOP_ALL or FindPlayerSkill() then
+            repeat task.wait() until not getgenv().STOP_ALL
+            task.wait(0.25)
         else
         if getgenv().AutoSkillV and Dist() <= 999 and getclosest().Humanoid.Health > 0 and not FindPlayerSkill() then
             game.Workspace.Lives:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("Humanoid")
