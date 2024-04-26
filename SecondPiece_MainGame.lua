@@ -1056,6 +1056,10 @@ local bv = Instance.new("BodyVelocity")
 coroutine.resume(coroutine.create(function()
     while wait() do
         pcall(function()
+if getgenv().STOP then
+    game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+    bv.Parent = nil
+else
 if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
     if Options.AutoGem.Value or Options.AutoQuest.Value or Options.AutoBossSpawn.Value or Options.AutoBountyHunter.Value then
         game.Players.LocalPlayer.Character.Humanoid.PlatformStand=true
@@ -1065,6 +1069,7 @@ if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and gam
     elseif not Options.AutoGem.Value and not Options.AutoQuest.Value and not Options.AutoBossSpawn.Value and not Options.AutoBountyHunter.Value then
                 game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
                 bv.Parent = nil
+                end
             end
          end
       end)
