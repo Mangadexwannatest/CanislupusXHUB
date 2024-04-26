@@ -278,12 +278,14 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForCh
 end)
 game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote"):WaitForChild("NoButton").InputBegan:Connect(function(input)
     pcall(function ()
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         if Options.Record.Value then
             if tostring(game.Players.LocalPlayer.PlayerGui.HUD.Wave.Text) ~= "-Wave-" then
             table.insert(getgenv().Recording, {["Wave"] = Wave() })
             end
             table.insert(getgenv().Recording, {["Time"] = { ["Sec"] = TimeGet , ["CheckTime"] = "false" }})
             table.insert(getgenv().Recording, {["SkipWave"] = "false" })
+            end
         end
     end)
 end)
