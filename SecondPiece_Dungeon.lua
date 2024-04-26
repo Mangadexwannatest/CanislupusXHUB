@@ -445,6 +445,10 @@ local bv = Instance.new("BodyVelocity")
 coroutine.resume(coroutine.create(function()
     while wait() do
         pcall(function()
+if getget().STOP_ALL then
+    game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+    bv.Parent = nil
+else
 if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
     if Options.AutoPortal.Value then
         game.Players.LocalPlayer.Character.Humanoid.PlatformStand=true
@@ -454,6 +458,7 @@ if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and gam
     elseif not Options.AutoPortal.Value then
                 game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
                 bv.Parent = nil
+                end
             end
          end
       end)
