@@ -525,8 +525,23 @@ end
                         if i == "Wave" and getgenv().Wave_Read then
                             repeat wait() until Wave() >= tonumber(v) or not getgenv().Wave_Read
                         -- Time
-                        elseif i == "Time" and getgenv().Time_Read then
-                            repeat wait() until Traget_Time() >= tonumber(v["Time"]) or not getgenv().Time_Read
+                        elseif i == "Time" and getgenv().Time_Read then 
+                            if getgenv().GameSpeed_Read and not Options.SPEED.Value then   -- Check Time ให้เล่นตามความเร็วเกม
+                            repeat wait() until Traget_Time() >= tonumber(v["Time"]) or not getgenv().Time_Read or not getgenv().GameSpeed_Read or Options.SPEED.Value
+                        elseif not getgenv().GameSpeed_Read or Options.SPEED.Value then
+                            if v["Game Speed"] == "1X" and not Options.SPEED.Value then -- Check ถ้าเกม GameSpeed read ปิดอยู่แต่ ค่า speed ในเกมมันเปลี่ยน
+                                repeat wait() until Traget_Time() >= tonumber(v["Time"]) or not getgenv().Time_Read or getgenv().GameSpeed_Read or Options.SPEED.Value
+                            elseif v["Game Speed"] ~= "1X" then
+                                repeat wait() until Traget_Time() >= tonumber(v["Time"]/tonumber(v["Time"])) or not getgenv().Time_Read or getgenv().GameSpeed_Read
+                            end
+                        elseif Options.SPEED.Value then -- Check ถ้าเปิด ออโต้ speed แล้วค่าความเร็วเกมเปลี่ยน
+                            if Options.Speed.Value == "2X" and v['Game Speed'] ~= "2X" then -- Check ถ้า auto speed เท่ากับ 2 แต่ค่า file speed ในเกมตอนนี้ไม่เป็น 2
+                                -- ที่ไม่ check 1 เพราะใส่ auto speed แค่ 2 กับ 3 เพราะงั้นแม่งเปลี่ยนเป็น 1 ไม่ได้
+                                repeat wait() until Traget_Time() >= v["Time"]/2 or not getgenv().Time_Read or not Options.SPEED.Value
+                            elseif Options.Speed.Value == "3X" and v['Game Speed'] ~= "3X" then
+                                repeat wait() until Traget_Time() >= v["Time"]/3 or not getgenv().Time_Read or not Options.SPEED.Value
+                            end
+                        end
                         -- Changed Game Speed
                         elseif i == "Game Speed On Changed" and getgenv().GameSpeed_Read then
                             --Gaem Speed More than 2
@@ -543,9 +558,9 @@ end
                                     until Time() == v or not getgenv().GameSpeed_Read or Options.SPEED.Value
                                 end
                         -- Vote Wave
-                        elseif i == "VoteWave" and Wave() <= v["Wave"] then
-                            repeat task.wait() until Get_TheWaveI() or Wave() > v["Wave"] -- Wait For Wave Gui
-                            repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"] -- fire 
+                        elseif i == "VoteWave" and Wave() <= v["Wave"] and getgenv().SkipWave_Read then
+                            repeat task.wait() until Get_TheWaveI() or Wave() > v["Wave"] or not getgenv().SkipWave_Read  -- Wait For Wave Gui
+                            repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"] or not getgenv().SkipWave_Read  -- fire 
                         -- Money
                         elseif i == "Money" then
                             repeat wait() until Money() >= tonumber(v)
@@ -576,14 +591,14 @@ end
                             until not iS_Unit -- Check if not unit position
                         
                         --Skill Activate
-                        elseif i == "UseSpecialMove" then
+                        elseif i == "UseSpecialMove" and getgenv().UseSpecialMove_Read then
                             repeat
                                 local just_ability = UseSpecialMove(v["Unit"],v["Position"])
                                 UseSpecialMove(v["Unit"],v["Position"])
                                 task.wait(0.25)
-                            until just_ability  -- Check if unit alr ability
+                            until just_ability or not getgenv().UseSpecialMove_Read  -- Check if unit alr ability
                         -- Auto Toggle
-                        elseif i == "AutoToggle" then
+                        elseif i == "AutoToggle" and getgenv().Auto_Activate_Read then
                             AutoToggleActivate(v["Unit"],v["Position"],v["Value"])
                             -- No check gu tum mai pen 
                      end
