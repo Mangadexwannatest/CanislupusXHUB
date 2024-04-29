@@ -316,7 +316,7 @@ function DestroyKuy()
 
     Tabs.Main:AddDropdown("SelectRaid", {
         Title = "SELECT RAID",
-        Values = {"Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
+        Values = {"Psycho Student Raid","Buff Boy Raid","Warlord Raid","Gear 5 Fluffy Raid","Tengoku Raid","Hirito Raid","Titan Raid"},
         Multi = false,
         Default = 1,
     })
@@ -326,6 +326,7 @@ function DestroyKuy()
         Multi = false,
         Default = 1,
     })
+
     Tabs.Main:AddToggle("AutoRaid", {Title = "AUTO RAID", Default = false })
 
     Tabs.Main:AddToggle("AutoLeaveIfRaid", {Title = "AUTO STOP RETRY // LEAVE IF RAID OPENED", Default = false })
