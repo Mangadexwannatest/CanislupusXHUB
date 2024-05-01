@@ -107,7 +107,6 @@ local Tabs = {
 local Options = Fluent.Options
 getgenv().Recording = {}
 local Macro_Files = {}
-local HUB = '/CrazyDay/'..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense/Macro"
 
 
    do
@@ -119,48 +118,44 @@ local HUB = '/CrazyDay/'..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defens
         warn('make folder 1')
         end
         if isfolder("CrazyDay") then
-            if not isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense") then
+            if not isfolder("CrazyDay/ASTD") then
                 repeat wait()
-                makefolder("/CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense")
-            until isfolder("CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense")
+                makefolder("/CrazyDay/ASTD")
+            until isfolder("CrazyDay/ASTD")
             warn('make folder 2')
             end
         end
 
-    function MakeFolder()
-        if not isfolder(HUB) then 
-            makefolder(HUB)
+    if not isfolder("/CrazyDay/ASTD/Macro") then
+        repeat
+        makefolder("/CrazyDay/ASTD/Macro")
+        task.wait(0.35)
+        until isfolder("/CrazyDay/ASTD/Macro")
+    end
+    if isfolder("/CrazyDay/ASTD/Macro") then
+        if not isfile("/CrazyDay/ASTD/Macro") then
+            writefile("/CrazyDay/ASTD/Macro/Crazy Day.lua", game:GetService("HttpService"):JSONEncode({}))
         end
     end
 
-    function List()
-        repeat 
-            MakeFolder()
-            wait() 
-        until isfolder(HUB)
-        if isfolder(HUB) then
-            local List = listfiles(HUB)
-            for i,v in next,List do
-                table.insert(Macro_Files,string.split(v,"/")[5]:split(".")[1])
-                    end
-                end
-            end
-        
-    List()
+    for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
+        table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+    end
+    repeat task.wait() until #Macro_Files >= 1
     local MacroOptions = Tabs.Main:AddDropdown("OptionsMacro", {
         Title = "Select File",
         Description = nil,
         Values = Macro_Files,
         Multi = false,
-        Default = nil,
+        Default = nil
     })
 
     local Action = Tabs.Main:AddDropdown("Action", {
         Title = "Select Actions",
-        Description = nil,
+        Description = "recommended to enable all",
         Values = {"Wave","Money","Time","Game Speed","Skip Wave","UseSpecialMove","Auto Activate","Priority","Auto Wave Skip"},
         Multi = true,
-        Default = {"Wave","Money","Time","Game Speed","Skip Wave","UseSpecialMove","Auto Activate","Priority","Auto Wave Skip"},
+        Default = {nil},
     })
 
     local Input = Tabs.Main:AddInput("Input", {
@@ -171,19 +166,24 @@ local HUB = '/CrazyDay/'..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defens
         Numeric = false,
         Finished = true,
         Callback = function(bool)
-            writefile(string.format(HUB.."/%s.lua", bool)	, "")
-            table.clear(Macro_Files)
-            List()
-            MacroOptions:SetValue(bool)
+            if not table.find(Macro_Files,bool) then
+            writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua", bool)	, "")
+            Macro_Files = {}
+            for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
+                table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+            end
             MacroOptions:SetValues(Macro_Files)
+            MacroOptions:SetValue(bool)
             Fluent:Notify({
                 Title = "Creat succeed",
                 Content = "Macro name",
                 SubContent = bool,
-                Duration = 5 
+                Duration = 5
         })
         end
+    end
     })
+
 
 
     local RecordToggle = Tabs.Main:AddToggle("Record", {Title = "Macro Record",Description = "after record disable to save or wait for the game has ended", Default = false })
@@ -528,6 +528,11 @@ end)
             game:GetService("TeleportService"):Teleport(4996049426)
         end
     })
+    local UpdateLog = Tabs.Other:AddSection("Update Log")
+    UpdateLog:AddParagraph({
+        Title = "Last Update May/1/2024 [15:12 UTC + 07:00]",
+        Content = "[*] Fixed Macro file now showing when using autoload\n[*] Fixed auto clams reward\n[*] Fixed create file after autoload\n[*] Chang file macro position"
+    })
 
     white:OnChanged(function()
         if Options.AutoWhiteScreen.Value then
@@ -552,7 +557,7 @@ end)
                 Content = "Macro name",
                 SubContent = Options.OptionsMacro.Value,
                 Duration = 5 })
-                writefile(string.format(HUB.."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode(getgenv().Recording))
+                writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode(getgenv().Recording))
             end
         end
     end)
@@ -878,9 +883,9 @@ end
     PlayToggle:OnChanged(function()
         if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
             repeat wait() until Options.OptionsMacro.Value ~= nil
-            for i,v in next, listfiles(HUB) do
-                if string.split(v,"/")[5]:split(".")[1] == Options.OptionsMacro.Value then
-                    local File = readfile(string.format(HUB.."/%s.lua",string.split(v,"/")[5]:split(".")[1]))
+            for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
+                if string.split(v,"/")[5]:split(".lua")[1] == Options.OptionsMacro.Value then
+                    local File = readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
                     getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
                 end
             end
@@ -986,13 +991,14 @@ end
     end
 end)
 
-
+repeat task.wait() until #Macro_Files >= 1
+warn("Loaded")
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({})
-InterfaceManager:SetFolder("CrazyDay")
-SaveManager:SetFolder("/CrazyDay/"..game.Players.LocalPlayer.Name.."_All_Star_Tower_Defense")
+InterfaceManager:SetFolder("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
+SaveManager:SetFolder("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
@@ -1278,6 +1284,14 @@ local function VisibleGui()
     end
 end
 
+function ClamsReward()
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Content.TaskList.ScrollFrame:GetChildren()) do
+        if v:IsA("Frame") and v.ClaimButton.Button.Active then
+            firesignal(v.ClaimButton.Button.MouseButton1Click,game.Players.LocalPlayer)
+        end
+    end
+end
+
 local Task
 local Event
 coroutine.resume(coroutine.create(function()
@@ -1292,22 +1306,16 @@ coroutine.resume(coroutine.create(function()
             until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
 
             else
-                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Content.TaskList.ScrollFrame:GetChildren()) do
-                    if v:IsA("Frame") and v.ClaimButton.Button.Active then
-                        firesignal(v.ClaimButton.Button.MouseButton1Click,game.Players.LocalPlayer)
-                    elseif v:IsA("Frame") and not v.ClaimButton.Button.Active then
-                        repeat
-                        VisibleGui()
-                            Event = game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Event.FG
-                        firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Daily.FG.MouseButton1Click,game.Players.LocalPlayer)
-                        task.wait(0.25)
-                        VisibleGui()
-                        game:GetService("VirtualInputManager"):SendMouseButtonEvent(Event.AbsolutePosition.X + 27.5, Event.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
-                        VisibleGui()
-                        task.wait(0.15)
-                        until v.ClaimButton.Button.Active or not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible
-                    end 
-                end
+                repeat
+                    ClamsReward()
+                    Event = game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Event.FG
+                    firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Tasks.FG.MouseButton1Click,game.Players.LocalPlayer)
+                    task.wait(1)
+                    ClamsReward()
+                    firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Daily.FG.MouseButton1Click,game.Players.LocalPlayer)
+                    task.wait(1)
+                    ClamsReward()
+                until v.ClaimButton.Button.Active or not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible
             end
         end
         if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
