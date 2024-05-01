@@ -903,8 +903,10 @@ end
                         elseif not getgenv().GameSpeed_Read or Options.SPEED.Value then
                             if v["Game Speed"] == "1X" and not Options.SPEED.Value then -- Check ถ้าเกม GameSpeed read ปิดอยู่แต่ ค่า speed ในเกมมันเปลี่ยน
                                 repeat wait() until Traget_Time() >= tonumber(v["Time"]) or not getgenv().Time_Read or getgenv().GameSpeed_Read or Options.SPEED.Value
-                            elseif v["Game Speed"] ~= "1X" then
-                                repeat wait() until Traget_Time() >= tonumber(v["Time"]/tonumber(v["Time"])) or not getgenv().Time_Read or getgenv().GameSpeed_Read or Options.SPEED.Value
+                            elseif v["Game Speed"] == "2X" then
+                                repeat wait() until Traget_Time() >= v["Time"]/2 or not getgenv().Time_Read or getgenv().GameSpeed_Read or Options.SPEED.Value
+                            elseif v["Game Speed"] == "3X" then
+                                repeat wait() until Traget_Time() >= v["Time"]/3 or not getgenv().Time_Read or getgenv().GameSpeed_Read or Options.SPEED.Value
                             end
                         elseif Options.SPEED.Value then -- Check ถ้าเปิด ออโต้ speed แล้วค่าความเร็วเกมเปลี่ยน
                             if Options.Speed.Value == "2X" and v['Game Speed'] ~= "2X" then -- Check ถ้า auto speed เท่ากับ 2 แต่ค่า file speed ในเกมตอนนี้ไม่เป็น 2
