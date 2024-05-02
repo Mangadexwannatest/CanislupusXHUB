@@ -112,6 +112,7 @@ local function Challenge_Adventures()
 end
 
 
+
 local function CF()
     if game:GetService("ReplicatedStorage").Lobby.Value and game:GetService("Workspace"):FindFirstChild("Queue"):FindFirstChild("Joinables") then
         return CFrame.new(-2322.02148, 5365.50391, -1.47732902, 1, -3.34713333e-11, 0.000121481258, 2.93671649e-11, 1, 3.37843851e-08, -0.000121481258, -3.37843815e-08, 1)
@@ -192,7 +193,7 @@ local Actions = {}
     })
 
     local Action = Tabs.Main:AddDropdown("Action", {
-        Title = "Select Actions",
+        Title = "Select Actions (Macro Play)",
         Description = "recommended to enable all",
         Values = {"Summon","Upgrade","Sell","Game Speed","Skip Wave","UseSpecialMove","Auto Activate","Priority","Auto Wave Skip"},
         Multi = true,
@@ -246,7 +247,7 @@ local Actions = {}
                     Title = "WARNING",
                     Content = "BUY THE GAME PASS FIRST",
                     SubContent = nil,
-                    Duration = 1.5
+                    Duration = 3
             })
             WDA:SetValue("2X")
         end
@@ -450,11 +451,15 @@ local Actions = {}
         elseif value == Options.Select_Mode.Values[3] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(Challenge)
+            if Challenge_Adventures() then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
+            end
         elseif value == Options.Select_Mode.Values[4] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(Adventures)
+            if Challenge_Adventures() then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
+            end
         end
     end
     end)
@@ -469,31 +474,37 @@ local Actions = {}
         elseif Options.Select_Mode.Value == Options.Select_Mode.Values[2] then
             Traget_CFrame,RoomName = tostring(Infinite().CFrame) , tostring(Infinite().Name)
         elseif Options.Select_Mode.Value == Options.Select_Mode.Values[3] or Options.Select_Mode.Value == Options.Select_Mode.Values[4] then
+            if Challenge_Adventures() then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
+            end
         end
     end
 end)
 
     warn1:OnChanged(function()
-        if Options.Select_Map.Value == nil and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value then
+    if Options.Select_Map.Value == nil and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value then
             Fluent:Notify({
                 Title = "WARNING",
                 Content = "SELECT MAP FIRST",
                 SubContent = nil,
-                Duration = 1.5
-        })
+                Duration = 3 })
         Options.Auto_Lobby:SetValue(false)
     else
-    if Options.Select_Map.Value == "Challenge" or Options.Select_Map.Value == "Adventures" and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value and Lable == "World : 1" then
-            Fluent:Notify({
-                Title = "WARNING",
-                Content = "THIS MODE NOT SUPPORT IN WORLD 1 TELEPORTING WORLD 2",
-                SubContent = nil,
-                Duration = 5 })
-                task.wait(2)
+    if Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value and Lable == "World : 1" then
+        Fluent:Notify({
+            Title = "WARNING",
+            Content = "THIS MODE NOT SUPPORT THIS WORLD TELEPORT IN 5 SECS ",
+            SubContent = nil,
+            Duration = 3 })
+            getgenv().STOP = true
+            task.wait(5)
             game:GetService("TeleportService"):Teleport(7785334488)
-        end
     end
+    if not Options.Auto_Lobby.Value and game.Players.LocalPlayer.Character.Humanoid.PlatformStand then
+        game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+        bv.Parent = nil
+    end
+end
 end)
 
     Tabs.Lobby:AddToggle("AutoUpgradeSlot", {Title = "Auto Upgrade Slot",Description = "automatically upgrade when your inventory full", Default = false })
@@ -524,8 +535,8 @@ end)
     })
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
-        Title = "Last Update May/2/2024 [10:50 UTC + 07:00]",
-        Content = "[+] Macro Status\n[*] Fixed some bugs"
+        Title = "Last Update May/2/2024 [12:34 UTC + 07:00]",
+        Content = "[+] Macro Status\n[*] Fixed some bugs\n[*] Fixed Auto Toggle Play"
     })
 
     white:OnChanged(function()
@@ -686,7 +697,7 @@ end)
                     else
                         getgenv().AutoToggle = false
                     end
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue :"..getgenv().AutoToggle.."\nUnit : "..Unit_Name
+                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
                             table.insert(getgenv().Recording, {
                                 ["AutoToggle"] = {
                                     ["Position"] = tostring(UnitSelect),
@@ -733,7 +744,7 @@ end)
                     }
                     }
                     })
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Auto Skip Wave\nValue :"..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
+                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
                     Connect_3:Disconnect()
                     Connect_3 = nil
                     end)
@@ -899,7 +910,7 @@ end
     if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
     if v.HumanoidRootPart.CFrame == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 then
         game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",v,vle)
-        task.wait(0.125)
+        task.wait(0.15)
         game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",v,"Text Here")
      end
   end
@@ -1290,7 +1301,7 @@ bv.MaxForce = Vector3.new(100000,100000,100000)
 bv.Velocity = Vector3.new(0,0,0)
 coroutine.resume(coroutine.create(function()
     while task.wait() do
-        if not Options.Auto_Lobby.Value or not game:GetService("ReplicatedStorage").Lobby.Value then
+        if getgenv().STOP or not Options.Auto_Lobby.Value or not game:GetService("ReplicatedStorage").Lobby.Value then
         else
         if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then
             firesignal(game.Players.LocalPlayer.PlayerGui.HUD.Start.MouseButton1Click,game.Players.LocalPlayer)
@@ -1300,7 +1311,7 @@ coroutine.resume(coroutine.create(function()
             plr.CFrame = GET_THE_FARM()
             bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
             game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
-        elseif Check_The_START() then
+        elseif Check_The_START() and not getgenv().STOP then
             plr.CFrame = CF()
             SelectMap()
             Play()
