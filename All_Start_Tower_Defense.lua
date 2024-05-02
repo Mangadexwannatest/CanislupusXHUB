@@ -922,6 +922,7 @@ end
   end
 
   local function Wait_Get_Paragrap(stat,value,OtherValue)
+    Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
     repeat wait() until tonumber(Wave()) >= tonumber(value["Wave"])
     if getgenv().GameSpeed_Read and not Options.SPEED.Value then
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
@@ -956,7 +957,7 @@ end
                 Duration = 5
         })
         Options.Play:SetValue(false)
-        end
+        else
         if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
             repeat wait() until Options.OptionsMacro.Value ~= nil
             for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
@@ -1047,6 +1048,7 @@ end
                 end
 			end
         end)
+    end
     end
 end)
 
