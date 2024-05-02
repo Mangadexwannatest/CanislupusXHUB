@@ -276,6 +276,7 @@ local Actions = {}
 
     VoteMode:OnChanged(function ()
         if Options.Auto_Vote.Value then
+            repeat wait() until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible
             repeat
                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(Options.Mode_vote.Value))
             wait(1)
@@ -992,12 +993,12 @@ end
                             repeat 
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
                             task.wait(1)
-                            until Time() == tostring(v["Value"]) or Options.SPEED.Value
+                            until Time() == tostring(v["Value"]) or Options.SPEED.Value or not Options.Play.Value
                         elseif tostring(v["Value"]) ==  "1X" and Time() ~= tostring(v["Value"]) then
                             repeat
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
                             task.wait(1)
-                            until Time() == tostring(v["Value"]) or Options.SPEED.Value
+                            until Time() == tostring(v["Value"]) or Options.SPEED.Value or not Options.Play.Value
                         end
 
                         -- Auto Skip Wave
@@ -1006,13 +1007,13 @@ end
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
                                 task.wait(0.25)
-                            until SkipWave_Toggel() == tostring(v["Value"])
+                            until SkipWave_Toggel() == tostring(v["Value"]) or not Options.Play.Value
     
                         -- Vote The Wave
                         elseif i == "VoteWave" and Wave() <= v["Wave"] and table.find(Actions,"Skip Wave") then
                             Wait_Get_Paragrap(stats,v,"Action : VoteWave\nValue : "..tostring(v["Value"]) )
-                            repeat task.wait() until Get_TheWaveI()
-                            repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"]
+                            repeat task.wait() until Get_TheWaveI() or not Options.Play.Value
+                            repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"] or not Options.Play.Value
 
                         -- Summon The Units
                         elseif i == "Summon" and table.find(Actions,"Summon") then
@@ -1026,7 +1027,7 @@ end
                                     ["Unit"] = v["Unit"]
                                 })
                                 task.wait(0.25)
-                            until Unit
+                            until Unit or not Options.Play.Value
                         -- Upgrade The Units
                         elseif i == "Upgrade" and table.find(Actions,"Upgrade") then
                             Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade\nUnit : "..tostring(v["Unit"]))
@@ -1034,14 +1035,14 @@ end
                             repeat local Unit_Upgrade = Upgrade(v["Unit"],v["Position"],v["Upgrade#"])
                                 Upgrade(v["Unit"],v["Position"],v["Upgrade#"])
                                 task.wait(0.25)
-                            until Unit_Upgrade
+                            until Unit_Upgrade or not Options.Play.Value
                         -- Sell The Units
                         elseif i == "Sell" and table.find(Actions,"Sell") then
                             Wait_Get_Paragrap(stats,v,"Action : Sell\nUnit : "..tostring(v["Unit"]))
                             repeat local iS_Unit = Verify_Unit(v["Unit"], v["Position"])
                                     Sell(v["Unit"], v["Position"])
                                 task.wait(0.25)
-                            until not iS_Unit 
+                            until not iS_Unit or not Options.Play.Value
                         -- Change The Priority of Units
                         elseif i == "Changed Priority" and table.find(Actions,"Priority") then 
                             task.wait(0.15)
@@ -1053,7 +1054,7 @@ end
                             repeat local just_ability = UseSpecialMove(v["Unit"],v["Position"])
                                 UseSpecialMove(v["Unit"],v["Position"])
                                 task.wait(0.25)
-                            until just_ability 
+                            until just_ability or not Options.Play.Value
                         -- Auto Toggle
                         elseif i == "AutoToggle" and table.find(Actions,"Auto Activate") then
                             Wait_Get_Paragrap(stats,v,"Action : AutoToggle\nUnit : "..tostring(v["Unit"]).."\nValue : "..tostring(v["Value"]))
@@ -1107,6 +1108,77 @@ coroutine.resume(coroutine.create(function()
 end))
 
 coroutine.resume(coroutine.create(function()
+if game.CoreGui:FindFirstChild("CurrentTime") == nil then
+local CurrentTime = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Backgourd1 = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local Backgourd2 = Instance.new("Frame")
+local UIGradient = Instance.new("UIGradient")
+local UICorner_3 = Instance.new("UICorner")
+local CureentTime = Instance.new("TextLabel")
+CurrentTime.Name = "CurrentTime"
+CurrentTime.Parent = game:WaitForChild("CoreGui")
+CurrentTime.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Frame.Parent = CurrentTime
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BackgroundTransparency = 0.900
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.0758697316, 0, 0.17257683, 0)
+Frame.Size = UDim2.new(0.140636548, 0, -0.0803782493, 0)
+UICorner.Parent = Frame
+Backgourd1.Name = "Backgourd1"
+Backgourd1.Parent = CurrentTime
+Backgourd1.AnchorPoint = Vector2.new(0.5, 0.5)
+Backgourd1.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+Backgourd1.BackgroundTransparency = 0.350
+Backgourd1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Backgourd1.BorderSizePixel = 0
+Backgourd1.Position = UDim2.new(0.0759999976, 0, 0.172999993, 0)
+Backgourd1.Size = UDim2.new(0.144727513, 0, 0.0851063803, 0)
+UICorner_2.Parent = Backgourd1
+Backgourd2.Name = "Backgourd2"
+Backgourd2.Parent = CurrentTime
+Backgourd2.AnchorPoint = Vector2.new(0.5, 0.5)
+Backgourd2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Backgourd2.BackgroundTransparency = 0.400
+Backgourd2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Backgourd2.BorderSizePixel = 0
+Backgourd2.Position = UDim2.new(0.0759999976, 0, 0.172999993, 0)
+Backgourd2.Size = UDim2.new(0.144727528, 0, 0.085922204, 0)
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(120, 120, 120)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(120, 120, 120))}
+UIGradient.Parent = Backgourd2
+UICorner_3.Parent = Backgourd2
+CureentTime.Name = "CureentTime"
+CureentTime.Parent = CurrentTime
+CureentTime.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CureentTime.BackgroundTransparency = 1.000
+CureentTime.BorderColor3 = Color3.fromRGB(0, 0, 0)
+CureentTime.BorderSizePixel = 0
+CureentTime.Position = UDim2.new(0.00494152121, 0, 0.129264757, 0)
+CureentTime.Size = UDim2.new(0.144156456, 0, 0.0864806101, 0)
+CureentTime.ZIndex = 2
+CureentTime.Font = Enum.Font.SourceSans
+CureentTime.Text = "Time : 0.00"
+CureentTime.TextColor3 = Color3.fromRGB(170, 170, 170)
+CureentTime.TextSize = 14.000
+end
+end))
+
+coroutine.resume(coroutine.create(function()
+    while wait() do pcall(function ()
+        if not game:GetService("ReplicatedStorage").Lobby.Value then
+        game:WaitForChild("CoreGui"):WaitForChild("CurrentTime"):FindFirstChild("CureentTime").Text = "Time : "..tostring(Workspace.DistributedGameTime)
+        end
+    end)
+end
+end))
+
+
+coroutine.resume(coroutine.create(function()
     local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
     Button.InputBegan:Connect(function(input)
         if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
@@ -1130,6 +1202,7 @@ end))
         while wait() do
             if Fluent.Unloaded then 
             game.CoreGui:FindFirstChild("Close/Open"):Destroy()
+            game.CoreGui:FindFirstChild("CurrentTime"):Destroy()
                 break 
              end
         end
@@ -1330,6 +1403,12 @@ function ClamsReward()
     end
 end
 
+function VisibleForCodex(value)
+	if game:GetService("CoreGui"):FindFirstChild("Codex") then
+		game:GetService("CoreGui"):FindFirstChild("Codex"):WaitForChild("gui").Enabled = value
+	end
+end
+
 local Task
 local Event
 coroutine.resume(coroutine.create(function()
@@ -1338,8 +1417,10 @@ coroutine.resume(coroutine.create(function()
         if game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible then
             if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
                 repeat
+            VisibleForCodex(false)
             Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
+            VisibleForCodex(false)
             task.wait(0.3)
             until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
 
@@ -1358,10 +1439,11 @@ coroutine.resume(coroutine.create(function()
         end
         if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
             Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
-            repeat 
+            repeat
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
             task.wait(0.3)
             until not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
+            VisibleForCodex(true)
         end
     end
 end)
