@@ -1,9 +1,9 @@
    
-repeat task.wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
+repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
 repeat wait(0.2) until game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("HUD")
 game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
 game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote")
-
+task.wait(1)
    if game.CoreGui:FindFirstChild("CrazyDay") == nil then
        warn("Loading Gui..")
     local firesignal = function(signal, arg2)
