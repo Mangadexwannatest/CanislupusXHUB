@@ -663,6 +663,7 @@ end)
     task.spawn(function ()
         UserAbility.Activated:Connect(function ()
             if not UserAbility.VisualGuide.Visible and Options.Record.Value then
+                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit : "..Unit_Name
                 table.insert(getgenv().Recording, {
                     ["UseSpecialMove"] = {
                         ["Position"] = tostring(UnitSelect),
@@ -673,7 +674,6 @@ end)
                             ["Game Speed"] = Time()
                 }
                 }})
-                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit :"..Unit_Name
                 end
             end)
         end)
@@ -686,6 +686,7 @@ end)
                     else
                         getgenv().AutoToggle = false
                     end
+                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue :"..getgenv().AutoToggle.."\nUnit : "..Unit_Name
                             table.insert(getgenv().Recording, {
                                 ["AutoToggle"] = {
                                     ["Position"] = tostring(UnitSelect),
@@ -697,7 +698,7 @@ end)
                                         ["Game Speed"] = Time()
                             }
                             }})
-                                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue :"..getgenv().AutoToggle.."\nUnit :"..Unit_Name
+                                
                                 Connect_1:Disconnect()
                                 Connect_1 = nil
                            end)
@@ -716,7 +717,7 @@ end)
                             ["Game Speed"] = Time()
             }}
             })
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Changed Priority\nUnit :"..Unit_Name
+                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Changed Priority\nUnit : "..Unit_Name
                   end
             end)
             game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.TextButton.InputBegan:Connect(function(input)
@@ -898,6 +899,8 @@ end
     if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
     if v.HumanoidRootPart.CFrame == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 then
         game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",v,vle)
+        task.wait(0.125)
+        game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",v,"Text Here")
      end
   end
 end
