@@ -924,19 +924,19 @@ end
   local function Wait_Get_Paragrap(stat,value,OtherValue)
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
     repeat wait() until tonumber(Wave()) >= tonumber(value["Wave"])
-    if getgenv().GameSpeed_Read and not Options.SPEED.Value then
+    if table.find(Actions,"Game Speed") and not Options.SPEED.Value then
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-    repeat wait() until Traget_Time() >= value["Time"]["Time"] or not getgenv().GameSpeed_Read or Options.SPEED.Value
-    elseif not getgenv().GameSpeed_Read or Options.SPEED.Value then
+    repeat wait() until Traget_Time() >= value["Time"]["Time"] or Options.SPEED.Value
+    elseif not table.find(Actions,"Game Speed") or Options.SPEED.Value then
         if value["Time"]["Game Speed"] == "1X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"] or getgenv().GameSpeed_Read
+            repeat wait() until Traget_Time() >= value["Time"]["Time"]
         elseif value["Time"]["Game Speed"] == "2X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/2 or getgenv().GameSpeed_Read
+            repeat wait() until Traget_Time() >= value["Time"]["Time"]/2
         elseif value["Time"]["Game Speed"] == "3X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/3).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/3 or getgenv().GameSpeed_Read
+            repeat wait() until Traget_Time() >= value["Time"]["Time"]/3
 
         elseif Options.SPEED.Value and Options.Speed.Value == "2X" and value["Time"]["Game Speed"] ~= "2X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
