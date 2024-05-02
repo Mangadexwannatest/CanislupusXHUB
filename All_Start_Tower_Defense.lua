@@ -930,13 +930,13 @@ end
     elseif not table.find(Actions,"Game Speed") or Options.SPEED.Value then
         if value["Time"]["Game Speed"] == "1X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]
+            repeat wait() until Traget_Time() >= value["Time"]["Time"] or table.find(Actions,"Game Speed")
         elseif value["Time"]["Game Speed"] == "2X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/2
+            repeat wait() until Traget_Time() >= value["Time"]["Time"]/2 or table.find(Actions,"Game Speed")
         elseif value["Time"]["Game Speed"] == "3X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/3).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/3
+            repeat wait() until Traget_Time() >= value["Time"]["Time"]/3 or table.find(Actions,"Game Speed")
 
         elseif Options.SPEED.Value and Options.Speed.Value == "2X" and value["Time"]["Game Speed"] ~= "2X" then
         Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
