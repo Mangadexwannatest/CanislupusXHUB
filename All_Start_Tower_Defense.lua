@@ -674,7 +674,6 @@ end)
     task.spawn(function ()
         UserAbility.Activated:Connect(function ()
             if not UserAbility.VisualGuide.Visible and Options.Record.Value then
-                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit : "..Unit_Name
                 table.insert(getgenv().Recording, {
                     ["UseSpecialMove"] = {
                         ["Position"] = tostring(UnitSelect),
@@ -685,6 +684,7 @@ end)
                             ["Game Speed"] = Time()
                 }
                 }})
+                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit : "..Unit_Name
                 end
             end)
         end)
@@ -697,7 +697,6 @@ end)
                     else
                         getgenv().AutoToggle = false
                     end
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
                             table.insert(getgenv().Recording, {
                                 ["AutoToggle"] = {
                                     ["Position"] = tostring(UnitSelect),
@@ -709,6 +708,7 @@ end)
                                         ["Game Speed"] = Time()
                             }
                             }})
+                            Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
                                 
                                 Connect_1:Disconnect()
                                 Connect_1 = nil
@@ -1068,6 +1068,7 @@ end)
 
 repeat task.wait() until #Macro_Files >= 1
 warn("Loaded")
+task.wait(1)
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 SaveManager:IgnoreThemeSettings()
