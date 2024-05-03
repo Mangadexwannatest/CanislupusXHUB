@@ -661,8 +661,6 @@ end)
         for i, v in ipairs(game.Workspace.Unit:GetChildren()) do
             for i, v2 in ipairs(v:GetDescendants()) do
                 if v2 == Mouse.Target then
-                    UnitSelect = nil
-                    Unit_Name = nil
                     UnitSelect = v:WaitForChild("HumanoidRootPart").Position
                     Unit_Name = tostring(v.Name)
                    end
