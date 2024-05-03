@@ -64,6 +64,7 @@ local Tabs = {
 local Options = Fluent.Options
 local Macro_Files = {}
 getgenv().Recording = {}
+local Actions = {}
 do
 
     if not isfolder("CrazyDay") then 
@@ -113,10 +114,17 @@ do
     local Action = Tabs.Main:AddDropdown("Action", {
         Title = "Select Actions (Macro Play)",
         Description = "recommended to enable all",
-        Values = {"nil"},
+        Values = {"Place","Upgrade","Sell","Target","Auto Wave Skip"},
         Multi = true,
         Default = {nil},
     })
+
+    Action:OnChanged(function(Value)
+        Actions = {}
+        for Value, State in next, Value do
+            table.insert(Actions, Value)
+        end
+    end)
 
     local Input = Tabs.Main:AddInput("Input", {
         Title = "Creat macro files",
@@ -536,11 +544,11 @@ end)
             for val = 1,#getgenv().Playing do
                 for i,v in pairs(getgenv().Playing[val]) do
                 ---Auto Skip 
-                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave" then
+                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and table.find(Actions,"Auto Wave Skip") then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
                     AutoSkip(v["Value"])
                 --- Place
-                elseif i == "Place" then
+                elseif i == "Place" and table.find(Actions,"Place") then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Place".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -552,9 +560,9 @@ end)
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(v["Unit"],stringtocf(v["Position"]))
                             task.wait(0.25)
-                        until Check_Unit_Position(v["Unit"],v["Position"])
+                        until Check_Unit_Position(v["Unit"],v["Position"]) or not table.find(Actions,"Place") or not Options.Play.Value
                     --- Upgrade
-                    elseif i == "Upgrade" then
+                    elseif i == "Upgrade" and table.find(Actions,"Upgrade") then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -566,21 +574,21 @@ end)
                         repeat
                             Upgrade(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
-                        until Upgrade(v["Unit"],v["Position"],v["Value"])
+                        until Upgrade(v["Unit"],v["Position"],v["Value"]) or not table.find(Actions,"Place") or not Options.Play.Value
                     --- Traget
-                    elseif i == "Target" then
+                    elseif i == "Target" and table.find(Actions,"Target") then
                         wait_and_set(val,v,"Action : Target Changed\nValue : "..tostring(v["Value"]))
                         repeat
                             Changed_Target(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
-                        until Changed_Target(v["Unit"],v["Position"],v["Value"])
+                        until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not table.find(Actions,"Target") or not Options.Play.Value
                     ----- Sell
-                    elseif i == "Sell" then 
+                    elseif i == "Sell" and table.find(Actions,"Sell") then 
                         wait_and_set(val,v,"Action : Sell".."\nUnit : "..tostring(v["Unit"]))
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.Sell:InvokeServer(Check_Unit_Position(v["Unit"],v["Position"]))
                             task.wait(0.25)
-                        until not Check_Unit_Position(v["Unit"],v["Position"])
+                        until not Check_Unit_Position(v["Unit"],v["Position"]) or not table.find(Actions,"Sell") or not Options.Play.Value
                     end
                     if val == #getgenv().Playing then
                         Get_Paragrahp().Text = "Status : Playing Ended "..tostring(val).."/"..tostring(#getgenv().Playing)
