@@ -1045,7 +1045,7 @@ end
                         end
 
                         -- Auto Skip Wave
-                        elseif i == "Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) and table.find(Actions,"Auto Wave Skip") then
+                        elseif i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) and table.find(Actions,"Auto Wave Skip") then
                             Wait_Get_Paragrap(stats,v,"Action : Auto Skip Wave\nValue : "..tostring(v["Value"]) )
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
