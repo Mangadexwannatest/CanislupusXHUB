@@ -753,16 +753,16 @@ end)
             local script = 
             [[
                 repeat wait() until game:IsLoaded()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
         
             local success = pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
              end)
              
              print(success)
              if not success then
                 wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
              end
             ]]
             if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
