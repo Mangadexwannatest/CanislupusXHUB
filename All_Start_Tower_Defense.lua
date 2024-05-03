@@ -225,6 +225,48 @@ local Actions = {}
         end
     end
     })
+    Tabs.Main:AddButton({
+        Title = "Delete file",
+        Description = "delete select file",
+        Callback = function()
+            if Options.OptionsMacro.Value == "Crazy Day" then
+                Fluent:Notify({
+                    Title = "WARNING",
+                    Content = "Cannot delete default profile",
+                    SubContent = Options.OptionsMacro.Value,
+                    Duration = 5
+                })
+            else
+            Fluent:Notify({
+                Title = "Delete succeed",
+                Content = "Macro name",
+                SubContent = Options.OptionsMacro.Value,
+                Duration = 5
+            })
+            delfile(string.format("/CrazyDay/ALS/Macro/".."%s.lua",Options.OptionsMacro.Value))
+            Macro_Files = {}
+            for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
+                table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+            end
+            MacroOptions:SetValues(Macro_Files)
+            MacroOptions:SetValue(nil)
+        end
+    end
+    })
+    Tabs.Main:AddButton({
+        Title = "Reset file",
+        Description = "all your record in the file that you select will be reset to nil",
+        Callback = function()
+            Fluent:Notify({
+            Title = "Reset succeed",
+            Content = "Macro name",
+            SubContent = Options.OptionsMacro.Value,
+            Duration = 5
+        })
+        getgenv().Recording = {}
+        writefile(string.format("/CrazyDay/ALS/Macro".."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode({}))
+    end
+    })
 
 
 
@@ -643,7 +685,7 @@ end)
                                 ["Game Speed"] = Time()
                 }}
                 })
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : VoteWave\nValue : true"
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : VoteWave\nValue : true"
                     end
                 end)
         game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.NoButton.Activated:Connect(function()
@@ -657,7 +699,7 @@ end)
                         ["Game Speed"] = Time()
             }}
             })
-            Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : VoteWave\nValue : false"
+            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : VoteWave\nValue : false"
             end
         end)
         game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("FastForward"):WaitForChild("TextLabel"):GetPropertyChangedSignal("Text"):Connect(function ()
@@ -668,7 +710,7 @@ end)
                         ["Wave"] = Wave(),
                         ["Time"] = Traget_Time()   
                     }})
-                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : SpeedChange\nValue : "..Time()
+                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : SpeedChange\nValue : "..Time()
             end
         end)
     end)
@@ -685,7 +727,7 @@ end)
                             ["Game Speed"] = Time()
                 }
                 }})
-                Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit : "..Unit_Name
+                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : UseSpecialMove\nUnit : "..Unit_Name
                 end
             end)
         end)
@@ -709,7 +751,7 @@ end)
                                         ["Game Speed"] = Time()
                             }
                             }})
-                            Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
+                            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
                                 
                                 Connect_1:Disconnect()
                                 Connect_1 = nil
@@ -729,7 +771,7 @@ end)
                             ["Game Speed"] = Time()
             }}
             })
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Changed Priority\nUnit : "..Unit_Name
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Changed Priority\nUnit : "..Unit_Name
                   end
             end)
             game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.TextButton.InputBegan:Connect(function(input)
@@ -745,7 +787,7 @@ end)
                     }
                     }
                     })
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
                     Connect_3:Disconnect()
                     Connect_3 = nil
                     end)
@@ -753,7 +795,7 @@ end)
             end)
             game:GetService("ReplicatedStorage").WaveValue:GetPropertyChangedSignal("Value"):Connect(function ()
                 table.insert(getgenv().Recording, {
-                    ["Auto Skip Wave"] = {
+                    ["Check Auto Skip Wave"] = {
                         ["Value"] = tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text),
                         ["Wave"] = Wave(),
                         ["Time"] = { 
@@ -762,6 +804,7 @@ end)
                 }
                 }
                 })
+                Get_Paragrahp().Text ="Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Check Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
             end)
     game.Workspace.Unit.ChildAdded:Connect(function(v)
         pcall(function()
@@ -784,7 +827,7 @@ end)
                             ["Game Speed"] = Time()
                 }
                     }})
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..MONEY.."\nAction : Summon\nUnit : "..tostring(v.Name)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..MONEY.."\nAction : Summon\nUnit : "..tostring(v.Name)
                     end
                 end
                 task.spawn(function ()
@@ -802,7 +845,7 @@ end)
                                 ["Game Speed"] = Time()
                     }
                     }})
-                    Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2].."\nAction : Upgrade\nUnit : "..tostring(v.Name)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2].."\nAction : Upgrade\nUnit : "..tostring(v.Name)
                       end
                     end)
                  end)
@@ -819,7 +862,7 @@ end)
                                     ["Game Speed"] = Time()
                         }
                         }})
-                            Get_Paragrahp().Text = "Status : Recording...\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Sell\nUnit : "..tostring(v.Name)
+                            Get_Paragrahp().Text ="Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Sell\nUnit : "..tostring(v.Name)
                         end
                     end)
                  end)
@@ -1060,6 +1103,10 @@ end
                             Wait_Get_Paragrap(stats,v,"Action : AutoToggle\nUnit : "..tostring(v["Unit"]).."\nValue : "..tostring(v["Value"]))
                             AutoToggleActivate(v["Unit"],v["Position"],v["Value"])
                      end
+                     ---ENDPLAY
+                     if stats == #getgenv().Playing then
+                        Get_Paragrahp().Text = "Status : Playing Ended "..tostring(stats).."/"..tostring(#getgenv().Playing)
+                    end
                 end
 			end
         end)
