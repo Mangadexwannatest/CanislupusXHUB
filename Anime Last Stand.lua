@@ -225,6 +225,7 @@ do
         Multi = false,
         Default = 1
     })
+    Tabs.GameMode:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
 
     Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
     local white = Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
