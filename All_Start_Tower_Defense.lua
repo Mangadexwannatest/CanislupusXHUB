@@ -1125,6 +1125,18 @@ InterfaceManager:SetFolder("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsyn
 SaveManager:SetFolder("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
 InterfaceManager:BuildInterfaceSection(Tabs.Settings)
 SaveManager:BuildConfigSection(Tabs.Settings)
+Tabs.Settings:AddButton({
+    Title = "Delete Autoload file",
+    Description = nil,
+    Callback = function()
+        Fluent:Notify({
+            Title = "Delete succeed",
+            Content = "autoload.txt",
+            SubContent = nil,
+            Duration = 5
+        })
+        delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/autoload.txt")
+    end})
 Window:SelectTab(1)
 SaveManager:LoadAutoloadConfig()
 
