@@ -1,3 +1,7 @@
+repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
+game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
+task.wait(1)
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -108,7 +112,7 @@ do
         Description = nil,
         Values = Macro_Files,
         Multi = false,
-        Default = 1
+        Default = nil
     })
 
     local Action = Tabs.Main:AddDropdown("Action", {
