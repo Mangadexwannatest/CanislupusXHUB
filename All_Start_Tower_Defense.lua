@@ -243,7 +243,7 @@ local Actions = {}
                 SubContent = Options.OptionsMacro.Value,
                 Duration = 5
             })
-            delfile(string.format("/CrazyDay/ALS/Macro/".."%s.lua",Options.OptionsMacro.Value))
+            delfile(string.format("/CrazyDay/ASTD/Macro/".."%s.lua",Options.OptionsMacro.Value))
             Macro_Files = {}
             for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
                 table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
