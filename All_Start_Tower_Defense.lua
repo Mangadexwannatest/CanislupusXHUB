@@ -3,7 +3,7 @@ repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:W
 repeat wait(0.2) until game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("HUD")
 game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
 game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("HUD"):WaitForChild("NextWaveVote")
-task.wait(1)
+task.wait(0.25)
    if game.CoreGui:FindFirstChild("CrazyDay") == nil then
        warn("Loading Gui..")
     local firesignal = function(signal, arg2)
@@ -1116,7 +1116,7 @@ end)
 
 repeat task.wait() until #Macro_Files >= 1
 warn("Loaded")
-task.wait(1)
+task.wait(0.45)
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 SaveManager:IgnoreThemeSettings()
