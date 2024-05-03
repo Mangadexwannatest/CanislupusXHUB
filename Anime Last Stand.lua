@@ -1,5 +1,5 @@
 repeat wait() until game:IsLoaded()
-game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
+repeat wait() until game.Players.LocalPlayer:FindFirstChild("Character"):WaitForChild("HumanoidRootPart")
 task.wait(1)
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -301,12 +301,13 @@ do
             getgenv().MissionEnd = true
             repeat wait() until Options.AutoMissionEnd.Value
             repeat
-                firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild(Options.ActionMissionEnd.Value):WaitForChild("Button").MouseButton1Click,game.Players.LocalPlayer)
-                wait(1)
+                firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("EndGameUI"):WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild(Options.ActionMissionEnd.Value):WaitForChild("Button").Activated,game.Players.LocalPlayer)
+                task.wait(0.5)
             until not v.Parent
         end
     end)
 
+    
     game.Players.LocalPlayer.PlayerGui.ChildAdded:Connect(function (v)
     if v.Name == "SkipWave" and Options.Record.Value then
     task.spawn(function ()
