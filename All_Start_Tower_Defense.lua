@@ -533,7 +533,7 @@ end)
                 Duration = 3 })
         Options.Auto_Lobby:SetValue(false)
     else
-    if Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value and Lable == "World : 1" then
+    if Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value and Lable ~= "World : 2" then
         Fluent:Notify({
             Title = "WARNING",
             Content = "THIS MODE NOT SUPPORT THIS WORLD TELEPORT IN 5 SECS ",
