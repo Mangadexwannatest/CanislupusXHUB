@@ -189,7 +189,7 @@ local Actions = {}
         Description = nil,
         Values = Macro_Files,
         Multi = false,
-        Default = 1
+        Default = nil
     })
 
     local Action = Tabs.Main:AddDropdown("Action", {
