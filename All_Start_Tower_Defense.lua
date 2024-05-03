@@ -794,6 +794,7 @@ end)
                 end
             end)
             game:GetService("ReplicatedStorage").WaveValue:GetPropertyChangedSignal("Value"):Connect(function ()
+                if Options.Record.Value then
                 table.insert(getgenv().Recording, {
                     ["Check Auto Skip Wave"] = {
                         ["Value"] = tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text),
@@ -805,7 +806,8 @@ end)
                 }
                 })
                 Get_Paragrahp().Text ="Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : Check Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
-            end)
+            end
+        end)
     game.Workspace.Unit.ChildAdded:Connect(function(v)
         pcall(function()
         if Options.Record.Value then
