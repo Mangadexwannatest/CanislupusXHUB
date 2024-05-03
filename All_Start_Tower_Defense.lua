@@ -245,7 +245,7 @@ local Actions = {}
             })
             delfile(string.format("/CrazyDay/ASTD/Macro/".."%s.lua",Options.OptionsMacro.Value))
             Macro_Files = {}
-            for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
+            for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
                 table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
             end
             MacroOptions:SetValues(Macro_Files)
@@ -264,7 +264,7 @@ local Actions = {}
             Duration = 5
         })
         getgenv().Recording = {}
-        writefile(string.format("/CrazyDay/ALS/Macro".."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode({}))
+        writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.OptionsMacro.Value), game:GetService("HttpService"):JSONEncode({}))
     end
     })
 
