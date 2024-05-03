@@ -1,4 +1,4 @@
-repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
+repeat wait() until game:IsLoaded()
 game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
 task.wait(1)
 
