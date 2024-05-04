@@ -892,7 +892,7 @@ end)
     end
 
     coroutine.resume(coroutine.create(function()
-        while task.wait(1.5) do
+        while wait(0.35) do
         if Options.AiPlay.Value then
             if table.find(slot,"Slot1") and tonumber(Options.Count1.Value) > #Unit["Slot1"] and not getgenv().In_Upgrage_1 then
                 getgenv().Upgrade_1 = false
@@ -932,7 +932,7 @@ end)
     end))
 
     coroutine.resume(coroutine.create(function()
-        while task.wait(0.85) do
+        while task.wait(0.125) do
         if Options.AiPlay.Value then
             for i,v in pairs(game.Workspace.Towers:GetChildren()) do
             if table.find(slot,"Slot1") and v.Name == unit_2("Slot1") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount1.Value) and getgenv().Upgrade_1 then
