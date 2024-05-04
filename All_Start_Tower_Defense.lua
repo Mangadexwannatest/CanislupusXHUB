@@ -1151,12 +1151,12 @@ Tabs.Settings:AddButton({
         else
             Fluent:Notify({
                 Title = "Delete succeed",
-                Content = SaveManager.Options.SaveManager_ConfigList.Value,
+                Content = tostring(SaveManager.Options.SaveManager_ConfigList.Value),
                 SubContent = "press the refresh button to refresh",
                 Duration = 5
             })
+            delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..SaveManager.Options.SaveManager_ConfigList.Value..".json")
         end
-        delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..SaveManager.Options.SaveManager_ConfigList.Value..".json")
     end
 })
 Window:SelectTab(1)
