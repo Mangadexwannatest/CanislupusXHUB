@@ -1141,7 +1141,7 @@ Tabs.Settings:AddButton({
     Title = "Delete Select Config List",
     Description = nil,
     Callback = function()
-        if SaveManager.Options.SaveManager_ConfigList.Value == nil or "" or "nil" then
+        if SaveManager.Options.SaveManager_ConfigList.Value == nil then
             Fluent:Notify({
                 Title = "WARNING",
                 Content = "Select the config list first",
@@ -1156,7 +1156,7 @@ Tabs.Settings:AddButton({
                 Duration = 5
             })
         end
-        delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..Options.SaveManager_ConfigList.Value..".json")
+        delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..SaveManager.Options.SaveManager_ConfigList.Value..".json")
     end
 })
 Window:SelectTab(1)
