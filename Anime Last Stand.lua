@@ -674,9 +674,8 @@ end)
                 if i == "Auto Skip Wave" or i == "Check Auto Skip Wave"  then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
                     AutoSkip(v["Value"])
-                elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) then
+                elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) and not game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value then
                     wait_and_set(val,v,"Action : Vote Wave".."\nValue : "..tostring(v["Value"]))
-                    repeat wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave")
                     repeat
                     VoteWave(v["Value"])
                     task.wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave") == nil or tonumber(Wave()) > tonumber(v["Wave"])
