@@ -216,6 +216,13 @@ do
     })
     Tabs.GameMode:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
     local Ai = Tabs.GameMode:AddSection("Auto Play")
+    local unitslot = Ai:AddDropdown("Spot", {
+        Title = "Select Spot(Auto Play)",
+        Description = nil,
+        Values = {"Very closest","closest","middle","far","Very far","base"},
+        Multi = false,
+        Default = 2
+    })
     local unitslot = Ai:AddDropdown("UnitSlot", {
         Title = "Select Unit(Auto Play)",
         Description = nil,
@@ -867,27 +874,44 @@ end)
         end
     end
 
+
+    local function spotvalue()
+        if Options.Spot.Value == "Very closest" then
+            return game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame
+        elseif Options.Spot.Value == "closest" then
+            return game:GetService("Workspace").Map.Waypoints:FindFirstChild("6").CFrame
+        elseif Options.Spot.Value == "middle" then
+            return game:GetService("Workspace").Map.Waypoints:FindFirstChild("12").CFrame
+        elseif Options.Spot.Value == "far" then
+            return game:GetService("Workspace").Map.Waypoints:FindFirstChild("16").CFrame
+        elseif Options.Spot.Value == "Very far" then
+            return game:GetService("Workspace").Map.Waypoints:FindFirstChild("20").CFrame
+        elseif Options.Spot.Value == "base" then
+            return game:GetService("Workspace").Map.Finish.CFrame
+        end
+    end
+
     coroutine.resume(coroutine.create(function()
         while task.wait(1.5) do
         if Options.AiPlay.Value then
             if table.find(slot,"Slot1") and tonumber(Options.Count1.Value) > #Unit["Slot1"] and not getgenv().In_Upgrage_1 then
                 getgenv().Upgrade_1 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot1"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot1"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
             elseif table.find(slot,"Slot2") and tonumber(Options.Count2.Value) > #Unit["Slot2"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 then
                 getgenv().Upgrade_2 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot2"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot2"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
             elseif table.find(slot,"Slot3") and tonumber(Options.Count3.Value) > #Unit["Slot3"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 then
                 getgenv().Upgrade_3 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot3"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot3"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
             elseif table.find(slot,"Slot4") and tonumber(Options.Count4.Value) > #Unit["Slot4"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 then
                 getgenv().Upgrade_4 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot4"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot4"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
             elseif table.find(slot,"Slot5") and tonumber(Options.Count5.Value) > #Unit["Slot5"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 and not getgenv().In_Upgrage_5 then
                 getgenv().Upgrade_5 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot5"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot5"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
             elseif table.find(slot,"Slot6") and tonumber(Options.Count6.Value) > #Unit["Slot6"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 and not getgenv().In_Upgrage_5 and not getgenv().In_Upgrage_6 then
                 getgenv().Upgrade_6 = false
-                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot6"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0)) 
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot6"),spotvalue() * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0)) 
             end
 
             if table.find(slot,"Slot1") and #Unit["Slot1"] >= tonumber(Options.Count1.Value) and not getgenv().Upgrade_1 then
