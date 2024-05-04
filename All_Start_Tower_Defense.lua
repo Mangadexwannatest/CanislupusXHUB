@@ -618,8 +618,9 @@ end)
                 Options.Record:SetValue(false)
         else
         if Options.Record.Value and Options.OptionsMacro.Value ~= nil then
-            Get_Paragrahp().Text = "Status : Recording...\nnil\nnil\nnil"
+            Get_Paragrahp().Text = "Status : Recording [0]"
             repeat wait() until not Options.Record.Value or game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible
+            Get_Paragrahp().Text = "Status : Recording Ended ["..#getgenv().Recording.."]"
             Fluent:Notify({
                 Title = "Record Ended",
                 Content = "Macro name",
@@ -629,6 +630,17 @@ end)
             end
         end
     end)
+
+    game.Players.LocalPlayer.OnTeleport:Connect(function(State)
+        local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+        local script =
+        [[
+            Options.Record:SetValue(false)
+        ]]
+        if State == Enum.TeleportState.InProgress or State == Enum.TeleportState.Started and Options.Record.Value then
+            QueueOnTeleport(script)
+            end
+        end)
 
     local function Wave()
         return game:GetService("ReplicatedStorage").WaveValue.Value
