@@ -47,6 +47,7 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
+
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -61,6 +62,7 @@ local Window = Fluent:CreateWindow({
 })
 local Tabs = { 
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Lobby = Window:AddTab({ Title = "Lobby", Icon = "" }),
     GameMode = Window:AddTab({Title = "Game Mode",Icon = ""}),
     Webhook = Window:AddTab({ Title = "Webhook", Icon = ""}),
     Other = Window:AddTab({ Title = 'Other' , Icon = ""}),
@@ -208,6 +210,31 @@ do
     local RecordToggle = Tabs.Main:AddToggle("Record", {Title = "Macro Record",Description = "after record disable to save or wait for the game has ended", Default = false })
     local PlayToggle = Tabs.Main:AddToggle("Play", {Title = "Macro Play", Default = false })
 
+    Tabs.Lobby:AddDropdown("Select_Mode", {
+        Title = "Select Mode",
+        Description = nil,
+        Values = {"Story","Challenge","Infinite","Raid"},
+        Multi = false,
+        Default = 1
+    })
+
+    local function GET_MODE()
+        if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
+            return
+        end
+        for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
+            if v:IsA("Folder") and v.Name == "" or nil then
+                for _,mode in pairs(v[Options.Select_Mode.Value]:GetChildren()) do
+                    if mode.Name == "Teleporter" then
+                        if tostring(mode:WaitForChild("Door"):WaitForChild("UI"):WaitForChild("PlayerCount").Text) == "0/4" then
+                            return mode:WaitForChild("Door")
+                    end
+                end
+            end
+        end
+    end
+    end
+
     getgenv().MissionEnd = nil
     Tabs.GameMode:AddDropdown("ActionMissionEnd", {
         Title = "Select Action",
@@ -342,6 +369,7 @@ do
     local UnitSelect
     local Unit_Name
     task.spawn(function ()
+    if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
     game:GetService("UserInputService").InputBegan:Connect(function(input)
             if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
             for i, v in ipairs(game.Workspace:WaitForChild("Towers"):GetChildren()) do
@@ -354,7 +382,6 @@ do
             end
         end
     end)
-    if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
     local AutoSKipButton = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
     game.Players.LocalPlayer.PlayerGui:WaitForChild("MainUI"):WaitForChild("ErrorHolder").ChildAdded:Connect(function (v)
     if string.find(v.Text,"-") then
@@ -935,6 +962,7 @@ end)
         ["Slot6"] = {}
      }
      local Current_CFrame = 0
+     if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
      game.Workspace.Towers.ChildAdded:Connect(function (v)
         Current_CFrame += 3
         for _,inslot in pairs(game.Players.LocalPlayer.Slots:GetChildren()) do
@@ -1051,6 +1079,7 @@ end)
             end
         end
     end))
+end
 
     coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer.OnTeleport:Connect(function(State)
