@@ -1,5 +1,5 @@
-repeat wait() until game:IsLoaded() and game.Players.LocalPlayer.PlayerGui:FindFirstChild("TopbarPlus").Enabled
-task.wait(1)
+repeat wait() until game:IsLoaded()
+repeat wait() until game.Players.LocalPlayer.Character
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -67,7 +67,7 @@ local Tabs = {
 local Options = Fluent.Options
 local Macro_Files = {}
 getgenv().Recording = {}
-local Actions = {}
+local slot = {}
 do
 
     if not isfolder("CrazyDay") then 
@@ -113,21 +113,6 @@ do
         Multi = false,
         Default = nil
     })
-
-    local Action = Tabs.Main:AddDropdown("Action", {
-        Title = "Select Actions (Macro Play)",
-        Description = "recommended to enable all",
-        Values = {"Place","Upgrade","Sell","Target","Auto Wave Skip"},
-        Multi = true,
-        Default = {nil},
-    })
-
-    Action:OnChanged(function(Value)
-        Actions = {}
-        for Value, State in next, Value do
-            table.insert(Actions, Value)
-        end
-    end)
 
     local Input = Tabs.Main:AddInput("Input", {
         Title = "Creat macro files",
@@ -220,6 +205,7 @@ do
 
     local RecordToggle = Tabs.Main:AddToggle("Record", {Title = "Macro Record",Description = "after record disable to save or wait for the game has ended", Default = false })
     local PlayToggle = Tabs.Main:AddToggle("Play", {Title = "Macro Play", Default = false })
+
     getgenv().MissionEnd = nil
     Tabs.GameMode:AddDropdown("ActionMissionEnd", {
         Title = "Select Action",
@@ -229,6 +215,45 @@ do
         Default = 1
     })
     Tabs.GameMode:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
+    local Ai = Tabs.GameMode:AddSection("Auto Play")
+    local unitslot = Ai:AddDropdown("UnitSlot", {
+        Title = "Select Unit(Auto Play)",
+        Description = nil,
+        Values = {"Slot1","Slot2","Slot3","Slot4","Slot5","Slot6"},
+        Multi = true,
+        Default = {nil}
+    })
+
+    unitslot:OnChanged(function(Value)
+        slot = {}
+        for Value, State in next, Value do
+            table.insert(slot, Value)
+        end
+    end)
+
+    Ai:AddSlider("Count1",{Title = "Select Unit (Slot1)",Description = "select unit count of slot1 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+    Ai:AddSlider("Count2",{Title = "Select Unit (Slot2)",Description = "select unit count of slot2 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+    Ai:AddSlider("Count3",{Title = "Select Unit (Slot3)",Description = "select unit count of slot3 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+    Ai:AddSlider("Count4",{Title = "Select Unit (Slot4)",Description = "select unit count of slot4 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+    Ai:AddSlider("Count5",{Title = "Select Unit (Slot5)",Description = "select unit count of slot5 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+    Ai:AddSlider("Count6",{Title = "Select Unit (Slot6)",Description = "select unit count of slot6 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
+
+    local aiplaychanged = Ai:AddToggle("AiPlay", {Title = "Auto Play [Place // Upgrade]", Default = false })
+
+    aiplaychanged:OnChanged(function ()
+        if Options.AiPlay.Value then
+            game.Players.LocalPlayer.PlayerGui.MainUI.ErrorHolder.Visible = false
+        else
+            game.Players.LocalPlayer.PlayerGui.MainUI.ErrorHolder.Visible = true
+        end
+    end)
+
+    Ai:AddSlider("UpgradeCount1",{Title = "Select Upgrade Unit (Slot1)",Description = "select unit count of slot1 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
+    Ai:AddSlider("UpgradeCount2",{Title = "Select Upgrade Unit (Slot2)",Description = "select unit count of slot2 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
+    Ai:AddSlider("UpgradeCount3",{Title = "Select Upgrade Unit (Slot3)",Description = "select unit count of slot3 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
+    Ai:AddSlider("UpgradeCount4",{Title = "Select Upgrade Unit (Slot4)",Description = "select unit count of slot4 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
+    Ai:AddSlider("UpgradeCount5",{Title = "Select Upgrade Unit (Slot5)",Description = "select unit count of slot5 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
+    Ai:AddSlider("UpgradeCount6",{Title = "Select Upgrade Unit (Slot6)",Description = "select unit count of slot6 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
 
     Tabs.Other:AddToggle("AutoRejoinError", {Title = "Auto Rejoin When Disconnect ", Default = false })
     local white = Tabs.Other:AddToggle("AutoWhiteScreen", {Title = "Auto White Screen", Default = false })
@@ -257,7 +282,7 @@ do
 
     RecordToggle:OnChanged(function()
         if Options.Record.Value and Options.OptionsMacro.Value ~= nil then
-            Get_Paragrahp().Text = "Status : Recording...\nnil\nnil\nnil"
+            Get_Paragrahp().Text = "Status : Recording [0]"
             repeat wait() until not Options.Record.Value or getgenv().MissionEnd
             Fluent:Notify({
                 Title = "Record Ended",
@@ -282,13 +307,22 @@ do
         return tostring(game.Players.LocalPlayer.Cash.Value)
     end
 
-    local function Fire(value)
-        local events = {"MouseButton1Click", "MouseButton1Down", "Activated"}
-        for i,v in pairs(events) do
-            for i,v in pairs(getconnections(value[v])) do
-                v:Fire()
+    local function VisibleForCodex(value)
+        if game:GetService("CoreGui"):FindFirstChild("Codex") then
+            game:GetService("CoreGui"):FindFirstChild("Codex"):WaitForChild("gui").Enabled = value
         end
     end
+
+    local function VisibleGui(value)
+        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = value
+    end
+    
+    local function VisibleForTrigon(value)
+        for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+            if v.Name == "ExecFrame" and v.Parent.Name == "MainFrame" then
+                v.Parent.Parent.Enabled = value
+            end
+         end
     end
 
     local money
@@ -309,9 +343,16 @@ do
             getgenv().MissionEnd = true
             repeat wait() until Options.AutoMissionEnd.Value
             repeat
-                Fire(game.Players.LocalPlayer.PlayerGui:WaitForChild("EndGameUI"):WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild(Options.ActionMissionEnd.Value):WaitForChild("Button"))
-                wait(1.5)
+                VisibleForCodex(false)
+                VisibleForTrigon(false)
+                VisibleGui(false)
+                local uiXXX = game.Players.LocalPlayer.PlayerGui:WaitForChild("EndGameUI"):WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild(Options.ActionMissionEnd.Value):WaitForChild("Button")
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(uiXXX.AbsolutePosition.X + 27.5, uiXXX.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
+                task.wait(0.5)
             until not v.Parent
+            VisibleForCodex(true)
+            VisibleForTrigon(true)
+            VisibleGui(true)
         end
     end)
 
@@ -545,22 +586,21 @@ end)
         end
     end
 
+    local function VoteWave(value)
+        if value then
+            firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("SkipWave"):WaitForChild("BG"):WaitForChild("Yes").MouseButton1Click,game.Players.LocalPlayer) 
+        else
+            firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("SkipWave"):WaitForChild("BG"):WaitForChild("No").MouseButton1Click,game.Players.LocalPlayer)
+        end
+    end
+
     local function wait_and_set(count,value,text)
-        Get_Paragrahp().Text = "Status : Playing "..tostring(count).."/"..tostring(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]).."\n"..text
+        Get_Paragrahp().Text = "Status : Playing ["..tostring(count).."/"..tostring(#getgenv().Playing).."]\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]).."\n"..text
         repeat task.wait() until tonumber(Wave()) >= tonumber(value["Wave"])
         repeat task.wait() until tonumber(Time()) >= tonumber(value["Time"])
     end
 
     PlayToggle:OnChanged(function ()
-        if #Actions <= 0 and Options.Play.Value then
-            Fluent:Notify({
-                Title = "WARNING",
-                Content = "SELECT THE ACTIONS TO PLAY FIRST",
-                SubContent = nil,
-                Duration = 5
-        })
-        Options.Play:SetValue(false)
-        else
         if Options.Play.Value and not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
             for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
                 if string.split(v,"/")[5]:split(".lua")[1] == Options.OptionsMacro.Value then
@@ -571,11 +611,17 @@ end)
             for val = 1,#getgenv().Playing do
                 for i,v in pairs(getgenv().Playing[val]) do
                 ---Auto Skip 
-                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and table.find(Actions,"Auto Wave Skip") then
+                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave"  then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
                     AutoSkip(v["Value"])
+                elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) then
+                    wait_and_set(val,v,"Action : Vote Wave".."\nValue : "..tostring(v["Value"]))
+                    repeat wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave")
+                    repeat
+                    VoteWave(v["Value"])
+                    task.wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave") == nil or tonumber(Wave()) > tonumber(v["Wave"])
                 --- Place
-                elseif i == "Place" and table.find(Actions,"Place") then
+                elseif i == "Place" then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Place".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -587,9 +633,9 @@ end)
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(v["Unit"],stringtocf(v["Position"]))
                             task.wait(0.25)
-                        until Check_Unit_Position(v["Unit"],v["Position"]) or not table.find(Actions,"Place") or not Options.Play.Value
+                        until Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
                     --- Upgrade
-                    elseif i == "Upgrade" and table.find(Actions,"Upgrade") then
+                    elseif i == "Upgrade" then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -601,29 +647,28 @@ end)
                         repeat
                             Upgrade(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
-                        until Upgrade(v["Unit"],v["Position"],v["Value"]) or not table.find(Actions,"Place") or not Options.Play.Value
+                        until Upgrade(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
                     --- Traget
-                    elseif i == "Target" and table.find(Actions,"Target") then
+                    elseif i == "Target" then
                         wait_and_set(val,v,"Action : Target Changed\nValue : "..tostring(v["Value"]))
                         repeat
                             Changed_Target(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
-                        until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not table.find(Actions,"Target") or not Options.Play.Value
+                        until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
                     ----- Sell
-                    elseif i == "Sell" and table.find(Actions,"Sell") then 
+                    elseif i == "Sell"  then 
                         wait_and_set(val,v,"Action : Sell".."\nUnit : "..tostring(v["Unit"]))
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.Sell:InvokeServer(Check_Unit_Position(v["Unit"],v["Position"]))
                             task.wait(0.25)
-                        until not Check_Unit_Position(v["Unit"],v["Position"]) or not table.find(Actions,"Sell") or not Options.Play.Value
+                        until not Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
                     end
                     if val == #getgenv().Playing then
-                        Get_Paragrahp().Text = "Status : Playing Ended "..tostring(val).."/"..tostring(#getgenv().Playing)
+                        Get_Paragrahp().Text = "Status : Playing Ended ["..tostring(val).."/"..tostring(#getgenv().Playing).."]"
                     end
                 end
             end
         end
-    end
 end)
 
 
@@ -639,11 +684,24 @@ end)
     SaveManager:SetFolder("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
     InterfaceManager:BuildInterfaceSection(Tabs.Settings)
     SaveManager:BuildConfigSection(Tabs.Settings)
+    SaveManager:BuildConfigSection(Tabs.Settings)
+    Tabs.Settings:AddButton({
+        Title = "Delete Autoload file",
+        Description = nil,
+        Callback = function()
+            Fluent:Notify({
+                Title = "Delete succeed",
+                Content = "autoload.txt",
+                SubContent = nil,
+                Duration = 5
+            })
+        delfile("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/autoload.txt")
+    end})
     Window:SelectTab(1)
     SaveManager:LoadAutoloadConfig()
     
     end -- End Of Do
-    end -- End of If
+
 
     coroutine.resume(coroutine.create(function()
         pcall(function ()
@@ -783,6 +841,116 @@ end)
             end)
     end))
 
+    local Unit = {
+        ["Slot1"] = {},
+        ["Slot2"] = {},
+        ["Slot3"] = {},
+        ["Slot4"] = {},
+        ["Slot5"] = {},
+        ["Slot6"] = {}
+     }
+     local Current_CFrame = 0
+     game.Workspace.Towers.ChildAdded:Connect(function (v)
+        Current_CFrame += 2.5
+        for _,inslot in pairs(game.Players.LocalPlayer.Slots:GetChildren()) do
+           if table.find(slot,inslot.Name) and tostring(v.Name) == tostring(inslot.Value) then
+              table.insert(Unit[inslot.Name],tostring(v.Name))
+           end
+        end
+        warn(#Unit["Slot1"],#Unit["Slot2"],#Unit["Slot3"],#Unit["Slot4"],#Unit["Slot5"],#Unit["Slot6"])
+     end)
+    local function unit_2(value)
+        for i,v in pairs(game.Players.LocalPlayer.Slots:GetChildren()) do
+            if v.Name == value then
+                return v.Value
+            end
+        end
+    end
+
+    coroutine.resume(coroutine.create(function()
+        while task.wait(1.5) do
+        if Options.AiPlay.Value then
+            if table.find(slot,"Slot1") and tonumber(Options.Count1.Value) > #Unit["Slot1"] and not getgenv().In_Upgrage_1 then
+                getgenv().Upgrade_1 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot1"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+            elseif table.find(slot,"Slot2") and tonumber(Options.Count2.Value) > #Unit["Slot2"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 then
+                getgenv().Upgrade_2 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot2"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+            elseif table.find(slot,"Slot3") and tonumber(Options.Count3.Value) > #Unit["Slot3"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 then
+                getgenv().Upgrade_3 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot3"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+            elseif table.find(slot,"Slot4") and tonumber(Options.Count4.Value) > #Unit["Slot4"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 then
+                getgenv().Upgrade_4 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot4"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+            elseif table.find(slot,"Slot5") and tonumber(Options.Count5.Value) > #Unit["Slot5"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 and not getgenv().In_Upgrage_5 then
+                getgenv().Upgrade_5 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot5"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0))
+            elseif table.find(slot,"Slot6") and tonumber(Options.Count6.Value) > #Unit["Slot6"] and not getgenv().In_Upgrage_1 and not getgenv().In_Upgrage_2 and not getgenv().In_Upgrage_3 and not getgenv().In_Upgrage_4 and not getgenv().In_Upgrage_5 and not getgenv().In_Upgrage_6 then
+                getgenv().Upgrade_6 = false
+                game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(unit_2("Slot6"),game:GetService("Workspace").Map.Waypoints:FindFirstChild("1").CFrame * CFrame.new(math.random(-Current_CFrame,Current_CFrame),1.5,0)) 
+            end
+
+            if table.find(slot,"Slot1") and #Unit["Slot1"] >= tonumber(Options.Count1.Value) and not getgenv().Upgrade_1 then
+                getgenv().Upgrade_1 = true
+            elseif table.find(slot,"Slot2") and #Unit["Slot2"] >= tonumber(Options.Count2.Value) and not getgenv().Upgrade_2 then
+                    getgenv().Upgrade_2 = true
+            elseif table.find(slot,"Slot3") and #Unit["Slot3"] >= tonumber(Options.Count3.Value) and not getgenv().Upgrade_3 then
+                    getgenv().Upgrade_3 = true
+            elseif table.find(slot,"Slot4") and #Unit["Slot4"] >= tonumber(Options.Count4.Value) and not getgenv().Upgrade_4 then
+                    getgenv().Upgrade_4 = true
+            elseif table.find(slot,"Slot5") and #Unit["Slot5"] >= tonumber(Options.Count5.Value) and not getgenv().Upgrade_5 then
+                    getgenv().Upgrade_5 = true
+            elseif table.find(slot,"Slot6") and #Unit["Slot6"] >= tonumber(Options.Count6.Value) and not getgenv().Upgrade_6 then
+                    getgenv().Upgrade_6 = true
+            end
+            end
+        end
+    end))
+
+    coroutine.resume(coroutine.create(function()
+        while task.wait(0.85) do
+        if Options.AiPlay.Value then
+            for i,v in pairs(game.Workspace.Towers:GetChildren()) do
+            if table.find(slot,"Slot1") and v.Name == unit_2("Slot1") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount1.Value) and getgenv().Upgrade_1 then
+                getgenv().In_Upgrage_1 = true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            elseif table.find(slot,"Slot2") and v.Name == unit_2("Slot2") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount2.Value) and getgenv().Upgrade_2 then
+                getgenv().In_Upgrage_2= true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            elseif table.find(slot,"Slot3") and v.Name == unit_2("Slot3") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount3.Value) and getgenv().Upgrade_3 then
+                getgenv().In_Upgrage_3 = true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            elseif table.find(slot,"Slot4") and v.Name == unit_2("Slot4") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount4.Value) and getgenv().Upgrade_4 then
+                getgenv().In_Upgrage_4 = true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            elseif table.find(slot,"Slot5") and v.Name == unit_2("Slot5") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount5.Value) and getgenv().Upgrade_5 then
+                getgenv().In_Upgrage_5 = true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            elseif table.find(slot,"Slot6") and v.Name == unit_2("Slot6") and tonumber(v:WaitForChild("Upgrade").Value) ~= tonumber(Options.UpgradeCount1.Value) and getgenv().Upgrade_6 then
+                getgenv().In_Upgrage_6 = true
+                game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
+            end
+
+            warn(getgenv().In_Upgrage_5)
+            if table.find(slot,"Slot1") and v.Name == unit_2("Slot1") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount1.Value) and getgenv().In_Upgrage_1 then
+                getgenv().In_Upgrage_1 = false
+            elseif table.find(slot,"Slot2") and v.Name == unit_2("Slot2") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount2.Value) and getgenv().In_Upgrage_2 then
+                getgenv().In_Upgrage_2= false
+            elseif table.find(slot,"Slot3") and v.Name == unit_2("Slot3") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount3.Value) and getgenv().In_Upgrage_3 then
+                getgenv().In_Upgrage_3 = false
+            elseif table.find(slot,"Slot4") and v.Name == unit_2("Slot4") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount4.Value) and getgenv().In_Upgrage_4 then
+                getgenv().In_Upgrage_4 = false
+            elseif table.find(slot,"Slot5") and v.Name == unit_2("Slot5") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount5.Value) and getgenv().In_Upgrage_5 then
+                getgenv().In_Upgrage_5 = false
+            elseif table.find(slot,"Slot6") and v.Name == unit_2("Slot6") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount1.Value) and getgenv().In_Upgrage_6 then
+                getgenv().In_Upgrage_6 = false
+            end
+
+            end
+            end
+        end
+    end))
+
     coroutine.resume(coroutine.create(function()
         game.Players.LocalPlayer.OnTeleport:Connect(function(State)
             local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
@@ -806,3 +974,6 @@ end)
                 end
         end)
     end))
+
+end -- End of If
+
