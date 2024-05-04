@@ -1137,6 +1137,28 @@ Tabs.Settings:AddButton({
         })
         delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/autoload.txt")
     end})
+Tabs.Settings:AddButton({
+    Title = "Delete Select Config List",
+    Description = nil,
+    Callback = function()
+        if SaveManager.Options.SaveManager_ConfigList.Value == nil or "" or "nil" then
+            Fluent:Notify({
+                Title = "WARNING",
+                Content = "Select the config list first",
+                SubContent = nil,
+                Duration = 5
+            })
+        else
+            Fluent:Notify({
+                Title = "Delete succeed",
+                Content = SaveManager.Options.SaveManager_ConfigList.Value,
+                SubContent = "press the refresh button to refresh",
+                Duration = 5
+            })
+        end
+        delfile("/CrazyDay/ASTD/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..Options.SaveManager_ConfigList.Value..".json")
+    end
+})
 Window:SelectTab(1)
 SaveManager:LoadAutoloadConfig()
 
@@ -1466,6 +1488,14 @@ function VisibleForCodex(value)
 	if game:GetService("CoreGui"):FindFirstChild("Codex") then
 		game:GetService("CoreGui"):FindFirstChild("Codex"):WaitForChild("gui").Enabled = value
 	end
+end
+
+function VisibleForTrigon(value)
+    for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+        if v.Name == "ExecFrame" and v.Parent.Name == "MainFrame" then
+            v.Parent.Parent.Enabled = value
+        end
+     end
 end
 
 local Task
