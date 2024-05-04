@@ -238,7 +238,7 @@ do
     Ai:AddSlider("Count5",{Title = "Select Unit (Slot5)",Description = "select unit count of slot5 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
     Ai:AddSlider("Count6",{Title = "Select Unit (Slot6)",Description = "select unit count of slot6 to place",Default = 1,Min = 1,Max = 8,Rounding = 0,})
 
-    local aiplaychanged = Ai:AddToggle("AiPlay", {Title = "Auto Play [Place // Upgrade]", Default = false })
+    local aiplaychanged = Ai:AddToggle("AiPlay", {Title = "Auto Play [Place // Upgrade]",Description = "will place the unit first then upgrade the unit until the unit upgrade value has equal upgrade count",Default = false })
 
     aiplaychanged:OnChanged(function ()
         if Options.AiPlay.Value then
@@ -851,7 +851,7 @@ end)
      }
      local Current_CFrame = 0
      game.Workspace.Towers.ChildAdded:Connect(function (v)
-        Current_CFrame += 2.5
+        Current_CFrame += 3
         for _,inslot in pairs(game.Players.LocalPlayer.Slots:GetChildren()) do
            if table.find(slot,inslot.Name) and tostring(v.Name) == tostring(inslot.Value) then
               table.insert(Unit[inslot.Name],tostring(v.Name))
@@ -931,7 +931,6 @@ end)
                 game:GetService("ReplicatedStorage").Remotes.Upgrade:InvokeServer(v)
             end
 
-            warn(getgenv().In_Upgrage_5)
             if table.find(slot,"Slot1") and v.Name == unit_2("Slot1") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount1.Value) and getgenv().In_Upgrage_1 then
                 getgenv().In_Upgrage_1 = false
             elseif table.find(slot,"Slot2") and v.Name == unit_2("Slot2") and tonumber(v:WaitForChild("Upgrade").Value) >= tonumber(Options.UpgradeCount2.Value) and getgenv().In_Upgrage_2 then
