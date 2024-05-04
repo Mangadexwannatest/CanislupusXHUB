@@ -337,12 +337,49 @@ do
     local money
     local skip_wave_true
     local skip_wave_false
+    local UnitSelect
+    local Unit_Name
     task.spawn(function ()
+    game:GetService("UserInputService").InputBegan:Connect(function(input)
+            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+            for i, v in ipairs(game.Workspace:WaitForChild("Towers"):GetChildren()) do
+                for i, v2 in ipairs(v:GetDescendants()) do
+                    if v2 == game.Players.LocalPlayer:GetMouse().Target then
+                        UnitSelect = v:WaitForChild("HumanoidRootPart").Position
+                        Unit_Name = tostring(v.Name)
+                    end
+                end
+            end
+        end
+    end)
     if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
     local AutoSKipButton = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
     game.Players.LocalPlayer.PlayerGui:WaitForChild("MainUI"):WaitForChild("ErrorHolder").ChildAdded:Connect(function (v)
     if string.find(v.Text,"-") then
         money = v.Text:split("-$")[2]
+        end
+    end)
+
+
+    local userability
+    game.Players.LocalPlayer.PlayerGui.ChildAdded:Connect(function(v)
+        if v.Name == "Upgrade" then
+            userability = v:WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild("Ability").InputBegan:Connect(function(input)
+                if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+                    if tonumber(v:WaitForChild("BG"):WaitForChild("Buttons"):WaitForChild("Ability"):WaitForChild("TextLabel").Text) == nil then
+                    table.insert(getgenv().Recording,{
+                        ["UseAbility"] = {
+                            ["Wave"] = Wave(),
+                            ["Time"] = Time(),
+                            ["Unit"] = Unit_Name,
+                            ["Position"] = UnitSelect}})
+                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : UseAbility\nUnit : "..Unit_Name
+                repeat wait() until not v.Parent
+                userability:Disconnect()
+                userability = nil
+                end
+                end
+            end)
         end
     end)
 
@@ -572,6 +609,19 @@ end)
         end
     end
 
+    local function Ability(Unit,Position)
+        if type(Position) == "string" then
+            Position = stringtopos(Position)
+        end
+        for i, v in pairs(game.Workspace.Towers:GetChildren()) do
+            if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+            if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 then
+                game:GetService("ReplicatedStorage").Remotes.Ability:InvokeServer(v)
+            end
+            end
+        end
+    end
+
 
 --game:GetService("ReplicatedStorage").Remotes.VoteSkip:FireServer()
 
@@ -643,8 +693,15 @@ end)
                             game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(v["Unit"],stringtocf(v["Position"]))
                             task.wait(0.25)
                         until Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
-                    --- Upgrade
-                    elseif i == "Upgrade" then
+                --- Traget
+                elseif i == "Target" then
+                        wait_and_set(val,v,"Action : Target Changed\nValue : "..tostring(v["Value"]))
+                        repeat
+                            Changed_Target(v["Unit"],v["Position"],v["Value"])
+                            task.wait(0.25)
+                        until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
+                --- Upgrade
+                elseif i == "Upgrade" then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -657,22 +714,19 @@ end)
                             Upgrade(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
                         until Upgrade(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
-                    --- Traget
-                    elseif i == "Target" then
-                        wait_and_set(val,v,"Action : Target Changed\nValue : "..tostring(v["Value"]))
-                        repeat
-                            Changed_Target(v["Unit"],v["Position"],v["Value"])
-                            task.wait(0.25)
-                        until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
-                    ----- Sell
-                    elseif i == "Sell"  then 
+                ----- Sell
+                 elseif i == "Sell"  then 
                         wait_and_set(val,v,"Action : Sell".."\nUnit : "..tostring(v["Unit"]))
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.Sell:InvokeServer(Check_Unit_Position(v["Unit"],v["Position"]))
                             task.wait(0.25)
                         until not Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
-                    end
-                    if val == #getgenv().Playing then
+                ---UseAbility
+                elseif i == "UseAbility" then
+                    wait_and_set(val,v,"Action : UseAbility".."\nUnit : "..tostring(v["Unit"]))
+                    Ability(v["Unit"],v["Position"])
+                end
+                if val == #getgenv().Playing then
                         Get_Paragrahp().Text = "Status : Playing Ended ["..tostring(val).."/"..tostring(#getgenv().Playing).."]"
                     end
                 end
