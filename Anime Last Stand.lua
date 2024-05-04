@@ -2,9 +2,6 @@ repeat wait() until game:IsLoaded()
 repeat wait() until game.Players.LocalPlayer.Character
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     warn("Loading Gui..")
@@ -49,6 +46,10 @@ coroutine.resume(coroutine.create(function()
     end
 end))
 
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 local Window = Fluent:CreateWindow({
     Title = "Anime Last Stand",
     SubTitle = "Last Update May/03/2024 [CrazyDay:edek#1004]",
