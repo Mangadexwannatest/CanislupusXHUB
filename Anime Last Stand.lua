@@ -382,7 +382,6 @@ do
             end
         end
     end)
-    local AutoSKipButton = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
     game.Players.LocalPlayer.PlayerGui:WaitForChild("MainUI"):WaitForChild("ErrorHolder").ChildAdded:Connect(function (v)
     if string.find(v.Text,"-") then
         money = v.Text:split("-$")[2]
@@ -478,43 +477,27 @@ do
     end)
 
     game:GetService("ReplicatedStorage").Wave:GetPropertyChangedSignal("Value"):Connect(function ()
-        if AutoSKipButton.BackgroundColor3 == Color3.fromRGB(0, 0, 0) and Options.Record.Value then
+        if Options.Record.Value then
             table.insert(getgenv().Recording,{
             ["Check Auto Skip Wave"] = {
                 ["Wave"] = Wave(),
                 ["Time"] = Time(),
-                ["Value"] = false
+                ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value
             }})
-            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Check Auto Skip Wave\nValue : false"
-        elseif AutoSKipButton.BackgroundColor3 == Color3.fromRGB(245, 245, 245) and Options.Record.Value then
-            table.insert(getgenv().Recording,{
-                ["Check Auto Skip Wave"] = {
-                    ["Wave"] = Wave(),
-                    ["Time"] = Time(),
-                    ["Value"] = true
-                }})
-                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Check Auto Skip Wave\nValue : true"
+            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Check Auto Skip Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)
         end
     end)
 
 
-    AutoSKipButton:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
-    if AutoSKipButton.BackgroundColor3 == Color3.fromRGB(0, 0, 0) and Options.Record.Value then
+    game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip"):GetPropertyChangedSignal("Value"):Connect(function()
+    if  Options.Record.Value then
         table.insert(getgenv().Recording,{
             ["Auto Skip Wave"] = {
                 ["Wave"] = Wave(),
                 ["Time"] = Time(),
-                ["Value"] = false
+                ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value
             }})
-            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Auto Skip Wave Wave\nValue : false"
-    elseif AutoSKipButton.BackgroundColor3 == Color3.fromRGB(245, 245, 245) and Options.Record.Value then
-        table.insert(getgenv().Recording,{
-            ["Auto Skip Wave"] = {
-                ["Wave"] = Wave(),
-                ["Time"] = Time(),
-                ["Value"] = true
-            }})
-            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Auto Skip Wave Wave\nValue : true"
+            Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Time().."\nAction : Auto Skip Wave Wave\nValue : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)
         end
     end)
 
@@ -656,27 +639,18 @@ end)
 
 
     local function AutoSkip(value)
-        local XAD = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
-        if value then
-            if XAD.BackgroundColor3 ~= Color3.fromRGB(245, 245, 245) then
+        if game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value ~= value then
+            local AutoSKipButton = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
             repeat
-            firesignal(XAD.MouseButton1Click,game.Players.LocalPlayer)
+            firesignal(AutoSKipButton.MouseButton1Click,game.Players.LocalPlayer)
             task.wait(0.35)
-            until XAD.BackgroundColor3 == Color3.fromRGB(245, 245, 245)
-            end
-        else
-            if XAD.BackgroundColor3 ~= Color3.fromRGB(0, 0, 0) then
-            repeat
-            firesignal(XAD.MouseButton1Click,game.Players.LocalPlayer)
-            task.wait(0.35)
-            until XAD.BackgroundColor3 == Color3.fromRGB(0, 0, 0)
-            end
+            until game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value == value
         end
     end
 
     local function VoteWave(value)
         if value then
-            firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("SkipWave"):WaitForChild("BG"):WaitForChild("Yes").MouseButton1Click,game.Players.LocalPlayer) 
+            firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("SkipWave"):WaitForChild("BG"):WaitForChild("Yes").MouseButton1Click,game.Players.LocalPlayer)
         else
             firesignal(game.Players.LocalPlayer.PlayerGui:WaitForChild("SkipWave"):WaitForChild("BG"):WaitForChild("No").MouseButton1Click,game.Players.LocalPlayer)
         end
@@ -702,11 +676,12 @@ end)
                 if i == "Auto Skip Wave" or i == "Check Auto Skip Wave"  then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
                     AutoSkip(v["Value"])
+                --- Vote Wave
                 elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) and not game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value then
                     wait_and_set(val,v,"Action : Vote Wave".."\nValue : "..tostring(v["Value"]))
                     repeat
                     VoteWave(v["Value"])
-                    task.wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave") == nil or tonumber(Wave()) > tonumber(v["Wave"])
+                    task.wait() until game.Players.LocalPlayer.PlayerGui:FindFirstChild("SkipWave") == nil or tonumber(Wave()) > tonumber(v["Wave"]) or game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value
                 --- Place
                 elseif i == "Place" then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Place".."\nUnit : "..tostring(v["Unit"]))
