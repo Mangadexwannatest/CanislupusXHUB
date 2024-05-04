@@ -759,6 +759,28 @@ end)
             })
         delfile("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/autoload.txt")
     end})
+    Tabs.Settings:AddButton({
+        Title = "Delete Select Config List",
+        Description = nil,
+        Callback = function()
+            if SaveManager.Options.SaveManager_ConfigList.Value == nil then
+                Fluent:Notify({
+                    Title = "WARNING",
+                    Content = "Select the config list first",
+                    SubContent = nil,
+                    Duration = 5
+                })
+            else
+                Fluent:Notify({
+                    Title = "Delete succeed",
+                    Content = SaveManager.Options.SaveManager_ConfigList.Value,
+                    SubContent = "press the refresh button to refresh",
+                    Duration = 5
+                })
+            end
+            delfile("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name).."/settings/"..SaveManager.Options.SaveManager_ConfigList.Value..".json")
+        end
+    })
     Window:SelectTab(1)
     SaveManager:LoadAutoloadConfig()
     
