@@ -248,11 +248,13 @@ do
     local aiplaychanged = Ai:AddToggle("AiPlay", {Title = "Auto Play [Place // Upgrade]",Description = "will place the unit first then upgrade the unit until the unit upgrade value has equal upgrade count",Default = false })
 
     aiplaychanged:OnChanged(function ()
+        pcall(function()
         if Options.AiPlay.Value then
             game.Players.LocalPlayer.PlayerGui.MainUI.ErrorHolder.Visible = false
         else
             game.Players.LocalPlayer.PlayerGui.MainUI.ErrorHolder.Visible = true
         end
+    end)
     end)
 
     Ai:AddSlider("UpgradeCount1",{Title = "Select Upgrade Unit (Slot1)",Description = "select unit count of slot1 to upgrade",Default = 0,Min = 0,Max = 15,Rounding = 0,})
@@ -690,7 +692,6 @@ end)
     InterfaceManager:SetFolder("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
     SaveManager:SetFolder("/CrazyDay/ALS/"..game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name))
     InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-    SaveManager:BuildConfigSection(Tabs.Settings)
     SaveManager:BuildConfigSection(Tabs.Settings)
     Tabs.Settings:AddButton({
         Title = "Delete Autoload file",
