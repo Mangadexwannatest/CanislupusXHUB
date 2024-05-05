@@ -725,7 +725,7 @@ end)
                     ["Game Speed On Changed"] = {
                         ["Value"] = Time(),
                         ["Wave"] = Wave(),
-                        ["Time"] = Traget_Time()   
+                        ["Time"] = tonumber(Workspace.DistributedGameTime)
                     }})
                 Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : SpeedChange\nValue : "..Time()
             end
