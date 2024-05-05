@@ -468,25 +468,29 @@ local Macro_Files = {}
     })
 
     Mode_Select:OnChanged(function(value)
-        if value ~= nil and game:GetService("ReplicatedStorage").Lobby.Value then
+        if value ~= nil then
         if value == Options.Select_Mode.Values[1] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(WorldIn)
+            if game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Story().CFrame), tostring(Story().Name)
+            end
         elseif value == Options.Select_Mode.Values[2] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(Inf)
+            if game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Infinite().CFrame) , tostring(Infinite().Name)
+            end
         elseif value == Options.Select_Mode.Values[3] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(Challenge)
-            if Challenge_Adventures() then
+            if Challenge_Adventures() and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
             end
         elseif value == Options.Select_Mode.Values[4] then
             MapSlect:SetValue(nil)
             MapSlect:SetValues(Adventures)
-            if Challenge_Adventures() then
+            if Challenge_Adventures() and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
             end
         end
@@ -496,14 +500,13 @@ local Macro_Files = {}
     local warn1 = Tabs.Lobby:AddToggle("Auto_Lobby", {Title = "Auto Join Lobby", Default = false })
 
     MapSlect:OnChanged(function(value)
-        if value == nil then
-        elseif value ~= nil and game:GetService("ReplicatedStorage").Lobby.Value then
-        if Options.Select_Mode.Value == Options.Select_Mode.Values[1] then
+        if value ~= nil then
+        if Options.Select_Mode.Value == Options.Select_Mode.Values[1] and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Story().CFrame) , tostring(Story().Name)
-        elseif Options.Select_Mode.Value == Options.Select_Mode.Values[2] then
+        elseif Options.Select_Mode.Value == Options.Select_Mode.Values[2] and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Infinite().CFrame) , tostring(Infinite().Name)
         elseif Options.Select_Mode.Value == Options.Select_Mode.Values[3] or Options.Select_Mode.Value == Options.Select_Mode.Values[4] then
-            if Challenge_Adventures() then
+            if Challenge_Adventures() and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
             end
         end
