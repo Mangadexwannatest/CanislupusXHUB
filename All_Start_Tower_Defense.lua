@@ -120,6 +120,15 @@ local function CF()
         return CFrame.new(-142.440994, 92.8373184, -1883.59546, -0.999998212, 9.35774722e-11, 0.00189758092, -9.31082711e-11, 1, -9.83808235e-08, -0.00189758092, -9.83808235e-08, -0.999998212)
     end
 end
+local function Traget_Time()
+    if game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 1 then
+    return tonumber(Workspace.DistributedGameTime)
+    elseif game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 2 then
+        return tonumber(Workspace.DistributedGameTime * 1.95)
+    elseif game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 2 then
+        return tonumber(Workspace.DistributedGameTime * 3.985)
+    end
+end
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -681,9 +690,6 @@ end)
             end
         end
     end)
-    local function Traget_Time()
-        return tonumber(Workspace.DistributedGameTime)
-    end
     task.spawn(function ()
         game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.YesButton.Activated:Connect(function()
             if Options.Record.Value then
@@ -1244,7 +1250,7 @@ end))
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
         if not game:GetService("ReplicatedStorage").Lobby.Value then
-        game:WaitForChild("CoreGui"):WaitForChild("CurrentTime"):FindFirstChild("CureentTime").Text = "Time : "..tostring(Workspace.DistributedGameTime)
+        game:WaitForChild("CoreGui"):WaitForChild("CurrentTime"):FindFirstChild("CureentTime").Text = "Time : "..tostring(Traget_Time())
         end
     end)
 end
