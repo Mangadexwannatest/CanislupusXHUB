@@ -47,7 +47,10 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-
+local Traget_CFrame
+local function GET_THE_FARM()
+    return CFrame.new(table.unpack(Traget_CFrame:gsub(" ", ""):split(",")))
+end
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -210,30 +213,89 @@ do
     local RecordToggle = Tabs.Main:AddToggle("Record", {Title = "Macro Record",Description = "after record disable to save or wait for the game has ended", Default = false })
     local PlayToggle = Tabs.Main:AddToggle("Play", {Title = "Macro Play", Default = false })
 
-    Tabs.Lobby:AddDropdown("Select_Mode", {
-        Title = "Select Mode",
+    local Mode = Tabs.Lobby:AddDropdown("Select_Mode", {
+        Title = "Select Type",
         Description = nil,
-        Values = {"Story","Challenge","Infinite","Raid"},
+        Values = {"Story","Challenge","Infinite","Raids"},
         Multi = false,
         Default = 1
     })
+    local MAP = Tabs.Lobby:AddDropdown("Select_Map", {
+        Title = "Select Map",
+        Description = nil,
+        Values = {nil},
+        Multi = false,
+        Default = nil
+    })
+
+    Tabs.Lobby:AddDropdown("Select_Stage", {
+        Title = "Select Stage",
+        Description = nil,
+        Values = {1,2,3,4,5,6},
+        Multi = false,
+        Default = 1
+    })
+    Tabs.Lobby:AddDropdown("MODEADWD", {
+        Title = "Select Mode",
+        Description = nil,
+        Values = {"Normal","Nightmare"},
+        Multi = false,
+        Default = 1
+    })
+
+    Tabs.Lobby:AddToggle("AutoJoinLobby", {Title = "Auto Join Lobby ", Default = false })
+
 
     local function GET_MODE()
         if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
             return
         end
-        for i,v in pairs(game:GetService("Workspace"):GetChildren()) do
-            if v:IsA("Folder") and v.Name == "" or nil then
-                for _,mode in pairs(v[Options.Select_Mode.Value]:GetChildren()) do
-                    if mode.Name == "Teleporter" then
-                        if tostring(mode:WaitForChild("Door"):WaitForChild("UI"):WaitForChild("PlayerCount").Text) == "0/4" then
-                            return mode:WaitForChild("Door")
-                    end
+        for i,v in pairs(game:GetService("Workspace").TeleporterFolder[Options.Select_Mode.Value]:GetChildren()) do
+                    if v.Name == "Teleporter" then
+                        if tostring(v:WaitForChild("Door"):WaitForChild("UI"):WaitForChild("PlayerCount").Text) == "0/4" then
+                            return v:WaitForChild("Door")
                 end
             end
         end
     end
-    end
+    
+
+    Mode:OnChanged(function (Value)
+        if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
+            return
+        end
+        if Value == ("Story" or "Challenge" or "Infinite") then
+            MAP:SetValue(nil)
+            MAP:SetValues({"Desert Village","Water Part","Hollow Dimension","Planet Nemak","Star Mansion","Super Hero City","Hero Association"})
+            Traget_CFrame = tostring(GET_MODE().CFrame)
+        elseif Value == "Raids" then
+            MAP:SetValue(nil)
+            MAP:SetValues({"Marines Fort"})
+            Traget_CFrame = tostring(GET_MODE().CFrame)
+        end
+    end)
+
+    MAP:OnChanged(function (Value)
+        if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
+            return
+        end
+        Traget_CFrame = tostring(GET_MODE().CFrame)
+    end)
+
+    task.spawn(function ()
+        while wait(1) do
+            if Options.AutoJoinLobby.Value and game.PlaceId == 12886143095 and game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
+                if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("MapSelection") or not game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = GET_THE_FARM()
+                  end
+                if game.Players.LocalPlayer.PlayerGui:FindFirstChild("MapSelection") and not game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
+                game:GetService("ReplicatedStorage").Remotes.Teleporter.MapSelect:InvokeServer("Ready",Options.Select_Map.Value,Options.Select_Stage.Value,Options.MODEADWD.Value)
+                elseif game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
+                game:GetService("ReplicatedStorage").Remotes.Teleporter.Interact:FireServer("Skip")
+                end
+               end
+            end
+    end)
 
     getgenv().MissionEnd = nil
     Tabs.GameMode:AddDropdown("ActionMissionEnd", {
@@ -245,7 +307,7 @@ do
     })
     Tabs.GameMode:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
     local Ai = Tabs.GameMode:AddSection("Auto Play")
-    local unitslot = Ai:AddDropdown("Spot", {
+    Ai:AddDropdown("Spot", {
         Title = "Select Spot(Auto Play)",
         Description = nil,
         Values = {"Very closest","closest","middle","far","Very far","base"},
@@ -1056,29 +1118,15 @@ end)
     end))
 end
 
-    coroutine.resume(coroutine.create(function()
-        game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-            local script = 
-            [[
-                repeat wait() until game:IsLoaded()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
-        
-            local success = pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
-             end)
-             
-             print(success)
-             if not success then
-                wait(20)
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua"))()
-             end
-            ]]
-            if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-                QueueOnTeleport(script)
-                end
-        end)
-    end))
+game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+    if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+    QueueOnTeleport(
+        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime%20Last%20Stand.lua'))()"
+    )
+    end
+end)
+
 
 end -- End of If
 
