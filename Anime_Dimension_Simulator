@@ -1919,8 +1919,8 @@ end))
 
 local queue_on_teleport = queue_on_teleport or syn.queue_on_teleport or fluxus.queue_on_teleport or function(...) return ... end
 game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+    if not Options.AutoExecuteScript.Value then return end
     if state ~= Enum.TeleportState.Started and state ~= Enum.TeleportState.InProgress then return end
-    if Options.AutoExecuteScript.Value then
     queue_on_teleport([[
         repeat task.wait() until game:IsLoaded()
         repeat wait()until game:GetService("Players").LocalPlayer ~= nil
@@ -1929,7 +1929,6 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(state)
         wait(2)
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
     ]])
-    end
 end)
 
 
