@@ -1923,11 +1923,9 @@ end))
 game.Players.LocalPlayer.OnTeleport:Connect(function(state)
     local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
     if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-    QueueOnTeleport([[
-        repeat task.wait() until game:IsLoaded()
-        wait(2)
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
-    ]])
+    QueueOnTeleport(
+        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()"
+    )
     end
 end)
 
