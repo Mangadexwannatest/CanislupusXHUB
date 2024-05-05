@@ -5,6 +5,7 @@ if not game:GetService("Players").LocalPlayer.Character then game:GetService("Pl
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
    if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+    repeat 
        warn("Loading Gui..")
     local firesignal = function(signal, arg2)
         if getconnections(signal) then
@@ -1507,5 +1508,6 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(state)
     end
 end)
 
-
+wait(5)
+until game.CoreGui:FindFirstChild("CrazyDay")
 end -- End Of If
