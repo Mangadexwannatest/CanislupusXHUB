@@ -807,24 +807,19 @@ end)
         v:WaitForChild("Owner")
         v:WaitForChild("HumanoidRootPart") 
             if v:WaitForChild("UpgradeTag").Value >= 0  and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
-                for ii,vv in next,game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.Unit:GetChildren() do
-                    if vv:IsA("Frame") and tostring(vv.Unit.Value) == tostring(v.Name) and Options.Record.Value then
-                        local MONEY = vv:FindFirstChild("ImageLabel"):FindFirstChild("TextLabel").Text
                 table.insert(getgenv().Recording, {
                     ["Summon"] = {
                         ["Rotation"] = 0,
                         ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
                         ["Unit"] = tostring(v.Name),
                         ["Wave"] = Wave(),
-                        ["Money"] = MONEY,
+                        ["Money"] = string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2],
                         ["Time"] = { 
                             ["Time"] = Traget_Time(),
                             ["Game Speed"] = Time()
                 }
                     }})
                     Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..MONEY.."\nAction : Summon\nUnit : "..tostring(v.Name)
-                    end
-                end
                 task.spawn(function ()
                 v:WaitForChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
                     if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name and Options.Record.Value then
