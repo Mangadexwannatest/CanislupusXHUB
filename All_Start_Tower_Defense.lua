@@ -147,8 +147,6 @@ local Tabs = {
 local Options = Fluent.Options
 getgenv().Recording = {}
 local Macro_Files = {}
-local Actions = {}
-
 
    do
 
@@ -193,14 +191,6 @@ local Actions = {}
         Values = Macro_Files,
         Multi = false,
         Default = nil
-    })
-
-    local Action = Tabs.Main:AddDropdown("Action", {
-        Title = "Select Actions (Macro Play)",
-        Description = "recommended to enable all",
-        Values = {"Summon","Upgrade","Sell","Game Speed","Skip Wave","UseSpecialMove","Auto Activate","Priority","Auto Wave Skip"},
-        Multi = true,
-        Default = {nil},
     })
 
     local Input = Tabs.Main:AddInput("Input", {
@@ -328,14 +318,6 @@ local Actions = {}
             until not game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible 
         end
     end)
-
-    Action:OnChanged(function(Value)
-        Actions = {}
-        for Value, State in next, Value do
-            table.insert(Actions, Value)
-        end
-    end)
-
 
     Tabs.Webhook:AddInput("Webhook", {
         Title = "Webhook",
@@ -999,15 +981,6 @@ end
   end
   
     PlayToggle:OnChanged(function()
-        if #Actions <= 0 and Options.Play.Value then
-            Fluent:Notify({
-                Title = "WARNING",
-                Content = "SELECT THE ACTIONS TO PLAY FIRST",
-                SubContent = nil,
-                Duration = 5
-        })
-        Options.Play:SetValue(false)
-        else
         if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
             repeat wait() until Options.OptionsMacro.Value ~= nil
             for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
@@ -1020,7 +993,7 @@ end
 				for stats = 1, #getgenv().Playing do
 					for i, v in pairs(getgenv().Playing[stats]) do
                         -- Game Speed On Changed
-                        if i == "Game Speed On Changed" and Time() ~= tostring(v["Value"]) and table.find(Actions,"Game Speed") then -- Changed game speed
+                        if i == "Game Speed On Changed" and Time() ~= tostring(v["Value"])  then -- Changed game speed
                         Get_Paragrahp().Text = "Status : Playing "..tonumber(stats).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(v["Wave"]).."\nWaiting For Time : "..tostring(v["Time"]).."\nAction : SpeedChange\nValue : "..tostring(v["Value"])
                         repeat wait() until tonumber(Wave()) >= tonumber(v["Wave"])
                         repeat wait() until Traget_Time() >= v["Time"]
@@ -1037,7 +1010,7 @@ end
                         end
 
                         -- Auto Skip Wave
-                        elseif i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) and table.find(Actions,"Auto Wave Skip") then
+                        elseif i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) then
                             Wait_Get_Paragrap(stats,v,"Action : Auto Skip Wave\nValue : "..tostring(v["Value"]) )
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
@@ -1045,13 +1018,13 @@ end
                             until SkipWave_Toggel() == tostring(v["Value"]) or not Options.Play.Value
     
                         -- Vote The Wave
-                        elseif i == "VoteWave" and Wave() <= v["Wave"] and table.find(Actions,"Skip Wave") then
+                        elseif i == "VoteWave" and Wave() <= v["Wave"]  then
                             Wait_Get_Paragrap(stats,v,"Action : VoteWave\nValue : "..tostring(v["Value"]) )
                             repeat task.wait() until Get_TheWaveI() or not Options.Play.Value
                             repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"] or not Options.Play.Value
 
                         -- Summon The Units
-                        elseif i == "Summon" and table.find(Actions,"Summon") then
+                        elseif i == "Summon" and then
                             Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Summon\nUnit : "..tostring(v["Unit"]))
                             repeat wait() until Money() >= tonumber(v["Money"])
                             repeat
@@ -1064,7 +1037,7 @@ end
                                 task.wait(0.25)
                             until Unit or not Options.Play.Value
                         -- Upgrade The Units
-                        elseif i == "Upgrade" and table.find(Actions,"Upgrade") then
+                        elseif i == "Upgrade" then
                             Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade\nUnit : "..tostring(v["Unit"]))
                             repeat wait() until Money() >= tonumber(v["Money"])
                             repeat local Unit_Upgrade = Upgrade(v["Unit"],v["Position"],v["Upgrade#"])
@@ -1072,26 +1045,26 @@ end
                                 task.wait(0.25)
                             until Unit_Upgrade or not Options.Play.Value
                         -- Sell The Units
-                        elseif i == "Sell" and table.find(Actions,"Sell") then
+                        elseif i == "Sell" then
                             Wait_Get_Paragrap(stats,v,"Action : Sell\nUnit : "..tostring(v["Unit"]))
                             repeat local iS_Unit = Verify_Unit(v["Unit"], v["Position"])
                                     Sell(v["Unit"], v["Position"])
                                 task.wait(0.25)
                             until not iS_Unit or not Options.Play.Value
                         -- Change The Priority of Units
-                        elseif i == "Changed Priority" and table.find(Actions,"Priority") then 
+                        elseif i == "Changed Priority" then 
                             task.wait(0.15)
                             Wait_Get_Paragrap(stats,v,"Action : Changed Priority\nUnit : "..tostring(v["Unit"]))
                             ChangedPriority(v["Unit"],v["Position"])
                         -- UseSpecialMove 
-                        elseif i == "UseSpecialMove" and table.find(Actions,"UseSpecialMove") then
+                        elseif i == "UseSpecialMove"  then
                             Wait_Get_Paragrap(stats,v,"Action : UseSpecialMove\nUnit : "..tostring(v["Unit"]))
                             repeat local just_ability = UseSpecialMove(v["Unit"],v["Position"])
                                 UseSpecialMove(v["Unit"],v["Position"])
                                 task.wait(0.25)
                             until just_ability or not Options.Play.Value
                         -- Auto Toggle
-                        elseif i == "AutoToggle" and table.find(Actions,"Auto Activate") then
+                        elseif i == "AutoToggle"  then
                             Wait_Get_Paragrap(stats,v,"Action : AutoToggle\nUnit : "..tostring(v["Unit"]).."\nValue : "..tostring(v["Value"]))
                             AutoToggleActivate(v["Unit"],v["Position"],v["Value"])
                      end
@@ -1102,7 +1075,6 @@ end
                 end
 			end
         end)
-    end
     end
 end)
 
