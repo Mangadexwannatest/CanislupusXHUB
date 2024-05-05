@@ -682,10 +682,21 @@ end)
     end)
 
 
-   local white = Tabs.Other:AddToggle("WhiteScreen", {Title = "AUTO WHITE SCREEN", Default = false })
+    local white = Tabs.Other:AddToggle("WhiteScreen", {Title = "AUTO WHITE SCREEN", Default = false })
     Tabs.Other:AddToggle("AutoRejoinIfError", {Title = "AUTO REJOIN IF ERROR", Default = false })
     Tabs.Other:AddToggle("AutoCloseAfterExecute", {Title = "CLOSE GUI AFTER EXECUTE", Default = false })
-    Tabs.Other:AddToggle("AutoExecuteScript", {Title = "AUTO EXECUTE SCRIPT", Default = false })
+    local excute = Tabs.Other:AddToggle("AutoExecuteScript", {Title = "AUTO EXECUTE SCRIPT", Default = false })
+
+    excute:OnChanged(function ()
+        if Options.AutoExecuteScript.Value then
+            getgenv().AUTOEXCUTE = true
+            warn("TRUE")
+        else
+            getgenv().AUTOEXCUTE = false
+            warn("FALSE")
+        end
+    end)
+
     Tabs.Other:AddButton({
         Title = "TELEPORT LOBBY",
         Description = nil,
@@ -1922,7 +1933,7 @@ end))
 
 game.Players.LocalPlayer.OnTeleport:Connect(function(state)
     local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-    if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+    if state == Enum.TeleportState.InProgress and getgenv().AUTOEXCUTE then
     QueueOnTeleport(
         "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()"
     )
