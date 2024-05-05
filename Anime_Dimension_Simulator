@@ -121,7 +121,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Anime Dimensions Simulator",
-    SubTitle = "Last Update April/23/2024 [CrazyDay:edek#1004]",
+    SubTitle = "Last Update May/05/2024 [CrazyDay:edek#1004]",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false,
@@ -711,8 +711,8 @@ end)
     local UpdateLog = Tabs.Other:AddSection("Update Log")
 
     UpdateLog:AddParagraph({
-        Title = "Last Update April/23/2024",
-        Content = "[+] Webhook Raid Reward\n[+] Auto Raid Challenge\n[+] Attack/Farm Medhod\n[*] Webhook Dungeon Reward Should work(speedraid,bossrush)\n[*] Fixed Boss Rush not join\n[*] Rework Auto EquipCharacter\n[*] Fixed All Bug 18:17\n[*] Fixed Raid Webhook"
+        Title = "Last Update May/05/2024",
+        Content = "[*] Fixed Auto Excuter now working\n[*] Fixed webhook not working"
     })
 
     white:OnChanged(function()
@@ -1044,7 +1044,11 @@ coroutine.resume(coroutine.create(function()
         if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
         if Options.Auto_Set_Distance.Value then
             if game.Players.LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible then
+                if Options.METHOD_FARM.Value == "Behind" or Options.METHOD_FARM.Value == "Front" then
                 method = CFrame.new(0,0,0)
+                elseif Options.METHOD_FARM.Value == "Over" then
+                method = CFrame.new(0,1.5,0) * CFrame.Angles(math.rad(-90),0,0)
+                end
             else
             if Options.METHOD_FARM.Value == "Behind"  then
                 method = CFrame.new(0,0,getClosestMob().HumanoidRootPart.Size.Z+5)
@@ -1621,10 +1625,9 @@ coroutine.resume(coroutine.create(function()
 end))
 
 
-if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then 
 local OtherItem = {}
 local Other_Num = {"None"}
-game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
@@ -1636,7 +1639,7 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):
     end
 end)
 
-game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
     pcall(function ()
     if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
         repeat wait()
@@ -1794,7 +1797,7 @@ BBody = game:GetService("HttpService"):JSONEncode({
       ["Content-Type"] = "application/json"
   },
   Body = BBody
-})  
+})
 end
 end)
 end)
@@ -1803,7 +1806,6 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
     pcall(function()
     if Options.AutoWebhook_Dungeon.Value then
         wait(1.25)
-        if #OtherItem >= 1 then
         for i,v in pairs(OtherItem) do
             if #v ~= 0 then
             local num = v
@@ -1815,7 +1817,6 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
             table.insert(Other_Num,name_count)
         end
     end
-end
 local timeInfo = os.date("*t")
 local ExpPer = tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text):split("%")
 BBody = game:GetService("HttpService"):JSONEncode({
@@ -1889,7 +1890,6 @@ end
 end)
 end)
 
-end--gameplace
 
 
 coroutine.resume(coroutine.create(function()
