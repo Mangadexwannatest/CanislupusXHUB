@@ -727,7 +727,7 @@ end)
                         ["Wave"] = Wave(),
                         ["Time"] = tonumber(Workspace.DistributedGameTime)
                     }})
-                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : SpeedChange\nValue : "..Time()
+                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..tonumber(Workspace.DistributedGameTime).."\nAction : SpeedChange\nValue : "..Time()
             end
         end)
     end)
