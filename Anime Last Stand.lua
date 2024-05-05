@@ -261,17 +261,18 @@ do
     
 
     Mode:OnChanged(function (Value)
-        if not game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
-            return
-        end
         if Value == ("Story" or "Challenge" or "Infinite") then
             MAP:SetValue(nil)
             MAP:SetValues({"Desert Village","Water Part","Hollow Dimension","Planet Nemak","Star Mansion","Super Hero City","Hero Association"})
-            Traget_CFrame = tostring(GET_MODE().CFrame)
+            if game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
+                Traget_CFrame = tostring(GET_MODE().CFrame)
+            end
         elseif Value == "Raids" then
             MAP:SetValue(nil)
             MAP:SetValues({"Marines Fort"})
+            if game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
             Traget_CFrame = tostring(GET_MODE().CFrame)
+            end
         end
     end)
 
