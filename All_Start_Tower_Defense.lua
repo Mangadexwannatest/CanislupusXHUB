@@ -1503,29 +1503,14 @@ end)
 end
 end))
 
+game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+    if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+    QueueOnTeleport(
+        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()"
+    )
+    end
+end)
 
-coroutine.resume(coroutine.create(function()
-    game.Players.LocalPlayer.OnTeleport:Connect(function(State)
-        local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-        local script = 
-        [[
-            repeat wait() until game:IsLoaded()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
-    
-        local success = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
-         end)
-         
-         print(success)
-         if not success then
-            wait(20)
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua"))()
-         end
-        ]]
-        if State == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-            QueueOnTeleport(script)
-            end
-    end)
-end))
 
 end -- End Of If
