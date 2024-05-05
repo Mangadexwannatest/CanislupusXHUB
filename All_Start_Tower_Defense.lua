@@ -121,13 +121,7 @@ local function CF()
     end
 end
 local function Traget_Time()
-    if game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 1 then
     return tonumber(Workspace.DistributedGameTime)
-    elseif game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 2 then
-        return tonumber(Workspace.DistributedGameTime * 1.95)
-    elseif game:GetService("ReplicatedStorage"):WaitForChild("SpeedUP").Value == 3 then
-        return tonumber(Workspace.DistributedGameTime * 3.985)
-    end
 end
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
