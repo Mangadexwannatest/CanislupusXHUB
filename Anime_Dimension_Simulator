@@ -1689,7 +1689,7 @@ Check_Raid_GUI().ChildAdded:Connect(function(v)
         table.insert(item_name,v.Name.." [Legendary]")
     else
         table.insert(item_name,v.Name.." [Mythic]")
-        end    
+        end
     end
 end)
 
@@ -1790,6 +1790,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
     pcall(function()
     if Options.AutoWebhook_Dungeon.Value then
         wait(1.25)
+        if #OtherItem >= 1 then
         for i,v in pairs(OtherItem) do
             if #v ~= 0 then
             local num = v
@@ -1801,6 +1802,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI:
             table.insert(Other_Num,name_count)
         end
     end
+end
 local timeInfo = os.date("*t")
 local ExpPer = tostring(game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text):split("%")
 BBody = game:GetService("HttpService"):JSONEncode({
@@ -1917,18 +1919,16 @@ else
 end
 end))
 
-local queue_on_teleport = queue_on_teleport or syn.queue_on_teleport or fluxus.queue_on_teleport or function(...) return ... end
+
 game.Players.LocalPlayer.OnTeleport:Connect(function(state)
-    if not Options.AutoExecuteScript.Value then return end
-    if state ~= Enum.TeleportState.Started and state ~= Enum.TeleportState.InProgress then return end
-    queue_on_teleport([[
+    local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+    if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+    QueueOnTeleport([[
         repeat task.wait() until game:IsLoaded()
-        repeat wait()until game:GetService("Players").LocalPlayer ~= nil
-        if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
-        game.Players.LocalPlayer:WaitForChild("PlayerGui")
         wait(2)
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Dimension_Simulator'))()
     ]])
+    end
 end)
 
 
