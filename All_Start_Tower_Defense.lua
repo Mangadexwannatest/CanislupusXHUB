@@ -621,6 +621,7 @@ end)
             Get_Paragrahp().Text = "Status : Recording [0]"
             repeat wait() until not Options.Record.Value or game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible
             Get_Paragrahp().Text = "Status : Recording Ended ["..#getgenv().Recording.."]"
+            Options.Record:SetValue(false)
             Fluent:Notify({
                 Title = "Record Ended",
                 Content = "Macro name",
