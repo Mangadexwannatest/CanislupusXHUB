@@ -1,4 +1,7 @@
 repeat wait() until game:IsLoaded()
+repeat wait()until game:GetService("Players").LocalPlayer ~= nil
+if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
+game.Players.LocalPlayer:WaitForChild("PlayerGui")
 repeat wait() until game:FindFirstChild("CoreGui"):FindFirstChild("PlayerList")
 coroutine.resume(coroutine.create(function()
     pcall(function ()
@@ -1617,13 +1620,11 @@ coroutine.resume(coroutine.create(function()
     end)
 end))
 
+
+if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then 
 local OtherItem = {}
 local Other_Num = {"None"}
-
-
-game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
-
-game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
     if not v:IsA("UIGridLayout") then
         if tonumber(v.LevelReq.Text) then
             if not OtherItem[v.Name] then
@@ -1635,7 +1636,7 @@ game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.
     end
 end)
 
-game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RewardFrame.RewardGridFrame.ChildAdded:Connect(function(v)
+game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
     pcall(function ()
     if v.Name ~= 'TraitToken' and v.Name ~= 'RaidCurrency' and v.Name ~= "BossRushEntryPass" and v.Name ~= 'Gem' and v.Name ~= 'BossRushCurrency' then
         repeat wait()
@@ -1662,7 +1663,7 @@ end)
 
 
 function Check_Raid_GUI()
-    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame:GetDescendants()) do
+    for i,v in pairs(game.Players.LocalPlayer.PlayerGui:WaitForChild("UniversalGui"):WaitForChild("UniversalCenterUIFrame"):WaitForChild("RaidResultUI"):WaitForChild("Frame"):GetDescendants()) do
         if v.Name == "RaidRewardGridFrame" and v.Parent.Name == 'Shadow' then
             return v
         end
@@ -1703,6 +1704,7 @@ Check_Raid_GUI().ChildAdded:Connect(function(v)
         end
     end
 end)
+
 
 function Gem() for i,v in next,game.Players.LocalPlayer.PlayerGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame:GetChildren() do if v.Name == "CoinBlack" and i == 14 then
     return v.Gem.Text end end end
@@ -1886,6 +1888,8 @@ BBody = game:GetService("HttpService"):JSONEncode({
 end
 end)
 end)
+
+end--gameplace
 
 
 coroutine.resume(coroutine.create(function()
