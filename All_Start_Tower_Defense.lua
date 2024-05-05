@@ -670,12 +670,12 @@ end)
     local Auto = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("Auto")
     local UserAbility = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton")
     UserInput.InputBegan:Connect(function(input)
-        if (input.UserInputType == Enum_input.MouseButton1 or input.UserInputType == Enum_input.MouseButton2 or input.UserInputType == Enum_input.Touch) then
+        if (input.UserInputType == Enum_input.MouseButton1 or input.UserInputType == Enum_input.MouseButton2 or input.UserInputType == Enum_input.MouseButton3 or input.UserInputType == Enum_input.Touch) then
         for i, v in ipairs(game.Workspace.Unit:GetChildren()) do
-            for i, v2 in ipairs(v:GetDescendants()) do
+            for i2, v2 in ipairs(v:GetDescendants()) do
                 if v2 == Mouse.Target then
-                    UnitSelect = v:WaitForChild("HumanoidRootPart").Position
-                    Unit_Name = tostring(v.Name)
+                    UnitSelect = v:WaitForChild("HumanoidRootPart").Position;
+                    Unit_Name = tostring(v.Name);
                    end
                 end
             end
@@ -995,28 +995,7 @@ end
   local function Wait_Get_Paragrap(stat,value,OtherValue)
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
     repeat wait() until tonumber(Wave()) >= tonumber(value["Wave"])
-    if table.find(Actions,"Game Speed") and not Options.SPEED.Value then
-    Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-    repeat wait() until Traget_Time() >= value["Time"]["Time"] or Options.SPEED.Value
-    elseif not table.find(Actions,"Game Speed") or Options.SPEED.Value then
-        if value["Time"]["Game Speed"] == "1X" then
-        Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"] or table.find(Actions,"Game Speed")
-        elseif value["Time"]["Game Speed"] == "2X" then
-        Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/2 or table.find(Actions,"Game Speed")
-        elseif value["Time"]["Game Speed"] == "3X" then
-        Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/3).."\n"..OtherValue
-            repeat wait() until Traget_Time() >= value["Time"]["Time"]/3 or table.find(Actions,"Game Speed")
-
-        elseif Options.SPEED.Value and Options.Speed.Value == "2X" and value["Time"]["Game Speed"] ~= "2X" then
-        Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/2).."\n"..OtherValue
-            repeat wait() until  Traget_Time() >= value["Time"]["Time"]/2 or not Options.SPEED.Value
-        elseif Options.SPEED.Value and Options.Speed.Value == "3X" and value["Time"]["Game Speed"] ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
-        Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]/3).."\n"..OtherValue
-            repeat wait() until  Traget_Time() >= value["Time"]["Time"]/3 or not Options.SPEED.Value
-        end
-    end
+    repeat wait() until Traget_Time() >= value["Time"]["Time"]
   end
   
     PlayToggle:OnChanged(function()
