@@ -757,16 +757,16 @@ end)
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.PlaceTower:FireServer(v["Unit"],stringtocf(v["Position"]))
                             task.wait(0.25)
-                        until Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
+                        until Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value or tonumber(Wave()) > tonumber(v["Wave"])
                 --- Traget
-                elseif i == "Target" then
+                elseif i == "Target" and Check_Unit_Position(v["Unit"],v["Position"]) then
                         wait_and_set(val,v,"Action : Target Changed\nValue : "..tostring(v["Value"]))
                         repeat
                             Changed_Target(v["Unit"],v["Position"],v["Value"])
                             task.wait(0.25)
                         until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
                 --- Upgrade
-                elseif i == "Upgrade" then
+                elseif i == "Upgrade" and Upgrade(v["Unit"],v["Position"],v["Value"]) then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
@@ -780,14 +780,14 @@ end)
                             task.wait(0.25)
                         until Upgrade(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
                 ----- Sell
-                 elseif i == "Sell"  then 
+                 elseif i == "Sell" and Check_Unit_Position(v["Unit"],v["Position"]) then 
                         wait_and_set(val,v,"Action : Sell".."\nUnit : "..tostring(v["Unit"]))
                         repeat
                             game:GetService("ReplicatedStorage").Remotes.Sell:InvokeServer(Check_Unit_Position(v["Unit"],v["Position"]))
                             task.wait(0.25)
                         until not Check_Unit_Position(v["Unit"],v["Position"]) or not Options.Play.Value
                 ---UseAbility
-                elseif i == "UseAbility" then
+                elseif i == "UseAbility" and Check_Unit_Position(v["Unit"],v["Position"]) then
                     wait_and_set(val,v,"Action : UseAbility".."\nUnit : "..tostring(v["Unit"]))
                     Ability(v["Unit"],v["Position"])
                 end
