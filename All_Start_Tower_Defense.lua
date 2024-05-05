@@ -1024,7 +1024,7 @@ end
                             repeat SkipWave(v["Value"]) task.wait(0.25)  until not Get_TheWaveI() or Wave() > v["Wave"] or not Options.Play.Value
 
                         -- Summon The Units
-                        elseif i == "Summon" and then
+                        elseif i == "Summon" then
                             Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Summon\nUnit : "..tostring(v["Unit"]))
                             repeat wait() until Money() >= tonumber(v["Money"])
                             repeat
