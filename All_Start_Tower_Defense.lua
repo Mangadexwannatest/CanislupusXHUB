@@ -1,5 +1,5 @@
    
-repeat wait() until game:IsLoaded()
+repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
 repeat wait()until game:GetService("Players").LocalPlayer ~= nil
 if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
