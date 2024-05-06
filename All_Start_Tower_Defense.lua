@@ -708,7 +708,7 @@ end)
      
      
      game:GetService("UserInputService").InputBegan:Connect(function(input)
-        if (input.UserInputType == Enum.UserInputType.MouseButton1 or Enum.UserInputType.MouseButton2 or Enum.UserInputType.Touch) then
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or Enum.UserInputType.MouseButton2 or Enum.UserInputType.Touch) and Options.Record.Value then
            local Unit
            for i, v in ipairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
               for i2, v2 in ipairs(v:GetDescendants()) do
@@ -783,7 +783,7 @@ end)
         end)
     task.spawn(function()
             Auto.InputBegan:Connect(function(input) -- กูใช้ Activate ละแม่ง connect ไม่ทันควย
-                if (input.UserInputType == Enum_input.MouseButton1 or input.UserInputType == Enum_input.Touch) and Options.Record.Value then
+                if (input.UserInputType == Enum_input.MouseButton1 or Enum_input.Touch) and Options.Record.Value then
                 Connect_1 = Auto:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
                     if AutoBackGround().BackgroundColor3 == Color3.fromRGB(0, 255, 0) then
                         getgenv().AutoToggle = true
