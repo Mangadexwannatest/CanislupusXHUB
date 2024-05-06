@@ -4,7 +4,9 @@ if not game:GetService("Players").LocalPlayer.Character then game:GetService("Pl
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 if game.CoreGui:FindFirstChild("CrazyDay") == nil then
-    warn("Loading Gui..")
+    repeat 
+        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+        warn("Loading Gui..")
 
     local firesignal = function(signal, arg2)
         if getconnections(signal) then
@@ -269,7 +271,7 @@ do
             end
         elseif Value == "Raids" then
             MAP:SetValue(nil)
-            MAP:SetValues({"Marines Fort"})
+            MAP:SetValues({"Marines Fort","Hell City"})
             if game:GetService("ReplicatedStorage"):FindFirstChild("ZonePlusReference") then
             Traget_CFrame = tostring(GET_MODE().CFrame)
             end
@@ -1128,6 +1130,7 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(state)
     end
 end)
 
-
-end -- End of If
-
+end
+wait(5)
+until game.CoreGui:FindFirstChild("CrazyDay")
+end -- End Of If
