@@ -674,19 +674,8 @@ end)
     end
 
     local function abbreviateNumber(number)
-    local abbreviationIndex = math.floor(math.log(number,1000))
-    local abbreviation = tablead[abbreviationIndex]
-    if abbreviation then
-        local shortNum = number/(1000^abbreviationIndex)
-        local intNum = math.floor(shortNum)
-        local str = intNum .. abbreviation
-        if intNum < shortNum then
-            str = str .. "+"
-        end
-        return str
-        else
-            return tostring(number)
-        end
+	local finalNr = math.floor((((number/1000^(math.floor(math.log(number, 1e3))))*100)+0.5)) /100 .. (tablead[math.floor(math.log(number, 1e3))] or "")
+	return finalNr
     end
 
 
@@ -791,9 +780,10 @@ end)
                             }
                             }})
                             Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nAction : AutoToggle\nValue : "..tostring(getgenv().AutoToggle).."\nUnit : "..Unit_Name
-                                
+                                if Connect_1 then
                                 Connect_1:Disconnect()
                                 Connect_1 = nil
+                                end
                            end)
                         end
                     end)
