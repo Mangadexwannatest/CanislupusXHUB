@@ -1034,8 +1034,8 @@ end
 
   local function Wait_Get_Paragrap(stat,value,OtherValue)
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
-    repeat wait() until tonumber(Wave()) >= tonumber(value["Wave"])
-    repeat wait() until Traget_Time() >= value["Time"]["Time"]
+    repeat task.wait() until tonumber(Wave()) >= tonumber(value["Wave"])
+    repeat task.wait() until Traget_Time() >= value["Time"]["Time"]
   end
 
   local function checkmoney()
