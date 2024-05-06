@@ -830,7 +830,7 @@ end)
             game:GetService("ReplicatedStorage").WaveValue:GetPropertyChangedSignal("Value"):Connect(function ()
                 if Options.Record.Value then
                 table.insert(getgenv().Recording, {
-                    ["Check Auto Skip Wave"] = {
+                    ["Auto Skip Wave"] = {
                         ["Value"] = tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text),
                         ["Wave"] = Wave(),
                         ["Time"] = { 
@@ -1020,9 +1020,6 @@ end
     repeat task.wait() until Traget_Time() >= value["Time"]["Time"]
   end
 
-  local function checkmoney()
-
-  end
   
     PlayToggle:OnChanged(function()
         if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
@@ -1054,7 +1051,7 @@ end
                         end
 
                         -- Auto Skip Wave
-                        elseif i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) then
+                        elseif i == "Auto Skip Wave" and SkipWave_Toggel() ~= tostring(v["Value"]) then
                             Wait_Get_Paragrap(stats,v,"Action : Auto Skip Wave\nValue : "..tostring(v["Value"]) )
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
