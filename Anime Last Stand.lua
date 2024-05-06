@@ -131,7 +131,8 @@ do
         Numeric = false,
         Finished = true,
         Callback = function(bool)
-            if not table.find(Macro_Files,bool) then
+            if getgenv().OnTeleport then return end
+            if not table.find(Macro_Files,bool) and bool ~= ("" or nil) then
             writefile(string.format("/CrazyDay/ALS/Macro".."/%s.lua", bool)	, "")
             Macro_Files = {}
             for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
@@ -1122,6 +1123,7 @@ end)
 end
 
 game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+    getgenv().OnTeleport = true
     local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
     if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
     QueueOnTeleport(
