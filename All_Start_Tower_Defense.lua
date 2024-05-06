@@ -6,6 +6,7 @@ game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
    if game.CoreGui:FindFirstChild("CrazyDay") == nil then
     repeat 
+        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
        warn("Loading Gui..")
     local firesignal = function(signal, arg2)
         if getconnections(signal) then
@@ -376,6 +377,8 @@ local Macro_Files = {}
 
 
     local Map = {
+        ["World1"] = {},
+        ["World2"] = {}
     }
     local WorldIn = {
     }
@@ -387,30 +390,36 @@ local Macro_Files = {}
     }
     local Lable
     task.spawn(function ()
-        if not game:GetService("ReplicatedStorage").Lobby.Value then
-            Lable = "World : "..tostring(game:GetService("ReplicatedStorage").Map.Value)
-            return end
-        if game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") then
+        if game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") and game:GetService("ReplicatedStorage").Lobby.Value then
         Lable = "World : 1"
+        elseif not game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") and game:GetService("ReplicatedStorage").Lobby.Value then
+        Lable = "World : 2"
+        elseif not game:GetService("ReplicatedStorage").Lobby.Value then
+        Lable = "World : "..tostring(game:GetService("ReplicatedStorage").Map.Value)
+        end
+
         for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.World1:GetChildren()) do
             if v:IsA("Frame") then
-                table.insert(Map,{["MAP"] = {
+                table.insert(Map["World1"],{["MAP"] = {
                     ["Number"] = tonumber(v.MissionTitle.Text:split(".")[1]),
                     ["Name"] = tostring(v.MissionTitle.Text:split(".")[2])
                 }})
                 end
             end
-        else
-            Lable = "World : 2"
-            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.World2:GetChildren()) do
-                if v:IsA("Frame") then
-                    table.insert(Map,{["MAP"] = {
-                        ["Number"] = tonumber(v.MissionTitle.Text:split(".")[1]),
-                        ["Name"] = tostring(v.MissionTitle.Text:split(".")[2])
+            table.sort(Map["World1"],function (a,b)
+                return a["MAP"]["Number"] < b["MAP"]["Number"]
+            end)
+        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.World2:GetChildren()) do
+            if v:IsA("Frame") then
+                table.insert(Map["World2"],{["MAP"] = {
+                    ["Number"] = tonumber(v.MissionTitle.Text:split(".")[1]),
+                    ["Name"] = tostring(v.MissionTitle.Text:split(".")[2])
                     }})
                 end
             end
-        end
+            table.sort(Map["World2"],function (a,b)
+                return a["MAP"]["Number"] < b["MAP"]["Number"]
+            end)
         for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.Infinite:GetChildren()) do
             if v:IsA("Frame")  then
                 table.insert(Inf,tostring(v.MissionTitle.Text))
@@ -426,20 +435,23 @@ local Macro_Files = {}
                 table.insert(Adventures,tostring(v.MissionTitle.Text))
             end
         end
-    end)
-    task.spawn(function ()
-    table.sort(Map,function (a,b)
-            return a["MAP"]["Number"] < b["MAP"]["Number"]
-        end)
-
-        for i = 1, #Map do
-            for i,v in pairs(Map[i]) do
-                if i ==  "MAP" then
+        ---------------------------
+        for i = 1,#Map["World1"] do
+            for i,v in pairs(Map["World1"][i]) do
+                if i == "MAP" then
+                    table.insert(WorldIn,v["Number"].."."..v["Name"])
+                end
+            end
+        end
+        for i = 1,#Map["World2"] do
+            for i,v in pairs(Map["World2"][i]) do
+                if i == "MAP" then
                     table.insert(WorldIn,v["Number"].."."..v["Name"])
                 end
             end
         end
     end)
+
 
     Tabs.Lobby:AddParagraph({
         Title = "Current World",
@@ -452,12 +464,13 @@ local Macro_Files = {}
         Multi = false,
         Default = 1
     })
+
     local MapSlect = Tabs.Lobby:AddDropdown("Select_Map", {
         Title = "Select Map (Auto Update)",
         Description = nil,
         Values = WorldIn,
         Multi = false,
-        Default = nil,
+        Default = 1,
     })
     Tabs.Lobby:AddDropdown("Select_Stage", {
         Title = "Select Stage (Only Story)",
@@ -1511,6 +1524,7 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(state)
     end
 end)
 
+end
 wait(5)
 until game.CoreGui:FindFirstChild("CrazyDay")
 end -- End Of If
