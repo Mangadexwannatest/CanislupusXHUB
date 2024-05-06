@@ -706,10 +706,8 @@ end)
     local function AutoSkip(value)
         if game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value ~= value then
             local AutoSKipButton = game.Players.LocalPlayer.PlayerGui:WaitForChild("TopbarPlus"):WaitForChild("TopbarContainer"):WaitForChild("UnnamedIcon"):WaitForChild("DropdownContainer"):WaitForChild("DropdownFrame"):WaitForChild("AutoSkip"):WaitForChild("IconButton")
-            repeat
             firesignal(AutoSKipButton.MouseButton1Click,game.Players.LocalPlayer)
-            task.wait(0.35)
-            until game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value == value
+        else return true
         end
     end
 
@@ -740,7 +738,12 @@ end)
                 ---Auto Skip 
                 if i == "Auto Skip Wave" or i == "Check Auto Skip Wave"  then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
+                    if not AutoSkip(v["Value"]) then
+                    repeat
                     AutoSkip(v["Value"])
+                    task.wait(0.25)
+                    until AutoSkip(v["Value"])
+                    end
                 --- Vote Wave
                 elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) and not game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value then
                     wait_and_set(val,v,"Action : Vote Wave".."\nValue : "..tostring(v["Value"]))
