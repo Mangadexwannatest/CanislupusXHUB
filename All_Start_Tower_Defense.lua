@@ -680,6 +680,7 @@ end)
 
 
     getgenv().AutoToggle = nil
+    getgenv().OnEnter = false
     local Enum_input = Enum.UserInputType
     local UnitSelect
     local Unit_Name
@@ -688,19 +689,19 @@ end)
     local Auto = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("Auto")
     local UserAbility = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton")
     local function C1()
-        if not getgenv().OnEnter then
+        if not getgenv().OnEnter and game:GetService("UserInputService").MouseEnabled then
            getgenv().OnEnter = true
         end
      end
      
      local function C2()
-        if getgenv().OnEnter then
+        if getgenv().OnEnter and game:GetService("UserInputService").MouseEnabled then
            getgenv().OnEnter = false
         end
      end
      
      for i,v in pairs(game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("UpgradeV2"):GetDescendants()) do
-        if v:IsA("Frame") or v:IsA("GuiButton") or v:IsA("Button") or v:IsA("Button") then
+        if v:IsA("Frame") or v:IsA("GuiButton") or v:IsA("Button") or v:IsA("Button") and game:GetService("UserInputService").MouseEnabled then
            v.MouseEnter:Connect(C1)
            v.MouseLeave:Connect(C2)
          end
