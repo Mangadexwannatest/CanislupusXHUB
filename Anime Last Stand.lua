@@ -132,7 +132,7 @@ do
         Finished = true,
         Callback = function(bool)
             if getgenv().OnTeleport then return end
-            if not table.find(Macro_Files,bool) and bool ~= ("" or nil) then
+            if table.find(Macro_Files,bool) or bool == ("" or nil) then return end
             writefile(string.format("/CrazyDay/ALS/Macro".."/%s.lua", bool)	, "")
             Macro_Files = {}
             for i,v in pairs(listfiles("/CrazyDay/ALS/Macro")) do
@@ -146,7 +146,6 @@ do
                 SubContent = bool,
                 Duration = 5
         })
-        end
     end
     })
 
