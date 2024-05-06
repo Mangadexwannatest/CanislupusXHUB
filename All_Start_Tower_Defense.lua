@@ -663,15 +663,32 @@ end)
     end
     local tablead = {"k","m","b"}
     local function TONUM(values)
-    local num = 1
-    for i,v in pairs(tablead) do
-        values = string.gsub(values, v ,function ()
-            num = num * (10 ^ (i * 3))
-            return ''
-        end)
+            local num = 1
+                for i,v in pairs(tablead) do
+                    values = string.gsub(values, v ,function ()
+                    num = num * (10 ^ (i * 3))
+                return ''
+            end)
+        end
+        return num * values
     end
-    return num * values
-end
+
+    local function abbreviateNumber(number)
+    local abbreviationIndex = math.floor(math.log(number,1000))
+    local abbreviation = tablead[abbreviationIndex]
+    if abbreviation then
+        local shortNum = number/(1000^abbreviationIndex)
+        local intNum = math.floor(shortNum)
+        local str = intNum .. abbreviation
+        if intNum < shortNum then
+            str = str .. "+"
+        end
+        return str
+        else
+            return tostring(number)
+        end
+    end
+
 
     getgenv().AutoToggle = nil
     local Mouse = game.Players.LocalPlayer:GetMouse()
@@ -846,7 +863,7 @@ end
                         ["Unit"] = tostring(v.Name),
                         ["Wave"] = Wave(),
                         ["Money"] = TONUM(tostring(MONEY)),
-                        ["Time"] = { 
+                        ["Time"] = {
                             ["Time"] = Traget_Time(),
                             ["Game Speed"] = Time()
                 }}})
@@ -868,7 +885,7 @@ end
                                 ["Game Speed"] = Time()
                     }
                     }})
-                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2].."\nAction : Upgrade\nUnit : "..tostring(v.Name)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..abbreviateNumber(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text:split('$')[1]:split('-')[2].."\nAction : Upgrade\nUnit : "..tostring(v.Name)
                       end
                     end)
                  end)
@@ -1057,7 +1074,7 @@ end
 
                         -- Summon The Units
                         elseif i == "Summon" then
-                            Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Summon\nUnit : "..tostring(v["Unit"]))
+                            Wait_Get_Paragrap(stats,v,"Waiting For Money : "..abbreviateNumber(v["Money"]).."\nAction : Summon\nUnit : "..tostring(v["Unit"]))
                             repeat wait() until Money() >= tonumber(v["Money"])
                             repeat
                                 local Unit = Verify_Unit(v["Unit"], v["Position"])
@@ -1070,7 +1087,7 @@ end
                             until Unit or not Options.Play.Value
                         -- Upgrade The Units
                         elseif i == "Upgrade" then
-                            Wait_Get_Paragrap(stats,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade\nUnit : "..tostring(v["Unit"]))
+                            Wait_Get_Paragrap(stats,v,"Waiting For Money : "..abbreviateNumber(v["Money"]).."\nAction : Upgrade\nUnit : "..tostring(v["Unit"]))
                             repeat wait() until Money() >= tonumber(v["Money"])
                             repeat local Unit_Upgrade = Upgrade(v["Unit"],v["Position"],v["Upgrade#"])
                                 Upgrade(v["Unit"],v["Position"],v["Upgrade#"])
