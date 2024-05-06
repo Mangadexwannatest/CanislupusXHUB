@@ -459,7 +459,7 @@ local Macro_Files = {}
         Title = "Current World",
         Content = tostring(Lable)
     })
-    local Mode_Select = Tabs.Lobby:AddDropdown("Select_Mode", {
+    local MOD_SELECT = Tabs.Lobby:AddDropdown("Select_Mode", {
         Title = "Select Mode",
         Description = nil,
         Values = {"Story","Infinity","Challenge","Adventures"},
@@ -467,10 +467,31 @@ local Macro_Files = {}
         Default = 1
     })
 
-    local MapSlect = Tabs.Lobby:AddDropdown("Select_Map", {
-        Title = "Select Map (Auto Update)",
+    local MAP_S1 = Tabs.Lobby:AddDropdown("Story_Map", {
+        Title = "Select Map (Story)",
         Description = nil,
         Values = WorldIn,
+        Multi = false,
+        Default = 1,
+    })
+    local MAP_S2 = Tabs.Lobby:AddDropdown("Infinite_Map", {
+        Title = "Select Map (Infinite)",
+        Description = nil,
+        Values = Inf,
+        Multi = false,
+        Default = 1,
+    })
+    local MAP_S3 = Tabs.Lobby:AddDropdown("Challenge_Map", {
+        Title = "Select Map (Challenge)",
+        Description = nil,
+        Values = Challenge,
+        Multi = false,
+        Default = 1,
+    })
+    local MAP_S4 = Tabs.Lobby:AddDropdown("Adventures_Map", {
+        Title = "Select Map (Adventures)",
+        Description = nil,
+        Values = Adventures,
         Multi = false,
         Default = 1,
     })
@@ -482,39 +503,9 @@ local Macro_Files = {}
         Default = 1,
     })
 
-    Mode_Select:OnChanged(function(value)
-        if value ~= nil then
-        if value == Options.Select_Mode.Values[1] then
-            MapSlect:SetValue(nil)
-            MapSlect:SetValues(WorldIn)
-            if game:GetService("ReplicatedStorage").Lobby.Value then
-            Traget_CFrame,RoomName = tostring(Story().CFrame), tostring(Story().Name)
-            end
-        elseif value == Options.Select_Mode.Values[2] then
-            MapSlect:SetValue(nil)
-            MapSlect:SetValues(Inf)
-            if game:GetService("ReplicatedStorage").Lobby.Value then
-            Traget_CFrame,RoomName = tostring(Infinite().CFrame) , tostring(Infinite().Name)
-            end
-        elseif value == Options.Select_Mode.Values[3] then
-            MapSlect:SetValue(nil)
-            MapSlect:SetValues(Challenge)
-            if Challenge_Adventures() and game:GetService("ReplicatedStorage").Lobby.Value then
-            Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
-            end
-        elseif value == Options.Select_Mode.Values[4] then
-            MapSlect:SetValue(nil)
-            MapSlect:SetValues(Adventures)
-            if Challenge_Adventures() and game:GetService("ReplicatedStorage").Lobby.Value then
-            Traget_CFrame,RoomName = tostring(Challenge_Adventures().CFrame) , tostring(Challenge_Adventures().Name)
-            end
-        end
-    end
-    end)
-
     local warn1 = Tabs.Lobby:AddToggle("Auto_Lobby", {Title = "Auto Join Lobby", Default = false })
 
-    MapSlect:OnChanged(function(value)
+    MOD_SELECT:OnChanged(function(value)
         if value ~= nil then
         if Options.Select_Mode.Value == Options.Select_Mode.Values[1] and game:GetService("ReplicatedStorage").Lobby.Value then
             Traget_CFrame,RoomName = tostring(Story().CFrame) , tostring(Story().Name)
@@ -529,14 +520,6 @@ local Macro_Files = {}
 end)
 
     warn1:OnChanged(function()
-    if Options.Select_Map.Value == nil and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value then
-            Fluent:Notify({
-                Title = "WARNING",
-                Content = "SELECT MAP FIRST",
-                SubContent = nil,
-                Duration = 3 })
-        Options.Auto_Lobby:SetValue(false)
-    else
     if Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and Options.Auto_Lobby.Value and game:GetService("ReplicatedStorage").Lobby.Value and Lable ~= "World : 2" then
         Fluent:Notify({
             Title = "WARNING",
@@ -551,7 +534,6 @@ end)
         game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
         bv.Parent = nil
     end
-end
 end)
 
     Tabs.Lobby:AddToggle("AutoUpgradeSlot", {Title = "Auto Upgrade Slot",Description = "automatically upgrade when your inventory full", Default = false })
@@ -759,7 +741,7 @@ end)
                     ["Game Speed On Changed"] = {
                         ["Value"] = Time(),
                         ["Wave"] = Wave(),
-                        ["Time"] = tonumber(Workspace.DistributedGameTime)
+                        ["Time"] = Time()
                     }})
                 Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..tonumber(Workspace.DistributedGameTime).."\nAction : SpeedChange\nValue : "..Time()
             end
@@ -1325,7 +1307,8 @@ local function Check_The_START()
 end
 
 local function Get_Stage()
-    local tonumber = tonumber(Options.Select_Map.Value:split(".")[1])
+    if Options.Select_Mode.Value ~= "Story" then return end
+    local tonumber = tonumber(Options.Story_Map.Value:split(".")[1])
     if tonumber == 1 then
         return Options.Select_Stage.Value
     else
@@ -1362,11 +1345,11 @@ local function SelectMap()
     task.wait(1.5)
     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main:GetDescendants()) do
         if v:FindFirstChild("MissionTitle") and v:FindFirstChild("FG") and v:FindFirstChild("MissionClick") then
-            if string.find(v.MissionTitle.Text,Options.Select_Map.Value) and Options.Select_Mode.Value == "Story" then
+            if string.find(v.MissionTitle.Text,Options.Story_Map.Value) and Options.Select_Mode.Value == "Story" then
                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(Get_Stage()),true)
-            elseif string.find(v.MissionTitle.Text,Options.Select_Map.Value) and Options.Select_Mode.Value == "Infinity" then
+            elseif string.find(v.MissionTitle.Text,Options.Infinite_Map.Value) and Options.Select_Mode.Value == "Infinity" then
                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
-            elseif Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and string.find(v.MissionTitle.Text,Options.Select_Map.Value) then
+            elseif Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and (string.find(v.MissionTitle.Text,Options.Challenge_Map.Value) or string.find(v.MissionTitle.Text,Options.Adventures_Map.Value))  then
                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
            end
         end
