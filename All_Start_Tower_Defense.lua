@@ -390,10 +390,12 @@ local Macro_Files = {}
     }
     local Lable
     task.spawn(function ()
-        if game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") and game:GetService("ReplicatedStorage").Lobby.Value then
+        if game:GetService("ReplicatedStorage").Lobby.Value then
+        if game.Workspace:WaitForChild("Queue"):FindFirstChild("W2 PERM")  then
         Lable = "World : 1"
-        elseif not game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") and game:GetService("ReplicatedStorage").Lobby.Value then
+        elseif not game.Workspace:WaitForChild("Queue"):FindFirstChild("W2 PERM") then
         Lable = "World : 2"
+        end
         elseif not game:GetService("ReplicatedStorage").Lobby.Value then
         Lable = "World : "..tostring(game:GetService("ReplicatedStorage").Map.Value)
         end
