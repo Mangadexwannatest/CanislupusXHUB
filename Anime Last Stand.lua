@@ -736,7 +736,7 @@ end)
             for val = 1,#getgenv().Playing do
                 for i,v in pairs(getgenv().Playing[val]) do
                 ---Auto Skip 
-                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave"  then
+                if i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and not AutoSkip(v["Value"]) then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
                     if not AutoSkip(v["Value"]) then
                     repeat
