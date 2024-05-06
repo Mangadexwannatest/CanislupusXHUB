@@ -885,7 +885,7 @@ end)
                                 ["Game Speed"] = Time()
                     }
                     }})
-                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..abbreviateNumber(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text:split('$')[1]:split('-')[2].."\nAction : Upgrade\nUnit : "..tostring(v.Name)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..abbreviateNumber(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text:split('$')[1]:split('-')[2]).."\nAction : Upgrade\nUnit : "..tostring(v.Name)
                       end
                     end)
                  end)
