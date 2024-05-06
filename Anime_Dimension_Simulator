@@ -3,6 +3,9 @@ repeat wait()until game:GetService("Players").LocalPlayer ~= nil
 if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
 repeat wait() until game:FindFirstChild("CoreGui"):FindFirstChild("PlayerList")
+if game.CoreGui:FindFirstChild("CrazyDay") == nil then
+    repeat 
+        if game.CoreGui:FindFirstChild("CrazyDay") == nil then
 coroutine.resume(coroutine.create(function()
     pcall(function ()
 local Username = game.Players.LocalPlayer.Name
@@ -96,10 +99,6 @@ for i,v in next,game.Workspace.GameMap:GetDescendants() do
     end
 end
 
-if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
-repeat task.wait() until game.Workspace.Folders.Players:FindFirstChild(game.Players.LocalPlayer.Name)
-if game.CoreGui:FindFirstChild("CrazyDay") == nil then
-    warn("Loading Gui..")
 
     if not isfolder('CrazyDay') then
         repeat wait()
@@ -1945,5 +1944,8 @@ game.Players.LocalPlayer.OnTeleport:Connect(function(state)
 end)
 
 
-end -- End Of Do
 
+end
+wait(5)
+until game.CoreGui:FindFirstChild("CrazyDay")
+end -- End Of If
