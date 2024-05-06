@@ -838,7 +838,7 @@ end)
                             ["Game Speed"] = Time()
                 }
                     }})
-                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..MONEY.."\nAction : Summon\nUnit : "..tostring(v.Name)
+                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2].."\nAction : Summon\nUnit : "..tostring(v.Name)
                 task.spawn(function ()
                 v:WaitForChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
                     if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name and Options.Record.Value then
