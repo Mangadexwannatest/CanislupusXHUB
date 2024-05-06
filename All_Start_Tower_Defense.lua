@@ -680,8 +680,6 @@ end)
 
 
     getgenv().AutoToggle = nil
-    local Mouse = game.Players.LocalPlayer:GetMouse()
-    local UserInput = game:GetService("UserInputService")
     local Enum_input = Enum.UserInputType
     local UnitSelect
     local Unit_Name
@@ -689,16 +687,40 @@ end)
     local Connect_3
     local Auto = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("Auto")
     local UserAbility = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton")
-    UserInput.InputBegan:Connect(function(input)
-        if (input.UserInputType == Enum_input.MouseButton1 or input.UserInputType == Enum_input.MouseButton2 or input.UserInputType == Enum_input.MouseButton3 or input.UserInputType == Enum_input.Touch) then
-        for i, v in ipairs(game.Workspace.Unit:GetChildren()) do
-            for i2, v2 in ipairs(v:GetDescendants()) do
-                if v2 == Mouse.Target then
-                    UnitSelect = v:WaitForChild("HumanoidRootPart").Position;
-                    Unit_Name = tostring(v.Name);
-                   end
-                end
-            end
+    local function C1()
+        if not getgenv().OnEnter then
+           getgenv().OnEnter = true
+        end
+     end
+     
+     local function C2()
+        if getgenv().OnEnter then
+           getgenv().OnEnter = false
+        end
+     end
+     
+     for i,v in pairs(game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("UpgradeV2"):GetDescendants()) do
+        if v:IsA("Frame") or v:IsA("GuiButton") or v:IsA("Button") or v:IsA("Button") then
+           v.MouseEnter:Connect(C1)
+           v.MouseLeave:Connect(C2)
+         end
+     end
+     
+     
+     game:GetService("UserInputService").InputBegan:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseButton1 or Enum.UserInputType.MouseButton2 or Enum.UserInputType.Touch) then
+           local Unit
+           for i, v in ipairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
+              for i2, v2 in ipairs(v:GetDescendants()) do
+                 if v2 == game.Players.LocalPlayer:GetMouse().Target and v:WaitForChild("Owner").Value == game.Players.LocalPlayer and not getgenv().OnEnter then
+                    Unit = v
+                 end
+              end
+           end
+           if Unit and not getgenv().OnEnter then
+           UnitSelect = Unit:WaitForChild("HumanoidRootPart").Position
+           Unit_Name = tostring(Unit.Name)
+           end
         end
     end)
     task.spawn(function ()
