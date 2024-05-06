@@ -1,5 +1,5 @@
    
-repeat wait() until game:IsLoaded() and not game.Players.LocalPlayer.PlayerGui:WaitForChild("LoadingScreen").Frame.Visible
+repeat wait() until game:IsLoaded()
 repeat wait()until game:GetService("Players").LocalPlayer ~= nil
 if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
 game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -661,7 +661,17 @@ end)
     local function AutoBackGround()
         return game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("Auto")
     end
-
+    local tablead = {"k","m","b"}
+    local function TONUM(values)
+    local num = 1
+    for i,v in pairs(tablead) do
+        values = string.gsub(values, v ,function ()
+            num = num * (10 ^ (i * 3))
+            return ''
+        end)
+    end
+    return num * values
+end
 
     getgenv().AutoToggle = nil
     local Mouse = game.Players.LocalPlayer:GetMouse()
@@ -826,19 +836,23 @@ end)
         v:WaitForChild("Owner")
         v:WaitForChild("HumanoidRootPart") 
             if v:WaitForChild("UpgradeTag").Value >= 0  and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+                for ii,vv in next,game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.Unit:GetChildren() do
+                    if vv:IsA("Frame") and tostring(vv.Unit.Value) == tostring(v.Name) then
+                        local MONEY = vv:FindFirstChild("ImageLabel"):FindFirstChild("TextLabel").Text
                 table.insert(getgenv().Recording, {
                     ["Summon"] = {
                         ["Rotation"] = 0,
                         ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
                         ["Unit"] = tostring(v.Name),
                         ["Wave"] = Wave(),
-                        ["Money"] = string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2],
+                        ["Money"] = TONUM(tostring(MONEY)),
                         ["Time"] = { 
                             ["Time"] = Traget_Time(),
                             ["Game Speed"] = Time()
-                }
-                    }})
-                    Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..string.split(game.Players.LocalPlayer.PlayerGui.HUD.AddedCash.Text,'$')[1]:split('-')[2].."\nAction : Summon\nUnit : "..tostring(v.Name)
+                }}})
+                Get_Paragrahp().Text = "Status : Recording ["..#getgenv().Recording.."]\nWave : "..Wave().."\nTime : "..Traget_Time().."\nMoney : "..tostring(MONEY).."\nAction : Summon\nUnit : "..tostring(v.Name)
+                    end
+                 end
                 task.spawn(function ()
                 v:WaitForChild('UpgradeTag'):GetPropertyChangedSignal("Value"):Connect(function() 
                     if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name and Options.Record.Value then
@@ -992,6 +1006,10 @@ end
     Get_Paragrahp().Text = "Status : Playing "..tonumber(stat).."/"..tonumber(#getgenv().Playing).."\nWaiting For Wave : "..tostring(value["Wave"]).."\nWaiting For Time : "..tostring(value["Time"]["Time"]).."\n"..OtherValue
     repeat wait() until tonumber(Wave()) >= tonumber(value["Wave"])
     repeat wait() until Traget_Time() >= value["Time"]["Time"]
+  end
+
+  local function checkmoney()
+
   end
   
     PlayToggle:OnChanged(function()
