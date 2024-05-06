@@ -738,12 +738,10 @@ end)
                 ---Auto Skip 
                 if i == "Auto Skip Wave" or i == "Check Auto Skip Wave" and not AutoSkip(v["Value"]) then
                     wait_and_set(val,v,"Action : Auto Skip Wave".."\nValue : "..tostring(v["Value"]))
-                    if not AutoSkip(v["Value"]) then
                     repeat
                     AutoSkip(v["Value"])
                     task.wait(0.25)
                     until AutoSkip(v["Value"])
-                    end
                 --- Vote Wave
                 elseif i == "Vote Wave" and tonumber(Wave()) <= tonumber(v["Wave"]) and not game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value then
                     wait_and_set(val,v,"Action : Vote Wave".."\nValue : "..tostring(v["Value"]))
@@ -772,7 +770,7 @@ end)
                             task.wait(0.25)
                         until Changed_Target(v["Unit"],v["Position"],v["Value"]) or not Options.Play.Value
                 --- Upgrade
-                elseif i == "Upgrade" and Upgrade(v["Unit"],v["Position"],v["Value"]) then
+                elseif i == "Upgrade" and Check_Unit_Position(v["Unit"],v["Position"]) then
                         wait_and_set(val,v,"Waiting For Money : "..tostring(v["Money"]).."\nAction : Upgrade".."\nUnit : "..tostring(v["Unit"]))
                         if string.find(v["Money"],"k") then
                             local mun = v["Money"]:split(".")
