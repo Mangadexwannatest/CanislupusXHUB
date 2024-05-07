@@ -63,6 +63,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end)
 
+    spawn(function ()
+        local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
+        Button.InputBegan:Connect(function(input)
+            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = not game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible
+        end
+    end)
+    end)
+
     local function Story()
         if game:GetService("ReplicatedStorage").Lobby.Value and game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") then
             for i,v in pairs(game:GetService("Workspace").Queue.InteractionsV2:GetChildren()) do
