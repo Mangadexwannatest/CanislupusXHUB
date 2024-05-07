@@ -676,7 +676,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
                 end
             end
-            spawn(function()
+            task.spawn(function()
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
                         if not Options.Current_Macro_Mode.Value == "Play" then return end
@@ -921,7 +921,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         a.__namecall = newcclosure(function(self,...)
             arg = {...};
             local method = getnamecallmethod();
-                spawn(function ()
+                task.spawn(function ()
                     if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value then
                         if (method == "FireServer" or "InvokeServer") and (arg[1] == "Summon" or "Upgrade" or "UseSpecialMove" or "AutoToggle" or "Sell" or "SpeedChange" or "ChangePriority" or "VoteWaveConfirm" or "AutoSkipWaves_CHANGE" or "VoteGameMode") then
                             if arg[1] == "Summon" then
@@ -1160,7 +1160,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             return backs(self,...)
         end)
     setreadonly(a,true)
-    spawn(function ()
+    task.spawn(function ()
         while wait() do
             if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value  then
             for i,v in pairs(current_action["Action"]) do
