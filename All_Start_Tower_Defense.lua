@@ -745,12 +745,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             repeat
                                 remoteinput:FireServer(tostring(i),{
                                     ["Rotation"] = tonumber(v["Rotation"]),
-                                    ["cframe"] = stringtocf(v["CFrame"]),
+                                    ["cframe"] = stringtocf(v["Position"]),
                                     ["Unit"] = v["Unit"]
                                 })
                                 task.wait(0.25)
                             until check_the_unitspawns(v["Unit"],v["Position"])
-                        elseif i == "Upgrade" then
+                        elseif i == "Upgrade" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
                                 ["Upgrade"] = {
@@ -767,7 +767,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 remoteserver:InvokeServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):FindFirstChild("UpgradeTag").Value) >= tonumber(v["Value"])
-                        elseif i == "Sell" then
+                        elseif i == "Sell" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
                                 ["Sell"] = {
@@ -781,7 +781,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 remoteinput:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until not check_the_unitspawns(v["Unit"],v["Position"])
-                        elseif i == "ChangePriority" then
+                        elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
                                 ["ChangePriority"] = {
@@ -792,7 +792,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     }}
                                 wait_for(v)
                                 remoteinput:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
-                        elseif i == "AutoToggle" then
+                        elseif i == "AutoToggle" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
                                 ["AutoToggle"] = {
@@ -804,7 +804,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 }}
                                 wait_for(v)
                                 remoteinput:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
-                        elseif i == "UseSpecialMove" then
+                        elseif i == "UseSpecialMove" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
                                 ["UseSpecialMove"] = {
@@ -938,7 +938,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Money"] = tostring(getmoney_units(action_2["Unit"])),
                                         ["Rotation"] = tostring(action_2["Rotation"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
-                                        ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Position"] = tostring(workspace.Unit:FindFirstChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
