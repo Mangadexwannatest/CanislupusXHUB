@@ -698,7 +698,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Action"] = "Actions : VoteGameMode",
                                 }}
                             wait_for(v)
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),tostring(v["Value"]))
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
                             current_val = val
                             current_play_action["Action"] = {
@@ -710,7 +710,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v)
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                             repeat
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i))
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
                             task.wait(0.25)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                         elseif i == "AutoSkipWaves_CHANGE" then
@@ -722,7 +722,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Action"] = "Actions : AutoSkipWaves_CHANGE",
                                 }}
                             wait_for(v)
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i))
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
                         elseif i == "SpeedChange" then
                             current_val = val
                             current_play_action["Action"] = {
@@ -733,7 +733,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Value"] = "Actions : "..tostring(v["Value"]),
                                 }}
                             wait_for(v)
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),v["Value"])
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
 
                         ------------------------------------------ MAIN ------------------------------------------
 
@@ -751,7 +751,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v)
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),{
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"]
@@ -772,7 +772,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v)
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
-                                game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
+                                game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("UpgradeTag").Value) >= tonumber(v["Value"])
                         elseif i == "Sell" and check_the_unitspawns(v["Unit"],v["Position"]) then
@@ -786,7 +786,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 }}
                             wait_for(v)
                             repeat
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Sell",check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until not check_the_unitspawns(v["Unit"],v["Position"])
                         elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"],v["Position"]) then
@@ -799,7 +799,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Unit"] = "Unit : "..tostring(v["Unit"]),
                                     }}
                                 wait_for(v)
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("ChangePriority",check_the_unitspawns(v["Unit"],v["Position"]))
                         elseif i == "AutoToggle" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
@@ -811,7 +811,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Value"] = "Value : "..tostring(v["Value"]),
                                 }}
                                 wait_for(v)
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
                         elseif i == "UseSpecialMove" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             current_val = val
                             current_play_action["Action"] = {
@@ -824,7 +824,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 }}
                                 wait_for(v)
                                 repeat
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]),tostring(v["Value"]))
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_the_unitspawns(v["Unit"],v["Position"]),tostring(v["Value"]))
                                 task.wait(0.25)
                                 until check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2").Value
                         end
