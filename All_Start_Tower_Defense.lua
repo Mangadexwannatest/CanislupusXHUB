@@ -744,7 +744,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
                                 remoteinput:FireServer(tostring(i),{
-                                    ["Rotation"] = v["Rotation"],
+                                    ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"]
                                 })
