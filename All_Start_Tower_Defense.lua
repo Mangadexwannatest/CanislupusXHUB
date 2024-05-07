@@ -766,7 +766,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             repeat
                                 remoteserver:InvokeServer(tostring(i),check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
-                                until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("UpgradeTag").Value) >= tonumber(v["Value"])
+                                until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):FindFirstChild("UpgradeTag").Value) >= tonumber(v["Value"])
                         elseif i == "Sell" then
                             current_val = val
                             current_play_action["Action"] = {
@@ -837,7 +837,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         return "Status Playing ["..current_val.."/"..#getgenv().Playing.."]"
     end
     spawn(function ()
-        while wait(0.1) do
+        while wait() do
             if Options.Current_Macro_Mode.Value == "Play" and Options.do_current_mode.Value  then
                 for i,v in pairs(current_play_action["Action"]) do
                     if i == "End" then
