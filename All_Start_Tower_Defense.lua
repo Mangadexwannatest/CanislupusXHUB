@@ -644,7 +644,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
         for i,v in pairs(workspace:WaitForChild("Unit"):GetChildren()) do
             if v.Name == Unit and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
-            if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 1.15 then
+            if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 1.5 then
                 return v
             end
             end
