@@ -938,8 +938,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 local action_2 = arg[2]
                                 if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] then
-                                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer and workspace.Unit:FindFirstChild(action_2["Unit"]):WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -964,7 +963,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     if l_unit_l then
                                         l_unit_l:Disconnect()
                                         l_unit_l = nil
-                                    end
                                     end
                                 end
                                 end)
