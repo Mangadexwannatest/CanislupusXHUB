@@ -156,6 +156,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function stringtocf(str)
+        return CFrame.new(table.unpack(str:gsub(" ", ""):split(",")))
+    end
+    local function stringtopos(str)
+        return Vector3.new(table.unpack(str:gsub(" ", ""):split(",")))
+    end
+
+
     local firesignal = function(signal, arg2)
         if getconnections(signal) then
             firesignal(signal, arg2)
@@ -172,12 +180,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             end)
         end
         return num * values
-    end
-    local function stringtocf(str)
-        return CFrame.new(table.unpack(str:gsub(" ", ""):split(",")))
-    end
-    local function stringtopos(str)
-        return Vector3.new(table.unpack(str:gsub(" ", ""):split(",")))
     end
 
     local function getmoney_units(values)
@@ -628,8 +630,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     })
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
-        Title = "Last Update May/08/2024 ",
-        Content = "[*] Fixed autotoggle and usespecialmove and changepriority"
+        Title = "Last Update May/08/2024/08:48 [UTC + 07:00]",
+        Content = "[*] Fixed autotoggle and usespecialmove and changepriority\n[*] Fixed some time summone dose not working"
     })
 
     white:OnChanged(function()
@@ -640,19 +642,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end)
 
-
-    local function check_the_unitspawns(Unit,Position)
-        if type(Position) == "string" then
-            Position = stringtopos(Position)
-        end
-        for i,v in pairs(workspace:WaitForChild("Unit"):GetChildren()) do
-            if v.Name == Unit and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
-            if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 1.5 then
-                return v
-            end
-            end
-        end
-    end
 
     local function waveuionshow()
         return game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible
@@ -679,6 +668,39 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             }}
         repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
         repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
+    end
+
+    local function check_the_unitspawns(Unit,Position, cframe)
+        if type(Position) == "string" then
+            Position = stringtopos(Position)
+        end
+        if type(cframe) == "string" then
+            cframe = stringtocf(cframe)
+        end
+        for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
+            if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+            if (v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 ) or v.HumanoidRootPart.CFrame == cframe then
+                return v
+            end
+            end
+        end
+    end
+
+    local function test_upgrade(Unit,Position,Value)
+        if type(Position) == "string" then
+            Position = stringtopos(Position)
+        end
+        for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
+            if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).Magnitude < 2 then
+                    if tonumber(v:WaitForChild("UpgradeTag").Value) < tonumber(Value) then
+                        game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",v)
+                    elseif tonumber(v:WaitForChild("UpgradeTag").Value) >= tonumber(Value) then
+                        return v
+                    end
+                end
+            end
+        end
     end
 
     PlayToggle:OnChanged(function ()
@@ -716,26 +738,38 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v,val,"Summon",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Summon",["Rotation"] = "Rotation : "..tostring(v["Rotation"]),["Unit"] = "Unit : "..tostring(v["Unit"])})
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
+                                local Unit
+                                if v["Position"] then
+                                    Unit = check_the_unitspawns(v["Unit"], v["Position"], v["CFrame"])
+                                elseif not v["Position"] then
+                                    Unit = check_the_unitspawns(v["Unit"], v["CFrame"])
+                                end
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
                                 task.wait(0.25)
-                            until check_the_unitspawns(v["Unit"],v["Position"])
+                            until Unit
                         elseif i == "Upgrade" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             wait_for(v,val,"Upgrade",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Upgrade",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = "Value : "..tostring(v["Value"] + 1)})
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
-                                game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",check_the_unitspawns(v["Unit"],v["Position"]))
+                                test_upgrade(v["Unit"], v["Position"], v["Value"])
                             task.wait(0.25)
-                                until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("UpgradeTag").Value) >= tonumber(v["Value"])
+                                until test_upgrade(v["Unit"], v["Position"], v["Value"])
                         elseif i == "Sell" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             wait_for(v,val,"Sell",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : Sell",["Unit"] = "Unit : "..tostring(v["Unit"])})
                             repeat
+                                local sell
+                                if v["Position"] then
+                                    sell = check_the_unitspawns(v["Unit"], v["Position"], v["CFrame"])
+                                elseif not v["Position"] then
+                                    sell = check_the_unitspawns(v["Unit"], v["CFrame"])
+                                end
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Sell",check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
-                                until not check_the_unitspawns(v["Unit"],v["Position"])
+                                until not sell
                         elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"],v["Position"]) then
                             wait_for(v,val,"ChangePriority",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : ChangePriority",["Unit"] = "Unit : "..tostring(v["Unit"])})
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("ChangePriority",check_the_unitspawns(v["Unit"],v["Position"]))
@@ -845,7 +879,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local l_unit_l
     local l_upgrade_l
-    spawn(function ()
+    task.spawn(function ()
         setreadonly(a,false)
         a.__namecall = newcclosure(function(self,...)
             arg = {...};
@@ -857,7 +891,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 local action_1 = arg[1]
                                 local action_2 = arg[2]
                                 if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
-                                    l_unit_l = workspace.Unit.ChildAdded:Connect(function (v)
+                                    l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
                                         if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                     table.insert(Macro,{
                                         ["Summon"] = {
@@ -867,7 +901,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Rotation"] = tostring(action_2["Rotation"]),
                                         ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
-                                        ["Position"] = tostring(workspace.Unit:FindFirstChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position)
+                                        ["Position"] = tostring(game.Workspace.Unit:WaitForChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
                                     current_action["Action"] = {
@@ -877,7 +911,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Money"] = tostring(getmoney_units(action_2["Unit"])),
                                             ["Action"] = tostring(action_1),
                                             ["Rotation"] = tostring(action_2["Rotation"]),
-                                            ["Unit"] = tostring(action_2["Unit"])
+                                            ["Unit"] = tostring(action_2["Unit"]),
                                         }}
                                     writemacro()
                                     if l_unit_l then
@@ -900,7 +934,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Money"] = tostring(getupgradevalues()),
                                         ["Unit"] = tostring(action_2),
                                         ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
                                     current_action["Action"] = {
@@ -910,7 +944,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Money"] = tostring(getupgradevalues()),
                                             ["Action"] = tostring(action_1),
                                             ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1)
+                                            ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
                                         }}
                                     writemacro()
                                         if l_upgrade_l then
@@ -928,7 +962,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Unit"] = tostring(action_2),
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
+                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                     }
                                 })
                                 current_action["Action"] = {
@@ -936,10 +970,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Wave"] = tostring(Wave()),
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
-                                        ["Unit"] = tostring(action_2)
+                                        ["Unit"] = tostring(action_2),
                                     }}
-                                    writemacro()
-                                task.wait(0.55)
+                                writemacro()
                             elseif arg[1] == "AutoToggle" then
                                 local action_1 = arg[1]
                                 local action_2 = arg[2]
@@ -950,7 +983,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Time"] = tostring(Time()),
                                     ["Unit"] = tostring(action_2),
                                     ["Value"] = action_3,
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
+                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                     }
                                 })
                                 current_action["Action"] = {
@@ -959,7 +992,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
                                         ["Unit"] = tostring(action_2),
-                                        ["Value"] = tostring(action_3)
+                                        ["Value"] = tostring(action_3),
                                     }}
                                     writemacro()
                                 task.wait(0.25)
@@ -974,7 +1007,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Unit"] = tostring(action_2),
                                         ["Value"] = tostring(action_3),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
                                     current_action["Action"] = {
@@ -983,7 +1016,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Time"] = tostring(Time()),
                                             ["Action"] = tostring(action_1),
                                             ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_3)
+                                            ["Value"] = tostring(action_3),
                                         }}
                                     writemacro()
                                     task.wait(1)
@@ -995,7 +1028,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["ChangePriority"] = {
                                 ["Wave"] = tostring(Wave()),
                                 ["Time"] = tostring(Time()),
-                                ["Unit"] = tostring(action_2)
+                                ["Unit"] = tostring(action_2),
+                                ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                 }
                             })
                             current_action["Action"] = {
@@ -1003,7 +1037,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Action"] = tostring(action_1),
-                                    ["Unit"] = tostring(action_2)
+                                    ["Unit"] = tostring(action_2),
                             }}
                             writemacro()
                             task.wait(0.1)
@@ -1014,7 +1048,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["SpeedChange"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Value"] = action_2
+                                    ["Value"] = action_2,
                                     }
                                 })
                                 current_action["Action"] = {
@@ -1022,7 +1056,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Wave"] = tostring(Wave()),
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
-                                        ["Value"] = tostring(action_2)
+                                        ["Value"] = tostring(action_2),
                                 }}
                                 writemacro()
                                 task.wait(0.15)
@@ -1032,14 +1066,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             table.insert(Macro,{
                                 ["VoteWaveConfirm"] = {
                                 ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time())
+                                ["Time"] = tostring(Time()),
                                 }
                             })
                             current_action["Action"] = {
                                 ["VoteWaveConfirm"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1)
+                                    ["Action"] = tostring(action_1),
                             }}
                             writemacro()
                             task.wait(0.15)
@@ -1049,14 +1083,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             table.insert(Macro,{
                                 ["AutoSkipWaves_CHANGE"] = {
                                 ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time())
+                                ["Time"] = tostring(Time()),
                                 }
                             })
                             current_action["Action"] = {
                                 ["AutoSkipWaves_CHANGE"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1)
+                                    ["Action"] = tostring(action_1),
                             }}
                             writemacro()
                             task.wait(0.15)
@@ -1068,7 +1102,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["Wave"] = tostring(Wave()),
                                 ["Time"] = tostring(Time()),
                                 ["Action"] = tostring(action_1),
-                                ["Value"] = tostring(action_2)
+                                ["Value"] = tostring(action_2),
                                 }
                             })
                             current_action["Action"] = {
@@ -1076,7 +1110,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Action"] = tostring(action_1),
-                                    ["Value"] = tostring(action_2)
+                                    ["Value"] = tostring(action_2),
                             }}
                             writemacro()
                             task.wait(0.15)
@@ -1090,55 +1124,56 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     task.spawn(function ()
         while wait() do
             if Options.Record.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
-            for i,v in pairs(current_action["Action"]) do
-                if i == "Default" then
-                    Get_Paragrahp().Text = "Status Recording ["..tostring(#Macro).."]\nCurrent Time : "..tostring(Time())
-                elseif i == "Summon" then
-                    Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nRotation : "..v["Rotation"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                elseif i == "Upgrade" then
-                    Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                elseif i == "UseSpecialMove" or i == "AutoToggle"  then
-                    Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                elseif i == "Sell" or i == "ChangePriority" then
-                    Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                elseif i == "SpeedChange" or i == "VoteGameMode" then
-                    Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                elseif i == "VoteWaveConfirm" or i == "AutoSkipWaves_CHANGE" then
-                    Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nCurrent Time : "..tostring(Time())
-                end
+                for i,v in pairs(current_action["Action"]) do
+                    if i == "Default" then
+                        Get_Paragrahp().Text = "Status Recording ["..tostring(#Macro).."]\nCurrent Time : "..tostring(Time())
+                    elseif i == "Summon" then
+                        Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nRotation : "..v["Rotation"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
+                    elseif i == "Upgrade" then
+                        Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
+                    elseif i == "UseSpecialMove" or i == "AutoToggle"  then
+                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
+                    elseif i == "Sell" or i == "ChangePriority" then
+                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
+                    elseif i == "SpeedChange" or i == "VoteGameMode" then
+                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
+                    elseif i == "VoteWaveConfirm" or i == "AutoSkipWaves_CHANGE" then
+                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nCurrent Time : "..tostring(Time())
+                    end
                 end
             end
         end
     end)
 end)
-spawn(function ()
-    while wait() do
-        pcall(function ()
-            if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
-            tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
-            else
-            if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
-                repeat
-                    if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
-                game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
-                task.wait(1)
-                end
-                until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
-            elseif Options.SPEED.Value and Options.Speed.Value == "3X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" then
-                if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+
+    spawn(function ()
+        while wait() do
+            pcall(function ()
+                if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
+                tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
                 else
-                repeat 
-                    if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
-                game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
-                task.wait(1)
+                    if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+                        repeat
+                            if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+                                task.wait(1)
+                            end
+                        until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
+                    elseif Options.SPEED.Value and Options.Speed.Value == "3X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" then
+                        if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+                        else
+                            repeat 
+                                if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+                                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+                                    task.wait(1)
+                                end
+                            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
+                            or not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275)
+                        end
                     end
-                until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
-                or not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275)
-                       end
-                   end
                 end
-             end)
-          end
+            end)
+        end
     end)
 
 
