@@ -666,10 +666,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             ["Action"] = {
                 [actionname] = val
             }}
-        repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
-        if tonumber(values["Wave"]) == tonumber(0) then return end
-        repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
-    end
+            repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
+            if tonumber(values["Wave"]) == tonumber(0) then return end
+            if not values["Money"] then
+                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
+            elseif values["Money"] then
+                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+            end
+        end
 
     local function check_the_unitspawns(Unit,Position, cframe)
         if type(Position) == "string" then
