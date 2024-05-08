@@ -485,11 +485,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         
         if not table.find(IngoreTimeIF,"Money Reach") then
         repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"]) or table.find(IngoreTimeIF,"Money Reach")
-        elseif table.find(IngoreTimeIF,"Money Reach") then
+        elseif table.find(IngoreTimeIF,"Money Reach") and val1["Money"] then
         repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"]) or tonumber(Money()) >= tonumber(stringofnum(val1["Money"]))
         end
 
-        if val2["Money"] then
+        if val1["Money"] then
             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(val1["Money"]))
         end
     end
@@ -754,13 +754,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local function main_playstatus(val)
         if Options.Record.Value and val == "new" then
-            return "Status Recording ["..#Macro.."]\nCurrent Time : "..tostring(Time())
+            return "Status Recording ["..#Macro.."]"
         elseif Options.Play.Value  and val == "new" then
-            return "Status Playing ["..currentval.."/"..#getgenv().Playing.."]\nCurrent Time : "..tostring(Time())
-        elseif Options.Record.Value and val == "nil" then
-            return "Status Recording ["..#Macro.."]\n"
-        elseif Options.Play.Value  and val == "nil" then
-            return "Status Playing [nil/nil]\nCurrent Time : "..tostring(Time())
+            return "Status Playing ["..currentval.."/"..#getgenv().Playing.."]"
         end
     end
 
@@ -769,9 +765,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             if game.PlaceId == 12886143095 then return end
             if Options.Record.Value or Options.Play.Value then
                 for i,v in pairs(current_action["Action"]) do
-                    if i == "nil" then
-                        Get_Paragrahp().Text = main_playstatus(i)
-                    else
                     if i == "new" and v["3"] and not v["4"] then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\nCurrent Time : "..tostring(Time())
                     elseif i == "new" and v["4"] and not v["5"] then
@@ -780,7 +773,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\nCurrent Time : "..tostring(Time())
                     elseif i == "new" and v["6"] and not v["7"] then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\nCurrent Time : "..tostring(Time())
-                    end
                     end
                 end
             end
