@@ -903,7 +903,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     task.spawn(function ()
         setreadonly(a,false)
         a.__namecall = newcclosure(function(self,...)
-            arg = {...};
+            local arg = {...};
             local method = getnamecallmethod();
                 task.spawn(function ()
                     if Options.Record.Value then
