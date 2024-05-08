@@ -892,7 +892,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 local action_2 = arg[2]
                                 if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                        if v.Name == action_2["Unit"] then
+                                            if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -918,51 +919,55 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         l_unit_l:Disconnect()
                                         l_unit_l = nil
                                     end
+                                else
+                                    if l_unit_l then
+                                        l_unit_l:Disconnect()
+                                        l_unit_l = nil
+                                    end
                                 end
-                                end)
                             end
-                            elseif arg[1] == "Upgrade" then
-                                local action_1 = arg[1]
-                                local action_2 = arg[2]
-                                if tonumber(Money()) >= tonumber(stringofnum(getupgradevalues())) and not l_upgrade_l then
-                                    l_upgrade_l = action_2:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
-                                        if action_2:WaitForChild("Owner").Value == game.Players.LocalPlayer then
-                                    table.insert(Macro,{
-                                        ["Upgrade"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Money"] = tostring(getupgradevalues()),
-                                        ["Unit"] = tostring(action_2),
-                                        ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
-                                        }
-                                    })
-                                    current_action["Action"] = {
-                                        ["Upgrade"] = {
-                                            ["Wave"] = tostring(Wave()),
-                                            ["Time"] = tostring(Time()),
-                                            ["Money"] = tostring(getupgradevalues()),
-                                            ["Action"] = tostring(action_1),
-                                            ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
-                                        }}
-                                    writemacro()
-                                        if l_upgrade_l then
-                                            l_upgrade_l:Disconnect()
-                                            l_upgrade_l = nil
-                                        end
-                                        end
-                                    end)
-                                end
-                            elseif arg[1] == "Sell" then
-                                local action_1 = arg[1]
-                                local action_2 = arg[2]
-                                table.insert(Macro,{
-                                    ["Sell"] = {
+                        end)
+                    end
+                elseif arg[1] == "Upgrade" then
+                    local action_1 = arg[1]
+                    local action_2 = arg[2]
+                    if tonumber(Money()) >= tonumber(stringofnum(getupgradevalues())) and not l_upgrade_l then
+                        l_upgrade_l = action_2:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
+                            table.insert(Macro,{
+                                ["Upgrade"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
+                                    ["Money"] = tostring(getupgradevalues()),
                                     ["Unit"] = tostring(action_2),
+                                    ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
                                     ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                }
+                            })
+                            current_action["Action"] = {
+                                ["Upgrade"] = {
+                                    ["Wave"] = tostring(Wave()),
+                                    ["Time"] = tostring(Time()),
+                                    ["Money"] = tostring(getupgradevalues()),
+                                    ["Action"] = tostring(action_1),
+                                    ["Unit"] = tostring(action_2),
+                                    ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
+                                }}
+                                writemacro()
+                                if l_upgrade_l then
+                                    l_upgrade_l:Disconnect()
+                                    l_upgrade_l = nil
+                                end
+                            end)
+                        end
+                        elseif arg[1] == "Sell" then
+                            local action_1 = arg[1]
+                            local action_2 = arg[2]
+                                table.insert(Macro,{
+                                    ["Sell"] = {
+                                        ["Wave"] = tostring(Wave()),
+                                        ["Time"] = tostring(Time()),
+                                        ["Unit"] = tostring(action_2),
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                     }
                                 })
                                 current_action["Action"] = {
