@@ -841,7 +841,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     coroutine.resume(coroutine.create(unload_ui))
 
 end
-task.wait(0.25)
+task.wait(1)
 until game.CoreGui:FindFirstChild("CrazyDay")
 end -- End Of If
 
