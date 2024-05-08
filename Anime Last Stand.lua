@@ -236,7 +236,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         Default = 1,
     })
     local ignoretime = Tabs.Main:AddDropdown("ignoretime", {
-        Title = "Ignore time if",
+        Title = "Ignore time / wave if",
         Values = {"Money Reach"},
         Multi = true,
         Default = {nil},
@@ -482,7 +482,16 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         current_action = {["Action"] = {
             [val2] = val3
         }}
-        repeat task.wait() until tonumber(Wave()) >= tonumber(val1["Wave"])
+        if not table.find(IngoreTimeIF,"Money Reach") then
+        repeat task.wait() until tonumber(Wave()) >= tonumber(val1["Wave"]) or table.find(IngoreTimeIF,"Money Reach")
+
+        elseif table.find(IngoreTimeIF,"Money Reach") then
+            if val1["Money"] then
+                repeat task.wait() until tonumber(Wave()) >= tonumber(val1["Wave"]) or tonumber(Money()) >= tonumber(stringofnum(val1["Money"]))
+            elseif not val1["Money"] then
+                repeat task.wait() until tonumber(Wave()) >= tonumber(val1["Wave"])
+            end
+        end
 
         if not table.find(IngoreTimeIF,"Money Reach") then
         repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"]) or table.find(IngoreTimeIF,"Money Reach")
