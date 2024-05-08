@@ -658,11 +658,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         return tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
     end
 
-    local function wait_for(values)
-        repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
-        repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
-    end
-
     local current_play_action = {
         ["Action"] = {
             ["Default"] = {
@@ -673,6 +668,16 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         }
     }
     local current_val = 0
+    local function wait_for(values,number,actionname,val)
+        current_val = number
+        current_play_action = {
+            ["Action"] = {
+                [actionname] = val
+            }}
+        repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
+        repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
+    end
+
     outmode:OnChanged(function ()
         if Options.do_current_mode.Value then
             repeat task.wait() until Options.Current_Macro_Mode.Value == "Play" and not game:GetService("ReplicatedStorage").Lobby.Value
@@ -688,65 +693,26 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         if not Options.Current_Macro_Mode.Value == "Play" then return end
                         ------------------------------------------ GAME SETTINGS ------------------------------------------
                         if i == "VoteGameMode" and game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible and not Options.Auto_Vote.Value then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["VoteGameMode"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : VoteGameMode",
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"VoteGameMode",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : VoteGameMode",["Value"] = "Value : "..tostring(v["Value"])})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["VoteWaveConfirm"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : VoteWaveConfirm",
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"VoteWaveConfirm",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : VoteWaveConfirm"})
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                             repeat
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
                             task.wait(0.25)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                         elseif i == "AutoSkipWaves_CHANGE" then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["AutoSkipWaves_CHANGE"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : AutoSkipWaves_CHANGE",
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"AutoSkipWaves_CHANGE",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : AutoSkipWaves_CHANGE"})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
                         elseif i == "SpeedChange" then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["SpeedChange"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : SpeedChange",
-                                    ["Value"] = "Actions : "..tostring(v["Value"]),
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"SpeedChange",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : SpeedChange",["Value"] = "Value : "..tostring(v["Value"])})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
 
                         ------------------------------------------ MAIN ------------------------------------------
 
                         elseif i == "Summon" then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["Summon"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Money"] = "Waiting For Money : "..tostring(v["Money"]),
-                                    ["Action"] = "Actions : Summon",
-                                    ["Rotation"] = "Rotation : "..tostring(v["Rotation"]),
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"Summon",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Summon",["Rotation"] = "Rotation : "..tostring(v["Rotation"]),["Unit"] = "Unit : "..tostring(v["Unit"])})
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
@@ -757,70 +723,26 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 task.wait(0.25)
                             until check_the_unitspawns(v["Unit"],v["Position"])
                         elseif i == "Upgrade" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["Upgrade"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Money"] = "Waiting For Money : "..tostring(v["Money"]),
-                                    ["Action"] = "Actions : Upgrade",
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                    ["Value"] = "Value : "..tostring(v["Value"] + 1),
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"Upgrade",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Upgrade",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = "Value : "..tostring(v["Value"] + 1)})
                             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until tonumber(check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("UpgradeTag").Value) >= tonumber(v["Value"])
                         elseif i == "Sell" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["Sell"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : Sell",
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                }}
-                            wait_for(v)
+                            wait_for(v,val,"Sell",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : Sell",["Unit"] = "Unit : "..tostring(v["Unit"])})
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Sell",check_the_unitspawns(v["Unit"],v["Position"]))
                             task.wait(0.25)
                                 until not check_the_unitspawns(v["Unit"],v["Position"])
                         elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["ChangePriority"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : ChangePriority",
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                    }}
-                                wait_for(v)
+                            wait_for(v,val,"ChangePriority",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : ChangePriority",["Unit"] = "Unit : "..tostring(v["Unit"])})
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("ChangePriority",check_the_unitspawns(v["Unit"],v["Position"]))
                         elseif i == "AutoToggle" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["AutoToggle"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : AutoToggle",
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                    ["Value"] = "Value : "..tostring(v["Value"]),
-                                }}
-                                wait_for(v)
+                            wait_for(v,val,"AutoToggle",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : AutoToggle",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = tostring(v["Value"])})
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
                         elseif i == "UseSpecialMove" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            current_val = val
-                            current_play_action["Action"] = {
-                                ["UseSpecialMove"] = {
-                                    ["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),
-                                    ["Time"] = "Waiting For Time : "..tostring(v["Time"]),
-                                    ["Action"] = "Actions : UseSpecialMove",
-                                    ["Unit"] = "Unit : "..tostring(v["Unit"]),
-                                    ["Value"] = "Value : "..tostring(v["Value"]),
-                                }}
-                                wait_for(v)
+                            wait_for(v,val,"UseSpecialMove",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : UseSpecialMove",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = tostring(v["Value"])})
                                 repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_the_unitspawns(v["Unit"],v["Position"]),tostring(v["Value"]))
                                 task.wait(0.25)
@@ -944,7 +866,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Rotation"] = tostring(action_2["Rotation"]),
                                         ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
-                                        ["Position"] = tostring(workspace.Unit:FindFirstChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position),
+                                        ["Position"] = tostring(workspace.Unit:FindFirstChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position)
                                         }
                                     })
                                     current_action["Action"] = {
@@ -954,7 +876,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Money"] = tostring(getmoney_units(action_2["Unit"])),
                                             ["Action"] = tostring(action_1),
                                             ["Rotation"] = tostring(action_2["Rotation"]),
-                                            ["Unit"] = tostring(action_2["Unit"]),
+                                            ["Unit"] = tostring(action_2["Unit"])
                                         }}
                                     writemacro()
                                     if l_unit_l then
@@ -977,7 +899,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Money"] = tostring(getupgradevalues()),
                                         ["Unit"] = tostring(action_2),
                                         ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
                                         }
                                     })
                                     current_action["Action"] = {
@@ -987,7 +909,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Money"] = tostring(getupgradevalues()),
                                             ["Action"] = tostring(action_1),
                                             ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
+                                            ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1)
                                         }}
                                     writemacro()
                                         if l_upgrade_l then
@@ -1005,7 +927,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Unit"] = tostring(action_2),
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
                                     }
                                 })
                                 current_action["Action"] = {
@@ -1013,7 +935,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Wave"] = tostring(Wave()),
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
-                                        ["Unit"] = tostring(action_2),
+                                        ["Unit"] = tostring(action_2)
                                     }}
                                     writemacro()
                                 task.wait(0.55)
@@ -1027,7 +949,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Time"] = tostring(Time()),
                                     ["Unit"] = tostring(action_2),
                                     ["Value"] = action_3,
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
                                     }
                                 })
                                 current_action["Action"] = {
@@ -1036,7 +958,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
                                         ["Unit"] = tostring(action_2),
-                                        ["Value"] = tostring(action_3),
+                                        ["Value"] = tostring(action_3)
                                     }}
                                     writemacro()
                                 task.wait(0.25)
@@ -1051,7 +973,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Unit"] = tostring(action_2),
                                         ["Value"] = tostring(action_3),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position)
                                         }
                                     })
                                     current_action["Action"] = {
@@ -1060,7 +982,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Time"] = tostring(Time()),
                                             ["Action"] = tostring(action_1),
                                             ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_3),
+                                            ["Value"] = tostring(action_3)
                                         }}
                                     writemacro()
                                     task.wait(1)
@@ -1072,7 +994,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["ChangePriority"] = {
                                 ["Wave"] = tostring(Wave()),
                                 ["Time"] = tostring(Time()),
-                                ["Unit"] = tostring(action_2),
+                                ["Unit"] = tostring(action_2)
                                 }
                             })
                             current_action["Action"] = {
@@ -1080,7 +1002,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Action"] = tostring(action_1),
-                                    ["Unit"] = tostring(action_2),
+                                    ["Unit"] = tostring(action_2)
                             }}
                             writemacro()
                             task.wait(0.1)
@@ -1091,7 +1013,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["SpeedChange"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Value"] = action_2,
+                                    ["Value"] = action_2
                                     }
                                 })
                                 current_action["Action"] = {
@@ -1099,7 +1021,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Wave"] = tostring(Wave()),
                                         ["Time"] = tostring(Time()),
                                         ["Action"] = tostring(action_1),
-                                        ["Value"] = tostring(action_2),
+                                        ["Value"] = tostring(action_2)
                                 }}
                                 writemacro()
                                 task.wait(0.15)
@@ -1109,14 +1031,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             table.insert(Macro,{
                                 ["VoteWaveConfirm"] = {
                                 ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
+                                ["Time"] = tostring(Time())
                                 }
                             })
                             current_action["Action"] = {
                                 ["VoteWaveConfirm"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
+                                    ["Action"] = tostring(action_1)
                             }}
                             writemacro()
                             task.wait(0.15)
@@ -1126,14 +1048,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             table.insert(Macro,{
                                 ["AutoSkipWaves_CHANGE"] = {
                                 ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
+                                ["Time"] = tostring(Time())
                                 }
                             })
                             current_action["Action"] = {
                                 ["AutoSkipWaves_CHANGE"] = {
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
+                                    ["Action"] = tostring(action_1)
                             }}
                             writemacro()
                             task.wait(0.15)
@@ -1145,7 +1067,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["Wave"] = tostring(Wave()),
                                 ["Time"] = tostring(Time()),
                                 ["Action"] = tostring(action_1),
-                                ["Value"] = tostring(action_2),
+                                ["Value"] = tostring(action_2)
                                 }
                             })
                             current_action["Action"] = {
@@ -1153,7 +1075,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["Wave"] = tostring(Wave()),
                                     ["Time"] = tostring(Time()),
                                     ["Action"] = tostring(action_1),
-                                    ["Value"] = tostring(action_2),
+                                    ["Value"] = tostring(action_2)
                             }}
                             writemacro()
                             task.wait(0.15)
