@@ -398,7 +398,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         Title = "Confirm",
                         Callback = function()
                             Notify("Reset Succeed",Options.Current_File.Value)
-                            getgenv().Recording = {}
+                            Macro = {}
                             writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.Current_File.Value), game:GetService("HttpService"):JSONEncode({}))
                         end
                     },{
@@ -1086,7 +1086,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Value"] = tostring(action_2),
                                 }}
                                 writemacro()
-                                task.wait(0.15)
+                                task.wait(0.015)
                         elseif arg[1] == "VoteWaveConfirm" then
                             local action_1 = arg[1]
                             if game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
