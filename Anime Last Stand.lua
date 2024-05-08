@@ -483,17 +483,23 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             [val2] = val3
         }}
         repeat task.wait() until tonumber(Wave()) >= tonumber(val1["Wave"])
-        
+
         if not table.find(IngoreTimeIF,"Money Reach") then
         repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"]) or table.find(IngoreTimeIF,"Money Reach")
-        elseif table.find(IngoreTimeIF,"Money Reach") and val1["Money"] then
+
+        elseif table.find(IngoreTimeIF,"Money Reach") then
+            if val1["Money"] then
         repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"]) or tonumber(Money()) >= tonumber(stringofnum(val1["Money"]))
+            elseif not val1["Money"] then
+                repeat task.wait() until tonumber(Time()) >= tonumber(val1["Time"])
+            end
         end
 
         if val1["Money"] then
             repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(val1["Money"]))
         end
     end
+
 
     PlayToggle:OnChanged(function ()
         if game.PlaceId == 12886143095 then return end
