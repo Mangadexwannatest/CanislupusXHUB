@@ -416,7 +416,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local PlayToggle = Tabs.Main:AddToggle("Play", {Title = "Macro Play", Default = false })
 
     RecordToggle:OnChanged(function ()
-        if Options.Record.Value and Options.PlayToggle.Value then
+        if Options.Record.Value and Options.Play.Value then
             Options.Record:SetValue(false)
             Options.Play:SetValue(false)
             return Notify("Error","dont enable record / play macro together")
