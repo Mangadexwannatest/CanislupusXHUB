@@ -683,7 +683,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             }}
             repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
             if table.find(ActionTime_stopwait,"Wave : 0") and tonumber(values["Wave"]) == tonumber(0) then return end
-            if not values["Money"] then
+            if not table.find(ActionTime_stopwait,"Money reach") then
+            repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ActionTime_stopwait,"Money reach")
+            elseif not values["Money"] and table.find(ActionTime_stopwait,"Money reach") then
                 repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
             elseif values["Money"] and table.find(ActionTime_stopwait,"Money reach") then
                 repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
