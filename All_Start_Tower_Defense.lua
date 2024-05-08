@@ -673,8 +673,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         }
     }
     local current_val = 0
-
-
     outmode:OnChanged(function ()
         if Options.do_current_mode.Value then
             repeat task.wait() until Options.Current_Macro_Mode.Value == "Play"
@@ -754,7 +752,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
-                                    ["Unit"] = v["Unit"]
+                                    ["Unit"] = v["Unit"],
                                 })
                                 task.wait(0.25)
                             until check_the_unitspawns(v["Unit"],v["Position"])
@@ -846,7 +844,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
     spawn(function ()
         while wait() do
-            if Options.Current_Macro_Mode.Value == "Play" and Options.do_current_mode.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
+            if game:GetService("ReplicatedStorage").Lobby.Value then return end
+            if Options.Current_Macro_Mode.Value == "Play" and Options.do_current_mode.Value then
                 for i,v in pairs(current_play_action["Action"]) do
                     if i == "End" then
                         Get_Paragrahp().Text = "Status Playing Ended ["..v["val"].."/"..#getgenv().Playing.."]\nCurrent Time : "..tostring(Time())
@@ -930,8 +929,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             arg = {...};
             local method = getnamecallmethod();
                 task.spawn(function ()
-                    if game:GetService("ReplicatedStorage").Lobby.Value then return end
-                    if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value then
+                    if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
                         if (method == "FireServer" or "InvokeServer") and (arg[1] == "Summon" or "Upgrade" or "UseSpecialMove" or "AutoToggle" or "Sell" or "SpeedChange" or "ChangePriority" or "VoteWaveConfirm" or "AutoSkipWaves_CHANGE" or "VoteGameMode") then
                             if arg[1] == "Summon" then
                                 local action_1 = arg[1]
@@ -1169,7 +1167,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     setreadonly(a,true)
     task.spawn(function ()
         while wait() do
-            if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value  and not game:GetService("ReplicatedStorage").Lobby.Value then
+            if game:GetService("ReplicatedStorage").Lobby.Value then return end
+            if Options.Current_Macro_Mode.Value == "Record" and Options.do_current_mode.Value then
             for i,v in pairs(current_action["Action"]) do
                 if i == "Default" then
                     Get_Paragrahp().Text = "Status Recording ["..tostring(#Macro).."]\nCurrent Time : "..tostring(Time())
