@@ -408,14 +408,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     otherlobby:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
 
 
-    local themap;
+    local themap
     currentmode:OnChanged(function (Value)
-        if (Value == "Story" or "Challenge" or "Infinite") then
-            current_cframe = tostring(currentmodevalues().CFrame)
-            themap = tostring(Options.Mains_MAP.Value)
-        elseif Value == "Raids" then
+        if game.PlaceId ~= 12886143095 then return end
+        if Value == "Raids" then
             current_cframe = tostring(currentmodevalues().CFrame)
             themap = tostring(Options.Raid_MAP.Value)
+        elseif Value == ("Story" or "Challenge" or "Infinite") then
+            current_cframe = tostring(currentmodevalues().CFrame)
+            themap = tostring(Options.Mains_MAP.Value)
         end
     end)
 
@@ -427,7 +428,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = get_the_cframe()
                 end
                 if game.Players.LocalPlayer.PlayerGui:FindFirstChild("MapSelection") and not game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
-                    game:GetService("ReplicatedStorage").Remotes.Teleporter.MapSelect:InvokeServer("Ready",themap,Options.Select_Stage.Value,Options.ModeType.Value)
+                    game:GetService("ReplicatedStorage").Remotes.Teleporter.MapSelect:InvokeServer("Ready",themap,Options.Select_Stage.Value)
                 elseif game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
                     game:GetService("ReplicatedStorage").Remotes.Teleporter.Interact:FireServer("Skip")
                 end
