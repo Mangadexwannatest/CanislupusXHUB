@@ -754,9 +754,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local function main_playstatus(val)
         if Options.Record.Value and val == "new" then
-            return "Status Recording ["..#Macro.."]"
+            return "Status Recording ["..#Macro.."]\n"
         elseif Options.Play.Value  and val == "new" then
-            return "Status Playing ["..currentval.."/"..#getgenv().Playing.."]"
+            return "Status Playing ["..currentval.."/"..#getgenv().Playing.."]\n"
         end
     end
 
