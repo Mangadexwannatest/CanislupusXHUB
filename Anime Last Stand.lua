@@ -1,10 +1,11 @@
 repeat task.wait() until game:IsLoaded()
 repeat wait()until game:GetService("Players").LocalPlayer ~= nil
 if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
-
+if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 
 if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     repeat
+        if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
 
