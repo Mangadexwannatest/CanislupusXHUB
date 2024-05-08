@@ -42,6 +42,37 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end)
 
+    spawn(function ()
+        if not game:WaitForChild("CoreGui"):FindFirstChild("Close/Open") then
+            local CloseOpen = Instance.new("ScreenGui")
+            local TextButton = Instance.new("TextButton")
+            CloseOpen.Name = "Close/Open"
+            CloseOpen.Parent = game:WaitForChild("CoreGui")
+            CloseOpen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            TextButton.Parent = CloseOpen
+            TextButton.BackgroundColor3 = Color3.fromRGB(140, 140, 140)
+            TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            TextButton.BorderSizePixel = 0
+            TextButton.Position = UDim2.new(0.00470430125, 0, 0.0685579255, 0)
+            TextButton.Size = UDim2.new(0.118145198, 0, 0.0385342762, 0)
+            TextButton.Font = Enum.Font.ArialBold
+            TextButton.Text = "Close/Open"
+            TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            TextButton.TextScaled = true
+            TextButton.TextSize = 14.000
+            TextButton.TextWrapped = true
+        end
+    end)
+    
+    spawn(function ()
+        local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
+        Button.InputBegan:Connect(function(input)
+            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = not game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible
+        end
+    end)
+    end)
+
     local firesignal = function(signal, arg2)
         if getconnections(signal) then
             firesignal(signal, arg2)
@@ -333,7 +364,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
-    Tabs.Lobby:AddDropdown("Story_MAP", {
+    Tabs.Lobby:AddDropdown("Mains_MAP", {
         Title = "Select Main",
         Description = "select the map for (story // challenge // infinite)",
         Values = {"Desert Village","Water Part","Hollow Dimension","Planet Nemak","Star Mansion","Super Hero City","Hero Association"},
@@ -356,7 +387,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         Multi = false,
         Default = 1
     })
-    Tabs.Lobby:AddDropdown("MODEADWD", {
+    Tabs.Lobby:AddDropdown("ModeType", {
         Title = "Select Mode",
         Description = nil,
         Values = {"Normal","Nightmare"},
@@ -377,11 +408,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     otherlobby:AddToggle("AutoMissionEnd", {Title = "Auto Leave // Retry // Next ", Default = false })
 
 
+    local themap;
     currentmode:OnChanged(function (Value)
         if (Value == "Story" or "Challenge" or "Infinite") then
             current_cframe = tostring(currentmodevalues().CFrame)
+            themap = tostring(Options.Mains_MAP.Value)
         elseif Value == "Raids" then
             current_cframe = tostring(currentmodevalues().CFrame)
+            themap = tostring(Options.Raid_MAP.Value)
         end
     end)
 
@@ -393,7 +427,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = get_the_cframe()
                 end
                 if game.Players.LocalPlayer.PlayerGui:FindFirstChild("MapSelection") and not game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
-                    game:GetService("ReplicatedStorage").Remotes.Teleporter.MapSelect:InvokeServer("Ready",Options.Select_Map.Value,Options.Select_Stage.Value,Options.MODEADWD.Value)
+                    game:GetService("ReplicatedStorage").Remotes.Teleporter.MapSelect:InvokeServer("Ready",themap,Options.Select_Stage.Value,Options.ModeType.Value)
                 elseif game.Players.LocalPlayer.PlayerGui:FindFirstChild("TeleportUI") then
                     game:GetService("ReplicatedStorage").Remotes.Teleporter.Interact:FireServer("Skip")
                 end
@@ -772,6 +806,24 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end)
 
     spawn(function ()
+        repeat wait() until game:IsLoaded()
+        game.CoreGui:WaitForChild("CrazyDay")
+        repeat wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
+        repeat wait() until Options.AutoCloseAfterExecute.Value
+        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = false
+    end)
+
+    spawn(function ()
+        game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+            if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+                if Options.AutoRejoinError.Value then
+                    game:GetService("TeleportService"):Teleport(12886143095)
+                end
+            end
+        end)
+    end)
+
+    spawn(function ()
         game.Players.LocalPlayer.OnTeleport:Connect(function(state)
             getgenv().OnTeleport = true
             local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
@@ -782,6 +834,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             end
         end)
     end)
+
+    local function unload_ui()
+        while wait() do
+            if Fluent.Unloaded then
+            game.CoreGui:FindFirstChild("Close/Open"):Destroy()
+                break 
+                end
+        end
+    end
+    coroutine.resume(coroutine.create(unload_ui))
+
 end
 task.wait(0.25)
 until game.CoreGui:FindFirstChild("CrazyDay")
