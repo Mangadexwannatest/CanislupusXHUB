@@ -321,7 +321,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         Title = "Stop Waiting for time if : ",
         Description = "will out of wait for time while playing if wave 0 or money reach",
         Values = {"Wave : 0","Money reach"},
-        Multi = false,
+        Multi = true,
         Default = {nil},
     })
     STOPTIME:OnChanged(function (Value)
