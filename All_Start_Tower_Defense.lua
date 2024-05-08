@@ -667,9 +667,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 [actionname] = val
             }}
         repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
-        if tonumber(values["Wave"]) > 0 then
+        if tonumber(values["Wave"]) == tonumber(0) then return end
         repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
-        end
     end
 
     local function check_the_unitspawns(Unit,Position, cframe)
