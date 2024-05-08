@@ -259,6 +259,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local a = getrawmetatable(game)
     local backs = a.__namecall
     local Macro = {}
+    local ActionTime_stopwait = {}
 
     do
         local function Notify(titile,Content,SubTitle,time)
@@ -316,6 +317,19 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         Multi = false,
         Default = 1,
     })
+    local STOPTIME = Tabs.Main:AddDropdown("Stop_Wait_If", {
+        Title = "Stop Waiting for time if : ",
+        Description = "will out of wait for time while playing if wave 0 or money reach",
+        Values = {"Wave : 0","Money reach"},
+        Multi = false,
+        Default = {nil},
+    })
+    STOPTIME:OnChanged(function (Value)
+        ActionTime_stopwait = {}
+        for Value, State in next, Value do
+            table.insert(ActionTime_stopwait, Value)
+        end
+    end)
     Tabs.Main:AddInput("Input", {
         Title = "Creat macro files",
         Description = nil,
@@ -659,6 +673,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             }
         }
     }
+
     local current_val = 0
     local function wait_for(values,number,actionname,val)
         current_val = number
@@ -667,10 +682,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 [actionname] = val
             }}
             repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
-            if tonumber(values["Wave"]) == tonumber(0) then return end
+            if table.find(ActionTime_stopwait,"Wave : 0") and tonumber(values["Wave"]) == tonumber(0) then return end
             if not values["Money"] then
                 repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
-            elseif values["Money"] then
+            elseif values["Money"] and table.find(ActionTime_stopwait,"Money reach") then
                 repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
             end
         end
