@@ -688,7 +688,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
         for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
             if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
-                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2.25 then
+                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 1.75 then
                     return v
                 end
             end
@@ -772,7 +772,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
-                                task.wait(0.35)
+                                task.wait(0.15)
                             until check_the_unitspawns(v["Unit"], v["Position"]) or not Options.Play.Value
                         elseif i == "Upgrade" and check_the_unitspawns(v["Unit"], v["Position"] ) then
                             if tonumber(check_the_unitspawns(v["Unit"], v["Position"] ):WaitForChild("UpgradeTag").Value) < tonumber(v["Value"]) then
