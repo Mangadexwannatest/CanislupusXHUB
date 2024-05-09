@@ -174,9 +174,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local Options = Fluent.Options
     local Macro_Files = {}
     local Macro = {}
-    local current_action = {["Action"] = {["nil"] = {
-        ["1"] = nil
-    }}}
+    local current_action = {["Action"] = {["Default"] = {["1"] = nil,["2"] = nil,["3"] = nil}}}
     local currentval = 0
     local IngoreTimeIF = {}
 
@@ -228,7 +226,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
     end
     repeat task.wait() until #Macro_Files >= 1
-    Tabs.Main:AddParagraph({Title = "Macro Status",Content = "nil [0]"})
+    Tabs.Main:AddParagraph({Title = "Macro Status",Content = "Status nil [0]\nCurrent Time : 0.00"})
     local CurrentFiles = Tabs.Main:AddDropdown("Current_File", {
         Title = "Select File",
         Values = Macro_Files,
@@ -339,6 +337,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             Options.Record:SetValue(false)
             Options.Play:SetValue(false)
             return Notify("Error","dont enable record / play macro together")
+        end
+        if Options.Record.Value and not Options.Play.Value then
+            current_action = {
+                ["Action"] = {
+                    ["end"] = {["1"] = "Status Recording ["..tostring(#Macro).."]" }
+                }}
+            repeat task.wait() until not Options.Record.Value
+            current_action = {
+                ["Action"] = {
+                    ["end"] = {["1"] = "Status Recording Ended ["..tostring(#Macro).."]" }
+                }}
         end
     end)
 
@@ -509,6 +518,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
 
+    local count
     PlayToggle:OnChanged(function ()
         if game.PlaceId == 12886143095 then return end
         if Options.Play.Value then
@@ -523,6 +533,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     for i,v in pairs(getgenv().Playing[val]) do
                         if not Options.Play.Value or game.PlaceId == 12886143095 then return end
                         local AutoSkilValue = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip")
+                        count = val
                         if i == "AutoSkip" and AutoSkilValue.Value ~= v["Value"] then
                             wait_for(val,v,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkip",["4"] = "Value : "..tostring(v["Value"])})
                                 repeat
@@ -563,9 +574,21 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(val,v,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : Ability",["4"] = "Unit : "..tostring(v["Unit"]) })
                             game:GetService("ReplicatedStorage").Remotes.Ability:InvokeServer(check_unit(v["Unit"], v["Position"]))
                         end
+                        if val == #getgenv().Playing then
+                        current_action = {
+                            ["Action"] = {
+                                ["end"] = {["1"] = "Status Playing Ended ["..tostring(val).."/"..tostring(#getgenv().Playing).."]" }
+                            }}
+                        end
                     end
                 end
             end)
+        end
+        if not Options.Play.Value and count ~= 0 then
+            current_action = {
+                ["Action"] = {
+                    ["end"] = {["1"] = "Status Playing Ended ["..tostring(count).."/"..tostring(#getgenv().Playing).."]" }
+                }}
         end
     end)
 
@@ -632,139 +655,143 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end
             end)
         end)
+        task.spawn(function ()
         game.Players.LocalPlayer.PlayerGui:WaitForChild("MainUI"):WaitForChild("ErrorHolder").ChildAdded:Connect(function (v)
             if string.find(v.Text,"-") then
                 money = v.Text:split("-$")[2]
                 end
             end)
-        game.workspace.Towers.ChildAdded:Connect(function (v)
-        if Options.Record.Value then
-            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
-                table.insert(Macro,{
-                    ["PlaceTower"] = {
-                        ["Wave"] = tostring(Wave()),
-                        ["Time"] = tostring(Time()),
-                        ["Money"] = tostring(money),
-                        ["Unit"] = tostring(v.Name),
-                        ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
-                    }})
-                    set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Money : "..tostring(money),["4"] = "Action : PlaceTower",["5"] = "Unit : "..tostring(v.Name)})
-                    writemacro()
-            task.spawn(function ()
-                v:WaitForChild("Upgrade"):GetPropertyChangedSignal("Value"):Connect(function ()
-                    if Options.Record.Value then
+        end)
+        task.spawn(function ()
+            game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip"):GetPropertyChangedSignal("Value"):Connect(function()
+                if Options.Record.Value then
                     table.insert(Macro,{
-                        ["Upgrade"] = {
+                        ["AutoSkip"] = {
                             ["Wave"] = tostring(Wave()),
                             ["Time"] = tostring(Time()),
-                            ["Money"] = tostring(money),
-                            ["Unit"] = tostring(v.Name),
-                            ["Value"] = tostring(v:WaitForChild("Upgrade").Value),
-                            ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                            ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value,
                         }})
-                        set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Money : "..tostring(money),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v.Name),["6"] = "Value : "..tostring(v:WaitForChild("Upgrade").Value) })
+                        set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : AutoSkip",["4"] =  "Value : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)})
                         writemacro()
                     end
-                    end)
                 end)
+            end)
             task.spawn(function ()
-                    v:GetPropertyChangedSignal("Parent"):Connect(function ()
-                        if Options.Record.Value then
-                            table.insert(Macro,{
-                            ["Sell"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Unit"] = tostring(v.Name),
-                                ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
-                            }})
-                            set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Sell",["4"] = "Unit : "..tostring(v.Name) })
-                            writemacro()
-                        end
-                    end)
-                end)
-            task.spawn(function ()
-                v:WaitForChild("Targeting"):GetPropertyChangedSignal("Value"):Connect(function ()
+                game:GetService("ReplicatedStorage").Wave:GetPropertyChangedSignal("Value"):Connect(function ()
                     if Options.Record.Value then
-                        table.insert(Macro,{
-                            ["Target"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Unit"] = tostring(v.Name),
-                                ["Value"] = tostring(v:WaitForChild("Targeting").Value),
-                                ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
-                            }})
-                            set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Target",["4"] = "Unit : "..tostring(v.Name),["5"] =  "Value : "..tostring(v:WaitForChild("Targeting").Value) })
-                            writemacro()
-                        end
-                    end)
+                    table.insert(Macro,{
+                        ["AutoSkip"] = {
+                            ["Wave"] = tostring(Wave()),
+                            ["Time"] = tostring(Time()),
+                            ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value,
+                        }})
+                        set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Check AutoSkip",["4"] =  "Value : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)})
+                        writemacro()
+                    end
                 end)
+            end)
             task.spawn(function ()
-                game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip"):GetPropertyChangedSignal("Value"):Connect(function()
-                    if Options.Record.Value then
-                        table.insert(Macro,{
-                            ["AutoSkip"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value,
-                            }})
-                            set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : AutoSkip",["4"] =  "Value : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)})
-                            writemacro()
-                        end
-                    end)
-                end)
-                task.spawn(function ()
-                    game:GetService("ReplicatedStorage").Wave:GetPropertyChangedSignal("Value"):Connect(function ()
+                local a = getrawmetatable(game);
+                local b = a.__namecall;
+                setreadonly(a,false)
+                a.__namecall = newcclosure(function (self,...)
+                    local arg = {...};
+                    local method = getnamecallmethod();
+                    task.spawn(function ()
                         if Options.Record.Value then
-                        table.insert(Macro,{
-                            ["AutoSkip"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Value"] = game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value,
-                            }})
-                            set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Check AutoSkip",["4"] =  "Value : "..tostring(game.Players.LocalPlayer.PlayerGui:WaitForChild("Settings"):WaitForChild("AutoSkip").Value)})
-                            writemacro()
-                        end
-                    end)
-                end)
-                task.spawn(function ()
-                    local a = getrawmetatable(game);
-                    local b = a.__namecall;
-                    setreadonly(a,false)
-                    a.__namecall = newcclosure(function (self,...)
-                        local arg = {...};
-                        local method = getnamecallmethod();
-                        task.spawn(function ()
-                            if Options.Record.Value then
-                            if self.Name == "Ability" and method == "InvokeServer" then
-                                local action_1 = arg[1]
-                                if not getgenv().incool_down then
-                                    table.insert(Macro,{
-                                        ["Ability"] = {
-                                            ["Wave"] = tostring(Wave()),
-                                            ["Time"] = tostring(Time()),
-                                            ["Unit"] = tostring(action_1),
-                                            ["Position"] = tostring(action_1:WaitForChild("HumanoidRootPart").Position),
-                                        }})
-                                    set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Ability",["4"] = "Unit : "..tostring(action_1) })
-                                    writemacro()
-                                end
-                            elseif self.Name == "VoteSkip" and method == "FireServer" then
+                        if self.Name == "Ability" and method == "InvokeServer" then
+                            local action_1 = arg[1]
+                            if not getgenv().incool_down then
                                 table.insert(Macro,{
-                                    ["VoteSkip"] = {
+                                    ["Ability"] = {
                                         ["Wave"] = tostring(Wave()),
                                         ["Time"] = tostring(Time()),
+                                        ["Unit"] = tostring(action_1),
+                                        ["Position"] = tostring(action_1:WaitForChild("HumanoidRootPart").Position),
                                     }})
-                                    set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : VoteSkip" })
-                                    writemacro()
-                                end
+                                set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Ability",["4"] = "Unit : "..tostring(action_1) })
+                                writemacro()
                             end
-                            end)
-                            return b(self,...)
+                        elseif self.Name == "VoteSkip" and method == "FireServer" then
+                            table.insert(Macro,{
+                                ["VoteSkip"] = {
+                                    ["Wave"] = tostring(Wave()),
+                                    ["Time"] = tostring(Time()),
+                                }})
+                                set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : VoteSkip" })
+                                writemacro()
+                            end
+                        end
+                        end)
+                        return b(self,...)
+                    end)
+                end)
+                task.spawn(function ()
+                    game.workspace.Towers.ChildAdded:Connect(function (v)
+                        if Options.Record.Value then
+                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                table.insert(Macro,{
+                                    ["PlaceTower"] = {
+                                        ["Wave"] = tostring(Wave()),
+                                        ["Time"] = tostring(Time()),
+                                        ["Money"] = tostring(money),
+                                        ["Unit"] = tostring(v.Name),
+                                        ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                                    }})
+                                    set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Money : "..tostring(money),["4"] = "Action : PlaceTower",["5"] = "Unit : "..tostring(v.Name)})
+                                    writemacro()
+                            task.spawn(function ()
+                                v:WaitForChild("Upgrade"):GetPropertyChangedSignal("Value"):Connect(function ()
+                                    if Options.Record.Value then
+                                    table.insert(Macro,{
+                                        ["Upgrade"] = {
+                                            ["Wave"] = tostring(Wave()),
+                                            ["Time"] = tostring(Time()),
+                                            ["Money"] = tostring(money),
+                                            ["Unit"] = tostring(v.Name),
+                                            ["Value"] = tostring(v:WaitForChild("Upgrade").Value),
+                                            ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                                        }})
+                                        set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Money : "..tostring(money),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v.Name),["6"] = "Value : "..tostring(v:WaitForChild("Upgrade").Value) })
+                                        writemacro()
+                                    end
+                                    end)
+                                end)
+                            task.spawn(function ()
+                                    v:GetPropertyChangedSignal("Parent"):Connect(function ()
+                                        if Options.Record.Value then
+                                            table.insert(Macro,{
+                                            ["Sell"] = {
+                                                ["Wave"] = tostring(Wave()),
+                                                ["Time"] = tostring(Time()),
+                                                ["Unit"] = tostring(v.Name),
+                                                ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                                            }})
+                                            set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Sell",["4"] = "Unit : "..tostring(v.Name) })
+                                            writemacro()
+                                        end
+                                    end)
+                                end)
+                            task.spawn(function ()
+                            v:WaitForChild("Targeting"):GetPropertyChangedSignal("Value"):Connect(function ()
+                                if Options.Record.Value then
+                                    table.insert(Macro,{
+                                        ["Target"] = {
+                                            ["Wave"] = tostring(Wave()),
+                                            ["Time"] = tostring(Time()),
+                                            ["Unit"] = tostring(v.Name),
+                                            ["Value"] = tostring(v:WaitForChild("Targeting").Value),
+                                            ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                                    }})
+                                set_grap("new",{["1"] = "Wave : "..tostring(Wave()),["2"] = "Time : "..tostring(Time()),["3"] = "Action : Target",["4"] = "Unit : "..tostring(v.Name),["5"] =  "Value : "..tostring(v:WaitForChild("Targeting").Value) })
+                                writemacro()
+                            end
                         end)
                     end)
                 end
             end
         end)
+    end)
     end)
 
     local function main_playstatus(val)
@@ -778,15 +805,20 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     task.spawn(function ()
         while wait() do
             if game.PlaceId == 12886143095 then return end
-            if Options.Record.Value or Options.Play.Value then
                 for i,v in pairs(current_action["Action"]) do
-                    if i == "new" and v["3"] and not v["4"] then
+                    if i == "Default" then
+                        Get_Paragrahp().Text = "Status nil [0]\nCurrent Time : "..tostring(Time())
+                    end
+                    if i == "end" then
+                        Get_Paragrahp().Text =v["1"].."\nCurrent Time : "..tostring(Time())
+                    else
+                    if i == "new" and v["3"] and not v["4"] and (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["4"] and not v["5"] then
+                    elseif i == "new" and v["4"] and not v["5"] (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["5"] and not v["6"] then
+                    elseif i == "new" and v["5"] and not v["6"] (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["6"] and not v["7"] then
+                    elseif i == "new" and v["6"] and not v["7"] (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\nCurrent Time : "..tostring(Time())
                     end
                 end
