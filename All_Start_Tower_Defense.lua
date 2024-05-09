@@ -4,6 +4,7 @@ if not game:GetService("Players").LocalPlayer.Character then game:GetService("Pl
 repeat task.wait() until not game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("LoadingScreen"):WaitForChild("Frame").Visible
 if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     repeat
+        if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
 
@@ -258,7 +259,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local a = getrawmetatable(game)
     local backs = a.__namecall
     local Macro = {}
-    local ActionTime_stopwait = {}
+    local ignore_the_values = {}
+    local current_val = 0
+    local Last_action = {["Action"] = {["Default"] = {["1"] = nil,["2"] = nil,["3"] = nil}}}
 
     do
         local function Notify(titile,Content,SubTitle,time)
@@ -309,24 +312,24 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
     repeat task.wait() until #Macro_Files >= 1
     ------------- Macro
-    Tabs.Main:AddParagraph({Title = "Macro Status",Content = "nil [0]"})
+    Tabs.Main:AddParagraph({Title = "Macro Status",Content = "Status nil [0]\nCurrent Time : 0.00"})
     local CurrentFiles = Tabs.Main:AddDropdown("Current_File", {
         Title = "Select File",
         Values = Macro_Files,
         Multi = false,
         Default = 1,
     })
-    local STOPTIME = Tabs.Main:AddDropdown("Stop_Wait_If", {
-        Title = "Stop Waiting for time if : ",
-        Description = "will out of wait for time while playing if wave 0 or money reach",
-        Values = {"Wave : 0","Money reach"},
+    local ignore_Its = Tabs.Main:AddDropdown("ignore_If", {
+        Title = "Ignore time / wave if",
+        Description = "will out of wait for time / wave while playing macro if wave 0 or money reach",
+        Values = {"wave 0","money reach"},
         Multi = true,
         Default = {nil},
     })
-    STOPTIME:OnChanged(function (Value)
-        ActionTime_stopwait = {}
+    ignore_Its:OnChanged(function (Value)
+        ignore_the_values = {}
         for Value, State in next, Value do
-            table.insert(ActionTime_stopwait, Value)
+            table.insert(ignore_the_values, Value)
         end
     end)
     Tabs.Main:AddInput("Input", {
@@ -419,6 +422,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             Options.Record:SetValue(false)
             Options.Play:SetValue(false)
             return Notify("Error","dont enable record / play macro together")
+        end
+        if Options.Record.Value and not Options.Play.Value then
+            repeat task.wait() until not Options.Record.Value
+            Last_action = {
+                ["Action"] = {
+                    ["end"] = {["1"] = "Ended ["..tostring(#Macro).."]" }
+                }}
         end
     end)
 
@@ -663,33 +673,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         return tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
     end
 
-    local current_play_action = {
-        ["Action"] = {
-            ["Default"] = {
-                ["1"] = nil,
-                ["2"] = nil,
-                ["3"] = nil
-            }
-        }
-    }
-
-    local current_val = 0
-    local function wait_for(values,number,actionname,val)
-        current_val = number
-        current_play_action = {
-            ["Action"] = {
-                [actionname] = val
-            }}
-            repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
-            if table.find(ActionTime_stopwait,"Wave : 0") and tonumber(values["Wave"]) == tonumber(0) then return end
-            if not table.find(ActionTime_stopwait,"Money reach") then
-            repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ActionTime_stopwait,"Money reach")
-            elseif not values["Money"] and table.find(ActionTime_stopwait,"Money reach") then
-                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
-            elseif values["Money"] and table.find(ActionTime_stopwait,"Money reach") then
-                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
-            end
-        end
 
     local function check_the_unitspawns(Unit,Position, cframe)
         if type(Position) == "string" then
@@ -700,149 +683,124 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
         for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
             if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
-            if (v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 ) or v.HumanoidRootPart.CFrame == cframe then
-                return v
-            end
+                if (v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2 ) or v.HumanoidRootPart.CFrame == cframe then
+                    return v
+                end
             end
         end
     end
 
-    local function test_upgrade(Unit,Position,Value)
-        if type(Position) == "string" then
-            Position = stringtopos(Position)
+    local function wait_for(values,number,actionname,val)
+        current_val = number
+        Last_action = {
+            ["Action"] = {
+                [actionname] = val
+            }}
+
+            if table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0) then return end
+
+            if not table.find(ignore_the_values,"money reach") then
+                repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or table.find(ignore_the_values,"money reach")
+            elseif table.find(ignore_the_values,"money reach") then
+                if values["Money"] then
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+                elseif not values["Money"] then
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
+                end
+            end
+
+            if not table.find(ignore_the_values,"money reach") then
+                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ignore_the_values,"money reach")
+            elseif table.find(ignore_the_values,"money reach") then
+                if values["Money"] then
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+                elseif not values["Money"] then
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
+                end
+            end
+
+            if values["Money"] then
+                repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+            end
         end
-        for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
-            if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
-                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).Magnitude < 2 then
-                    if tonumber(v:WaitForChild("UpgradeTag").Value) < tonumber(Value) then
-                        game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",v)
-                    elseif tonumber(v:WaitForChild("UpgradeTag").Value) >= tonumber(Value) then
-                        return v
+
+        PlayToggle:OnChanged(function ()
+            if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
+                for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
+                    if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
+                        local File = readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
+                        getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
                     end
                 end
-            end
-        end
-    end
-
-    PlayToggle:OnChanged(function ()
-        if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
-            for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
-                if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
-                    local File = readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
-                    getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
-                end
-            end
             task.spawn(function()
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
-                        ------------------------------------------ GAME SETTINGS ------------------------------------------
+                        if not Options.Play.Value or game:GetService("ReplicatedStorage").Lobby.Value then return end
                         if i == "VoteGameMode" and game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible and not Options.Auto_Vote.Value then
-                            wait_for(v,val,"VoteGameMode",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : VoteGameMode",["Value"] = "Value : "..tostring(v["Value"])})
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"])})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
-                            wait_for(v,val,"VoteWaveConfirm",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : VoteWaveConfirm"})
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteWaveConfirm"})
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                             repeat
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
-                            task.wait(0.25)
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
+                                task.wait(0.115)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                         elseif i == "AutoSkipWaves_CHANGE" then
-                            wait_for(v,val,"AutoSkipWaves_CHANGE",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : AutoSkipWaves_CHANGE"})
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkipWaves_CHANGE"})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
                         elseif i == "SpeedChange" then
-                            wait_for(v,val,"SpeedChange",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : SpeedChange",["Value"] = "Value : "..tostring(v["Value"])})
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SpeedChange",["4"] = "Value : "..tostring(v["Value"]) })
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
-
-                        ------------------------------------------ MAIN ------------------------------------------
-
                         elseif i == "Summon" then
-                            wait_for(v,val,"Summon",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Summon",["Rotation"] = "Rotation : "..tostring(v["Rotation"]),["Unit"] = "Unit : "..tostring(v["Unit"])})
-                            repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Summon",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Rotation : "..tostring(v["Rotation"]) })
+                            local cframe_And_position
+                            if v["Position"] then
+                                cframe_And_position = check_the_unitspawns(v["Unit"], v["Position"], v["CFrame"])
+                            elseif not v["Position"] then
+                                cframe_And_position = check_the_unitspawns(v["Unit"], nil, v["CFrame"])
+                            end
                             repeat
-                                local Unit
-                                if v["Position"] then
-                                    Unit = check_the_unitspawns(v["Unit"], v["Position"], v["CFrame"])
-                                elseif not v["Position"] then
-                                    Unit = check_the_unitspawns(v["Unit"], v["CFrame"])
-                                end
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
+                                task.wait(0.35)
+                            until cframe_And_position
+                        elseif i == "Upgrade" and check_the_unitspawns(v["Unit"], v["Position"] ) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Value : "..tostring(v["Value"] + 1) })
+                            repeat
+                                game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",check_the_unitspawns(v["Unit"],v["Position"]))
                                 task.wait(0.25)
-                            until Unit
-                        elseif i == "Upgrade" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            wait_for(v,val,"Upgrade",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Money"] = "Waiting For Money : "..tostring(v["Money"]),["Action"] = "Action : Upgrade",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = "Value : "..tostring(v["Value"] + 1)})
-                            repeat task.wait() until tonumber(Money()) >= tonumber(stringofnum(v["Money"]))
+                            until tonumber(check_the_unitspawns(v["Unit"], v["Position"]):WaitForChild("Upgrade").Value) >= tonumber(v["Value"])
+                        elseif i == "Sell" and check_the_unitspawns(v["Unit"], v["Position"] ) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : Sell",["4"] = "Unit : "..tostring(v["Unit"]) })
                             repeat
-                                test_upgrade(v["Unit"], v["Position"], v["Value"])
-                            task.wait(0.25)
-                                until test_upgrade(v["Unit"], v["Position"], v["Value"])
-                        elseif i == "Sell" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            wait_for(v,val,"Sell",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : Sell",["Unit"] = "Unit : "..tostring(v["Unit"])})
-                            repeat
-                                local sell
-                                if v["Position"] then
-                                    sell = check_the_unitspawns(v["Unit"], v["Position"], v["CFrame"])
-                                elseif not v["Position"] then
-                                    sell = check_the_unitspawns(v["Unit"], v["CFrame"])
-                                end
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Sell",check_the_unitspawns(v["Unit"],v["Position"]))
-                            task.wait(0.25)
-                                until not sell
-                        elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            wait_for(v,val,"ChangePriority",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : ChangePriority",["Unit"] = "Unit : "..tostring(v["Unit"])})
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("ChangePriority",check_the_unitspawns(v["Unit"],v["Position"]))
-                        elseif i == "AutoToggle" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            wait_for(v,val,"AutoToggle",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : AutoToggle",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = tostring(v["Value"])})
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
-                        elseif i == "UseSpecialMove" and check_the_unitspawns(v["Unit"],v["Position"]) then
-                            wait_for(v,val,"UseSpecialMove",{["Wave"] = "Waiting For Wave : "..tostring(v["Wave"]),["Time"] = "Waiting For Time : "..tostring(v["Time"]),["Action"] = "Action : UseSpecialMove",["Unit"] = "Unit : "..tostring(v["Unit"]),["Value"] = tostring(v["Value"])})
-                                repeat
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_the_unitspawns(v["Unit"],v["Position"]),tostring(v["Value"]))
-                                task.wait(0.25)
-                                until check_the_unitspawns(v["Unit"],v["Position"]):WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2").Value
+                                task.wait(0.1)
+                            until not check_the_unitspawns(v["Unit"], v["Position"] )
+                        elseif i == "ChangePriority" and check_the_unitspawns(v["Unit"], v["Position"] ) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : ChangePriority",["4"] = "Unit : "..tostring(v["Unit"]) })
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("ChangePriority",check_the_unitspawns(v["Unit"],v["Position"]))
+                        elseif i == "AutoToggle" and check_the_unitspawns(v["Unit"], v["Position"] ) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoToggle",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Value : "..tostring(v["Value"]) })
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoToggle",check_the_unitspawns(v["Unit"],v["Position"]),v["Value"])
+                        elseif i == "UseSpecialMove" and check_the_unitspawns(v["Unit"], v["Position"] ) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : UseSpecialMove",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Value : "..tostring(v["Value"]) })
+                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_the_unitspawns(v["Unit"],v["Position"]),tostring(v["Value"]))
                         end
-                        -------- END PLAYED -------- 
                         if val == #getgenv().Playing then
-                            current_play_action["Action"] = {
-                                ["End"] = {
-                                    ["val"] = val,
+                            Last_action = {
+                                ["Action"] = {
+                                    ["end"] = {["1"] = "Ended ["..tostring(val).."/"..tostring(#getgenv().Playing).."]" }
                                 }}
+                            end
                         end
                     end
-                end
-            end)
-        end
-    end)
-
-    local function main_playstatus()
-        return "Status Playing ["..current_val.."/"..#getgenv().Playing.."]"
-    end
-    spawn(function ()
-        while wait() do
-            if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
-                for i,v in pairs(current_play_action["Action"]) do
-                    if i == "End" then
-                        Get_Paragrahp().Text = "Status Playing Ended ["..v["val"].."/"..#getgenv().Playing.."]\nCurrent Time : "..tostring(Time())
-                    elseif i == "VoteGameMode" or i == "VoteWaveConfirm" or i == "AutoSkipWaves_CHANGE" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Action"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "SpeedChange" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Action"].."\n"..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "Summon" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Money"].."\n"..v["Action"].."\n"..v["Rotation"].."\n"..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "Upgrade" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Money"].."\n"..v["Action"].."\n"..v["Unit"].."\n"..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "Sell" or i == "ChangePriority" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Action"].."\n"..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "AutoToggle" or i == "UseSpecialMove" then
-                        Get_Paragrahp().Text = main_playstatus().."\n"..v["Wave"].."\n"..v["Time"].."\n"..v["Action"].."\n"..v["Unit"].."\n"..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    end
-                end
+                end)
             end
-        end
-    end)
+        end)
 
     repeat task.wait() until #Macro_Files >= 1
     warn("Loaded")
@@ -885,19 +843,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
 
-    local current_action = {
-        ["Action"] = {
-            ["Default"] = {
-                ["1"] = nil,
-                ["2"] = nil,
-                ["3"] = nil,
-            }
-        }
-    }
-    local function mainstats(values)
-        return "Status Recording ["..tostring(#Macro).."]\nWave : "..values["Wave"].."\nTime : "..values["Time"]
-    end
-
     local l_unit_l
     local l_upgrade_l
     task.spawn(function ()
@@ -914,7 +859,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
                                         if v.Name == action_2["Unit"] then
-                                            if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+                                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -926,53 +871,55 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Position"] = tostring(game.Workspace.Unit:WaitForChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
-                                    current_action["Action"] = {
-                                        ["Summon"] = {
-                                            ["Wave"] = tostring(Wave()),
-                                            ["Time"] = tostring(Time()),
-                                            ["Money"] = tostring(getmoney_units(action_2["Unit"])),
-                                            ["Action"] = tostring(action_1),
-                                            ["Rotation"] = tostring(action_2["Rotation"]),
-                                            ["Unit"] = tostring(action_2["Unit"]),
-                                        }}
-                                    writemacro()
-                                    if l_unit_l then
-                                        l_unit_l:Disconnect()
-                                        l_unit_l = nil
-                                    end
-                                else
-                                    if l_unit_l then
-                                        l_unit_l:Disconnect()
-                                        l_unit_l = nil
+                                    Last_action = {
+                                        ["Action"] = {
+                                            ["new"] = {
+                                            ["1"] = "Wave : "..tostring(Wave()),
+                                            ["2"] = "Time : "..tostring(Time()),
+                                            ["3"] = "Money : "..tostring(getmoney_units(action_2["Unit"])),
+                                            ["4"] = "Action : "..tostring(action_1),
+                                            ["5"] = "Unit : "..tostring(action_2["Unit"]),
+                                            ["6"] = "Rotation : "..tostring(action_2["Rotation"]),
+                                        }}}
+                                        writemacro()
+                                        if l_unit_l then
+                                            l_unit_l:Disconnect()
+                                            l_unit_l = nil
+                                        end
+                                    else
+                                        if l_unit_l then
+                                            l_unit_l:Disconnect()
+                                            l_unit_l = nil
+                                        end
                                     end
                                 end
-                            end
-                        end)
-                    end
-                elseif arg[1] == "Upgrade" then
-                    local action_1 = arg[1]
-                    local action_2 = arg[2]
-                    if tonumber(Money()) >= tonumber(stringofnum(getupgradevalues())) and not l_upgrade_l then
-                        l_upgrade_l = action_2:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
-                            table.insert(Macro,{
-                                ["Upgrade"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Money"] = tostring(getupgradevalues()),
-                                    ["Unit"] = tostring(action_2),
-                                    ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                            end)
+                        end
+                    elseif arg[1] == "Upgrade" then
+                        local action_1 = arg[1]
+                        local action_2 = arg[2]
+                        if tonumber(Money()) >= tonumber(stringofnum(getupgradevalues())) and not l_upgrade_l then
+                            l_upgrade_l = action_2:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
+                                table.insert(Macro,{
+                                    ["Upgrade"] = {
+                                        ["Wave"] = tostring(Wave()),
+                                        ["Time"] = tostring(Time()),
+                                        ["Money"] = tostring(getupgradevalues()),
+                                        ["Unit"] = tostring(action_2),
+                                        ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value),
+                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                 }
                             })
-                            current_action["Action"] = {
-                                ["Upgrade"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Money"] = tostring(getupgradevalues()),
-                                    ["Action"] = tostring(action_1),
-                                    ["Unit"] = tostring(action_2),
-                                    ["Value"] = tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
-                                }}
+                            Last_action = {
+                                ["Action"] = {
+                                    ["new"] = {
+                                    ["1"] = "Wave : "..tostring(Wave()),
+                                    ["2"] = "Time : "..tostring(Time()),
+                                    ["3"] = "Money : "..tostring(getupgradevalues()),
+                                    ["4"] = "Action : "..tostring(action_1),
+                                    ["5"] = "Unit : "..tostring(action_2),
+                                    ["6"] = "Value : "..tostring(action_2:WaitForChild("UpgradeTag").Value + 1),
+                                }}}
                                 writemacro()
                                 if l_upgrade_l then
                                     l_upgrade_l:Disconnect()
@@ -991,394 +938,417 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
                                     }
                                 })
-                                current_action["Action"] = {
-                                    ["Sell"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Action"] = tostring(action_1),
-                                        ["Unit"] = tostring(action_2),
-                                    }}
-                                writemacro()
-                            elseif arg[1] == "AutoToggle" then
-                                local action_1 = arg[1]
-                                local action_2 = arg[2]
-                                local action_3 = arg[3]
-                                table.insert(Macro,{
-                                    ["AutoToggle"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Unit"] = tostring(action_2),
-                                    ["Value"] = action_3,
-                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
-                                    }
-                                })
-                                current_action["Action"] = {
-                                    ["AutoToggle"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Action"] = tostring(action_1),
-                                        ["Unit"] = tostring(action_2),
-                                        ["Value"] = tostring(action_3),
-                                    }}
+                                Last_action = {
+                                    ["Action"] = {
+                                        ["new"] = {
+                                        ["1"] = "Wave : "..tostring(Wave()),
+                                        ["2"] = "Time : "..tostring(Time()),
+                                        ["3"] = "Action : "..tostring(action_1),
+                                        ["4"] = "Unit : "..tostring(action_2),
+                                    }}}
                                     writemacro()
-                                task.wait(0.25)
-                            elseif arg[1] == "UseSpecialMove" then
-                                local action_1 = arg[1]
-                                local action_2 = arg[2]
-                                local action_3 = arg[3]
-                                if not action_2:WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2").Value and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible then
+                                elseif arg[1] == "AutoToggle" then
+                                    local action_1 = arg[1]
+                                    local action_2 = arg[2]
+                                    local action_3 = arg[3]
                                     table.insert(Macro,{
-                                        ["UseSpecialMove"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Unit"] = tostring(action_2),
-                                        ["Value"] = tostring(action_3),
-                                        ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
-                                        }
-                                    })
-                                    current_action["Action"] = {
-                                        ["UseSpecialMove"] = {
+                                        ["AutoToggle"] = {
                                             ["Wave"] = tostring(Wave()),
                                             ["Time"] = tostring(Time()),
-                                            ["Action"] = tostring(action_1),
                                             ["Unit"] = tostring(action_2),
-                                            ["Value"] = tostring(action_3),
-                                        }}
-                                    writemacro()
-                                    task.wait(1)
-                            end
-                        elseif arg[1] == "ChangePriority" then
-                            local action_1 = arg[1]
-                            local action_2 = arg[2]
-                            table.insert(Macro,{
-                                ["ChangePriority"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Unit"] = tostring(action_2),
-                                ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
-                                }
-                            })
-                            current_action["Action"] = {
-                                ["ChangePriority"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
-                                    ["Unit"] = tostring(action_2),
-                            }}
-                            writemacro()
-                            task.wait(0.1)
-                            elseif arg[1] == "SpeedChange" then
-                                local action_1 = arg[1]
-                                local action_2 = arg[2]
-                                table.insert(Macro,{
-                                    ["SpeedChange"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Value"] = action_2,
-                                    }
-                                })
-                                current_action["Action"] = {
-                                    ["SpeedChange"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Action"] = tostring(action_1),
-                                        ["Value"] = tostring(action_2),
-                                }}
-                                writemacro()
-                                task.wait(0.015)
-                        elseif arg[1] == "VoteWaveConfirm" then
-                            local action_1 = arg[1]
-                            if game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
-                            table.insert(Macro,{
-                                ["VoteWaveConfirm"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                }
-                            })
-                            current_action["Action"] = {
-                                ["VoteWaveConfirm"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
-                            }}
-                            writemacro()
-                            task.wait(0.15)
-                        end
-                        elseif arg[1] == "AutoSkipWaves_CHANGE" then
-                            local action_1 = arg[1]
-                            table.insert(Macro,{
-                                ["AutoSkipWaves_CHANGE"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                }
-                            })
-                            current_action["Action"] = {
-                                ["AutoSkipWaves_CHANGE"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
-                            }}
-                            writemacro()
-                            task.wait(0.15)
-                        elseif arg[1] == "VoteGameMode" and not Options.Auto_Vote.Value then
-                            local action_1 = arg[1]
-                            local action_2 = arg[2]
-                            table.insert(Macro,{
-                                ["VoteGameMode"] = {
-                                ["Wave"] = tostring(Wave()),
-                                ["Time"] = tostring(Time()),
-                                ["Action"] = tostring(action_1),
-                                ["Value"] = tostring(action_2),
-                                }
-                            })
-                            current_action["Action"] = {
-                                ["VoteGameMode"] = {
-                                    ["Wave"] = tostring(Wave()),
-                                    ["Time"] = tostring(Time()),
-                                    ["Action"] = tostring(action_1),
-                                    ["Value"] = tostring(action_2),
-                            }}
-                            writemacro()
-                            task.wait(0.15)
-                            end
-                        end
-                    end
-                end)
-            return backs(self,...)
-        end)
-    setreadonly(a,true)
-    task.spawn(function ()
-        while wait() do
-            if Options.Record.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
-                for i,v in pairs(current_action["Action"]) do
-                    if i == "Default" then
-                        Get_Paragrahp().Text = "Status Recording ["..tostring(#Macro).."]\nCurrent Time : "..tostring(Time())
-                    elseif i == "Summon" then
-                        Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nRotation : "..v["Rotation"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "Upgrade" then
-                        Get_Paragrahp().Text = mainstats(v).."\nMoney : "..v["Money"].."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "UseSpecialMove" or i == "AutoToggle"  then
-                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "Sell" or i == "ChangePriority" then
-                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nUnit : "..v["Unit"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "SpeedChange" or i == "VoteGameMode" then
-                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nValue : "..v["Value"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "VoteWaveConfirm" or i == "AutoSkipWaves_CHANGE" then
-                        Get_Paragrahp().Text = mainstats(v).."\nAction : "..v["Action"].."\nCurrent Time : "..tostring(Time())
-                    end
-                end
-            end
-        end
-    end)
-end)
+                                            ["Value"] = action_3,
+                                            ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                        }
+                                    })
+                                    Last_action = {
+                                        ["Action"] = {
+                                            ["new"] = {
+                                            ["1"] = "Wave : "..tostring(Wave()),
+                                            ["2"] = "Time : "..tostring(Time()),
+                                            ["3"] = "Action : "..tostring(action_1),
+                                            ["4"] = "Unit : "..tostring(action_2),
+                                            ["5"] = "Value : "..tostring(action_3),
+                                        }}}
+                                        writemacro()
+                                        task.wait(0.25)
+                                    elseif arg[1] == "UseSpecialMove" then
+                                        local action_1 = arg[1]
+                                        local action_2 = arg[2]
+                                        local action_3 = arg[3]
+                                        if not action_2:WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2").Value and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible then
+                                            table.insert(Macro,{
+                                                ["UseSpecialMove"] = {
+                                                    ["Wave"] = tostring(Wave()),
+                                                    ["Time"] = tostring(Time()),
+                                                    ["Unit"] = tostring(action_2),
+                                                    ["Value"] = tostring(action_3),
+                                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                                }
+                                            })
+                                            Last_action = {
+                                                ["Action"] = {
+                                                    ["new"] = {
+                                                    ["1"] = "Wave : "..tostring(Wave()),
+                                                    ["2"] = "Time : "..tostring(Time()),
+                                                    ["3"] = "Action : "..tostring(action_1),
+                                                    ["4"] = "Unit : "..tostring(action_2),
+                                                    ["5"] = "Value : "..tostring(action_3),
+                                                }}}
+                                                writemacro()
+                                                task.wait(1)
+                                            end
+                                        elseif arg[1] == "ChangePriority" then
+                                            local action_1 = arg[1]
+                                            local action_2 = arg[2]
+                                            table.insert(Macro,{
+                                                ["ChangePriority"] = {
+                                                    ["Wave"] = tostring(Wave()),
+                                                    ["Time"] = tostring(Time()),
+                                                    ["Unit"] = tostring(action_2),
+                                                    ["Position"] = tostring(action_2:WaitForChild("HumanoidRootPart").Position),
+                                                }
+                                            })
+                                            Last_action = {
+                                                ["Action"] = {
+                                                    ["new"] = {
+                                                    ["1"] = "Wave : "..tostring(Wave()),
+                                                    ["2"] = "Time : "..tostring(Time()),
+                                                    ["3"] = "Action : "..tostring(action_1),
+                                                    ["4"] = "Unit : "..tostring(action_2),
+                                                }}}
+                                                writemacro()
+                                                task.wait(0.1)
+                                            elseif arg[1] == "SpeedChange" then
+                                                local action_1 = arg[1]
+                                                local action_2 = arg[2]
+                                                table.insert(Macro,{
+                                                    ["SpeedChange"] = {
+                                                        ["Wave"] = tostring(Wave()),
+                                                        ["Time"] = tostring(Time()),
+                                                        ["Value"] = action_2,
+                                                    }
+                                                })
+                                                Last_action = {
+                                                    ["Action"] = {
+                                                        ["new"] = {
+                                                        ["1"] = "Wave : "..tostring(Wave()),
+                                                        ["2"] = "Time : "..tostring(Time()),
+                                                        ["3"] = "Action : "..tostring(action_1),
+                                                        ["4"] = "Value : "..tostring(action_2),
+                                                    }}}
+                                                    writemacro()
+                                                    task.wait(0.015)
+                                                elseif arg[1] == "VoteWaveConfirm" then
+                                                    local action_1 = arg[1]
+                                                    if game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
+                                                        table.insert(Macro,{
+                                                            ["VoteWaveConfirm"] = {
+                                                                ["Wave"] = tostring(Wave()),
+                                                                ["Time"] = tostring(Time()),
+                                                            }
+                                                        })
+                                                        Last_action = {
+                                                            ["Action"] = {
+                                                                ["new"] = {
+                                                                ["1"] = "Wave : "..tostring(Wave()),
+                                                                ["2"] = "Time : "..tostring(Time()),
+                                                                ["3"] = "Action : "..tostring(action_1),
+                                                            }}}
+                                                            writemacro()
+                                                            task.wait(0.15)
+                                                        end
+                                                    elseif arg[1] == "AutoSkipWaves_CHANGE" then
+                                                        local action_1 = arg[1]
+                                                        table.insert(Macro,{
+                                                            ["AutoSkipWaves_CHANGE"] = {
+                                                                ["Wave"] = tostring(Wave()),
+                                                                ["Time"] = tostring(Time()),
+                                                            }
+                                                        })
+                                                        Last_action = {
+                                                            ["Action"] = {
+                                                                ["new"] = {
+                                                                ["1"] = "Wave : "..tostring(Wave()),
+                                                                ["2"] = "Time : "..tostring(Time()),
+                                                                ["3"] = "Action : "..tostring(action_1),
+                                                            }}}
+                                                            writemacro()
+                                                            task.wait(0.15)
+                                                        elseif arg[1] == "VoteGameMode" and not Options.Auto_Vote.Value then
+                                                            local action_1 = arg[1]
+                                                            local action_2 = arg[2]
+                                                            table.insert(Macro,{
+                                                                ["VoteGameMode"] = {
+                                                                    ["Wave"] = tostring(Wave()),
+                                                                    ["Time"] = tostring(Time()),
+                                                                    ["Action"] = tostring(action_1),
+                                                                    ["Value"] = tostring(action_2),
+                                                                }
+                                                            })
+                                                            Last_action = {
+                                                                ["Action"] = {
+                                                                    ["new"] = {
+                                                                    ["1"] = "Wave : "..tostring(Wave()),
+                                                                    ["2"] = "Time : "..tostring(Time()),
+                                                                    ["3"] = "Action : "..tostring(action_1),
+                                                                    ["4"] = "Value : "..tostring(action_2),
+                                                                }}}
+                                                                writemacro()
+                                                                task.wait(0.15)
+                                                            end
+                                                        end
+                                                    end
+                                                end)
+                                                return backs(self,...)
+                                            end)
+                                            setreadonly(a,true)
+                                        end)
 
-    spawn(function ()
-        while wait() do
-            pcall(function ()
-                if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
-                tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
-                else
-                    if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
-                        repeat
-                            if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
-                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
-                                task.wait(1)
-                            end
-                        until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
-                    elseif Options.SPEED.Value and Options.Speed.Value == "3X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" then
-                        if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
-                        else
-                            repeat 
-                                if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
-                                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
-                                    task.wait(1)
+                                        local function mainstatus(val)
+                                            if Options.Record.Value and val == "new" then
+                                                return "Status Recording ["..#Macro.."]\n"
+                                            elseif Options.Play.Value and val == "new" then
+                                                return "Status Playing ["..current_val.."/"..#getgenv().Playing.."]\n"
+                                            end
+                                        end
+
+                                        task.spawn(function ()
+                                            while wait() do
+                                                if game:GetService("ReplicatedStorage").Lobby.Value then return end
+                                                    for i,v in pairs(Last_action["Action"]) do
+                                                    if i == "Default" then
+                                                        Get_Paragrahp().Text = "Status nil [0]\nCurrent Time : "..tostring(Time())
+                                                    end
+                                                    if i == "end" then
+                                                        if Options.Record.Value then
+                                                            Get_Paragrahp().Text = "Status Recording "..v["1"].."\nCurrent Time : "..tostring(Time())
+                                                        elseif Options.Play.Value then
+                                                            Get_Paragrahp().Text = "Status Playing "..v["1"].."\nCurrent Time : "..tostring(Time())
+                                                        end
+                                                    end
+                                                    if i == "new" and v["3"] and not v["4"] then
+                                                        Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\nCurrent Time : "..tostring(Time())
+                                                    elseif i =="new" and v["4"] and not v["5"] then
+                                                        Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\nCurrent Time : "..tostring(Time())
+                                                    elseif i =="new" and v["5"] and not v["6"] then
+                                                        Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\nCurrent Time : "..tostring(Time())
+                                                    elseif i =="new" and v["6"] and not v["7"] then
+                                                        Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\nCurrent Time : "..tostring(Time())
+                                                    elseif i =="new" and v["7"] and not v["8"] then
+                                                        Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\n"..v["7"].."\nCurrent Time : "..tostring(Time())
+                                                    end
+                                                end
+                                            end
+                                        end)
+
+                                        spawn(function ()
+                                            while wait() do pcall(function ()
+                                                if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
+                                                tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
+                                                else
+                                                    if Options.SPEED.Value and Options.Speed.Value == "2X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+                                                        repeat
+                                                            if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "2X" then
+                                                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',true)
+                                                                task.wait(1)
+                                                            end
+                                                        until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "2X" or not Options.SPEED.Value or Options.Speed.Value ~= "2X"
+                                                    elseif Options.SPEED.Value and Options.Speed.Value == "3X" and tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" then
+                                                        if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+                                                        else
+                                                            repeat 
+                                                                if tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) ~= "3X" and game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+                                                                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer('SpeedChange',false)
+                                                                    task.wait(1)
+                                                                end
+                                                            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
+                                                            or not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275)
+                                                        end
+                                                    end
+                                                end
+                                            end)
+                                        end
+                                    end)
+
+                                    local function check_for_start()
+                                        if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible or game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.Visible then
+                                            return true
+                                        else
+                                            return false
+                                        end
+                                    end
+
+                                    local function get_stage()
+                                        if Options.Select_Mode.Value ~= "Story" then return end
+                                        local tonumber = tonumber(Options.Story_Map.Value:split(".")[1])
+                                        if tonumber == 1 then
+                                            return Options.Select_Stage.Value
+                                        else
+                                            if Options.Select_Stage.Value == "6" then
+                                                return  6 * tonumber
+                                            elseif Options.Select_Stage.Value == "5" then
+                                                return  6 * tonumber - 1
+                                        elseif Options.Select_Stage.Value == "4" then
+                                            return  6 * tonumber - 2
+                                        elseif Options.Select_Stage.Value == "3" then
+                                            return  6 * tonumber - 3
+                                        elseif Options.Select_Stage.Value ==  "2" then
+                                            return  6 * tonumber - 4
+                                        elseif Options.Select_Stage.Value == "1" then
+                                            return  6 * tonumber - 5
+                                        end
+                                    end
                                 end
-                            until tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == "1X" or not Options.SPEED.Value or Options.Speed.Value ~= "1X"
-                            or not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275)
+
+                                local function startbutton()
+                                    if Options.Select_Mode.Value ~= "Story" or not check_for_start() then return end
+                                    if game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionFrame.Visible then
+                                        task.wait(2)
+                                        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionFrame:GetChildren()) do
+                                            if v:IsA("Frame") and v.Name ~= "Friends" then
+                                                firesignal(v:FindFirstChild("Main"):FindFirstChild("Options"):FindFirstChild("PlayButton").MouseButton1Click,game.Players.LocalPlayer)
+                                            end
+                                        end
+                                    end
+                                end
+
+                                local function getmap()
+                                    if not check_for_start() or game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then return end
+                                    task.wait(1.5)
+                                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main:GetDescendants()) do
+                                        if v:FindFirstChild("MissionTitle") and v:FindFirstChild("FG") and v:FindFirstChild("MissionClick") then
+                                            if string.find(v.MissionTitle.Text,Options.Story_Map.Value) and Options.Select_Mode.Value == "Story" then
+                                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(get_stage()),true)
+                                            elseif string.find(v.MissionTitle.Text,Options.Infinite_Map.Value) and Options.Select_Mode.Value == "Infinity" then
+                                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
+                                            elseif Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and (string.find(v.MissionTitle.Text,Options.Challenge_Map.Value) or string.find(v.MissionTitle.Text,Options.Adventures_Map.Value))  then
+                                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
+                                            end
+                                        end
+                                    end
+                                end
+
+                                bv.MaxForce = Vector3.new(100000,100000,100000)
+                                bv.Velocity = Vector3.new(0,0,0)
+                                spawn(function ()
+                                    while wait() do
+                                        if not Options.Auto_Lobby.Value or not game:GetService("ReplicatedStorage").Lobby.Value then
+                                        else
+                                            if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then
+                                                firesignal(game.Players.LocalPlayer.PlayerGui.HUD.Start.MouseButton1Click,game.Players.LocalPlayer)
+                                            end
+                                            local plr = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                            if not check_for_start() and  not getgenv().STOP_TP then
+                                                plr.CFrame = get_the_cframeofdoor()
+                                                bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+                                                game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
+                                            elseif check_for_start()  then
+                                                getgenv().STOP_TP = true
+                                                plr.CFrame = CF()
+                                                getmap()
+                                                startbutton()
+                                            end
+                                        end
+                                        if not Options.Auto_Lobby.Value and game.Players.LocalPlayer.Character.Humanoid.PlatformStand then
+                                            game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+                                            bv.Parent = nil
+                                        end
+                                    end
+                                end)
+
+                                spawn(function ()
+                                    while wait() do pcall(function ()
+                                        if Options.AutoCliamReward.Value and game:GetService("ReplicatedStorage").Lobby.Value then
+                                            if game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible then
+                                                if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
+                                                    repeat
+                                                        VisibleForCodex(false)
+                                                        Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
+                                                        game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
+                                                        VisibleForCodex(false)
+                                                        task.wait(0.3)
+                                                    until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
+                                                else
+                                                    repeat
+                                                        ClamsReward()
+                                                        Event = game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Event.FG
+                                                        firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Tasks.FG.MouseButton1Click,game.Players.LocalPlayer)
+                                                        task.wait(1)
+                                                        ClamsReward()
+                                                        firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Daily.FG.MouseButton1Click,game.Players.LocalPlayer)
+                                                        task.wait(1)
+                                                        ClamsReward()
+                                                    until not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible
+                                                end
+                                            end
+                                            if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
+                                                Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
+                                                repeat
+                                                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
+                                                    task.wait(0.3)
+                                                until not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
+                                                VisibleForCodex(true)
+                                            end
+                                        end
+                                    end)
+                                end
+                            end)
+
+                            spawn(function ()
+                                game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
+                                    repeat wait(0.25) until Options.Replay_Return_Next.Value
+                                    if Options.Replay_Return_Next.Value then
+                                        repeat wait(0.15)
+                                            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
+                                        until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.Replay_Return_Next.Value
+                                    end
+                                end)
+                            end)
+
+                            spawn(function ()
+                                game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+                                    if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+                                        if Options.AutoRejoinError.Value then
+                                            repeat
+                                        game:GetService("TeleportService"):Teleport(4996049426)
+                                        wait()
+                                            until not Kick.Parent
+                                    end
+                                end
+                            end)
+                        end)
+
+                        spawn(function ()
+                            repeat wait() until game:IsLoaded()
+                            game:WaitForChild("CoreGui"):WaitForChild("CrazyDay")
+                            repeat wait() until game.CoreGui:FindFirstChild("CrazyDay")
+                            repeat wait() until Options.AutoCloseAfterExecute.Value
+                            game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = false
+                        end)
+
+                        spawn(function ()
+                            game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+                                getgenv().OnTeleport = true
+                                local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+                                if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+                                    QueueOnTeleport(
+                                        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()"
+                                    )
+                                end
+                            end)
+                        end)
+
+                        local function unload_ui()
+                            while wait() do
+                                if Fluent.Unloaded then 
+                                    game.CoreGui:FindFirstChild("Close/Open"):Destroy()
+                                    break
+                                end
+                            end
                         end
+                        coroutine.resume(coroutine.create(unload_ui))
+
                     end
-                end
-            end)
-        end
-    end)
-
-
-    local function check_for_start()
-        if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible or game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.Visible then
-            return true
-        else
-            return false
-        end
-    end
-
-    local function get_stage()
-        if Options.Select_Mode.Value ~= "Story" then return end
-        local tonumber = tonumber(Options.Story_Map.Value:split(".")[1])
-        if tonumber == 1 then
-            return Options.Select_Stage.Value
-        else
-            if Options.Select_Stage.Value == "6" then
-            return  6 * tonumber
-        elseif Options.Select_Stage.Value == "5" then
-            return  6 * tonumber - 1
-        elseif Options.Select_Stage.Value == "4" then
-            return  6 * tonumber - 2
-        elseif Options.Select_Stage.Value == "3" then
-            return  6 * tonumber - 3
-        elseif Options.Select_Stage.Value ==  "2" then
-            return  6 * tonumber - 4
-        elseif Options.Select_Stage.Value == "1" then
-            return  6 * tonumber - 5
-        end
-    end
-end
-
-local function startbutton()
-    if Options.Select_Mode.Value ~= "Story" or not check_for_start() then return end
-        if game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionFrame.Visible then
-        task.wait(2)
-            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionFrame:GetChildren()) do
-                if v:IsA("Frame") and v.Name ~= "Friends" then
-                    firesignal(v:FindFirstChild("Main"):FindFirstChild("Options"):FindFirstChild("PlayButton").MouseButton1Click,game.Players.LocalPlayer)
-                end
-            end
-        end
-    end
-
-local function getmap()
-    if not check_for_start() or game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then return end
-    task.wait(1.5)
-    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main:GetDescendants()) do
-        if v:FindFirstChild("MissionTitle") and v:FindFirstChild("FG") and v:FindFirstChild("MissionClick") then
-            if string.find(v.MissionTitle.Text,Options.Story_Map.Value) and Options.Select_Mode.Value == "Story" then
-                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(get_stage()),true)
-            elseif string.find(v.MissionTitle.Text,Options.Infinite_Map.Value) and Options.Select_Mode.Value == "Infinity" then
-                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
-            elseif Options.Select_Mode.Value == "Challenge" or Options.Select_Mode.Value == "Adventures" and (string.find(v.MissionTitle.Text,Options.Challenge_Map.Value) or string.find(v.MissionTitle.Text,Options.Adventures_Map.Value))  then
-                game:GetService("ReplicatedStorage").Remotes.Input:FireServer(RoomName.."Level",tostring(v),true)
-           end
-        end
-    end
-end
-
-    bv.MaxForce = Vector3.new(100000,100000,100000)
-    bv.Velocity = Vector3.new(0,0,0)
-    spawn(function ()
-    while wait() do
-        if not Options.Auto_Lobby.Value or not game:GetService("ReplicatedStorage").Lobby.Value then
-        else
-        if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then
-            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.Start.MouseButton1Click,game.Players.LocalPlayer)
-        end
-        local plr = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if not check_for_start() and  not getgenv().STOP_TP then
-            plr.CFrame = get_the_cframeofdoor()
-            bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-            game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
-        elseif check_for_start()  then
-            getgenv().STOP_TP = true
-            plr.CFrame = CF()
-            getmap()
-            startbutton()
-        end
-        end
-        if not Options.Auto_Lobby.Value and game.Players.LocalPlayer.Character.Humanoid.PlatformStand then
-            game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
-            bv.Parent = nil
-        end
-    end
-    end)
-
-    spawn(function ()
-        while wait() do pcall(function ()
-            if Options.AutoCliamReward.Value and game:GetService("ReplicatedStorage").Lobby.Value then
-                if game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible then
-                    if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
-                        repeat
-                            VisibleForCodex(false)
-                            Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
-                            game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
-                            VisibleForCodex(false)
-                            task.wait(0.3)
-                        until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
-                    else
-                        repeat
-                            ClamsReward()
-                            Event = game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Event.FG
-                            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Tasks.FG.MouseButton1Click,game.Players.LocalPlayer)
-                            task.wait(1)
-                            ClamsReward()
-                            firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Daily.FG.MouseButton1Click,game.Players.LocalPlayer)
-                            task.wait(1)
-                            ClamsReward()
-                        until not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible
-                    end
-                end
-                if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
-                    Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
-                    repeat
-                        game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
-                        task.wait(0.3)
-                    until not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible
-                    VisibleForCodex(true)
-                end
-            end
-        end)
-    end
-end)
-
-    spawn(function ()
-        game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
-            repeat wait(0.25) until Options.Replay_Return_Next.Value
-            if Options.Replay_Return_Next.Value then
-                repeat wait(0.15)
-                firesignal(game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.BG.Actions[Options.Ended_Action.Value].Activated,game.Players.LocalPlayer)
-                until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.Replay_Return_Next.Value
-            end
-        end)
-    end)
-
-    spawn(function ()
-        game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
-            if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
-                if Options.AutoRejoinError.Value then
-                    game:GetService("TeleportService"):Teleport(4996049426)
-                end
-            end
-        end)
-    end)
-
-    spawn(function ()
-        repeat wait() until game:IsLoaded()
-        game:WaitForChild("CoreGui"):WaitForChild("CrazyDay")
-        repeat wait() until game.CoreGui:FindFirstChild("CrazyDay")
-        repeat wait() until Options.AutoCloseAfterExecute.Value
-        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = false
-    end)
-
-    spawn(function ()
-        game.Players.LocalPlayer.OnTeleport:Connect(function(state)
-            getgenv().OnTeleport = true
-            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-            if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-            QueueOnTeleport(
-                "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()"
-            )
-            end
-        end)
-    end)
-
-    local function unload_ui()
-        while wait() do
-            if Fluent.Unloaded then 
-            game.CoreGui:FindFirstChild("Close/Open"):Destroy()
-                break
-            end
-        end
-    end
-    coroutine.resume(coroutine.create(unload_ui))
-
-end
-task.wait(0.25)
-until game.CoreGui:FindFirstChild("CrazyDay")
-end -- End Of If
+                task.wait(1)
+            until game.CoreGui:FindFirstChild("CrazyDay")
+        end -- End Of If
