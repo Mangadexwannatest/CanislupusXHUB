@@ -802,7 +802,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end
                 end)
             end
-            if not Options.Play.Value and count ~= 0 then
+            if not Options.Play.Value and count ~= 0 and getgenv().Playing ~= nil then
                 Last_action = {
                     ["Action"] = {
                         ["end"] = {["1"] = "Status Playing Ended ["..tostring(count).."/"..tostring(#getgenv().Playing).."]" }
