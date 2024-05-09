@@ -702,25 +702,23 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 [actionname] = val
             }}
 
-            if table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0) then return end
-
             if not table.find(ignore_the_values,"money reach") then
-                repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or table.find(ignore_the_values,"money reach")
+                repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or table.find(ignore_the_values,"money reach") or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
             elseif table.find(ignore_the_values,"money reach") then
                 if values["Money"] then
-                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"])) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
                 elseif not values["Money"] then
-                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"])
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
                 end
             end
 
             if not table.find(ignore_the_values,"money reach") then
-                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ignore_the_values,"money reach")
+                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ignore_the_values,"money reach") or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
             elseif table.find(ignore_the_values,"money reach") then
                 if values["Money"] then
-                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"]))
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"])) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
                 elseif not values["Money"] then
-                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"])
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
                 end
             end
 
@@ -754,8 +752,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 task.wait(0.115)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"]) or not Options.Play.Value
                         elseif i == "AutoSkipWaves_CHANGE" and tostring(skipwave_value()) ~= tostring(v["Value"]) then
-                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkipWaves_CHANGE"})
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkipWaves_CHANGE",["4"] = "Value : "..tostring(v["Value"])})
+                            repeat
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
+                            task.wait(0.25)
+                            until tostring(skipwave_value()) == tostring(v["Value"]) or not Options.Play.Value
                         elseif i == "SpeedChange" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SpeedChange",["4"] = "Value : "..tostring(v["Value"]) })
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
