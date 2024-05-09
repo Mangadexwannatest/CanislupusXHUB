@@ -729,6 +729,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
         local count = 0
         PlayToggle:OnChanged(function ()
+            if game:GetService("ReplicatedStorage").Lobby.Value then return end
             repeat task.wait() until #Macro_Files >= 1
             task.wait(0.5)
             if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
@@ -739,11 +740,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end
                 end
             task.spawn(function()
+                if game:GetService("ReplicatedStorage").Lobby.Value then return end
                 repeat task.wait() until #Macro_Files >= 1
                 task.wait(0.85)
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
-                        if not Options.Play.Value or game:GetService("ReplicatedStorage").Lobby.Value then return end
                         count = val
                         if i == "VoteGameMode" and game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible and not Options.Auto_Vote.Value then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"])})
@@ -767,13 +768,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         elseif i == "Summon" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Summon",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Rotation : "..tostring(v["Rotation"]) })
                             repeat
+                                local unit = check_the_unitspawns(v["Unit"], v["Position"])
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
                                 task.wait(0.15)
-                            until check_the_unitspawns(v["Unit"], v["Position"]) or not Options.Play.Value
+                            until unit or not Options.Play.Value
                         elseif i == "Upgrade" and check_the_unitspawns(v["Unit"], v["Position"] ) then
                             if tonumber(check_the_unitspawns(v["Unit"], v["Position"] ):WaitForChild("UpgradeTag").Value) < tonumber(v["Value"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Value : "..tostring(v["Value"] + 1) })
