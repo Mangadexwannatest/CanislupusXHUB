@@ -906,7 +906,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
                                         if v.Name == action_2["Unit"] then
-                                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                            if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -915,7 +915,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Rotation"] = tostring(action_2["Rotation"]),
                                         ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
-                                        ["Position"] = tostring(game.Workspace.Unit:WaitForChild(action_2["Unit"]):WaitForChild("HumanoidRootPart").Position),
+                                        ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
                                     Last_action = {
@@ -957,11 +957,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                 end
                                             end)
                                         end)]]
-                                        if l_unit_l then
-                                            l_unit_l:Disconnect()
-                                            l_unit_l = nil
-                                        end
-                                    else
                                         if l_unit_l then
                                             l_unit_l:Disconnect()
                                             l_unit_l = nil
