@@ -264,6 +264,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local ignore_the_values = {}
     local current_val = 0
     local Last_action = {["Action"] = {["Default"] = {["1"] = nil,["2"] = nil,["3"] = nil}}}
+    getgenv().Playing = nil
 
     do
         local function Notify(titile,Content,SubTitle,time)
