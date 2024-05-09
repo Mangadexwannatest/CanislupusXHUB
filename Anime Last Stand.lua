@@ -815,11 +815,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     else
                     if i == "new" and v["3"] and not v["4"] and (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["4"] and not v["5"] (Options.Record.Value or Options.Play.Value) then
+                    elseif i == "new" and v["4"] and not v["5"] and (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["5"] and not v["6"] (Options.Record.Value or Options.Play.Value) then
+                    elseif i == "new" and v["5"] and not v["6"] and (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\nCurrent Time : "..tostring(Time())
-                    elseif i == "new" and v["6"] and not v["7"] (Options.Record.Value or Options.Play.Value) then
+                    elseif i == "new" and v["6"] and not v["7"] and (Options.Record.Value or Options.Play.Value) then
                         Get_Paragrahp().Text = main_playstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\nCurrent Time : "..tostring(Time())
                     end
                 end
