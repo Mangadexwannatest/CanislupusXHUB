@@ -695,6 +695,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function wave_of_0()
+        if table.find(ignore_the_values,"wave 0") and tonumber(Wave()) == tonumber(0) then
+            return true
+        end
+    end
+
     local function wait_for(values,number,actionname,val)
         current_val = number
         Last_action = {
@@ -703,22 +709,22 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             }}
 
             if not table.find(ignore_the_values,"money reach") then
-                repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or table.find(ignore_the_values,"money reach") or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
+                repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or table.find(ignore_the_values,"money reach") or tonumber(Time()) >= tonumber(values["Time"]) or wave_of_0()
             elseif table.find(ignore_the_values,"money reach") then
                 if values["Money"] then
-                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"])) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or (tonumber(Money()) >= tonumber(stringofnum(values["Money"]))) or  (tonumber(Time()) >= tonumber(values["Time"])) or wave_of_0()
                 elseif not values["Money"] then
-                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0)) or  tonumber(Time()) >= tonumber(values["Time"])
+                    repeat task.wait() until tonumber(Wave()) >= tonumber(values["Wave"]) or (tonumber(Time()) >= tonumber(values["Time"])) or wave_of_0()
                 end
             end
 
             if not table.find(ignore_the_values,"money reach") then
-                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ignore_the_values,"money reach") or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
+                repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or table.find(ignore_the_values,"money reach") or wave_of_0()
             elseif table.find(ignore_the_values,"money reach") then
                 if values["Money"] then
-                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"])) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or tonumber(Money()) >= tonumber(stringofnum(values["Money"])) or wave_of_0()
                 elseif not values["Money"] then
-                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) or (table.find(ignore_the_values,"wave 0") and tonumber(values["Wave"]) == tonumber(0))
+                    repeat task.wait() until tonumber(Time()) >= tonumber(values["Time"]) wave_of_0()
                 end
             end
 
@@ -754,7 +760,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
-                                task.wait(0.115)
+                                task.wait(0.135)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"]) or not Options.Play.Value
                         elseif i == "AutoSkipWaves_CHANGE" and tostring(skipwave_value()) ~= tostring(v["Value"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkipWaves_CHANGE",["4"] = "Value : "..tostring(v["Value"])})
@@ -774,7 +780,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
-                                task.wait(0.15)
+                                task.wait(0.35)
                             until unit or not Options.Play.Value
                         elseif i == "Upgrade" and check_the_unitspawns(v["Unit"], v["Position"] ) then
                             if tonumber(check_the_unitspawns(v["Unit"], v["Position"] ):WaitForChild("UpgradeTag").Value) < tonumber(v["Value"]) then
@@ -903,10 +909,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             if arg[1] == "Summon" then
                                 local action_1 = arg[1]
                                 local action_2 = arg[2]
-                                if tonumber(Money()) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
+                                if tonumber(stringofnum(game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.CurrencyList.Cash.Text:split("$")[2])) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] then
-                                            if tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -928,39 +933,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["5"] = "Unit : "..tostring(action_2["Unit"]),
                                             ["6"] = "Rotation : "..tostring(action_2["Rotation"]),
                                         }}}
-                                        writemacro()
-                                        --[[ ใช้ได้ยุ แต่ อยากเปลี่ยนที่เฉยๆ
-                                            task.spawn(function ()
-                                            v:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
-                                                if Options.Record.Value then
-                                                    table.insert(Macro,{
-                                                        ["Upgrade"] = {
-                                                            ["Wave"] = tostring(Wave()),
-                                                            ["Time"] = tostring(Time()),
-                                                            ["Money"] = tostring(getupgradevalues()),
-                                                            ["Unit"] = tostring(v.Name),
-                                                            ["Value"] = tostring(v:WaitForChild("UpgradeTag").Value),
-                                                            ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
-                                                    }
-                                                })
-                                                Last_action = {
-                                                    ["Action"] = {
-                                                        ["new"] = {
-                                                        ["1"] = "Wave : "..tostring(Wave()),
-                                                        ["2"] = "Time : "..tostring(Time()),
-                                                        ["3"] = "Money : "..tostring(getupgradevalues()),
-                                                        ["4"] = "Action : Upgrade",
-                                                        ["5"] = "Unit : "..tostring(v.Name),
-                                                        ["6"] = "Value : "..tostring(v:WaitForChild("UpgradeTag").Value + 1),
-                                                    }}}
-                                                    writemacro()
-                                                end
-                                            end)
-                                        end)]]
-                                        if l_unit_l then
-                                            l_unit_l:Disconnect()
-                                            l_unit_l = nil
-                                        end
+                                    writemacro()
+                                    if l_unit_l then
+                                        l_unit_l:Disconnect()
+                                        l_unit_l = nil
                                     end
                                 end
                             end)
