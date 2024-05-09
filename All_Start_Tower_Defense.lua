@@ -760,7 +760,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         elseif i == "SpeedChange" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SpeedChange",["4"] = "Value : "..tostring(v["Value"]) })
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
-                        elseif i == "Summon" and not check_the_unitspawns(v["Unit"], v["Position"]) then
+                        elseif i == "Summon" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Summon",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Rotation : "..tostring(v["Rotation"]) })
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
