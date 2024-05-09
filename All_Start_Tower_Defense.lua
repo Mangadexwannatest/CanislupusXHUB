@@ -216,6 +216,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function skipwave_value()
+        return tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
+    end
+
    local function VisibleForCodex(value)
         if game:GetService("CoreGui"):FindFirstChild("Codex") then
             game:GetService("CoreGui"):FindFirstChild("Codex"):WaitForChild("gui").Enabled = value
@@ -676,9 +680,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local function waveuionshow()
         return game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible
     end
-    local function skipwave_value()
-        return tostring(game.Players.LocalPlayer.PlayerGui.HUD.Setting.Page.Main.Scroll.SettingV2.AutoSkip.Options.Toggle.CategoryName.Text)
-    end
 
 
     local function check_the_unitspawns(Unit,Position)
@@ -752,7 +753,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteWaveConfirm")
                                 task.wait(0.115)
                             until not waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"]) or not Options.Play.Value
-                        elseif i == "AutoSkipWaves_CHANGE" then
+                        elseif i == "AutoSkipWaves_CHANGE" and tostring(skipwave_value()) ~= tostring(v["Value"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkipWaves_CHANGE"})
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("AutoSkipWaves_CHANGE")
                         elseif i == "SpeedChange" then
@@ -1124,10 +1125,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                         end
                                                     elseif arg[1] == "AutoSkipWaves_CHANGE" then
                                                         local action_1 = arg[1]
+                                                        task.wait(0.55)
                                                         table.insert(Macro,{
                                                             ["AutoSkipWaves_CHANGE"] = {
                                                                 ["Wave"] = tostring(Wave()),
                                                                 ["Time"] = tostring(Time()),
+                                                                ["Value"] = tostring(skipwave_value()),
                                                             }
                                                         })
                                                         Last_action = {
@@ -1136,6 +1139,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                                 ["1"] = "Wave : "..tostring(Wave()),
                                                                 ["2"] = "Time : "..tostring(Time()),
                                                                 ["3"] = "Action : "..tostring(action_1),
+                                                                ["4"] = "Value : "..tostring(skipwave_value()),
                                                             }}}
                                                             writemacro()
                                                             task.wait(0.15)
