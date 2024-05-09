@@ -746,9 +746,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end
                 end
             task.spawn(function()
-                if game:GetService("ReplicatedStorage").Lobby.Value then return end
                 repeat task.wait() until #Macro_Files >= 1
-                task.wait(0.85)
+                if game:GetService("ReplicatedStorage").Lobby.Value then return end
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
                         count = val
