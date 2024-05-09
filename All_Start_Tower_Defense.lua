@@ -688,7 +688,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
         for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
             if v.Name == Unit and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
-                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 1.35 then
+                if v.HumanoidRootPart.Position == Position or (v.HumanoidRootPart.Position - Position).magnitude < 2.25 then
                     return v
                 end
             end
@@ -729,6 +729,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
         local count = 0
         PlayToggle:OnChanged(function ()
+            repeat task.wait() until #Macro_Files >= 1
+            task.wait(0.5)
             if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
                 for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
                     if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
@@ -737,6 +739,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end
                 end
             task.spawn(function()
+                repeat task.wait() until #Macro_Files >= 1
+                task.wait(0.85)
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
                         if not Options.Play.Value or game:GetService("ReplicatedStorage").Lobby.Value then return end
