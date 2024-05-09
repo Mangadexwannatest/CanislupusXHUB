@@ -177,6 +177,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local current_action = {["Action"] = {["Default"] = {["1"] = nil,["2"] = nil,["3"] = nil}}}
     local currentval = 0
     local IngoreTimeIF = {}
+    getgenv().Playing = nil
 
     do
         local function Notify(titile,Content,SubTitle,time)
@@ -584,10 +585,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end
             end)
         end
-        if not Options.Play.Value and count ~= 0 then
+        if not Options.Play.Value and count ~= 0 and getgenv().Playing ~= nil then
             current_action = {
                 ["Action"] = {
-                    ["end"] = {["1"] = "Status Playing Ended ["..tostring(count).."/"..tostring(#getgenv().Playing).."]" }
+                    ["end"] = {["1"] = "Status Playing Ended ["..tostring(count).."/"..tostring(getgenv().Playing).."]" }
                 }}
         end
     end)
