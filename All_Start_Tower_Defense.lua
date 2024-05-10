@@ -1302,12 +1302,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
                                 spawn(function ()
                                     while wait() do pcall(function ()
-                                        if check_for_start() then return end
                                         if Options.AutoCliamReward.Value and game:GetService("ReplicatedStorage").Lobby.Value then
                                             if game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible then
-                                                if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
+                                                if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible and not check_for_start() then
                                                     repeat
-                                                        if check_for_start() then return end
                                                         VisibleForCodex(false)
                                                         Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
                                                         game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
@@ -1316,7 +1314,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible or check_for_start()
                                                 else
                                                     repeat
-                                                        if check_for_start() then return end
                                                         ClamsReward()
                                                         Event = game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Event.FG
                                                         firesignal(game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Tabs.Tasks.FG.MouseButton1Click,game.Players.LocalPlayer)
@@ -1328,10 +1325,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     until not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible or check_for_start()
                                                 end
                                             end
-                                            if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible then
+                                            if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible and game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible and not check_for_start() then
                                                 Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
                                                 repeat
-                                                    if check_for_start() then return end
                                                     game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
                                                     task.wait(0.3)
                                                 until not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible or check_for_start()
