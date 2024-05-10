@@ -938,7 +938,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                             count += 1
                                             if v:FindFirstChild("Index") == nil then
+                                                repeat
+                                                    if v:FindFirstChild("Index")  == nil then
                                                 current_index(v,tostring(count))
+                                                    end
+                                                task.wait(0.115)
+                                                until v:FindFirstChild("Index")
                                             end
                                     table.insert(Macro,{
                                         ["Summon"] = {
