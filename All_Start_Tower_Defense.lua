@@ -156,6 +156,24 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function MacroStatusTExt()
+        for i,v in pairs(game:GetService("CoreGui"):WaitForChild("CrazyDay"):WaitForChild("MainStatus"):WaitForChild("CanvasGroup"):GetChildren()) do
+            if i == 1 then
+                for ii,vv in pairs(v:GetChildren()) do
+                    if ii == 3 then
+                        if vv:FindFirstChild("Frame") then
+                            for iii,vvv in pairs(vv.Frame:GetDescendants()) do
+                                if vvv.Name == "TextLabel" and string.find(vvv.Text,"Macro Status") then
+                                    return vvv
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     local function stringtocf(str)
         return CFrame.new(table.unpack(str:gsub(" ", ""):split(",")))
     end
@@ -438,11 +456,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             return Notify("Error","dont enable record / play macro together")
         end
         if Options.Record.Value and not Options.Play.Value then
+            MacroStatusTExt().Text = "Macro Status ["..tostring(Options.Current_File.Value).."]"
             Last_action = {
                 ["Action"] = {
                     ["end"] = {["1"] = "Status Recording ["..tostring(#Macro).."]" }
                 }}
             repeat task.wait() until not Options.Record.Value
+            MacroStatusTExt().Text = "Macro Status [nil]"
             Last_action = {
                 ["Action"] = {
                     ["end"] = {["1"] = "Status Recording Ended ["..tostring(#Macro).."]" }
@@ -768,6 +788,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 repeat task.wait() until #Macro_Files >= 1
                 if game:GetService("ReplicatedStorage").Lobby.Value then return end
                 task.wait(0.25)
+                MacroStatusTExt().Text = "Macro Status ["..tostring(Options.Current_File.Value).."]"
                 for val = 1,#getgenv().Playing do
                     for i,v in pairs(getgenv().Playing[val]) do
                         count = val
@@ -802,7 +823,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 })
                                 task.wait(0.35)
                                 if not index then
-                                    current_index(unit,tostring(v["Index"]))
+                                    current_index(unit,tonumber(v["Index"]))
                                 end
                             until unit or index or not Options.Play.Value
                         elseif i == "Upgrade" and check_index_values(v["Unit"], v["Index"]) then
@@ -840,6 +861,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end)
             end
             if not Options.Play.Value and count ~= 0 and getgenv().Playing ~= nil then
+                MacroStatusTExt().Text = "Macro Status [nil]"
                 Last_action = {
                     ["Action"] = {
                         ["end"] = {["1"] = "Status Playing Ended ["..tostring(count).."/"..tostring(#getgenv().Playing).."]" }
@@ -935,12 +957,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 local action_2 = arg[2]
                                 if tonumber(stringofnum(game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.CurrencyList.Cash.Text:split("$")[2])) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                        if v.Name == action_2["Unit"] and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
                                             count += 1
                                             if v:FindFirstChild("Index") == nil then
                                                 repeat
                                                     if v:FindFirstChild("Index")  == nil then
-                                                current_index(v,tostring(count))
+                                                current_index(v,tonumber(count))
                                                     end
                                                 task.wait(0.115)
                                                 until v:FindFirstChild("Index")
@@ -970,8 +992,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         }}}
                                     writemacro()
                                     if l_unit_l then
+                                        repeat
                                         l_unit_l:Disconnect()
                                         l_unit_l = nil
+                                        task.wait()
+                                        until not l_unit_l
                                     end
                                 end
                             end)
