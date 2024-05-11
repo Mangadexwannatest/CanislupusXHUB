@@ -145,7 +145,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     if ii == 3 then
                         if vv:FindFirstChild("Frame") then
                             for iii,vvv in pairs(vv.Frame:GetDescendants()) do
-                                if vvv.Name == "TextLabel" and tostring(vvv.Text) ~= "Macro Status" then
+                                if vvv.Name == "TextLabel" and not string.find(vvv.Text,"Macro Status") then
                                     return vvv
                                 end
                             end
