@@ -629,7 +629,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(check_index_values(v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
                     elseif i == "AutoUltToggle" and check_index_values(v["Index"]) then
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoUltToggle",["4"] = "Value : "..tostring(v["Value"]),["5"] = "UnitID : "..tostring(v["UnitID"]),["6"] = "Ult Name : "..tostring(v["UltName"]),["7"] = "Unit Index : "..tostring(v["Index"])  })
-                        game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(check_index_values(v["Value"],v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
+                        game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(v["Value"],check_index_values(v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
                     elseif i == "SellUnit" and check_index_values(v["Index"]) then 
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SellUnit",["4"] = "Unit Index : "..tostring(v["Index"])  })
                             game:GetService("ReplicatedStorage").RemoteEvents.ChangeUnitRemoteEvents.SellUnit:FireServer(check_index_values(v["Index"]):WaitForChild("U0Model"))
