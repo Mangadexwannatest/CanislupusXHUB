@@ -614,10 +614,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         until index or not Options.Play.Value
                     elseif i == "UpgradeUnit" and check_index_values(v["Index"]) then
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : UpgradeUnit",["5"] = "UpgradeType : "..tostring(v["TpyeUpgrade"]),["6"] = "Value : "..tostring(v["Value"]),["7"] = "Unit Index : "..tostring(v["Index"])  })
-                        repeat
                             game:GetService("ReplicatedStorage").RemoteFunctions.UpgradeUnitFunctions.UpgradeUnit:InvokeServer(check_index_values(v["Index"]):WaitForChild("U0Model"),tonumber(v["TpyeUpgrade"]))
-                            task.wait(0.25)
-                        until tonumber(check_index_values(v["Index"]):WaitForChild("U0Model"):WaitForChild("Values"):WaitForChild("UpgradeValues"):WaitForChild("Path"..tostring(v["TpyeUpgrade"]).."Upgrades").Value) >= tonumber(v["Value"] + 1) or not Options.Play.Value
                     elseif i == "ChangeTargeting" and check_index_values(v["Index"]) then
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : ChangeTargeting",["4"] = "Value : "..tostring(v["Value"]),["5"] = "Unit Index : "..tostring(v["Index"])  })
                         repeat
