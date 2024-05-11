@@ -390,6 +390,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local autojoin = Tabs.Lobby:AddToggle("auto_join_room", {Title = "Auto Join Lobby", Default = false })
 
+    local realstage,realroom
     autojoin:OnChanged(function ()
         if game.PlaceId ~= 17399149936 then return end
         roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
@@ -407,7 +408,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end)
 
-    local realstage,realroom
     stage:OnChanged(function (value)
         if game.PlaceId ~= 17399149936 then return end
         repeat wait() 
