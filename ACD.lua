@@ -121,6 +121,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function currentroom()
+        if game.PlaceId ~= 17399149936 then return end
+        for i,v in pairs(game:GetService("Workspace").TeleportRoomStory.Teleporters.Story:GetChildren()) do
+            if v.Name == "Chamber" then
+                if tostring(v.Values.OwnerName.Value) == game.Players.LocalPlayer.Name then
+                    return v
+                end
+            end
+        end
+    end
+
     local function current_index(parent,value)
         local int = Instance.new("IntValue")
         int.Name = "Index"
@@ -157,7 +168,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
-    local roomcframe,roomid
+    local roomcframe
     local function get_the_cframeofdoor()
         return CFrame.new(table.unpack(roomcframe:gsub(" ", ""):split(",")))
     end
@@ -390,29 +401,29 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local autojoin = Tabs.Lobby:AddToggle("auto_join_room", {Title = "Auto Join Lobby", Default = false })
 
-    local realstage,realroom
+    local realstage
 
     stage:OnChanged(function (value)
         if game.PlaceId ~= 17399149936 then return end
         if value == "Stage4 (Infinite Mode)" then
-            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-            realstage,realroom = "Stage4",tostring(roomid)
+            roomcframe = tostring(getroom().HitBox.CFrame)
+            realstage = "Stage4"
         elseif (value == "Stage1 or Stage2" or "Stage3") then
-            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-            realstage,realroom = tostring(Options.Select_Stage.Value),tostring(roomid)
+            roomcframe = tostring(getroom().HitBox.CFrame)
+            realstage = tostring(Options.Select_Stage.Value)
         end
     end)
 
     autojoin:OnChanged(function ()
         if game.PlaceId ~= 17399149936 then return end
-        roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
+        roomcframe = tostring(getroom().HitBox.CFrame)
         if Options.auto_join_room.Value then
             repeat 
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = get_the_cframeofdoor()
                 task.wait(0.1)
                 until game.Players.LocalPlayer.PlayerGui.PlayGUI.StageSelect.Visible
             repeat
-                game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(realroom))
+                game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(currentroom().Values.StageID.Value))
                 wait(1)
                 game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
                 task.wait(0.1)
@@ -446,7 +457,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         game.Players.LocalPlayer.PlayerGui.EndOfGameGUI.EndOfGame:GetPropertyChangedSignal("Visible"):Connect(function ()
             repeat task.wait() until Options.return_replay_next.Value
             task.wait(1)
+            if Options.select_missionend.Value ~= "BackToLobby" then
             game:GetService("ReplicatedStorage").RemoteEvents.UIRemoteEvents.PostEndGameClient:FireServer(Options.select_missionend.Value:lower())
+            else
+                game:GetService("ReplicatedStorage").RemoteEvents.UIRemoteEvents.PostEndGameClient:FireServer("backToLobby")
+            end
         end)
     end)
 
