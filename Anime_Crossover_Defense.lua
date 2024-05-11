@@ -569,6 +569,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 }
                             }
                         })
+                    else
+                        repeat
+                            getgenv().canplaying = true
+                        until getgenv().canplaying
                     end
                 end
             end
@@ -593,7 +597,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             repeat task.wait() until #Macro_Files >= 1
             if game.PlaceId == 17399149936 then return end
             task.wait(0.25)
-            repeat task.wait() until getgenv().canplaying
+            repeat task.wait() until warn(getgenv().canplaying)
             MacroStatusTExt().Text = "Macro Status ["..tostring(Options.Current_File.Value).."]"
             for val = 1,#getgenv().Playing do
                 for i,v in pairs(getgenv().Playing [val]) do
@@ -851,93 +855,93 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                 end
                                             end)
                                         end)
-                                        task.spawn(function ()
-                                            local a = getrawmetatable(game);
-                                            local b = a.__namecall;
-                                            setreadonly(a,false)
-                                            a.__namecall = newcclosure(function (self,...)
-                                                local arg = {...};
-                                                local method = getnamecallmethod();
-                                                task.spawn(function ()
-                                                    if Options.Record.Value and game.PlaceId ~= 17399149936 then
-                                                        if method == "FireServer" and (self.Name == "UseUltimate" or "AutoUltToggle" or "SellUnit") then
-                                                            if self.Name == "UseUltimate" and game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:FindFirstChild("UltimateTemplate") then
-                                                                local action_1 = arg[1]
-                                                                local action_2 = arg[2]
-                                                                local action_3 = arg[3]
-                                                                if not game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:WaitForChild("UltimateTemplate"):WaitForChild("InnerFrame"):WaitForChild("CooldownBar").Visible then
-                                                                table.insert(Macro,{
-                                                                    ["UseUltimate"] = {
-                                                                        ["Wave"] = tostring(Wave()),
-                                                                        ["Time"] = tostring(Time()),
-                                                                        ["UnitID"] = tostring(action_2),
-                                                                        ["UltName"] = tostring(action_3),
-                                                                        ["Index"] = tostring(action_1:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                    }
-                                                                })
-                                                                Last_action = {
-                                                                    ["Action"] = {
-                                                                        ["new"] = {
-                                                                        ["1"] = "Wave : "..tostring(Wave()),
-                                                                        ["2"] = "Time : "..tostring(Time()),
-                                                                        ["3"] = "Action : UseUltimate",
-                                                                        ["4"] = "UnitID : "..tostring(action_2),
-                                                                        ["5"] = "Ult Name : "..tostring(action_3),
-                                                                        ["6"] = "Unit Index : "..tostring(action_1:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                    }
-                                                                }}
-                                                                writemacro()
-                                                            end
-                                                        elseif self.Name == "AutoUltToggle" and game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:FindFirstChild("UltimateTemplate") then
-                                                            table.insert(Macro,{
-                                                                ["AutoUltToggle"] = {
-                                                                    ["Wave"] = tostring(Wave()),
-                                                                    ["Time"] = tostring(Time()),
-                                                                    ["Value"] = arg[1],
-                                                                    ["UnitID"] = tostring(arg[3]),
-                                                                    ["UltName"] = tostring(arg[4]),
-                                                                    ["Index"] = tostring(arg[2]:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                }
-                                                            })
-                                                            Last_action = {
-                                                                ["Action"] = {
-                                                                    ["new"] = {
-                                                                    ["1"] = "Wave : "..tostring(Wave()),
-                                                                    ["2"] = "Time : "..tostring(Time()),
-                                                                    ["3"] = "Action : AutoUltToggle",
-                                                                    ["4"] = "Value : "..tostring(arg[1]),
-                                                                    ["5"] = "UnitID : "..tostring(arg[3]),
-                                                                    ["6"] = "Ult Name : "..tostring(arg[4]),
-                                                                    ["7"] = "Unit Index : "..tostring(arg[2]:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                }
-                                                            }}
-                                                            writemacro()
-                                                        elseif self.Name == "SellUnit" then
-                                                            table.insert(Macro,{
-                                                                ["SellUnit"] = {
-                                                                    ["Wave"] = tostring(Wave()),
-                                                                    ["Time"] = tostring(Time()),
-                                                                    ["Index"] = tostring(arg[1]:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                }
-                                                            })
-                                                            Last_action = {
-                                                                ["Action"] = {
-                                                                    ["new"] = {
-                                                                    ["1"] = "Wave : "..tostring(Wave()),
-                                                                    ["2"] = "Time : "..tostring(Time()),
-                                                                    ["3"] = "Action : SellUnit",
-                                                                    ["4"] = "Unit Index : "..tostring(arg[1]:WaitForChild("Values"):WaitForChild("Index").Value),
-                                                                }
-                                                            }}
-                                                            writemacro()
-                                                            end
-                                                        end
-                                                    end
-                                                end)
-                                                return b(self,...)
-                                            end)
-                                        end)
                                     end
+                                end)
+                            end)
+                            task.spawn(function ()
+                                local a = getrawmetatable(game);
+                                local b = a.__namecall;
+                                setreadonly(a,false)
+                                a.__namecall = newcclosure(function (self,...)
+                                    local arg = {...};
+                                    local method = getnamecallmethod();
+                                    task.spawn(function ()
+                                        if Options.Record.Value and game.PlaceId ~= 17399149936 then
+                                            if method == "FireServer" and (self.Name == "UseUltimate" or "AutoUltToggle" or "SellUnit") then
+                                                if self.Name == "UseUltimate" and game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:FindFirstChild("UltimateTemplate") then
+                                                    local action_1 = arg[1]
+                                                    local action_2 = arg[2]
+                                                    local action_3 = arg[3]
+                                                    if not game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:WaitForChild("UltimateTemplate"):WaitForChild("InnerFrame"):WaitForChild("CooldownBar").Visible then
+                                                    table.insert(Macro,{
+                                                        ["UseUltimate"] = {
+                                                            ["Wave"] = tostring(Wave()),
+                                                            ["Time"] = tostring(Time()),
+                                                            ["UnitID"] = tostring(action_2),
+                                                            ["UltName"] = tostring(action_3),
+                                                            ["Index"] = tostring(action_1:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                        }
+                                                    })
+                                                    Last_action = {
+                                                        ["Action"] = {
+                                                            ["new"] = {
+                                                            ["1"] = "Wave : "..tostring(Wave()),
+                                                            ["2"] = "Time : "..tostring(Time()),
+                                                            ["3"] = "Action : UseUltimate",
+                                                            ["4"] = "UnitID : "..tostring(action_2),
+                                                            ["5"] = "Ult Name : "..tostring(action_3),
+                                                            ["6"] = "Unit Index : "..tostring(action_1:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                        }
+                                                    }}
+                                                    writemacro()
+                                                end
+                                            elseif self.Name == "AutoUltToggle" and game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:FindFirstChild("UltimateTemplate") then
+                                                table.insert(Macro,{
+                                                    ["AutoUltToggle"] = {
+                                                        ["Wave"] = tostring(Wave()),
+                                                        ["Time"] = tostring(Time()),
+                                                        ["Value"] = arg[1],
+                                                        ["UnitID"] = tostring(arg[3]),
+                                                        ["UltName"] = tostring(arg[4]),
+                                                        ["Index"] = tostring(arg[2]:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                    }
+                                                })
+                                                Last_action = {
+                                                    ["Action"] = {
+                                                        ["new"] = {
+                                                        ["1"] = "Wave : "..tostring(Wave()),
+                                                        ["2"] = "Time : "..tostring(Time()),
+                                                        ["3"] = "Action : AutoUltToggle",
+                                                        ["4"] = "Value : "..tostring(arg[1]),
+                                                        ["5"] = "UnitID : "..tostring(arg[3]),
+                                                        ["6"] = "Ult Name : "..tostring(arg[4]),
+                                                        ["7"] = "Unit Index : "..tostring(arg[2]:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                    }
+                                                }}
+                                                writemacro()
+                                            elseif self.Name == "SellUnit" then
+                                                table.insert(Macro,{
+                                                    ["SellUnit"] = {
+                                                        ["Wave"] = tostring(Wave()),
+                                                        ["Time"] = tostring(Time()),
+                                                        ["Index"] = tostring(arg[1]:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                    }
+                                                })
+                                                Last_action = {
+                                                    ["Action"] = {
+                                                        ["new"] = {
+                                                        ["1"] = "Wave : "..tostring(Wave()),
+                                                        ["2"] = "Time : "..tostring(Time()),
+                                                        ["3"] = "Action : SellUnit",
+                                                        ["4"] = "Unit Index : "..tostring(arg[1]:WaitForChild("Values"):WaitForChild("Index").Value),
+                                                    }
+                                                }}
+                                                writemacro()
+                                                end
+                                            end
+                                        end
+                                    end)
+                                    return b(self,...)
                                 end)
                             end)
                         end)
