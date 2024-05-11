@@ -587,6 +587,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             end
         end
 
+
     local count_val = 0
     PlayToggle:OnChanged(function ()
         if game.PlaceId == 17399149936 then return end
