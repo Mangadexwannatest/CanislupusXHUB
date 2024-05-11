@@ -385,16 +385,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local autojoin = Tabs.Lobby:AddToggle("auto_join_room", {Title = "Auto Join Lobby", Default = false })
 
-    local realstage,realroom
-    stage:OnChanged(function (value)
-        if game.PlaceId ~= 17399149936 then return end
-        if value == "Stage4 (Infinite Mode)" then
-            realstage,realroom = "Stage4",tostring(roomid.."inf")
-        else
-            realstage,realroom = tostring(value),tostring(roomid)
-        end
-    end)
-
     autojoin:OnChanged(function ()
         if game.PlaceId ~= 17399149936 then return end
         roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
@@ -409,6 +399,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
                 task.wait(0.1)
             until getgenv().OnTeleport
+        end
+    end)
+
+    local realstage,realroom
+    stage:OnChanged(function (value)
+        if game.PlaceId ~= 17399149936 then return end
+        repeat wait() until roomid
+        if value == "Stage4 (Infinite Mode)" then
+            realstage,realroom = "Stage4",tostring(roomid.."inf")
+        elseif value ~= "Stage4 (Infinite Mode)" then
+            realstage,realroom = tostring(value),tostring(roomid)
         end
     end)
 
@@ -969,17 +970,39 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             end
                         end)
 
+                        
                         spawn(function ()
-                            game.Players.LocalPlayer.OnTeleport:Connect(function(state)
-                                getgenv().OnTeleport = true
-                                local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-                                if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
-                                    QueueOnTeleport(
-                                        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Crossover_Defense.lua'))()"
-                                    )
+                            game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+                                if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+                                    if Options.AutoRejoinError.Value then
+                                        repeat
+                                    game:GetService("TeleportService"):Teleport(17399149936)
+                                    wait()
+                                        until not Kick.Parent
                                 end
-                            end)
+                            end
                         end)
+                    end)
+
+                    spawn(function ()
+                        repeat wait() until game:IsLoaded()
+                        game:WaitForChild("CoreGui"):WaitForChild("CrazyDay")
+                        repeat wait() until game.CoreGui:FindFirstChild("CrazyDay")
+                        repeat wait() until Options.AutoCloseAfterExecute.Value
+                        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = false
+                    end)
+
+                    spawn(function ()
+                        game.Players.LocalPlayer.OnTeleport:Connect(function(state)
+                            getgenv().OnTeleport = true
+                            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+                            if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
+                                QueueOnTeleport(
+                                    "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Crossover_Defense.lua'))()"
+                                )
+                            end
+                        end)
+                    end)
 
                     local function unload_ui()
                         while wait() do
