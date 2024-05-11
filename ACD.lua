@@ -579,6 +579,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             end
         end
 
+        local function ulttoggle(id,index,value,ult) -- กูใช้ remote เฉยๆแม่งไม่ติกให้กู
+            for i,v in pairs(game:GetService("Workspace").Units:GetChildren()) do
+                if tostring(v.U0Model.Values.UnitID.Value) == tostring(id) and tonumber(v.U0Model.Values.Index.Value) == tonumber(index) then
+                    game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.AutoUltToggle:FireServer(value,v.U0Model,tostring(v.U0Model.Values.UnitID.Value),tostring(ult))
+                end
+            end
+        end
+
     local count_val = 0
     PlayToggle:OnChanged(function ()
         if game.PlaceId == 17399149936 then return end
@@ -629,9 +637,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(check_index_values(v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
                     elseif i == "AutoUltToggle" and check_index_values(v["Index"]) then
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoUltToggle",["4"] = "Value : "..tostring(v["Value"]),["5"] = "UnitID : "..tostring(v["UnitID"]),["6"] = "Ult Name : "..tostring(v["UltName"]),["7"] = "Unit Index : "..tostring(v["Index"])  })
-                        game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(v["Value"],check_index_values(v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
-                        task.wait(0.1)
-                        game:GetService("ReplicatedStorage").RemoteEvents.UltimateRemoteEvents.UseUltimate:FireServer(v["Value"],check_index_values(v["Index"]):WaitForChild("U0Model"),tostring(v["UnitID"]),tostring(v["UltName"]) )
+                        ulttoggle(tostring(v["UnitID"]),tonumber(v["Index"],v["Value"]),tostring(v["UltName"]))
+
                     elseif i == "SellUnit" and check_index_values(v["Index"]) then 
                         wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SellUnit",["4"] = "Unit Index : "..tostring(v["Index"])  })
                             game:GetService("ReplicatedStorage").RemoteEvents.ChangeUnitRemoteEvents.SellUnit:FireServer(check_index_values(v["Index"]):WaitForChild("U0Model"))
