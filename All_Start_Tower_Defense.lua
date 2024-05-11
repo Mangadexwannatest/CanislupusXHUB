@@ -565,6 +565,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 table.insert(InfiniteTable,tostring(v.MissionTitle.Text))
             end
         end
+        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.Misc:GetChildren()) do
+            if v:IsA("Frame") then
+                if v.MissionTitle.Text ~= "GAUNTLET" then
+                    table.insert(InfiniteTable,tostring(v.MissionTitle.Text))
+                end
+            end
+        end
         for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.Challenges:GetChildren()) do
         if v:IsA("Frame")  then
             table.insert(ChallengeTable,tostring(v.MissionTitle.Text))
