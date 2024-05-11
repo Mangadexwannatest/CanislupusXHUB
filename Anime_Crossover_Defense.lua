@@ -569,9 +569,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 }
                             }
                         })
-                    else
+                    elseif tostring(v) == tostring(game:GetService("ReplicatedStorage").ReplicatedInfoFolder.GameRules.MapName.Value) then
                         repeat
                             getgenv().canplaying = true
+                            wait()
                         until getgenv().canplaying
                     end
                 end
@@ -597,7 +598,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             repeat task.wait() until #Macro_Files >= 1
             if game.PlaceId == 17399149936 then return end
             task.wait(0.25)
-            repeat task.wait() until warn(getgenv().canplaying)
+            repeat task.wait() until getgenv().canplaying
             MacroStatusTExt().Text = "Macro Status ["..tostring(Options.Current_File.Value).."]"
             for val = 1,#getgenv().Playing do
                 for i,v in pairs(getgenv().Playing [val]) do
