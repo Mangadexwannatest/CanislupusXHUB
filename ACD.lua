@@ -813,7 +813,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["Upgrade"] = {
                                                 ["Wave"] = tostring(Wave()),
                                                 ["Time"] = tostring(Time()),
-                                                ["Money"] = tostring(Money),
+                                                ["Money"] = tostring(money),
                                                 ["TpyeUpgrade"] = tostring(2),
                                                 ["Value"] = tostring(v:WaitForChild("U0Model"):WaitForChild("Values"):WaitForChild("UpgradeValues"):WaitForChild("Path2Upgrades").Value) - 1,
                                                 ["Index"] = tostring(v:WaitForChild("U0Model"):WaitForChild("Values"):WaitForChild("Index").Value),
@@ -1011,7 +1011,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
                             if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
                                 QueueOnTeleport(
-                                    "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ACD.lua'))()"
+                                    "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/Anime_Crossover_Defense.lua'))()"
                                 )
                             end
                         end)
