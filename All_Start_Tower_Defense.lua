@@ -344,7 +344,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
     repeat task.wait() until #Macro_Files >= 1
     ------------- Macro
-    Tabs.Main:AddParagraph({Title = "Macro Status",Content = "Status nil [0]\nCurrent Time : 0.00"})
+    Tabs.Main:AddParagraph({Title = "Macro Status [nil]",Content = "Status nil [0]\nCurrent Time : 0.00"})
     local CurrentFiles = Tabs.Main:AddDropdown("Current_File", {
         Title = "Select File",
         Values = Macro_Files,
