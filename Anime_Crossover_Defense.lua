@@ -405,10 +405,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local realstage,realroom
     stage:OnChanged(function (value)
         if game.PlaceId ~= 17399149936 then return end
-        repeat wait() until roomid
+        repeat wait() 
+            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
+        until roomid
         if value == "Stage4 (Infinite Mode)" then
+            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
             realstage,realroom = "Stage4",tostring(roomid.."inf")
         elseif value ~= "Stage4 (Infinite Mode)" then
+            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
             realstage,realroom = tostring(value),tostring(roomid)
         end
     end)
