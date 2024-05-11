@@ -391,6 +391,19 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local autojoin = Tabs.Lobby:AddToggle("auto_join_room", {Title = "Auto Join Lobby", Default = false })
 
     local realstage,realroom
+
+    stage:OnChanged(function (value)
+        if game.PlaceId ~= 17399149936 then return end
+        if value == "Stage4 (Infinite Mode)" then
+            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
+            realstage,realroom = "Stage4",tostring(roomid.."inf")
+        elseif value ~= "Stage4 (Infinite Mode)" then
+            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
+            realstage,realroom = tostring(value),tostring(roomid)
+        end
+    end)
+
+    
     autojoin:OnChanged(function ()
         if game.PlaceId ~= 17399149936 then return end
         roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
@@ -405,20 +418,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
                 task.wait(0.1)
             until getgenv().OnTeleport
-        end
-    end)
-
-    stage:OnChanged(function (value)
-        if game.PlaceId ~= 17399149936 then return end
-        repeat wait() 
-            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-        until roomid
-        if value == "Stage4 (Infinite Mode)" then
-            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-            realstage,realroom = "Stage4",tostring(roomid.."inf")
-        elseif value ~= "Stage4 (Infinite Mode)" then
-            roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-            realstage,realroom = tostring(value),tostring(roomid)
         end
     end)
 
