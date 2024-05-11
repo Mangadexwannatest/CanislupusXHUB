@@ -577,7 +577,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end
             end
         end
-
+        
         local function ulttoggle(id,index,value,ult) -- กูใช้ remote เฉยๆแม่งไม่ติกให้กู
             for i,v in pairs(game:GetService("Workspace").Units:GetChildren()) do
                 if tostring(v.U0Model.Values.UnitID.Value) == tostring(id) and tonumber(v.U0Model.Values.Index.Value) == tonumber(index) then
