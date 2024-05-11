@@ -397,9 +397,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         if value == "Stage4 (Infinite Mode)" then
             roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
             realstage,realroom = "Stage4",tostring(roomid)
-        elseif value ~= "Stage4 (Infinite Mode)" then
+        elseif (value == "Stage1 or Stage2" or "Stage3") then
             roomcframe,roomid = tostring(getroom().HitBox.CFrame),tostring(getroom().Values.StageID.Value)
-            realstage,realroom = tostring(value),tostring(roomid)
+            realstage,realroom = tostring(Options.Select_Stage.Value),tostring(roomid)
         end
     end)
 
