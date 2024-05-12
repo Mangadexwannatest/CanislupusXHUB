@@ -674,9 +674,19 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             task.wait(0.1)
                             game:GetService("ReplicatedStorage").RemoteFunctions.SpeedChange.ChangeSpeedRemoteFunction:InvokeServer()
                         until tostring(game.Players.LocalPlayer.PlayerGui.ScreenGui.SpeedFrame.SpeedButton.TextLabel.Text) == tostring(v["Value"])
-                    elseif i == "AutoSkip" then
-                        wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkip",["4"] = "Value : "..tostring(v["Value"])  })
-                        game:GetService("ReplicatedStorage").RemoteEvents.Settings.Toggle:FireServer("AutoSkip",v["Value"])
+                    elseif i == "Autoskip" then
+                        wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : Autoskip",["4"] = "Value : "..tostring(v["Value"])  })
+                        if v["Value"] == true then
+                            repeat
+                                firesignal(game.Players.LocalPlayer.PlayerGui.MenuGUI.SettingsFrame.ScrollingFrame.Autoskip.ToggleFrame.Button.MouseButton1Down)
+                                task.wait(0.1)
+                            until game.Players.LocalPlayer.PlayerGui.MenuGUI.SettingsFrame.ScrollingFrame.Autoskip.ToggleFrame.Button.Sphere.AbsolutePosition.X >= 650
+                        elseif v["Value"] == false then
+                            repeat
+                                firesignal(game.Players.LocalPlayer.PlayerGui.MenuGUI.SettingsFrame.ScrollingFrame.Autoskip.ToggleFrame.Button.MouseButton1Down)
+                                task.wait(0.1)
+                            until game.Players.LocalPlayer.PlayerGui.MenuGUI.SettingsFrame.ScrollingFrame.Autoskip.ToggleFrame.Button.Sphere.AbsolutePosition.X <= 640
+                        end
                     elseif i == "StartNextWave" and tonumber(Wave()) <= tonumber(v["Wave"]) then
                         current_val = val
                         Last_action = {["Action"] = {["new"] = {["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : StartNextWave" }}}
@@ -982,9 +992,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     }
                                                 }}
                                                 writemacro()
-                                            elseif self.Name == "Toggle" and arg[1] == "AutoSkip" then
+                                            elseif self.Name == "Toggle" and arg[1] == "Autoskip" then
+                                                if game.Players.LocalPlayer.PlayerGui.MenuGUI.SettingsFrame.Visible then
                                                 table.insert(Macro,{
-                                                    ["AutoSkip"] = {
+                                                    ["Autoskip"] = {
                                                         ["Wave"] = tostring(Wave()),
                                                         ["Time"] = tostring(Time()),
                                                         ["Value"] = arg[2],
@@ -995,11 +1006,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                         ["new"] = {
                                                         ["1"] = "Wave : "..tostring(Wave()),
                                                         ["2"] = "Time : "..tostring(Time()),
-                                                        ["3"] = "Action : AutoSkip",
+                                                        ["3"] = "Action : Autoskip",
                                                         ["4"] = "Value : "..tostring(arg[2]),
                                                     }
                                                 }}
                                                 writemacro()
+                                            end
                                             elseif self.Name == "StartNextWave" then
                                                 if game.Players.LocalPlayer.PlayerGui.ScreenGui.StartNextWave.Visible and tonumber(Wave()) ~= tonumber(0) then
                                                     table.insert(Macro,{
