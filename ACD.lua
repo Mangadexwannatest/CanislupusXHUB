@@ -152,6 +152,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    task.spawn(function ()
+        if game.PlaceId == 17399149936 then return end
+        game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui"):WaitForChild("StartNextWave")
+        if game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui"):WaitForChild("StartNextWave").Visible and tonumber(Wave()) == 0 then
+            repeat
+                game:GetService("ReplicatedStorage").RemoteEvents.EnemyRemoteEvents.StartNextWave:FireServer()
+                task.wait(1)
+            until not game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui"):WaitForChild("StartNextWave").Visible or tonumber(Wave()) > 0
+        end
+    end)
+
     local function Money()
         if game.PlaceId == 17399149936 then return end
         return game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitsSlotsFrame.CoinsFrame.CoinsText.Text
@@ -592,7 +603,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end
             end
         end
-        
+
         local function ulttoggle(id,index,value,ult) -- กูใช้ remote เฉยๆแม่งไม่ติกให้กู
             for i,v in pairs(game:GetService("Workspace").Units:GetChildren()) do
                 if tostring(v.U0Model.Values.UnitID.Value) == tostring(id) and tonumber(v.U0Model.Values.Index.Value) == tonumber(index) then
@@ -663,6 +674,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             task.wait(0.1)
                             game:GetService("ReplicatedStorage").RemoteFunctions.SpeedChange.ChangeSpeedRemoteFunction:InvokeServer()
                         until tostring(game.Players.LocalPlayer.PlayerGui.ScreenGui.SpeedFrame.SpeedButton.TextLabel.Text) == tostring(v["Value"])
+                    elseif i == "AutoSkip" then
+                        wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : AutoSkip",["4"] = "Value : "..tostring(v["Value"])  })
+                        game:GetService("ReplicatedStorage").RemoteEvents.Settings.Toggle:FireServer("AutoSkip",v["Value"])
+                    elseif i == "StartNextWave" and tonumber(Wave()) <= tonumber(v["Wave"]) then
+                        current_val = val
+                        Last_action = {["Action"] = {["new"] = {["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : StartNextWave" }}}
+                        repeat task.wait() until tonumber(Time()) >= tonumber(v["Time"]) or tonumber(Wave()) > tonumber(v["Wave"])
+                        repeat task.wait() until game.Players.LocalPlayer.PlayerGui.ScreenGui.StartNextWave.Visible or tonumber(Wave()) > tonumber(v["Wave"])
+                        game:GetService("ReplicatedStorage").RemoteEvents.EnemyRemoteEvents.StartNextWave:FireServer()
                     end
                     if val == #getgenv().Playing then
                         Last_action = {
@@ -892,7 +912,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     local method = getnamecallmethod();
                                     task.spawn(function ()
                                         if Options.Record.Value and game.PlaceId ~= 17399149936 then
-                                            if method == "FireServer" and (self.Name == "UseUltimate" or "AutoUltToggle" or "SellUnit") then
+                                            if method == "FireServer" and (self.Name == "UseUltimate" or "AutoUltToggle" or "SellUnit" or "Toggle" or "StartNextWave") then
                                                 if self.Name == "UseUltimate" and game.Players.LocalPlayer.PlayerGui.ScreenGui.UnitShower.UltimateButtons:FindFirstChild("UltimateTemplate") then
                                                     local action_1 = arg[1]
                                                     local action_2 = arg[2]
@@ -962,22 +982,58 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     }
                                                 }}
                                                 writemacro()
+                                            elseif self.Name == "Toggle" and arg[1] == "AutoSkip" then
+                                                table.insert(Macro,{
+                                                    ["AutoSkip"] = {
+                                                        ["Wave"] = tostring(Wave()),
+                                                        ["Time"] = tostring(Time()),
+                                                        ["Value"] = arg[2],
+                                                    }
+                                                })
+                                                Last_action = {
+                                                    ["Action"] = {
+                                                        ["new"] = {
+                                                        ["1"] = "Wave : "..tostring(Wave()),
+                                                        ["2"] = "Time : "..tostring(Time()),
+                                                        ["3"] = "Action : AutoSkip",
+                                                        ["4"] = "Value : "..tostring(arg[2]),
+                                                    }
+                                                }}
+                                                writemacro()
+                                            elseif self.Name == "StartNextWave" then
+                                                if game.Players.LocalPlayer.PlayerGui.ScreenGui.StartNextWave.Visible and tonumber(Wave()) ~= tonumber(0) then
+                                                    table.insert(Macro,{
+                                                        ["StartNextWave"] = {
+                                                            ["Wave"] = tostring(Wave()),
+                                                            ["Time"] = tostring(Time()),
+                                                        }
+                                                    })
+                                                    Last_action = {
+                                                        ["Action"] = {
+                                                            ["new"] = {
+                                                            ["1"] = "Wave : "..tostring(Wave()),
+                                                            ["2"] = "Time : "..tostring(Time()),
+                                                            ["3"] = "Action : StartNextWave",
+                                                        }
+                                                    }}
+                                                    writemacro()
                                                 end
                                             end
                                         end
-                                    end)
-                                    return b(self,...)
+                                    end
                                 end)
+                                return b(self,...)
                             end)
                         end)
+                    end)
 
-                        local function mainstatus(val)
-                            if Options.Record.Value and val == "new" then
-                                return "Status Recording ["..#Macro.."]\n"
-                            elseif Options.Play.Value and val == "new" then
-                                return "Status Playing ["..current_val.."/"..#getgenv().Playing.."]\n"
-                            end
+                    local function mainstatus(val)
+                        if Options.Record.Value and val == "new" then
+                            return "Status Recording ["..#Macro.."]\n"
+                        elseif Options.Play.Value and val == "new" then
+                            return "Status Playing ["..current_val.."/"..#getgenv().Playing.."]\n"
                         end
+                    end
 
                         task.spawn(function ()
                             while wait() do
