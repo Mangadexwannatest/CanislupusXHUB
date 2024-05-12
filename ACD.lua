@@ -179,10 +179,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
-    local roomcframe
-    local function get_the_cframeofdoor()
-        return CFrame.new(table.unpack(roomcframe:gsub(" ", ""):split(",")))
-    end
     local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
     local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
     local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -417,28 +413,27 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     stage:OnChanged(function (value)
         if game.PlaceId ~= 17399149936 then return end
         if value == "Stage4 (Infinite Mode)" then
-            roomcframe = tostring(getroom().HitBox.CFrame)
             realstage = "Stage4"
         elseif (value == "Stage1 or Stage2" or "Stage3") then
-            roomcframe = tostring(getroom().HitBox.CFrame)
             realstage = tostring(Options.Select_Stage.Value)
         end
     end)
 
     autojoin:OnChanged(function ()
         if game.PlaceId ~= 17399149936 then return end
-        roomcframe = tostring(getroom().HitBox.CFrame)
         if Options.auto_join_room.Value then
-            repeat 
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = get_the_cframeofdoor()
-                task.wait(0.1)
-                until game.Players.LocalPlayer.PlayerGui.PlayGUI.StageSelect.Visible
-            repeat
-                game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(currentroom().Values.StageID.Value))
-                wait(1)
-                game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
-                task.wait(0.1)
-            until getgenv().OnTeleport
+            while wait() do
+                if not currentroom() then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getroom().HitBox.CFrame
+                elseif currentroom() then
+                    game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(currentroom().Values.StageID.Value))
+                    wait(1)
+                    game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
+                end
+                if getgenv().OnTeleport or not Options.auto_join_room.Value then
+                    break
+                end
+            end
         end
     end)
 
