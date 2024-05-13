@@ -741,6 +741,16 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function check_its_index(Unit)
+        for i,v in pairs(game.Workspace:WaitForChild("Unit"):GetChildren()) do
+            if v.Name == Unit and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                if v:FindFirstChild("Index") == nil then
+                    return v
+                end
+            end
+        end
+    end
+
     local function wave_of_0()
         if table.find(ignore_the_values,"wave 0") and tonumber(Wave()) == tonumber(0) then
             return true
@@ -821,7 +831,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         elseif i == "Summon" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Summon",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Rotation : "..tostring(v["Rotation"]),["7"] = "Unit Index : "..tostring(v["Index"]) })
                             repeat
-                                local unit = check_the_unitspawns(v["Unit"], v["Position"])
                                 local index = check_index_values(v["Unit"], v["Index"])
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Summon",{
                                     ["Rotation"] = tonumber(v["Rotation"]),
@@ -830,9 +839,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 })
                                 task.wait(0.35)
                                 if not index then
-                                    current_index(unit,tonumber(v["Index"]))
+                                    current_index(check_its_index(v["Unit"] ),tonumber(v["Index"]))
                                 end
-                            until unit or index or not Options.Play.Value
+                            until index or not Options.Play.Value
                         elseif i == "Upgrade" and check_index_values(v["Unit"], v["Index"]) then
                             if tonumber(check_index_values(v["Unit"], v["Index"]):WaitForChild("UpgradeTag").Value) < tonumber(v["Value"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Value : "..tostring(v["Value"] + 1),["7"] = "Unit Index : "..tostring(v["Index"]) })
@@ -983,7 +992,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
                                         ["Index"] = tostring(v:WaitForChild("Index").Value),
-                                        ["Position"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
                                         }
                                     })
                                     Last_action = {
