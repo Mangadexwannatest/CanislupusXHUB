@@ -975,14 +975,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
                                         if v.Name == action_2["Unit"] and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
                                             count += 1
-                                            if v:FindFirstChild("Index") == nil then
                                                 repeat
                                                     if v:FindFirstChild("Index")  == nil then
                                                 current_index(v,tonumber(count))
                                                     end
-                                                task.wait(0.115)
+                                                task.wait()
                                                 until v:FindFirstChild("Index")
-                                            end
                                     table.insert(Macro,{
                                         ["Summon"] = {
                                         ["Wave"] = tostring(Wave()),
@@ -1006,13 +1004,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["7"] = "Unit Index : "..tostring(v:WaitForChild("Index").Value),
                                         }}}
                                     writemacro()
-                                    if l_unit_l then
                                         repeat
+                                            if l_unit_l then
                                         l_unit_l:Disconnect()
                                         l_unit_l = nil
+                                            end
                                         task.wait()
                                         until not l_unit_l
-                                    end
                                 end
                             end)
                         end
