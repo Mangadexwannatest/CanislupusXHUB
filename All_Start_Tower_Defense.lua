@@ -1015,7 +1015,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Money"] = tostring(getmoney_units(action_2["Unit"])),
                                         ["Rotation"] = tostring(action_2["Rotation"]),
-                                        ["CFrame"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
+                                        ["CFrame"] = tostring(action_2["cframe"]),
                                         ["Unit"] = tostring(action_2["Unit"]),
                                         ["Index"] = tostring(v:WaitForChild("Index").Value),
                                         }
