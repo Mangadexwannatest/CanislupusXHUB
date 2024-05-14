@@ -370,7 +370,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
     repeat task.wait() until #Macro_Files >= 1
     ------------- Macro
-    Tabs.Main:AddParagraph({Title = "Macro Status [nil]",Content = "Status nil [0]\nCurrent Time : 0.00"})
+    Tabs.Main:AddParagraph({Title = "Macro Status [nil]",Content = "Status nil [0]\nCurrent Time : 0"})
     local CurrentFiles = Tabs.Main:AddDropdown("Current_File", {
         Title = "Select File",
         Values = Macro_Files,
@@ -834,7 +834,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     for i,v in pairs(getgenv().Playing[val]) do
                         count = val
                         if i == "VoteGameMode" and game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible and not Options.Auto_Vote.Value then
-                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"])})
+                            Last_action = {
+                                ["Action"] = {
+                                    ["new"] = {["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"]) }
+                                }}
+                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"])
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteWaveConfirm"})
@@ -1011,7 +1015,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         ["Time"] = tostring(Time()),
                                         ["Money"] = tostring(getmoney_units(action_2["Unit"])),
                                         ["Rotation"] = tostring(action_2["Rotation"]),
-                                        ["CFrame"] = tostring(action_2["cframe"]),
+                                        ["CFrame"] = tostring(v:WaitForChild("HumanoidRootPart").Position),
                                         ["Unit"] = tostring(action_2["Unit"]),
                                         ["Index"] = tostring(v:WaitForChild("Index").Value),
                                         }
