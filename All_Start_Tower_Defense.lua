@@ -228,9 +228,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
 
     local function Time()
-        if game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
+        if game.Players.LocalPlayer.PlayerGui.HUD:FindFirstChild("Timerwave") and game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
         return game.Players.LocalPlayer.PlayerGui.HUD.Timerwave.Text
-    elseif game:GetService("ReplicatedStorage").Map.Value ~= "Gauntlet" then
+        elseif game.Players.LocalPlayer.PlayerGui.HUD:FindFirstChild("Timerwave") == nil and game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
+            return 0
+        elseif game:GetService("ReplicatedStorage").Map.Value ~= "Gauntlet" then
         return Workspace.DistributedGameTime
     end
     end
