@@ -219,11 +219,20 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
     local function Wave()
+        if game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
+            return 0
+        elseif game:GetService("ReplicatedStorage").Map.Value ~= "Gauntlet" then
         return game:GetService("ReplicatedStorage").WaveValue.Value
+        end
     end
 
+
     local function Time()
+        if game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
+        return game.Players.LocalPlayer.PlayerGui.HUD.Timerwave.Text
+    elseif game:GetService("ReplicatedStorage").Map.Value ~= "Gauntlet" then
         return Workspace.DistributedGameTime
+    end
     end
 
     local function ClamsReward()
@@ -567,9 +576,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
         for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.Misc:GetChildren()) do
             if v:IsA("Frame") then
-                if v.MissionTitle.Text ~= "GAUNTLET" then
                     table.insert(InfiniteTable,tostring(v.MissionTitle.Text))
-                end
             end
         end
         for i,v in pairs(game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.MissionChooser.Main.Challenges:GetChildren()) do
@@ -752,7 +759,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
     local function wave_of_0()
-        if table.find(ignore_the_values,"wave 0") and tonumber(Wave()) == tonumber(0) then
+        if game:GetService("ReplicatedStorage").Map.Value ~= "Gauntlet" and table.find(ignore_the_values,"wave 0") and tonumber(Wave()) == tonumber(0) then
             return true
         end
     end
