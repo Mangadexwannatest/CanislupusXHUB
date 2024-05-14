@@ -846,7 +846,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                     ["cframe"] = stringtocf(v["CFrame"]),
                                     ["Unit"] = v["Unit"],
                                 })
-                                task.wait(0.35)
+                                task.wait()
                                 if not index then
                                     current_index(check_its_index(v["Unit"] ),tonumber(v["Index"]))
                                 end
@@ -856,7 +856,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Upgrade",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Value : "..tostring(v["Value"] + 1),["7"] = "Unit Index : "..tostring(v["Index"]) })
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Server:InvokeServer("Upgrade",check_index_values(v["Unit"], v["Index"]))
-                                task.wait(0.25)
+                                task.wait()
                             until tonumber(check_index_values(v["Unit"], v["Index"]):WaitForChild("UpgradeTag").Value) >= tonumber(v["Value"]) or not Options.Play.Value
                         end
                         elseif i == "ChangePriority" and check_index_values(v["Unit"], v["Index"]) then
@@ -872,7 +872,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : Sell",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Unit Index : "..tostring(v["Index"]) })
                             repeat
                                 game:GetService("ReplicatedStorage").Remotes.Input:FireServer("Sell",check_index_values(v["Unit"], v["Index"]))
-                                task.wait(0.1)
+                                task.wait()
                             until not check_index_values(v["Unit"], v["Index"]) or not Options.Play.Value
                         end
                         if val == #getgenv().Playing then
