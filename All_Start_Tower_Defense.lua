@@ -723,7 +723,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
         Title = "Last Update May/15/2024",
-        Content = "[+] Macro (Play/Record) Support Multiple Abilities"
+        Content = "[+] Macro (Play/Record) Support Multiple Abilities\n[*] Fixed some time after unit reach max placement not record"
     })
 
     white:OnChanged(function()
@@ -1031,52 +1031,59 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 task.spawn(function ()
                     if Options.Record.Value then
                         if (method == "FireServer" or "InvokeServer") and (arg[1] == "Summon" or "Upgrade" or "UseSpecialMove" or "AutoToggle" or "Sell" or "SpeedChange" or "ChangePriority" or "VoteWaveConfirm" or "AutoSkipWaves_CHANGE" or "VoteGameMode") then
-                            if arg[1] == "Summon" then
-                                local action_1 = arg[1]
+                            if arg[1] == "Summon" and arg[2] then
                                 local action_2 = arg[2]
+                                repeat
+                                    if l_unit_l then
+                                        l_unit_l:Disconnect()
+                                        l_unit_l = nil
+                                    end
+                                    task.wait()
+                                until not l_unit_l
                                 if tonumber(stringofnum(game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.CurrencyList.Cash.Text:split("$")[2])) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
-                                            count += 1
-                                                repeat
-                                                    if v:FindFirstChild("Index") == nil then
-                                                        current_index(v,tonumber(count))
-                                                    end
+                                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                                count += 1
+                                                    repeat
+                                                        if v:FindFirstChild("Index") == nil then
+                                                            current_index(v,tonumber(count))
+                                                        end
+                                                    task.wait()
+                                                    until v:FindFirstChild("Index")
+                                        table.insert(Macro,{
+                                            ["Summon"] = {
+                                            ["Wave"] = tostring(Wave()),
+                                            ["Time"] = tostring(Time()),
+                                            ["Money"] = tostring(getmoney_units(action_2["Unit"])),
+                                            ["Rotation"] = tostring(action_2["Rotation"]),
+                                            ["CFrame"] = tostring(action_2["cframe"]),
+                                            ["Unit"] = tostring(action_2["Unit"]),
+                                            ["Index"] = tostring(v:WaitForChild("Index").Value),
+                                            }
+                                        })
+                                        Last_action = {
+                                            ["Action"] = {
+                                                ["new"] = {
+                                                ["1"] = "Wave : "..tostring(Wave()),
+                                                ["2"] = "Time : "..tostring(Time()),
+                                                ["3"] = "Money : "..tostring(getmoney_units(action_2["Unit"])),
+                                                ["4"] = "Action : "..tostring(arg[1]),
+                                                ["5"] = "Unit : "..tostring(action_2["Unit"]),
+                                                ["6"] = "Rotation : "..tostring(action_2["Rotation"]),
+                                                ["7"] = "Unit Index : "..tostring(v:WaitForChild("Index").Value),
+                                            }}}
+                                            repeat
+                                                if l_unit_l then
+                                                    l_unit_l:Disconnect()
+                                                    l_unit_l = nil
+                                                end
                                                 task.wait()
-                                                until v:FindFirstChild("Index")
-                                    table.insert(Macro,{
-                                        ["Summon"] = {
-                                        ["Wave"] = tostring(Wave()),
-                                        ["Time"] = tostring(Time()),
-                                        ["Money"] = tostring(getmoney_units(action_2["Unit"])),
-                                        ["Rotation"] = tostring(action_2["Rotation"]),
-                                        ["CFrame"] = tostring(action_2["cframe"]),
-                                        ["Unit"] = tostring(action_2["Unit"]),
-                                        ["Index"] = tostring(v:WaitForChild("Index").Value),
-                                        }
-                                    })
-                                    Last_action = {
-                                        ["Action"] = {
-                                            ["new"] = {
-                                            ["1"] = "Wave : "..tostring(Wave()),
-                                            ["2"] = "Time : "..tostring(Time()),
-                                            ["3"] = "Money : "..tostring(getmoney_units(action_2["Unit"])),
-                                            ["4"] = "Action : "..tostring(action_1),
-                                            ["5"] = "Unit : "..tostring(action_2["Unit"]),
-                                            ["6"] = "Rotation : "..tostring(action_2["Rotation"]),
-                                            ["7"] = "Unit Index : "..tostring(v:WaitForChild("Index").Value),
-                                        }}}
-                                        repeat
-                                            if l_unit_l then
-                                                l_unit_l:Disconnect()
-                                                l_unit_l = nil
-                                            end
-                                            task.wait()
-                                        until not l_unit_l
-                                    writemacro()
+                                            until not l_unit_l
+                                            writemacro()
+                                        end
+                                    end)
                                 end
-                            end)
-                        end
+                        --end
                     --[[ ใช้ได้ยุ แต่พอ cps มากกว่า 10 แม่ง อัดไม่ทัน
                         elseif arg[1] == "Upgrade" and game.Players.LocalPlayer.PlayerGui.HUD.UpgradeV2.Actions.Upgrade.Amount.Text ~= "Upgrade: MAX" then
                         local action_1 = arg[1]
@@ -1158,6 +1165,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         local action_2 = arg[2]
                                         local action_3 = arg[3]
                                         if not action_2:WaitForChild("SpecialMove"):WaitForChild("Special_Enabled2").Value and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible then
+                                            action_1 = arg[1]
+                                            action_2 = arg[2]
+                                            action_3 = arg[3]
                                             table.insert(Macro,{
                                                 ["UseSpecialMove"] = {
                                                     ["Wave"] = tostring(Wave()),
@@ -1219,14 +1229,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     end
                                                 end)
                                         elseif arg[1] == "ChangePriority" then
-                                            local action_1 = arg[1]
-                                            local action_2 = arg[2]
                                             table.insert(Macro,{
                                                 ["ChangePriority"] = {
                                                     ["Wave"] = tostring(Wave()),
                                                     ["Time"] = tostring(Time()),
-                                                    ["Unit"] = tostring(action_2),
-                                                    ["Index"] = tostring(action_2:WaitForChild("Index").Value),
+                                                    ["Unit"] = tostring(arg[2]),
+                                                    ["Index"] = tostring(arg[2]:WaitForChild("Index").Value),
                                                 }
                                             })
                                             Last_action = {
@@ -1234,20 +1242,18 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     ["new"] = {
                                                     ["1"] = "Wave : "..tostring(Wave()),
                                                     ["2"] = "Time : "..tostring(Time()),
-                                                    ["3"] = "Action : "..tostring(action_1),
-                                                    ["4"] = "Unit : "..tostring(action_2),
-                                                    ["5"] = "Unit : "..tostring(action_2:WaitForChild("Index").Value),
+                                                    ["3"] = "Action : "..tostring(arg[1]),
+                                                    ["4"] = "Unit : "..tostring(arg[2]),
+                                                    ["5"] = "Unit : "..tostring(arg[2]:WaitForChild("Index").Value),
                                                 }}}
                                                 writemacro()
                                                 task.wait(0.1)
                                             elseif arg[1] == "SpeedChange" then
-                                                local action_1 = arg[1]
-                                                local action_2 = arg[2]
                                                 table.insert(Macro,{
                                                     ["SpeedChange"] = {
                                                         ["Wave"] = tostring(Wave()),
                                                         ["Time"] = tostring(Time()),
-                                                        ["Value"] = action_2,
+                                                        ["Value"] = arg[2],
                                                     }
                                                 })
                                                 Last_action = {
@@ -1255,8 +1261,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                         ["new"] = {
                                                         ["1"] = "Wave : "..tostring(Wave()),
                                                         ["2"] = "Time : "..tostring(Time()),
-                                                        ["3"] = "Action : "..tostring(action_1),
-                                                        ["4"] = "Value : "..tostring(action_2),
+                                                        ["3"] = "Action : "..tostring(arg[1]),
+                                                        ["4"] = "Value : "..tostring(arg[2]),
                                                     }}}
                                                     writemacro()
                                                     task.wait(0.015)
