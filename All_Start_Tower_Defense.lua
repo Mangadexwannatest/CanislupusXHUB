@@ -1033,16 +1033,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         if (method == "FireServer" or "InvokeServer") and (arg[1] == "Summon" or "Upgrade" or "UseSpecialMove" or "AutoToggle" or "Sell" or "SpeedChange" or "ChangePriority" or "VoteWaveConfirm" or "AutoSkipWaves_CHANGE" or "VoteGameMode") then
                             if arg[1] == "Summon" and arg[2] then
                                 local action_2 = arg[2]
-                                repeat
-                                    if l_unit_l then
-                                        l_unit_l:Disconnect()
-                                        l_unit_l = nil
-                                    end
-                                    task.wait()
-                                until not l_unit_l
+                                if l_unit_l then
+                                    l_unit_l:Disconnect()
+                                    l_unit_l = nil
+                                end
                                 if tonumber(stringofnum(game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.CurrencyList.Cash.Text:split("$")[2])) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                            if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
+                                            if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                                 count += 1
                                                     repeat
                                                         if v:FindFirstChild("Index") == nil then
