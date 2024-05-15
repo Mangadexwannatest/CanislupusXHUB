@@ -838,8 +838,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["Action"] = {
                                     ["new"] = {["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"]) }
                                 }}
-                            repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"])
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
+                                task.spawn(function ()
+                                    repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"])
+                                    repeat
+                                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
+                                    task.wait(0.1)
+                                    until not game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"]) or Options.Auto_Vote.Value
+                                end)
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteWaveConfirm"})
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
