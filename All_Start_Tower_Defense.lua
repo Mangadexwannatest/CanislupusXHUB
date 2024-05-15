@@ -1036,11 +1036,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 local action_2 = arg[2]
                                 if tonumber(stringofnum(game.Players.LocalPlayer.PlayerGui.HUD.BottomFrame.CurrencyList.Cash.Text:split("$")[2])) >= tonumber(stringofnum(getmoney_units(action_2["Unit"]))) and not l_unit_l then
                                     l_unit_l = game.Workspace.Unit.ChildAdded:Connect(function (v)
-                                        if v.Name == action_2["Unit"] and tostring(v:WaitForChild("Owner").Value) == game.Players.LocalPlayer.Name then
+                                        if v.Name == action_2["Unit"] and v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                                             count += 1
                                                 repeat
-                                                    if v:FindFirstChild("Index")  == nil then
-                                                current_index(v,tonumber(count))
+                                                    if v:FindFirstChild("Index") == nil then
+                                                        current_index(v,tonumber(count))
                                                     end
                                                 task.wait()
                                                 until v:FindFirstChild("Index")
@@ -1066,14 +1066,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             ["6"] = "Rotation : "..tostring(action_2["Rotation"]),
                                             ["7"] = "Unit Index : "..tostring(v:WaitForChild("Index").Value),
                                         }}}
-                                    writemacro()
                                         repeat
                                             if l_unit_l then
-                                        l_unit_l:Disconnect()
-                                        l_unit_l = nil
+                                                l_unit_l:Disconnect()
+                                                l_unit_l = nil
                                             end
-                                        task.wait()
+                                            task.wait()
                                         until not l_unit_l
+                                    writemacro()
                                 end
                             end)
                         end
@@ -1205,7 +1205,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                                         ["5"] = "Value : "..tostring(v.TextLabel.Text),
                                                                         ["6"] = "Unit Index : "..tostring(action_2:WaitForChild("Index").Value),
                                                                     }}}
-                                                                    writemacro()
                                                                     repeat
                                                                         if TEXTMULTIPLE then
                                                                             TEXTMULTIPLE:Disconnect()
@@ -1213,6 +1212,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                                         end
                                                                         task.wait()
                                                                     until not TEXTMULTIPLE
+                                                                    writemacro()
                                                                 end)
                                                             end
                                                         end
