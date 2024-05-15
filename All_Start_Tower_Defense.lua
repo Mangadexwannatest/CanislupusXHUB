@@ -297,7 +297,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local Window = Fluent:CreateWindow({
         Title = "All Star Tower Defense",
-        SubTitle = "Last Update May/10/2024 [YT:CrazyDay/edek#1004]",
+        SubTitle = "Last Update May/15/2024 [YT:CrazyDay/edek#1004]",
         TabWidth = 160,
         Size = UDim2.fromOffset(580, 460),
         Acrylic = true,
@@ -722,8 +722,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     })
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
-        Title = "Last Update May/10/2024/11:42 [UTC + 07:00]",
-        Content = "[*] changed check unit position to index"
+        Title = "Last Update May/15/2024",
+        Content = "[+] Macro (Play/Record) Support Multiple Abilities"
     })
 
     white:OnChanged(function()
@@ -771,6 +771,22 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 if v:FindFirstChild("Index") == nil then
                     return v
                 end
+            end
+        end
+    end
+
+    local function fire(values)
+        local Signals = {"Activated", "MouseButton1Down", "MouseButton2Down", "MouseButton1Click", "MouseButton2Click"}
+        for i,Signal in pairs(Signals) do
+            firesignal(values[Signal])
+        end
+    end
+
+    local function get_multiple(value)
+        if game.Players.LocalPlayer.PlayerGui:FindFirstChild("MultipleAbilities") == nil then return end
+        for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MultipleAbilities.Frame:GetChildren()) do
+            if v.Name == "ImageButton" and tostring(v.TextLabel.Text) == value then
+                fire(v)
             end
         end
     end
@@ -892,6 +908,19 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         elseif i == "UseSpecialMove" and check_index_values(v["Unit"], v["Index"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : UseSpecialMove",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Value : "..tostring(v["Value"]),["6"] = "Unit Index : "..tostring(v["Index"]) })
                             game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_index_values(v["Unit"], v["Index"]),tostring(v["Value"]))
+                        elseif i == "UseMultipleAbilities" and check_index_values(v["Unit"], v["Index"]) then
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : UseMultipleAbilities",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Value : "..tostring(v["Value"]),["6"] = "Unit Index : "..tostring(v["Index"]) })
+                            repeat
+                                if game.Players.LocalPlayer.PlayerGui:FindFirstChild("MultipleAbilities") == nil then
+                                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer("UseSpecialMove",check_index_values(v["Unit"], v["Index"]),tostring(v["Value"]))
+                                end
+                                task.wait()
+                            until game.Players.LocalPlayer.PlayerGui:FindFirstChild("MultipleAbilities")
+                            game.Players.LocalPlayer.PlayerGui:WaitForChild("MultipleAbilities"):WaitForChild("Frame"):WaitForChild("ImageButton")
+                            repeat
+                                get_multiple(tostring(v["Value"]))
+                                task.wait()
+                            until game.Players.LocalPlayer.PlayerGui:FindFirstChild("MultipleAbilities") == nil
                         elseif i == "Sell" and check_index_values(v["Unit"], v["Index"]) then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : Sell",["4"] = "Unit : "..tostring(v["Unit"]),["5"] = "Unit Index : "..tostring(v["Index"]) })
                             repeat
@@ -961,6 +990,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local l_unit_l
     local count = 0
+    local TEXTMULTIPLE
     task.spawn(function ()
         task.spawn(function ()
             game.Workspace.Unit.ChildAdded:Connect(function (v)
@@ -1148,8 +1178,46 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     ["6"] = "Unit Index : "..tostring(action_2:WaitForChild("Index").Value),
                                                 }}}
                                                 writemacro()
-                                                task.wait(1)
+                                                task.wait(0.35)
                                             end
+                                            task.spawn(function ()
+                                                if game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("TextLabel").Text == "Multiple Abilities" then
+                                                    game.Players.LocalPlayer.PlayerGui:WaitForChild("MultipleAbilities"):WaitForChild("Frame")
+                                                    for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MultipleAbilities.Frame:GetChildren()) do
+                                                        if v:IsA("ImageButton") then
+                                                            TEXTMULTIPLE = v.Activated:Connect(function ()
+                                                                table.insert(Macro,{
+                                                                    ["UseMultipleAbilities"] = {
+                                                                        ["Wave"] = tostring(Wave()),
+                                                                        ["Time"] = tostring(Time()),
+                                                                        ["Unit"] = tostring(action_2),
+                                                                        ["Value"] = tostring(v.TextLabel.Text),
+                                                                        ["Index"] = tostring(action_2:WaitForChild("Index").Value),
+                                                                    }
+                                                                })
+                                                                Last_action = {
+                                                                    ["Action"] = {
+                                                                        ["new"] = {
+                                                                        ["1"] = "Wave : "..tostring(Wave()),
+                                                                        ["2"] = "Time : "..tostring(Time()),
+                                                                        ["3"] = "Action : UseMultipleAbilities",
+                                                                        ["4"] = "Unit : "..tostring(action_2),
+                                                                        ["5"] = "Value : "..tostring(v.TextLabel.Text),
+                                                                        ["6"] = "Unit Index : "..tostring(action_2:WaitForChild("Index").Value),
+                                                                    }}}
+                                                                    writemacro()
+                                                                    repeat
+                                                                        if TEXTMULTIPLE then
+                                                                            TEXTMULTIPLE:Disconnect()
+                                                                            TEXTMULTIPLE = nil
+                                                                        end
+                                                                        task.wait()
+                                                                    until not TEXTMULTIPLE
+                                                                end)
+                                                            end
+                                                        end
+                                                    end
+                                                end)
                                         elseif arg[1] == "ChangePriority" then
                                             local action_1 = arg[1]
                                             local action_2 = arg[2]
