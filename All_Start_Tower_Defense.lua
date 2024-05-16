@@ -226,19 +226,19 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
-    
+
     local function waithow()
         return tonumber(1) / tonumber(game:GetService("ReplicatedStorage").SpeedUP.Value)
     end
 
     local time_start = 0
-    task.spawn(function ()
+    coroutine.resume(coroutine.create(function()
         if game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then return end
         repeat task.wait() until tonumber(Wave()) > 0
         while wait(waithow()) do
             time_start += 1
         end
-    end)
+    end))
 
     local function Time()
         if game.Players.LocalPlayer.PlayerGui.HUD:FindFirstChild("Timerwave") and game:GetService("ReplicatedStorage").Map.Value == "Gauntlet" then
