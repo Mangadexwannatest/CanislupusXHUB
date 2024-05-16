@@ -297,7 +297,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
 
     local Window = Fluent:CreateWindow({
         Title = "All Star Tower Defense",
-        SubTitle = "Last Update May/15/2024 [YT:CrazyDay/edek#1004]",
+        SubTitle = "Last Update May/16/2024 [YT:CrazyDay/edek#1004]",
         TabWidth = 160,
         Size = UDim2.fromOffset(580, 460),
         Acrylic = true,
@@ -495,6 +495,76 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 }}
         end
     end)
+
+    local importoptions = Tabs.Main:AddSection('Import Macro')
+
+    importoptions:AddDropdown("ImportMethod", {
+        Title = "Select Mehod",
+        Description = nil,
+        Values = {"Discord","Github"},
+        Multi = false,
+        Default = 1,
+    })
+
+    importoptions:AddInput("ImportName", {
+        Title = "Import Name",
+        Description = "the name of file to make for import",
+        Default = nil,
+        Placeholder = "nil",
+        Numeric = false,
+        Finished = true,})
+
+    importoptions:AddInput("ImportLink", {
+        Title = "Import Link",
+        Description = "link of file location",
+        Default = nil,
+        Placeholder = "nil",
+        Numeric = false,
+        Finished = true,})
+
+    importoptions:AddButton({
+        Title = "Import",
+        Description = "press the button to import file",
+        Callback = function()
+            if Options.ImportName.Value == (nil or "") or Options.ImportLink.Value == (nil or "") then return Notify("Error","Value","make sure you dont forgot the import name/link") end
+            if (Options.ImportMethod.Value == "Discord" and not string.find(Options.ImportLink.Value,"https://cdn.discordapp.com/attachments/")) or (Options.ImportMethod.Value == "Github" and not string.find(Options.ImportLink.Value,"https://github.com/")) then return Notify("Error",tostring(Options.ImportMethod.Value),"make sure your link it's correct") end
+            repeat
+                if not isfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value)) then
+                    writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value), game:GetService("HttpService"):JSONEncode({}))
+                end
+                wait()
+            until isfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value))
+            if Options.ImportMethod.Value == "Discord" then
+                local getinfo = game:GetService("HttpService"):JSONEncode(game:HttpGet(tostring(Options.ImportLink.Value)))
+                writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value), getinfo:gsub('"%[','['):gsub('%]"',']'):gsub([[\]],''))
+            elseif Options.ImportMethod.Value == "Github" then
+                local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+                local linkmain = tostring(Options.ImportLink.Value)
+                local rawlink_g = linkmain:gsub("https://github.com","https://raw.githubusercontent.com"):gsub("/blob","")
+                local raw = httprequest({Url = tostring(rawlink_g),Method = "GET"})
+                local linkinfo = game:GetService("HttpService"):JSONEncode(raw.Body):gsub([[\]],''):gsub('"%[','['):gsub('%]n"',']')
+                writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value), linkinfo)
+            end
+            refreshmacroprofile()
+            CurrentFiles:SetValues(Macro_Files)
+            CurrentFiles:SetValue(Options.ImportName.Value)
+            Notify("Import Succeed",Options.ImportName.Value,"Macro Step Value : "..#game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.ImportName.Value))))
+        end
+    })
+
+    importoptions:AddButton({
+        Title = "How to Import?",
+        Description = "press the button to copy the link for import file tutorial",
+        Callback = function()
+            if Options.ImportMethod.Value == "Discord" then
+                setclipboard(tostring("https://streamable.com/ochwcz"))
+                Notify("Copy Succeed",tostring(Options.ImportMethod.Value),"https://streamable.com/ochwcz")
+            elseif Options.ImportMethod.Value == "Github" then
+                setclipboard(tostring("https://streamable.com/w1o9z0"))
+                Notify("Copy Succeed",tostring(Options.ImportMethod.Value),"https://streamable.com/w1o9z0")
+            end
+        end
+    })
 
     ------------- Game Options
     Tabs.Main:AddSection('Other')
@@ -722,8 +792,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     })
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
-        Title = "Last Update May/15/2024",
-        Content = "[+] Macro (Play/Record) Support Multiple Abilities\n[*] Fixed some time after unit reach max placement not record"
+        Title = "Update Log",
+        Content = "May/15/2024\n[+] Macro (Play/Record) Support Multiple Abilities\n\nMay/16/2024\n[+] Import Method (Discord/GitHub)\n[+] Import Macro\n[*] Fixed some time after unit reach max placement not record"
     })
 
     white:OnChanged(function()
@@ -1309,7 +1379,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                                 ["VoteGameMode"] = {
                                                                     ["Wave"] = tostring(Wave()),
                                                                     ["Time"] = tostring(Time()),
-                                                                    ["Action"] = tostring(action_1),
                                                                     ["Value"] = tostring(action_2),
                                                                 }
                                                             })
