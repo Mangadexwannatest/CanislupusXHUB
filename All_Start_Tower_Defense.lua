@@ -291,6 +291,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         int.Value = value
     end
 
+    local function exec()
+        return tostring(identifyexecutor())
+    end
+
+
     local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
     local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
     local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
@@ -334,7 +339,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         local function refreshmacroprofile()
             Macro_Files = {}
             for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
-                table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+                if exec() == "Fluxus" then
+                    table.insert(Macro_Files,v:split([[\]])[2]:split(".lua")[1])
+                elseif exec() ~= "Fluxus" then
+                    table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+                end
             end
         end
 
@@ -366,7 +375,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
     for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
-        table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+        if exec() == "Fluxus" then
+            table.insert(Macro_Files,v:split([[\]])[2]:split(".lua")[1])
+        elseif exec() ~= "Fluxus" then
+            table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+        end
     end
     repeat task.wait() until #Macro_Files >= 1
     ------------- Macro
@@ -906,9 +919,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             task.wait(0.5)
             if Options.Play.Value and not game:GetService("ReplicatedStorage").Lobby.Value then
                 for i,v in pairs(listfiles("/CrazyDay/ASTD/Macro")) do
-                    if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
-                        local File = readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
-                        getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
+                    if exec() == "Fluxus" then
+                        if v:split([[\]])[2]:split(".lua")[1] == Options.Current_File.Value then
+                            getgenv().Playing = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",v:split([[\]])[2]:split(".lua")[1])))
+                        end
+                    elseif exec() ~= "Fluxus" then
+                        if v:split([[/]])[5]:split(".lua")[1] == Options.Current_File.Value then
+                            getgenv().Playing = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",v:split([[/]])[5]:split(".lua")[1])))
+                        end
                     end
                 end
             task.spawn(function()
@@ -1557,9 +1575,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                 if not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible and not check_for_start() then
                                                     repeat
                                                         VisibleForCodex(false)
+                                                        VisibleForTrigon(false)
                                                         Task = game.Players.LocalPlayer.PlayerGui.HUD.LeftButton.TaskButton
                                                         game:GetService("VirtualInputManager"):SendMouseButtonEvent(Task.AbsolutePosition.X + 27.5, Task.AbsolutePosition.Y + 50, 0, not game.UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1), game, 0)
                                                         VisibleForCodex(false)
+                                                        VisibleForTrigon(false)
                                                         task.wait(0.3)
                                                     until game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible or check_for_start()
                                                 else
@@ -1582,6 +1602,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     task.wait(0.3)
                                                 until not game.Players.LocalPlayer.PlayerGui.HUD.TasksV2.Visible or check_for_start()
                                                 VisibleForCodex(true)
+                                                VisibleForTrigon(true)
                                             end
                                         end
                                     end)
