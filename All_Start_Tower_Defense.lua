@@ -1541,10 +1541,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         repeat wait() until Options.AutoRejoinError.Value
                                         task.wait(5.5)
                                         game:GetService("TeleportService"):Teleport(4996049426)
-                                        excutescript()
-                                end
+                                        task.spawn(function ()
+                                            excutescript()
+                                        end)
+                                    end
+                                end)
                             end)
-                        end)
 
                         spawn(function ()
                             repeat wait() until game:IsLoaded()
