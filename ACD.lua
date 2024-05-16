@@ -126,11 +126,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         for i,v in pairs(game:GetService("Workspace").TeleportRoomStory.Teleporters.Story:GetChildren()) do
             if v.Name == "Chamber" then
                 if tostring(v.Values.OwnerName.Value) == game.Players.LocalPlayer.Name then
-                    return v
+                    return v.Values.StageID.Value
                 end
             end
         end
     end
+
 
     local function current_index(parent,value)
         local int = Instance.new("IntValue")
@@ -510,7 +511,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 if not currentroom() then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getroom().HitBox.CFrame
                 elseif currentroom() then
-                    game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(currentroom().Values.StageID.Value))
+                    game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.SelectStage:FireServer(tostring(Options.Select_World.Value),tostring(realstage),tostring(currentroom()))
                     wait(1)
                     game:GetService("ReplicatedStorage").RemoteEvents.Teleporters.StartTeleport:FireServer()
                 end
@@ -572,8 +573,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local UpdateLog = Tabs.Other:AddSection("Update Log")
     UpdateLog:AddParagraph({
         Title = "Update Log",
-        Content = "May/16/2024\n[+] Import Method (Discord/GitHub)\n[+] Import Macro\n[*] Fixed not support (Fluxus) excutor"
+        Content = "May/16/2024\n[+] Import Method (Discord/GitHub)\n[+] Import Macro\n[*] Fixed not support (Fluxus) excutor\n\nLast updated because i probably shouldn't play this map anymore"
     })
+
 
     white:OnChanged(function()
         if Options.AutoWhiteScreen.Value then
