@@ -179,13 +179,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end
 
+    local function exec()
+        return tostring(identifyexecutor())
+    end
+
     local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
     local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
     local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
     local Window = Fluent:CreateWindow({
         Title = "Anime Crossover Defense",
-        SubTitle = "Last Update May/11/2024 [CrazyDay:edek#1004]",
+        SubTitle = "Last Update May/16/2024 [CrazyDay:edek#1004]",
         TabWidth = 160,
         Size = UDim2.fromOffset(580, 460),
         Acrylic = true,
@@ -222,7 +226,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local function refreshmacroprofile()
         Macro_Files = {}
         for i,v in pairs(listfiles("/CrazyDay/ACD/Macro")) do
-            table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+            if exec() == "Fluxus" then
+                table.insert(Macro_Files,v:split([[\]])[2]:split(".lua")[1])
+            elseif exec() ~= "Fluxus" then
+                table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+            end
         end
     end
 
@@ -255,8 +263,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     end
 
 
+
     for i,v in pairs(listfiles("/CrazyDay/ACD/Macro")) do
-        table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+        if exec() == "Fluxus" then
+            table.insert(Macro_Files,v:split([[\]])[2]:split(".lua")[1])
+        elseif exec() ~= "Fluxus" then
+            table.insert(Macro_Files,v:split("/")[5]:split(".lua")[1])
+        end
     end
     repeat task.wait() until #Macro_Files >= 1
     ------------- Macro
@@ -391,6 +404,77 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         end
     end)
 
+    local importoptions = Tabs.Main:AddSection('Import Macro')
+
+    importoptions:AddDropdown("ImportMethod", {
+        Title = "Select Mehod",
+        Description = nil,
+        Values = {"Discord","Github"},
+        Multi = false,
+        Default = 1,
+    })
+
+    importoptions:AddInput("ImportName", {
+        Title = "Import Name",
+        Description = "the name of file to make for import",
+        Default = nil,
+        Placeholder = "nil",
+        Numeric = false,
+        Finished = true,})
+
+    importoptions:AddInput("ImportLink", {
+        Title = "Import Link",
+        Description = "link of file location",
+        Default = nil,
+        Placeholder = "nil",
+        Numeric = false,
+        Finished = true,})
+
+    importoptions:AddButton({
+        Title = "Import",
+        Description = "press the button to import file",
+        Callback = function()
+            if Options.ImportName.Value == (nil or "") or Options.ImportLink.Value == (nil or "") then return Notify("Error","Value","make sure you dont forgot the import name/link") end
+            if (Options.ImportMethod.Value == "Discord" and not string.find(Options.ImportLink.Value,"https://cdn.discordapp.com/attachments/")) or (Options.ImportMethod.Value == "Github" and not string.find(Options.ImportLink.Value,"https://github.com/")) then return Notify("Error",tostring(Options.ImportMethod.Value),"make sure your link it's correct") end
+            repeat
+                if not isfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value)) then
+                    writefile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value), game:GetService("HttpService"):JSONEncode({}))
+                end
+                wait()
+            until isfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value))
+            if Options.ImportMethod.Value == "Discord" then
+                local getinfo = game:GetService("HttpService"):JSONEncode(game:HttpGet(tostring(Options.ImportLink.Value)))
+                writefile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value), getinfo:gsub('"%[','['):gsub('%]"',']'):gsub([[\]],''))
+            elseif Options.ImportMethod.Value == "Github" then
+                local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+                local linkmain = tostring(Options.ImportLink.Value)
+                local rawlink_g = linkmain:gsub("https://github.com","https://raw.githubusercontent.com"):gsub("/blob","")
+                local raw = httprequest({Url = tostring(rawlink_g),Method = "GET"})
+                local linkinfo = game:GetService("HttpService"):JSONEncode(raw.Body):gsub([[\]],''):gsub('"%[','['):gsub('%]n"',']')
+                writefile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value), linkinfo)
+            end
+            refreshmacroprofile()
+            CurrentFiles:SetValues(Macro_Files)
+            CurrentFiles:SetValue(Options.ImportName.Value)
+            Notify("Import Succeed",Options.ImportName.Value,"Macro Step Value : "..#game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",Options.ImportName.Value))))
+        end
+    })
+
+    importoptions:AddButton({
+        Title = "How to Import?",
+        Description = "press the button to copy the link for import file tutorial",
+        Callback = function()
+            if Options.ImportMethod.Value == "Discord" then
+                setclipboard(tostring("https://streamable.com/ochwcz"))
+                Notify("Copy Succeed","Method : "..tostring(Options.ImportMethod.Value),"https://streamable.com/ochwcz")
+            elseif Options.ImportMethod.Value == "Github" then
+                setclipboard(tostring("https://streamable.com/w1o9z0"))
+                Notify("Copy Succeed","Method : "..tostring(Options.ImportMethod.Value),"https://streamable.com/w1o9z0")
+            end
+        end
+    })
+
+
     -------- Lobby Mode
     Tabs.Lobby:AddDropdown("Select_World", {
         Title = "Select World",
@@ -485,6 +569,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             game:GetService("TeleportService"):Teleport(17399149936)
         end
     })
+    local UpdateLog = Tabs.Other:AddSection("Update Log")
+    UpdateLog:AddParagraph({
+        Title = "Update Log",
+        Content = "May/16/2024\n[+] Import Method (Discord/GitHub)\n[+] Import Macro\n[*] Fixed not support (Fluxus) excutor"
+    })
 
     white:OnChanged(function()
         if Options.AutoWhiteScreen.Value then
@@ -555,9 +644,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local function check_map()
         if oncheck then return end
         for i,v in pairs(listfiles("/CrazyDay/ACD/Macro")) do
-            if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
-                local mapcheck = readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
-                getgenv().checkmap = game:GetService("HttpService"):JSONDecode(mapcheck)
+            if exec() == "Fluxus" then
+                if v:split([[\]])[2]:split(".lua")[1] == Options.Current_File.Value then
+                    getgenv().checkmap = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",v:split([[\]])[2]:split(".lua")[1])))
+                end
+            elseif exec() ~= "Fluxus" then
+                if v:split([[/]])[5]:split(".lua")[1] == Options.Current_File.Value then
+                    getgenv().checkmap = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",v:split([[/]])[5]:split(".lua")[1])))
+                end
             end
         end
             if oncheck then return end
@@ -618,12 +712,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             wait(0.1)
             repeat task.wait() until getgenv().canplaying
             for i,v in pairs(listfiles("/CrazyDay/ACD/Macro")) do
-                if string.split(v,"/")[5]:split(".lua")[1] == Options.Current_File.Value then
-                    local File = readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",string.split(v,"/")[5]:split(".lua")[1]))
-                    getgenv().Playing = game:GetService("HttpService"):JSONDecode(File)
+                if exec() == "Fluxus" then
+                    if v:split([[\]])[2]:split(".lua")[1] == Options.Current_File.Value then
+                        getgenv().Playing = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",v:split([[\]])[2]:split(".lua")[1])))
+                    end
+                elseif exec() ~= "Fluxus" then
+                    if v:split([[/]])[5]:split(".lua")[1] == Options.Current_File.Value then
+                        getgenv().Playing = game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ACD/Macro".."/%s.lua",v:split([[/]])[5]:split(".lua")[1])))
+                    end
                 end
             end
-        task.spawn(function ()
+            task.spawn(function ()
             repeat task.wait() until #Macro_Files >= 1
             if game.PlaceId == 17399149936 then return end
             task.wait(0.25)
@@ -1070,7 +1169,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             end
                         end)
 
-                        
+
                         spawn(function ()
                             game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
                                 if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
