@@ -639,7 +639,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local ChallengeTable = {}
     local AdventuresTable = {}
     local Lable
-    task.spawn(function ()
+    coroutine.resume(coroutine.create(function()
         if not game:GetService("ReplicatedStorage").Lobby.Value then
         Lable = "Current World : "..tostring(game:GetService("ReplicatedStorage").Map.Value)
         elseif game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") and game:GetService("ReplicatedStorage").Lobby.Value then
@@ -704,7 +704,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 end
             end
         end
-    end)
+    end))
 
     Tabs.Lobby:AddParagraph({
         Title = "Current World",
@@ -929,7 +929,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         end
                     end
                 end
-            task.spawn(function()
+                coroutine.resume(coroutine.create(function()
                 repeat task.wait() until #Macro_Files >= 1
                 if game:GetService("ReplicatedStorage").Lobby.Value then return end
                 task.wait(0.25)
@@ -942,13 +942,13 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 ["Action"] = {
                                     ["new"] = {["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteGameMode",["4"] = "Value : "..tostring(v["Value"]) }
                                 }}
-                                task.spawn(function ()
+                                coroutine.resume(coroutine.create(function()
                                     repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"])
                                     repeat
                                     game:GetService("ReplicatedStorage").Remotes.Input:FireServer("VoteGameMode",tostring(v["Value"]))
                                     task.wait(0.1)
                                     until not game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible or tonumber(Wave()) > tonumber(v["Wave"]) or Options.Auto_Vote.Value
-                                end)
+                                end))
                         elseif i == "VoteWaveConfirm" and tonumber(Wave()) <= tonumber(v["Wave"]) and not skipwave_value() == "On" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : VoteWaveConfirm"})
                             repeat task.wait() until waveuionshow() or skipwave_value() == "On" or tonumber(Wave()) > tonumber(v["Wave"])
@@ -1024,7 +1024,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             end
                         end
                     end
-                end)
+                end))
             end
             if not Options.Play.Value and count ~= 0 and getgenv().Playing ~= nil then
                 MacroStatusTExt().Text = "Macro Status [nil]"
@@ -1079,8 +1079,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     local l_unit_l
     local count = 0
     local TEXTMULTIPLE
-    task.spawn(function ()
-        task.spawn(function ()
+    coroutine.resume(coroutine.create(function()
+        coroutine.resume(coroutine.create(function()
             game.Workspace.Unit.ChildAdded:Connect(function (v)
                 if v:WaitForChild("Owner").Value == game.Players.LocalPlayer then
                     v:WaitForChild("UpgradeTag"):GetPropertyChangedSignal("Value"):Connect(function ()
@@ -1111,12 +1111,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end)
                 end
             end)
-        end)
+        end))
         setreadonly(a,false)
         a.__namecall = newcclosure(function(self,...)
             local arg = {...};
             local method = getnamecallmethod();
-                task.spawn(function ()
+            coroutine.resume(coroutine.create(function()
                     if Options.Record.Value then
                         if (method == "FireServer" or "InvokeServer") and (arg[1] == "Summon" or "Upgrade" or "UseSpecialMove" or "AutoToggle" or "Sell" or "SpeedChange" or "ChangePriority" or "VoteWaveConfirm" or "AutoSkipWaves_CHANGE" or "VoteGameMode") then
                             if arg[1] == "Summon" and arg[2] then
@@ -1275,7 +1275,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                 writemacro()
                                                 task.wait(0.35)
                                             end
-                                            task.spawn(function ()
+                                            coroutine.resume(coroutine.create(function()
                                                 if game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("TextLabel").Text == "Multiple Abilities" then
                                                     game.Players.LocalPlayer.PlayerGui:WaitForChild("MultipleAbilities"):WaitForChild("Frame")
                                                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MultipleAbilities.Frame:GetChildren()) do
@@ -1312,7 +1312,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                             end
                                                         end
                                                     end
-                                                end)
+                                                end))
                                         elseif arg[1] == "ChangePriority" then
                                             table.insert(Macro,{
                                                 ["ChangePriority"] = {
@@ -1413,11 +1413,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                             end
                                                         end
                                                     end
-                                                end)
+                                                end))
                                                 return backs(self,...)
                                             end)
                                             setreadonly(a,true)
-                                        end)
+                                        end))
 
                                         local function mainstatus(val)
                                             if Options.Record.Value and val == "new" then
@@ -1427,7 +1427,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                             end
                                         end
 
-                                        task.spawn(function ()
+                                        coroutine.resume(coroutine.create(function()
                                             while wait() do
                                                 if game:GetService("ReplicatedStorage").Lobby.Value then return end
                                                     for i,v in pairs(Last_action["Action"]) do
@@ -1451,7 +1451,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                                     end
                                                 end
                                             end
-                                        end)
+                                        end))
 
                                         spawn(function ()
                                             while wait() do pcall(function ()
@@ -1631,9 +1631,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                         repeat wait() until Options.AutoRejoinError.Value
                                         task.wait(5.5)
                                         game:GetService("TeleportService"):Teleport(4996049426)
-                                        task.spawn(function ()
+                                        coroutine.resume(coroutine.create(function()
                                             excutescript()
-                                        end)
+                                        end))
                                     end
                                 end)
                             end)
