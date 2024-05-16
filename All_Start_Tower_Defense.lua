@@ -1533,14 +1533,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                             spawn(function ()
                                 game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
                                     if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
-                                        local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
                                         repeat wait() until Options.AutoRejoinError.Value
                                         task.wait(7.5)
+                                        local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+                                        QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()")
                                         game:GetService("TeleportService"):Teleport(4996049426)
-                                        QueueOnTeleport
-                                        (
-                                        "loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()"
-                                    )
                                 end
                             end)
                         end)
