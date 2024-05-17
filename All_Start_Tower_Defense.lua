@@ -1629,11 +1629,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                                 game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
                                     if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
                                         repeat wait() until Options.AutoRejoinError.Value
-                                        task.wait(5.5)
+                                        task.wait(2.5)
                                         game:GetService("TeleportService"):Teleport(4996049426)
-                                        coroutine.resume(coroutine.create(function()
-                                            excutescript()
-                                        end))
                                     end
                                 end)
                             end)
