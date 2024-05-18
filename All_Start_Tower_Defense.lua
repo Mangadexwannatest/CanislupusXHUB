@@ -67,7 +67,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
         local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
         Button.InputBegan:Connect(function(input)
             if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-        game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = not game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible
+        game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus").Visible = not game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus").Visible
         end
     end)
     end)
