@@ -1,14 +1,13 @@
 repeat task.wait() until game:IsLoaded()
 repeat task.wait()until game:GetService("Players").LocalPlayer ~= nil
-if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
+if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait() end
 --repeat task.wait() until not game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("LoadingScreen"):WaitForChild("Frame").Visible
-if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
     repeat
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
 
-        spawn(function ()
+        coroutine.resume(coroutine.create(function()
                 while wait() do pcall(function()
                     if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                         for i,v in pairs(game:WaitForChild("CoreGui"):GetChildren()) do
@@ -28,11 +27,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             break
         end
         end
-    end)
+    end))
 
-    spawn(function ()
+    coroutine.resume(coroutine.create(function()
         repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
-        for i,v in pairs(game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay"):GetChildren()) do
+        for i,v in pairs(game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):GetChildren()) do
             if v.Name == "Frame" and i == 2 then
                 repeat
                     v.Name = "MainStatus"
@@ -40,8 +39,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                 until game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus")
             end
         end
-    end)
-    spawn(function ()
+    end))
+    coroutine.resume(coroutine.create(function()
         if not game:WaitForChild("CoreGui"):FindFirstChild("Close/Open") then
             local CloseOpen = Instance.new("ScreenGui")
             local TextButton = Instance.new("TextButton")
@@ -61,16 +60,16 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             TextButton.TextSize = 14.000
             TextButton.TextWrapped = true
         end
-    end)
+    end))
 
-    spawn(function ()
-        local Button = game.CoreGui:FindFirstChild("Close/Open"):FindFirstChild("TextButton")
+    coroutine.resume(coroutine.create(function()
+        local Button = game:WaitForChild("CoreGui"):WaitForChild("Close/Open"):WaitForChild("TextButton")
         Button.InputBegan:Connect(function(input)
             if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-        game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus").Visible = not game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus").Visible
+        game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):WaitForChild("MainStatus").Visible = not game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):WaitForChild("MainStatus").Visible
         end
     end)
-    end)
+    end))
 
     local function Story()
         if game:GetService("ReplicatedStorage").Lobby.Value and game.Workspace:FindFirstChild("Queue"):FindFirstChild("W2 PERM") then
@@ -1665,4 +1664,3 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
                     end
                 task.wait(1)
             until game.CoreGui:FindFirstChild("CrazyDay")
-        end -- End Of If
