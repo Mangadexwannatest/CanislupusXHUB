@@ -2,7 +2,9 @@ repeat task.wait() until game:IsLoaded()
 game:WaitForChild("CoreGui")
 game:WaitForChild("Players")
     repeat
-        if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
+        game:WaitForChild("CoreGui")
+        game:WaitForChild("Players")
+        task.wait(0.1)
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
 
@@ -480,6 +482,17 @@ game:WaitForChild("Players")
                     }
                 }
             })
+        end
+    })
+    Tabs.Main:AddButton({
+        Title = "Copy file",
+        Description = "press the button to copy all current macro file values",
+        Callback = function()
+            local xo = readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.Current_File.Value))
+            setclipboard(
+                game:GetService("HttpService"):JSONEncode(xo):gsub('"%[','['):gsub('%]"',']'):gsub([[\]],'')
+            )
+            Notify("Copy Succeed",Options.Current_File.Value,"Macro Step Value : "..#game:GetService("HttpService"):JSONDecode(readfile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.Current_File.Value))))
         end
     })
 
