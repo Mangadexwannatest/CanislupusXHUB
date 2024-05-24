@@ -605,10 +605,9 @@ game:WaitForChild("Players")
         if Value == "3X" and not not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
             option_speed:SetValue("2X")
             Notify("Error","buy the gamepass first")
-            return
         end
     end)
-    
+
     Tabs.Main:AddDropdown("Ended_Action", {
         Title = "Select Action",
         Description = nil,
@@ -788,7 +787,7 @@ game:WaitForChild("Players")
     end)
 
     Tabs.Lobby:AddToggle("AutoUpgradeSlot", {Title = "Auto Upgrade Slot",Description = "automatically upgrade when your inventory full", Default = false })
-    spawn(function ()
+    coroutine.resume(coroutine.create(function()
     game.Players.LocalPlayer.PlayerGui.Notification.ChildAdded:Connect(function (v)
         if v.Name == "Message" and v:FindFirstChild("Message") and tostring(v:WaitForChild("Message"):FindFirstChild("Main"):FindFirstChild("Text").Text) ==  "Spend 150 Gems to Upgrade Inventory by 50 Slots" then
                 repeat wait() until game.Players.LocalPlayer.PlayerGui.Notification:FindFirstChild("Message"):FindFirstChild("Message"):FindFirstChild("Main"):FindFirstChild("Options"):FindFirstChild("ReviewButton").Visible and Options.AutoUpgradeSlot.Value
@@ -798,7 +797,7 @@ game:WaitForChild("Players")
                     until not v.Parent or not Options.AutoUpgradeSlot.Value
                 end
             end)
-        end)
+        end))
     Tabs.Lobby:AddToggle("AutoCliamReward",{Title = "Auto Clams Task",Description = "automatically clams all quest reward",Default = false})
 
     ------------- Other Functions
@@ -1090,6 +1089,7 @@ game:WaitForChild("Players")
     local l_unit_l
     local count = 0
     local TEXTMULTIPLE
+    local speed
     coroutine.resume(coroutine.create(function()
         coroutine.resume(coroutine.create(function()
             game.Workspace.Unit.ChildAdded:Connect(function (v)
@@ -1340,28 +1340,36 @@ game:WaitForChild("Players")
                                                     ["2"] = "Time : "..tostring(Time()),
                                                     ["3"] = "Action : "..tostring(arg[1]),
                                                     ["4"] = "Unit : "..tostring(arg[2]),
-                                                    ["5"] = "Unit : "..tostring(arg[2]:WaitForChild("Index").Value),
+                                                    ["5"] = "Unit Index : "..tostring(arg[2]:WaitForChild("Index").Value),
                                                 }}}
                                                 writemacro()
                                                 task.wait(0.1)
-                                            elseif arg[1] == "SpeedChange" then
-                                                table.insert(Macro,{
-                                                    ["SpeedChange"] = {
-                                                        ["Wave"] = tostring(Wave()),
-                                                        ["Time"] = tostring(Time()),
-                                                        ["Value"] = arg[2],
-                                                    }
-                                                })
-                                                Last_action = {
-                                                    ["Action"] = {
-                                                        ["new"] = {
-                                                        ["1"] = "Wave : "..tostring(Wave()),
-                                                        ["2"] = "Time : "..tostring(Time()),
-                                                        ["3"] = "Action : "..tostring(arg[1]),
-                                                        ["4"] = "Value : "..tostring(arg[2]),
-                                                    }}}
-                                                    writemacro()
-                                                    task.wait(0.015)
+                                            elseif arg[1] == "SpeedChange" and not Options.SPEED.Value then
+                                                local action_2 = arg[2]
+                                                speed = game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("FastForward"):WaitForChild("TextLabel"):GetPropertyChangedSignal("Text"):Connect(function ()
+                                                    table.insert(Macro,{
+                                                        ["SpeedChange"] = {
+                                                            ["Wave"] = tostring(Wave()),
+                                                            ["Time"] = tostring(Time()),
+                                                            ["Value"] = tostring(game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("FastForward"):WaitForChild("TextLabel").Text),
+                                                            ["bool"] = action_2,
+                                                        }
+                                                    })
+                                                    Last_action = {
+                                                        ["Action"] = {
+                                                            ["new"] = {
+                                                            ["1"] = "Wave : "..tostring(Wave()),
+                                                            ["2"] = "Time : "..tostring(Time()),
+                                                            ["3"] = "Action : SpeedChange",
+                                                            ["4"] = "Value : "..tostring(game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("FastForward"):WaitForChild("TextLabel").Text),
+                                                            ["5"] = "Bool : "..tostring(action_2),
+                                                        }}}
+                                                        writemacro()
+                                                        if speed or Options.SPEED.Value then
+                                                            speed:Disconnect()
+                                                            speed = nil
+                                                        end
+                                                    end)
                                                 elseif arg[1] == "VoteWaveConfirm" then
                                                     local action_1 = arg[1]
                                                     if game.Players.LocalPlayer.PlayerGui.HUD.NextWaveVote.Visible then
@@ -1464,7 +1472,7 @@ game:WaitForChild("Players")
                                             end
                                         end))
 
-                                        spawn(function ()
+                                        coroutine.resume(coroutine.create(function()
                                             while wait() do pcall(function ()
                                                 if not game.Players.LocalPlayer.PlayerGui.HUD.FastForward.Visible or
                                                 tostring(game.Players.LocalPlayer.PlayerGui.HUD.FastForward.TextLabel.Text) == Options.Speed.Value then
@@ -1491,7 +1499,7 @@ game:WaitForChild("Players")
                                                 end
                                             end)
                                         end
-                                    end)
+                                    end))
 
                                     local function check_for_start()
                                         if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible or game.Players.LocalPlayer.PlayerGui.HUD.MissionsV2.Visible then
@@ -1553,7 +1561,7 @@ game:WaitForChild("Players")
 
                                 bv.MaxForce = Vector3.new(100000,100000,100000)
                                 bv.Velocity = Vector3.new(0,0,0)
-                                spawn(function ()
+                                coroutine.resume(coroutine.create(function()
                                     while wait() do
                                         if not Options.Auto_Lobby.Value or not game:GetService("ReplicatedStorage").Lobby.Value then
                                         else
@@ -1577,9 +1585,9 @@ game:WaitForChild("Players")
                                             bv.Parent = nil
                                         end
                                     end
-                                end)
+                                end))
 
-                                spawn(function ()
+                                coroutine.resume(coroutine.create(function()
                                     while wait() do pcall(function ()
                                         if Options.AutoCliamReward.Value and game:GetService("ReplicatedStorage").Lobby.Value then
                                             if game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("LeftButton"):WaitForChild("TaskButton"):WaitForChild("ImageLabel").Visible then
@@ -1618,9 +1626,9 @@ game:WaitForChild("Players")
                                         end
                                     end)
                                 end
-                            end)
+                            end))
 
-                            spawn(function ()
+                            coroutine.resume(coroutine.create(function()
                                 game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd:GetPropertyChangedSignal('Visible'):Connect(function ()
                                     repeat wait(0.25) until Options.Replay_Return_Next.Value
                                     if Options.Replay_Return_Next.Value then
@@ -1629,14 +1637,14 @@ game:WaitForChild("Players")
                                         until not game.Players.LocalPlayer.PlayerGui.HUD.MissionEnd.Visible or not Options.Replay_Return_Next.Value
                                     end
                                 end)
-                            end)
+                            end))
 
                             local function excutescript()
                                 local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
                                 QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/All_Start_Tower_Defense.lua'))()")
                             end
 
-                            spawn(function ()
+                            coroutine.resume(coroutine.create(function()
                                 game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
                                     if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
                                         repeat wait() until Options.AutoRejoinError.Value
@@ -1644,24 +1652,24 @@ game:WaitForChild("Players")
                                         game:GetService("TeleportService"):Teleport(4996049426)
                                     end
                                 end)
-                            end)
+                            end))
 
-                        spawn(function ()
+                            coroutine.resume(coroutine.create(function()
                             repeat wait() until game:IsLoaded()
                             game:WaitForChild("CoreGui"):WaitForChild("CrazyDay")
                             repeat wait() until game.CoreGui:FindFirstChild("CrazyDay")
                             repeat wait() until Options.AutoCloseAfterExecute.Value
                             game.CoreGui.CrazyDay:FindFirstChild("MainStatus").Visible = false
-                        end)
+                        end))
 
-                        spawn(function ()
+                        coroutine.resume(coroutine.create(function()
                             game.Players.LocalPlayer.OnTeleport:Connect(function(state)
                                 getgenv().OnTeleport = true
                                 if state == Enum.TeleportState.InProgress and Options.AutoExecuteScript.Value then
                                     excutescript()
                                 end
                             end)
-                        end)
+                        end))
 
                         local function unload_ui()
                             while wait() do
