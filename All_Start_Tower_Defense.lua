@@ -1292,10 +1292,10 @@ game:WaitForChild("Players")
                                                 task.wait(0.35)
                                             end
                                             coroutine.resume(coroutine.create(function()
-                                                if game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("TextLabel").Text == "Multiple Abilities" then
+                                                if game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2").Visible and game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("UpgradeV2"):WaitForChild("SpecialButton"):WaitForChild("TextLabel").Text == "Multiple Abilities" and Options.Record.Value then
                                                     game.Players.LocalPlayer.PlayerGui:WaitForChild("MultipleAbilities"):WaitForChild("Frame")
                                                     for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MultipleAbilities.Frame:GetChildren()) do
-                                                        if v:IsA("ImageButton") then
+                                                        if v:IsA("ImageButton") and Options.Record.Value then
                                                             TEXTMULTIPLE = v.Activated:Connect(function ()
                                                                 table.insert(Macro,{
                                                                     ["UseMultipleAbilities"] = {
