@@ -973,8 +973,13 @@ game:WaitForChild("Players")
                             task.wait(0.25)
                             until tostring(skipwave_value()) == tostring(v["Value"]) or not Options.Play.Value
                         elseif i == "SpeedChange" then
-                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SpeedChange",["4"] = "Value : "..tostring(v["Value"]) })
-                            game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["Value"])
+                            wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Action : SpeedChange",["4"] = "Value : "..tostring(v["Value"]),["5"] = "Bool : "..tostring(v["bool"]) })
+                            repeat
+                                if game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("FastForward"):WaitForChild("TextLabel").Text ~= tostring(v["Value"]) then
+                                game:GetService("ReplicatedStorage").Remotes.Input:FireServer("SpeedChange",v["bool"])
+                                end
+                                task.wait(0.35)
+                            until game.Players.LocalPlayer.PlayerGui.HUD:WaitForChild("FastForward"):WaitForChild("TextLabel").Text == tostring(v["Value"])
                         elseif i == "Summon" then
                             wait_for(v,val,"new",{["1"] = "Waiting For Wave : "..tostring(v["Wave"]),["2"] = "Waiting For Time : "..tostring(v["Time"]),["3"] = "Waiting For Money : "..tostring(v["Money"]),["4"] = "Action : Summon",["5"] = "Unit : "..tostring(v["Unit"]),["6"] = "Rotation : "..tostring(v["Rotation"]),["7"] = "Unit Index : "..tostring(v["Index"]) })
                             repeat
