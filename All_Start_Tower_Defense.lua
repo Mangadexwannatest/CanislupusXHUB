@@ -1676,8 +1676,8 @@ repeat task.wait() until game:IsLoaded()
 
                         local function unload_ui()
                             while wait() do
-                                if Fluent.Unloaded then 
-                                    game.CoreGui:FindFirstChild("Close/Open"):Destroy()
+                                if Fluent.Unloaded then
+                                    game:WaitForChild("CoreGui"):FindFirstChild("Close/Open"):Destroy()
                                     break
                                 end
                             end
@@ -1686,4 +1686,4 @@ repeat task.wait() until game:IsLoaded()
 
                     end
                 task.wait(0.25)
-            until game.CoreGui:FindFirstChild("CrazyDay")
+            until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
