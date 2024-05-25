@@ -1,6 +1,4 @@
 repeat task.wait() until game:IsLoaded()
-game:WaitForChild("CoreGui")
-game:WaitForChild("Players")
     repeat
         game:WaitForChild("CoreGui")
         game:WaitForChild("Players")
@@ -602,7 +600,7 @@ game:WaitForChild("Players")
     })
 
     option_speed:OnChanged(function(Value)
-        if Value == "3X" and not not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
+        if Value == "3X" and not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game.Players.LocalPlayer.UserId, 12828275) then
             option_speed:SetValue("2X")
             Notify("Error","buy the gamepass first")
         end
@@ -1687,5 +1685,5 @@ game:WaitForChild("Players")
                         coroutine.resume(coroutine.create(unload_ui))
 
                     end
-                task.wait(1)
+                task.wait(0.25)
             until game.CoreGui:FindFirstChild("CrazyDay")
