@@ -6,39 +6,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
 
-        coroutine.resume(coroutine.create(function()
-                while wait() do pcall(function()
-                    if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
-                        for i,v in pairs(game:WaitForChild("CoreGui"):GetChildren()) do
-                        if v.Name == "ScreenGui" then
-                            for i2,v2 in pairs(v:GetDescendants()) do
-                            if v2.Name == "TextLabel" and string.find(v2.Text,"All Star Tower") then
-                                v2.Parent.Parent.Parent.Parent.Name = "CrazyDay"
-                                warn("Found Gui. . .")
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-        if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then
-            warn("break")
-            break
-        end
-        end
-    end))
-
-    coroutine.resume(coroutine.create(function()
-        repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
-        for i,v in pairs(game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):GetChildren()) do
-            if v.Name == "Frame" and i == 2 then
-                repeat
-                    v.Name = "MainStatus"
-                    task.wait(0.25)
-                until game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus")
-            end
-        end
-    end))
     coroutine.resume(coroutine.create(function()
         if not game:WaitForChild("CoreGui"):FindFirstChild("Close/Open") then
             local CloseOpen = Instance.new("ScreenGui")
@@ -1090,6 +1057,38 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 
     end -- End Of Do
 
+    coroutine.resume(coroutine.create(function()
+        while wait() do pcall(function()
+            if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
+                for i,v in pairs(game:WaitForChild("CoreGui"):GetChildren()) do
+                    if v.Name == "ScreenGui" then
+                        for i2,v2 in pairs(v:GetDescendants()) do
+                            if v2.Name == "TextLabel" and string.find(v2.Text,"All Star Tower") then
+                                v2.Parent.Parent.Parent.Parent.Name = "CrazyDay" warn("Found Gui. . .") end
+                            end
+                        end
+                    end
+                end
+            end)
+            if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then
+                warn("break")
+                break
+            end
+        end
+    end))
+    
+    coroutine.resume(coroutine.create(function()
+        repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
+        for i,v in pairs(game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):GetChildren()) do
+            if v.Name == "Frame" and i == 2 then
+                repeat
+                    v.Name = "MainStatus"
+                    task.wait(0.25)
+                until game:WaitForChild("CoreGui"):WaitForChild("CrazyDay"):FindFirstChild("MainStatus")
+            end
+        end
+    end))
+
     local function writemacro()
         writefile(string.format("/CrazyDay/ASTD/Macro".."/%s.lua",Options.Current_File.Value), game:GetService("HttpService"):JSONEncode(Macro))
     end
@@ -1458,6 +1457,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
                                         coroutine.resume(coroutine.create(function()
                                             while wait() do
                                                 if game:GetService("ReplicatedStorage").Lobby.Value then return end
+                                                if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then
                                                     for i,v in pairs(Last_action["Action"]) do
                                                     if i == "Default" then
                                                         Get_Paragrahp().Text = "Status nil [0]\nCurrent Time : "..tostring(Time())
@@ -1475,6 +1475,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
                                                         Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\nCurrent Time : "..tostring(Time())
                                                     elseif i =="new" and v["7"] and not v["8"] and (Options.Record.Value or Options.Play.Value )then
                                                         Get_Paragrahp().Text = mainstatus(i)..v["1"].."\n"..v["2"].."\n"..v["3"].."\n"..v["4"].."\n"..v["5"].."\n"..v["6"].."\n"..v["7"].."\nCurrent Time : "..tostring(Time())
+                                                    end
                                                     end
                                                     end
                                                 end
