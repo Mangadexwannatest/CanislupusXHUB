@@ -7,7 +7,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
             warn("Loading Gui. . .")
 
     coroutine.resume(coroutine.create(function()
-        if not game:WaitForChild("CoreGui"):FindFirstChild("Close/Open") then
+        repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
+        if game:WaitForChild("CoreGui"):FindFirstChild("Close/Open") == nil then
             local CloseOpen = Instance.new("ScreenGui")
             local TextButton = Instance.new("TextButton")
             CloseOpen.Name = "Close/Open"
@@ -29,6 +30,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
     end))
 
     coroutine.resume(coroutine.create(function()
+        repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("Close/Open")
         local Button = game:WaitForChild("CoreGui"):WaitForChild("Close/Open"):WaitForChild("TextButton")
         Button.InputBegan:Connect(function(input)
             if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
