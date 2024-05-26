@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
+if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
     repeat
-        game:WaitForChild("CoreGui")
-        game:WaitForChild("Players")
+        game:WaitForChild("CoreGui") game:WaitForChild("Players")
         task.wait(0.1)
         if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") == nil then
             warn("Loading Gui. . .")
@@ -276,6 +276,12 @@ repeat task.wait() until game:IsLoaded()
          end
     end
 
+    local plr,gameidtp = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()
+    if tonumber(plr:WaitForChild("Head"):WaitForChild("NameLevelBBGUI"):WaitForChild("LevelFrame"):WaitForChild("TextLabel").Text:split(".")[2]) >= 100 then
+        gameidtp = 7785334488
+    elseif tonumber(plr:WaitForChild("Head"):WaitForChild("NameLevelBBGUI"):WaitForChild("LevelFrame"):WaitForChild("TextLabel").Text:split(".")[2]) < 100 then
+        gameidtp = 4996049426
+    end
     local Traget_CFrame,RoomName
     local bv = Instance.new("BodyVelocity")
     local function get_the_cframeofdoor()
@@ -808,7 +814,7 @@ repeat task.wait() until game:IsLoaded()
         Title = "Teleport Lobby",
         Description = nil,
         Callback = function()
-            game:GetService("TeleportService"):Teleport(4996049426)
+            game:GetService("TeleportService"):Teleport(gameidtp)
         end
     })
     local UpdateLog = Tabs.Other:AddSection("Update Log")
@@ -1571,14 +1577,13 @@ repeat task.wait() until game:IsLoaded()
                                             if game.Players.LocalPlayer.PlayerGui.HUD.Start.Visible then
                                                 firesignal(game.Players.LocalPlayer.PlayerGui.HUD.Start.MouseButton1Click,game.Players.LocalPlayer)
                                             end
-                                            local plr = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                                             if not check_for_start() and  not getgenv().STOP_TP then
-                                                plr.CFrame = get_the_cframeofdoor()
+                                                plr:WaitForChild("HumanoidRootPart").CFrame = get_the_cframeofdoor()
                                                 bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
                                                 game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
                                             elseif check_for_start()  then
                                                 getgenv().STOP_TP = true
-                                                plr.CFrame = CF()
+                                                plr:WaitForChild("HumanoidRootPart").CFrame = CF()
                                                 getmap()
                                                 startbutton()
                                             end
@@ -1652,7 +1657,7 @@ repeat task.wait() until game:IsLoaded()
                                     if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
                                         repeat wait() until Options.AutoRejoinError.Value
                                         task.wait(2.5)
-                                        game:GetService("TeleportService"):Teleport(4996049426)
+                                        game:GetService("TeleportService"):Teleport(gameidtp)
                                     end
                                 end)
                             end))
@@ -1685,5 +1690,5 @@ repeat task.wait() until game:IsLoaded()
                         coroutine.resume(coroutine.create(unload_ui))
 
                     end
-                task.wait(0.25)
+                task.wait(0.75)
             until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay")
