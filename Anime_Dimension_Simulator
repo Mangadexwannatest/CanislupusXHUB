@@ -411,15 +411,11 @@ function DestroyKuy()
     local CardCheckOwner = game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame
     coroutine.resume(coroutine.create(function()
         while wait() do pcall(function ()  
-            if Options.STOP_LEAVE_MAXCARD.Value then
-                if tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
-                and Options.Select_Action_MaxCard.Value == "STOP RETRY"
-                and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
+            if game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 and Options.STOP_LEAVE_MAXCARD.Value then
+                if tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) and Options.Select_Action_MaxCard.Value == "STOP RETRY" then
                     getgenv().StopReplay = true
-                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text)
-                and Options.Select_Action_MaxCard.Value == "LEAVE"
-                and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
-                game:GetService("TeleportService"):Teleport(6938803436)
+                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) and Options.Select_Action_MaxCard.Value == "LEAVE" then
+                    game:GetService("TeleportService"):Teleport(6938803436)
                 end
             end
         end)
