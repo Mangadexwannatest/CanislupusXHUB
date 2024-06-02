@@ -414,17 +414,18 @@ function DestroyKuy()
             if Options.STOP_LEAVE_MAXCARD.Value then
                 if tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
                 and Options.Select_Action_MaxCard.Value == "STOP RETRY"
-                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
+                and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
                     getgenv().StopReplay = true
-                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text) 
-                and Options.Select_Action_MaxCard.Value == "LEAVE" 
-                and game.PlaceId ~= 6938803436 or game.PlaceId ~= 7274690025 or game.PlaceId ~= 7338881230 then
+                elseif tonumber(CardCheckOwner.CardsOwned.Text) >= tonumber(CardCheckOwner.MaxCardsOwned.Text)
+                and Options.Select_Action_MaxCard.Value == "LEAVE"
+                and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 and game.PlaceId ~= 7338881230 then
                 game:GetService("TeleportService"):Teleport(6938803436)
                 end
             end
         end)
     end
 end))
+
 
 
     function SellCard()
@@ -888,6 +889,7 @@ end
 end)
 end
 end))
+
 
 coroutine.resume(coroutine.create(function()
     while wait() do pcall(function ()
@@ -1613,6 +1615,7 @@ coroutine.resume(coroutine.create(function()
             end)
         end
 end))
+
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
