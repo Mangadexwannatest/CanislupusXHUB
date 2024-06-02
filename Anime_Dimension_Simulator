@@ -1600,11 +1600,9 @@ coroutine.resume(coroutine.create(function()
                     else
                     if game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Visible == true then
                         wait(1)
-                        if getgenv().RaidOpened and getgenv().StopReplay then
-                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text ~= "1" then
-                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text == "1" then
+                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text ~= "1" and not getgenv().RaidOpened and not getgenv().StopReplay then
+                        elseif game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible == true and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text == "1" and not getgenv().RaidOpened and not getgenv().StopReplay then
                             game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("RetryDungeon")
-                            end
                         end
                     end
                 end
@@ -1612,6 +1610,7 @@ coroutine.resume(coroutine.create(function()
         end
 end))
 
+warn(game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text)
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
