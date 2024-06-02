@@ -1610,7 +1610,6 @@ coroutine.resume(coroutine.create(function()
         end
 end))
 
-warn(game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text)
 
 coroutine.resume(coroutine.create(function()
     pcall(function ()
