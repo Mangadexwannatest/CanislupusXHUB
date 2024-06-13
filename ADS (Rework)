@@ -1683,17 +1683,53 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 								game:GetService("TeleportService"):Teleport(7338881230)
 							end
 						end
-						--// if auto_farm "true"
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is true" then
+						--// Set Method
+						if not Is_Blacklist then --// Not blacklist character
+							if boss_bar() then
+								if Options["Current Method"].Value == "Over" then
+									method_mode = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
+								elseif Options["Current Method"].Value == "Under" then
+									method_mode = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
+								elseif Options["Current Method"].Value == "Front" then
+									method_mode = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
+								elseif Options["Current Method"].Value == "Behind" then
+									method_mode = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
+								end
+							elseif not boss_bar() then
+								if Options["Current Method"].Value == "Over" then
+									method_mode = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.85 ,0) * CFrame.Angles(math.rad(-90),0,0)
+								elseif Options["Current Method"].Value == "Under" then
+									method_mode = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.85 ,0) * CFrame.Angles(math.rad(90),0,0)
+								elseif Options["Current Method"].Value == "Front" then
+									method_mode = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
+								elseif Options["Current Method"].Value == "Behind" then
+									method_mode = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
+								end
+							end
+						elseif Is_Blacklist then -- // Blacklist character
+							if Options["Current Method"].Value == "Over" then
+								method_mode = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
+							elseif Options["Current Method"].Value == "Under" then
+								method_mode = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
+							elseif Options["Current Method"].Value == "Front" then
+								method_mode = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
+							elseif Options["Current Method"].Value == "Behind" then
+								method_mode = CFrame.new(0, 0, 1.5)
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() -- Set Noclip
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
+					pcall(function()
+						if auto_farm() == "is true" then
 							if not getgenv()["On Dodgeing skill"] then
 								setCollide(false)
 							elseif getgenv()["On Dodgeing skill"]then
 								setCollide(true)
-								if tween_info then
-									tween_info:Cancel()
-								end
 							end
-
 							if not getgenv()["player it's nil"] then
 								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
 								bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
@@ -1707,43 +1743,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 									end
 								end
 							end
-
-							--// Check method
-							if not Is_Blacklist then --// Not blacklist character
-								if boss_bar() then
-									if Options["Current Method"].Value == "Over" then
-										method_mode = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
-									elseif Options["Current Method"].Value == "Under" then
-										method_mode = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
-									elseif Options["Current Method"].Value == "Front" then
-										method_mode = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
-									elseif Options["Current Method"].Value == "Behind" then
-										method_mode = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
-									end
-								elseif not boss_bar() then
-									if Options["Current Method"].Value == "Over" then
-										method_mode = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.85 ,0) * CFrame.Angles(math.rad(-90),0,0)
-									elseif Options["Current Method"].Value == "Under" then
-										method_mode = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.85 ,0) * CFrame.Angles(math.rad(90),0,0)
-									elseif Options["Current Method"].Value == "Front" then
-										method_mode = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
-									elseif Options["Current Method"].Value == "Behind" then
-										method_mode = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
-									end
-								end
-							elseif Is_Blacklist then -- // Blacklist character
-								if Options["Current Method"].Value == "Over" then
-									method_mode = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
-								elseif Options["Current Method"].Value == "Under" then
-									method_mode = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
-								elseif Options["Current Method"].Value == "Front" then
-									method_mode = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
-								elseif Options["Current Method"].Value == "Behind" then
-									method_mode = CFrame.new(0, 0, 1.5)
-								end
-							end
-						--// if auto_farm "false"
-						elseif (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is false" then
+						elseif auto_farm() == "is false" then
 							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand == true then
 								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
 								bv.Parent = nil
