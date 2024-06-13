@@ -684,6 +684,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
 			coroutine.resume(coroutine.create(function()
 				repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") ~= nil
+				if readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" then return end
 				getgenv().Character = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 				SetParagraphValue(2,"Characters","Current Character",getgenv().Character["Character1"].."\n"..getgenv().Character["Character2"].."\n"..getgenv().Character["Character3"])
 			end))
@@ -698,6 +699,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				end
 				if value and not isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
 					return Notify("Auto Equip Character (Error)","Make sure you save the characters.")
+				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" then 
+					return Notify("Auto Equip Character (Error)","Make sure your file is not empty.")
 				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 					getgenv().IsCharacter = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 					local remotes = game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction
@@ -727,8 +730,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				character_table["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
 				character_table["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
 				character_table["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
-				Notify("Successfully saved",character_table["Character1"].."\n"..character_table["Character2"].."\n"..character_table["Character3"])
 				writefile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json",game:GetService("HttpService"):JSONEncode(character_table))
+				Notify("Successfully saved",character_table["Character1"].."\n"..character_table["Character2"].."\n"..character_table["Character3"])
 				SetParagraphValue(2,"Characters","Current Character",character_table["Character1"].."\n"..character_table["Character2"].."\n"..character_table["Character3"])
 			end
 		})
@@ -1242,7 +1245,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				task.wait(1)
 				getgenv()["enemy spawning"] = false
 			end)
-			coroutine.resume(coroutine.create(function() --// Dodge Skill
+			coroutine.resume(coroutine.create(function() --// Character functions
 				game:GetService("Workspace"):WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
 					pcall(function ()
 						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
@@ -1266,6 +1269,65 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						end
 					end)
 				end)
+				local function ontounching_ignore()
+					pcall(function ()
+						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
+							if part.Name == "Ignore" then
+								getgenv()["On Dodgeing skill"] = true
+								repeat task.wait() until not part.Parent
+								task.wait(0.1)
+								getgenv()["On Dodgeing skill"] = false
+							end
+						end)
+					end)
+				end
+				local function humanod_anchored()
+					pcall(function ()
+						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:GetPropertyChangedSignal("Anchored"):Connect(function()
+							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored then
+								getgenv()["Using Skill"] = true
+								print("Using a invincible skill : true")
+								repeat task.wait() until game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == false
+								getgenv()["Using Skill"] = false
+								print("Using a invincible skill : false")
+							end
+						end)
+					end)
+				end
+				local is_connect_value
+				local function onCharacterAdded(character)
+					local humanoid = character:WaitForChild("Humanoid", 5)
+					if not humanoid then
+						return
+					end
+					humanoid.Died:Connect(function()
+						getgenv()["On Dodgeing skill"] = false
+						getgenv()["Using Skill"] = false
+						getgenv()["On Safe Mode"] = false
+						getgenv()["On counting"] = false
+						getgenv()["bring fully doing"] = false
+						getgenv()["player it's nil"] = true
+						is_connect_value =  game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
+							task.wait(1.25)
+							getgenv()["player it's nil"] = false
+							ontounching_ignore()
+							humanod_anchored()
+							if is_connect_value then
+								is_connect_value:Disconnect()
+								is_connect_value = nil
+							end
+						end)
+					end)
+				end
+				game.Players.LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+				do
+					local plr_on_character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+					if plr_on_character then
+						ontounching_ignore()
+						humanod_anchored()
+						onCharacterAdded(plr_on_character)
+					end
+				end
 			end))
 			coroutine.resume(coroutine.create(function() -- // Webhook # Connect functions
 				if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then
@@ -1365,67 +1427,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 							end
 						end)
 					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function () --// Character functions
-				local function ontounching_ignore()
-					pcall(function ()
-						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
-							if part.Name == "Ignore" then
-								getgenv()["On Dodgeing skill"] = true
-								repeat task.wait() until not part.Parent
-								task.wait(0.1)
-								getgenv()["On Dodgeing skill"] = false
-							end
-						end)
-					end)
-				end
-				local function humanod_anchored()
-					pcall(function ()
-						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:GetPropertyChangedSignal("Anchored"):Connect(function()
-							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored then
-								getgenv()["Using Skill"] = true
-								print("Using a invincible skill : true")
-								repeat task.wait() until game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == false
-								getgenv()["Using Skill"] = false
-								print("Using a invincible skill : false")
-							end
-						end)
-					end)
-				end
-				local is_connect_value
-				local function onCharacterAdded(character)
-					local humanoid = character:WaitForChild("Humanoid", 5)
-					if not humanoid then
-						return
-					end
-					humanoid.Died:Connect(function()
-						getgenv()["On Dodgeing skill"] = false
-						getgenv()["Using Skill"] = false
-						getgenv()["On Safe Mode"] = false
-						getgenv()["On counting"] = false
-						getgenv()["bring fully doing"] = false
-						getgenv()["player it's nil"] = true
-						is_connect_value =  game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-							task.wait(1.25)
-							getgenv()["player it's nil"] = false
-							ontounching_ignore()
-							humanod_anchored()
-							if is_connect_value then
-								is_connect_value:Disconnect()
-								is_connect_value = nil
-							end
-						end)
-					end)
-				end
-				game.Players.LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
-				do
-					local plr_on_character = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
-					if plr_on_character then
-						ontounching_ignore()
-						humanod_anchored()
-						onCharacterAdded(plr_on_character)
-					end
 				end
 			end))
 			coroutine.resume(coroutine.create(function() --// Quests functions
@@ -1643,21 +1644,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end)
 				end
 			end))
-			coroutine.resume(coroutine.create(function()-- // Bring Mode Misc
-				while task.wait() do
-					pcall(function ()
-						if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 16.5 then
-							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-									if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
-										v.Head.Transparency = 10
-									end
-								end
-							end
-						end
-					end)
-				end
-			end))
 			coroutine.resume(coroutine.create(function() --// Miscfarm setiings
 				local bv = Instance.new("BodyVelocity")
 				while task.wait() do
@@ -1720,7 +1706,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end)
 				end
 			end))
-			coroutine.resume(coroutine.create(function() -- Set Noclip
+			coroutine.resume(coroutine.create(function() -- // Set Noclip
 				while task.wait() do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function()
@@ -1828,6 +1814,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				while task.wait() do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
 					pcall(function ()
+						--// Bring Misc
+						if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 16.5 then
+							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
+									if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
+										v.Head.Transparency = 10
+									end
+								end
+							end
+						end
+						--// Bring Main
 						if auto_farm() == "is true" and Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["enemy spawning"] and not getgenv()["player it's nil"] then
 							--// Stage 0
 							if not boss_bar() and method_stage == 0 and getClosestobJect() and not getgenv()["Using Skill"] then
