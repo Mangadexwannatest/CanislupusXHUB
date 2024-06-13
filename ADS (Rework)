@@ -152,9 +152,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		local method_stage = 0
 		--// local of Game
 
-		local GameMap = game:GetService("Workspace").GameMap
-		local UniversalGui = game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui
-		local skills = UniversalGui.UniversalCenterUIFrame.SlotsHolder
+		local GameMap = game:GetService("Workspace"):WaitForChild("GameMap")
+		local UniversalGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
+		local skills = UniversalGui:WaitForChild("UniversalCenterUIFrame"):WaitForChild("SlotsHolder")
 		--// Other
 
 		local card_rewards = {"None"}
@@ -165,7 +165,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		if Assist_Fruits then for i,v in next, Assist_Fruits do assist_stage = i end end
 		local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 		local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-		local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+		-- ไม่ได้ใช้ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 		local function Notify(titile,Content,SubTitle,time)Fluent:Notify({Title = titile,Content = Content,SubContent = (SubTitle or nil),Duration = (time or 5)})end
 		local Tabs = {}
 		local Window = Fluent:CreateWindow({
