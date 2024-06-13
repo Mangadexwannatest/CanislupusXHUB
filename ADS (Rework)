@@ -138,7 +138,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		end))
 		repeat task.wait() until Dimension["Dimension Info"] and Raid["Raids Info"] and Rarity
 		local method_mode
-		local method_safe
 		local BlackList_Characters = {"Naruto","Sasuke"}
 		local current_character_of_speed_raid
 		local diemnsion_to_num,difficultyc_to_num,raid_to_num,farm_mode_to_num,method_mode_to_num,them_to_num,attack_method_to_num
@@ -155,6 +154,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 
 		local GameMap = game:GetService("Workspace").GameMap
 		local UniversalGui = game:GetService("Players").LocalPlayer.PlayerGui.UniversalGui
+		local skills = UniversalGui.UniversalCenterUIFrame.SlotsHolder
 		--// Other
 
 		local card_rewards = {"None"}
@@ -1242,7 +1242,32 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				task.wait(1)
 				getgenv()["enemy spawning"] = false
 			end)
-			coroutine.resume(coroutine.create(function() -- // Webhook functions
+			coroutine.resume(coroutine.create(function() --// Dodge Skill
+				game:GetService("Workspace"):WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
+					pcall(function ()
+						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
+							local a = v:Clone()
+							local side = math.clamp(2.85,0,10)
+							local Sizeto = v.Size + Vector3.new(side,100,side)
+							a.Size = Vector3.new(0,0,v.Size.Z)
+							if v.ClassName == "MeshPart" then
+								a.Size = Vector3.new(0,0,100)
+								Sizeto = v.Size + Vector3.new(side,side,100)
+							end
+							game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
+							a.CFrame = v.CFrame + Vector3.new(0,0,0)
+							a.Anchored = true
+							a.Transparency = 1
+							a.CanCollide = true
+							a.Name = "Ignore"
+							a.Parent = v.Parent
+							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On counting"] or getgenv()["bring fully doing"]
+							a:Destroy()
+						end
+					end)
+				end)
+			end))
+			coroutine.resume(coroutine.create(function() -- // Webhook # Connect functions
 				if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then
 					--// insert webhook
 					UniversalGui.UniversalCenterUIFrame:WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
@@ -1344,24 +1369,28 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			end))
 			coroutine.resume(coroutine.create(function () --// Character functions
 				local function ontounching_ignore()
-					game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart").Touched:Connect(function(part)
-						if not getgenv()["player it's nil"] and part.Name == "Ignore" then
-							getgenv()["On Dodgeing skill"] = true
-							repeat task.wait() until getgenv()["player it's nil"] == true or not part.Parent
-							task.wait(0.1)
-							getgenv()["On Dodgeing skill"] = false
-						end
+					pcall(function ()
+						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
+							if part.Name == "Ignore" then
+								getgenv()["On Dodgeing skill"] = true
+								repeat task.wait() until not part.Parent
+								task.wait(0.1)
+								getgenv()["On Dodgeing skill"] = false
+							end
+						end)
 					end)
 				end
 				local function humanod_anchored()
-					game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart"):GetPropertyChangedSignal("Anchored"):Connect(function()
-						if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == true then
-							getgenv()["Using Skill"] = true
-							print("Using a invincible skill : true")
-							repeat task.wait() until getgenv()["player it's nil"] == true or game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == false
-							getgenv()["Using Skill"] = false
-							print("Using a invincible skill : false")
-						end
+					pcall(function ()
+						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:GetPropertyChangedSignal("Anchored"):Connect(function()
+							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored then
+								getgenv()["Using Skill"] = true
+								print("Using a invincible skill : true")
+								repeat task.wait() until game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == false
+								getgenv()["Using Skill"] = false
+								print("Using a invincible skill : false")
+							end
+						end)
 					end)
 				end
 				local is_connect_value
@@ -1398,81 +1427,57 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						onCharacterAdded(plr_on_character)
 					end
 				end
-				game:GetService("Workspace"):WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
+			end))
+			coroutine.resume(coroutine.create(function() --// Quests functions
+				while task.wait() do
 					pcall(function ()
-						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
-							local a = v:Clone()
-							local side = math.clamp(2.85,0,10)
-							local Sizeto = v.Size + Vector3.new(side,100,side)
-							a.Size = Vector3.new(0,0,v.Size.Z)
-							if v.ClassName == "MeshPart" then
-								a.Size = Vector3.new(0,0,100)
-								Sizeto = v.Size + Vector3.new(side,side,100)
+						if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) and (Options["Auto Claim (Quest)"].Value or Options["Auto Claim (Speed Raid)"].Value) then
+							if Options["Auto Claim (Speed Raid)"].Value then
+								--// Speed Raid
+								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidFrame:GetChildren()) do
+									if v.Name == "Shade" and i == 11 then
+										shade_current = v
+									end
+								end
+								for i,v in pairs(shade_current:FindFirstChild("SpeedRaidScrollingFrame"):GetChildren()) do
+									if v:IsA("ImageButton") then
+										if v.RaidsButton.Cost.Text == "CLAIM" then
+											local a_b = v.Name:split("SpeedRaidRewardTemplate")[2]
+											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("ClaimWeeklySpeedRaidReward",tonumber(a_b))
+											v.RaidsButton.Cost.Text = "CLAIMED"
+										end
+									end
+								end
 							end
-							game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
-							a.CFrame = v.CFrame + Vector3.new(0,0,0)
-							a.Anchored = true
-							a.Transparency = 1
-							a.CanCollide = true
-							a.Name = "Ignore"
-							a.Parent = v.Parent
-							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On counting"] or getgenv()["bring fully doing"]
-							a:Destroy()
+							if Options["Auto Claim (Quest)"].Value then
+								--// Daily Quest
+								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.DailyQuestFrame.DailyQuestScrollingFrame:GetChildren()) do
+									if v:IsA("ImageLabel") then
+										if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+											v.Complete.Visible = true
+										end
+									end
+								end
+								--// Weekly Quest
+								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.WeeklyQuestFrame.WeeklyQuestScrollingFrame:GetChildren()) do
+									if v:IsA("ImageLabel") then
+										if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+											v.Complete.Visible = true
+										end
+									end
+								end
+							end
 						end
 					end)
-				end)
-			end))
-			coroutine.resume(coroutine.create(function() --// Quests
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) and (Options["Auto Claim (Quest)"].Value or Options["Auto Claim (Speed Raid)"].Value) then
-						if Options["Auto Claim (Speed Raid)"].Value then
-							--// Speed Raid
-							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidFrame:GetChildren()) do
-								if v.Name == "Shade" and i == 11 then
-									shade_current = v
-								end
-							end
-							for i,v in pairs(shade_current:FindFirstChild("SpeedRaidScrollingFrame"):GetChildren()) do
-								if v:IsA("ImageButton") then
-									if v.RaidsButton.Cost.Text == "CLAIM" then
-										local a_b = v.Name:split("SpeedRaidRewardTemplate")[2]
-										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("ClaimWeeklySpeedRaidReward",tonumber(a_b))
-										v.RaidsButton.Cost.Text = "CLAIMED"
-									end
-								end
-							end
-						end
-						if Options["Auto Claim (Quest)"].Value then
-							--// Daily Quest
-							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.DailyQuestFrame.DailyQuestScrollingFrame:GetChildren()) do
-								if v:IsA("ImageLabel") then
-									if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
-										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
-										v.Complete.Visible = true
-									end
-								end
-							end
-							--// Weekly Quest
-							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.WeeklyQuestFrame.WeeklyQuestScrollingFrame:GetChildren()) do
-								if v:IsA("ImageLabel") then
-									if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
-										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
-										v.Complete.Visible = true
-									end
-								end
-							end
-						end
-
-					end
 				end
 			end))
-			coroutine.resume(coroutine.create(function() -- // Skill Configs
+			coroutine.resume(coroutine.create(function() -- // Skill Main
 				while task.wait(0.115) do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function ()
-						if Options["Auto Skills // Attack"].Value and blacklist_getgenv() == "is false" and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
-							local skills = UniversalGui.UniversalCenterUIFrame.SlotsHolder
-							--// Skill Main
+						if Options["Auto Skills // Attack"].Value  and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
 							if skills["Skill"..Options["Skill One"].Value].Visible == true and tonumber(skills["Skill"..Options["Skill One"].Value].SkillName.Text) == nil then
 								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill One"].Value))
 							end
@@ -1488,6 +1493,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 							if skills["Skill"..Options["Skill Fifth"].Value].Visible and tonumber(skills["Skill"..Options["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skills["Skill"..Options["Skill Fifth"].Value].SkillName.Text) == nil then
 								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fifth"].Value))
 							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() -- // Skill Assist and Attack
+				while task.wat(0.115) do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
+					pcall(function ()
+						if Options["Auto Skills // Attack"].Value and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
 							--// Skill Assist
 							for i,v in next,Options["Current Assists (Assists / Fruits)"].Value do
 								if i and v == true then
@@ -1607,16 +1621,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				while task.wait() do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function ()
-						--// Method for Safe Part
-						if Options["Current Method"].Value == "Over" then
-							method_safe = CFrame.new(0,0,- 7.5) * CFrame.Angles(math.rad(-90),0,0)
-						elseif Options["Current Method"].Value == "Under" then
-							method_safe = CFrame.new(0,0,- 7.5) * CFrame.Angles(math.rad(90),0,0)
-						elseif Options["Current Method"].Value == "Front" then
-							method_safe = CFrame.new(0,0,- 7.5) * CFrame.Angles(math.rad(0),1800,0)
-						elseif Options["Current Method"].Value == "Behind" then
-							method_safe = CFrame.new(0,0,- 7.5)
-						end
 						-- // Check to Safe
 						local xp12i3 = game:GetService("Players").LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text:split("/")[2]
 						local bo215 = Options["Health to Safe"].Value * (xp12i3 / 100)
@@ -1639,20 +1643,23 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end)
 				end
 			end))
-			coroutine.resume(coroutine.create(function() --// Miscfarm setiings
-				local bv = Instance.new("BodyVelocity")
-				if current_map() == "Infinite Mode" then --// do this if it's infinite mode
-					game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText"):GetPropertyChangedSignal("Text"):Connect(function ()
-						local wave_value = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText").Text
-						if string.len(wave_value) == 2 and string.find(wave_value,"0") then
-							getgenv()["Waiting for enemy"] = false
-						else
-							getgenv()["Waiting for enemy"] = true
-							task.wait(3)
-							getgenv()["Waiting for enemy"] = false
+			coroutine.resume(coroutine.create(function()-- // Bring Mode Misc
+				while task.wait() do
+					pcall(function ()
+						if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 16.5 then
+							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
+									if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
+										v.Head.Transparency = 10
+									end
+								end
+							end
 						end
 					end)
 				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Miscfarm setiings
+				local bv = Instance.new("BodyVelocity")
 				while task.wait() do
 					pcall(function ()
 						local Is_Blacklist = table.find(BlackList_Characters,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value)
@@ -1676,21 +1683,21 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 								game:GetService("TeleportService"):Teleport(7338881230)
 							end
 						end
-						--// Dodgeing set
-						if getgenv()["On Dodgeing skill"] then
-							tween_info:Cancel()
-						end
 						--// if auto_farm "true"
 						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is true" then
 							if not getgenv()["On Dodgeing skill"] then
 								setCollide(false)
 							elseif getgenv()["On Dodgeing skill"]then
 								setCollide(true)
+								if tween_info then
+									tween_info:Cancel()
+								end
 							end
+
 							if not getgenv()["player it's nil"] then
 								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
 								bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-								bv.MaxForce = Vector3.new(30000,30000,30000)
+								bv.MaxForce = Vector3.new(100000,100000,100000)
 								bv.Velocity = Vector3.new(0,0,0)
 
 								local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
@@ -1700,15 +1707,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 									end
 								end
 							end
-							if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 13.75 then
-								for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-										if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
-											v.Head.Transparency = 10
-										end
-									end
-								end
-							end
+
 							--// Check method
 							if not Is_Blacklist then --// Not blacklist character
 								if boss_bar() then
@@ -1759,90 +1758,114 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end)
 				end
 			end))
-			coroutine.resume(coroutine.create(function() --// Autofarm Configs
+			coroutine.resume(coroutine.create(function() -- // Infinite Mode Playing
+				if current_map() == "Infinite Mode" then
+					game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText"):GetPropertyChangedSignal("Text"):Connect(function ()
+						local wave_value = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText").Text
+						if string.len(wave_value) == 2 and string.find(wave_value,"0") then
+							getgenv()["Waiting for enemy"] = false
+						else
+							getgenv()["Waiting for enemy"] = true
+							task.wait(3)
+							getgenv()["Waiting for enemy"] = false
+						end
+					end)
+				end
 				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() ~= "Infinite Mode" then break end
 					pcall(function ()
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is true" and not getgenv()["player it's nil"] then
-							--// its infinite mode
-							if current_map() == "Infinite Mode" and not getgenv()["On Safe Mode"] then
+						if auto_farm() == "is true" and not getgenv()["player it's nil"] and not getgenv()["On Safe Mode"] then
+							if getgenv()["Waiting for enemy"] then
 								local base = game:GetService("Workspace"):WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"]
-								if getgenv()["Waiting for enemy"] then
-									tween_modify(base,CFrame.new(0,100,0) * CFrame.Angles(math.rad(-90),0,0),100)
+								tween_modify(base,CFrame.new(0,100,0) * CFrame.Angles(math.rad(-90),0,0),125)
+								tween_info:Play()
+								tween_info.Completed:Wait()
+								tween_info:Cancel()
+							elseif not getgenv()["Waiting for enemy"] and not boss_bar() and blacklist_getgenv() == "is false" then
+								repeat
+									tween_enemy(getClosestMob().HumanoidRootPart,125)
 									tween_info:Play()
-									tween_info.Completed:Wait()
-									tween_info:Cancel()
-								elseif blacklist_getgenv() == "is false" and not boss_bar() then
-									repeat
-										tween_enemy(getClosestMob().HumanoidRootPart,100)
-										tween_info:Play()
-										task.wait()
-									until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-									tween_info:Cancel()
-								elseif blacklist_getgenv() == "is false" and boss_bar() then
-									repeat
-										tween_enemy(getClosestBoss().HumanoidRootPart,100)
-										tween_info:Play()
-										task.wait()
-									until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-									tween_info:Cancel()
-								end
-							--// not infinite mode
-							elseif current_map() ~= "Infinite Mode" then
-								--// Normal Mode
-								if Options["Current Farm Mode"].Value == "Normal Mode" and not getgenv()["On Safe Mode"] then
-									if blacklist_getgenv() == "is false" and not boss_bar() then
-										repeat
-											tween_enemy(getClosestMob().HumanoidRootPart,100)
-											tween_info:Play()
-											task.wait()
-										until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-										tween_info:Cancel()
-									elseif blacklist_getgenv() == "is false" and boss_bar() then
-										repeat
-											tween_enemy(getClosestBoss().HumanoidRootPart,100)
-											tween_info:Play()
-											task.wait()
-										until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-										tween_info:Cancel()
-									end
-								--// Bring Mode
-								elseif Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["On Safe Mode"] then
-									if not boss_bar() and method_stage == 0 and getClosestobJect() and not getgenv()["enemy spawning"] and not getgenv()["Using Skill"] then
-										repeat
-											getgenv()["On counting"] = true
-											tween_modify(getClosestobJect().HumanoidRootPart,CFrame.new(0,12.5,0),150)
-											tween_info:Play()
-											task.wait(0.0875)
-										until method_stage ~= 0 or not getClosestobJect() or boss_bar() or auto_farm() == "is false" or getgenv()["enemy spawning"] or getgenv()["On Safe Mode"]
-										method_stage = 1
-									elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and not getgenv()["Using Skill"] then
-										repeat
-											getgenv()["On counting"] = true
-											tween_modify(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
-											tween_info:Play()
-											task.wait()
-										until method_stage ~= 1 or boss_bar() or auto_farm() == "is false" or dist_enemy_Bring(getNormalEnemy().HumanoidRootPart) <= 50 or getgenv()["On Safe Mode"]
-										task.wait(2.75)
-										method_stage = 2
-									elseif not boss_bar() and method_stage == 2 and blacklist_getgenv() == "is false" then
-										repeat
-											getgenv()["On counting"] = false
-											tween_enemy(getClosestMob().HumanoidRootPart,125)
-											tween_info:Play()
-											task.wait()
-										until method_stage ~= 2 or boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-										tween_info:Cancel()
-									elseif boss_bar() and blacklist_getgenv() == "is false" then
-										repeat
-											getgenv()["On counting"] = false
-											tween_enemy(getClosestBoss().HumanoidRootPart,125)
-											tween_info:Play()
-											task.wait()
-										until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-										tween_info:Cancel()
-									end
-								end
+									task.wait()
+								until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
+							elseif not getgenv()["Waiting for enemy"] and boss_bar() and blacklist_getgenv() == "is false" then
+								repeat
+									tween_enemy(getClosestBoss().HumanoidRootPart,125)
+									tween_info:Play()
+									task.wait()
+								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Normal Mode
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
+					pcall(function ()
+						if auto_farm() == "is true" and Options["Current Farm Mode"].Value == "Normal Mode" and not getgenv()["player it's nil"] and not getgenv()["On Safe Mode"] then
+							if not boss_bar() and blacklist_getgenv() == "is false" then
+								repeat
+									tween_enemy(getClosestMob().HumanoidRootPart,125)
+									tween_info:Play()
+									task.wait()
+								until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
+							elseif boss_bar() and blacklist_getgenv() == "is false" then
+								repeat
+									tween_enemy(getClosestBoss().HumanoidRootPart,125)
+									tween_info:Play()
+									task.wait()
+								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Autofarm Configs Bring Mode // ใส่แยกเพราะ ping แดก
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
+					pcall(function ()
+						if auto_farm() == "is true" and Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["enemy spawning"] and not getgenv()["player it's nil"] then
+							--// Stage 0
+							if not boss_bar() and method_stage == 0 and getClosestobJect() and not getgenv()["Using Skill"] then
+								repeat
+									getgenv()["On counting"] = true
+									tween_modify(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),150)
+									tween_info:Play()
+									task.wait(0.0875)
+								until method_stage ~= 0 or not getClosestobJect() or boss_bar() or auto_farm() == "is false"
+								method_stage = 1
+							--// Stage 1
+							elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and not getgenv()["Using Skill"] then
+								repeat
+									getgenv()["On counting"] = true
+									tween_modify(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
+									tween_info:Play()
+									task.wait()
+								until method_stage ~= 1 or boss_bar() or auto_farm() == "is false" or dist_enemy_Bring(getNormalEnemy().HumanoidRootPart) <= 50
+								task.wait(2.75)
+								method_stage = 2
+							--// Stage 2
+							elseif not boss_bar() and method_stage == 2 and blacklist_getgenv() == "is false" and not getgenv()["On Safe Mode"] then
+								repeat
+									getgenv()["On counting"] = false
+									tween_enemy(getClosestMob().HumanoidRootPart,125)
+									tween_info:Play()
+									task.wait()
+								until method_stage ~= 2 or boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
+							--// Boss stage
+							elseif boss_bar() and blacklist_getgenv() == "is false" and not getgenv()["On Safe Mode"] then
+								repeat
+									getgenv()["On counting"] = false
+									tween_enemy(getClosestBoss().HumanoidRootPart,125)
+									tween_info:Play()
+									task.wait()
+								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
+								tween_info:Cancel()
 							end
 						end
 					end)
