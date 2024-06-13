@@ -1,4 +1,15 @@
+
 repeat task.wait() until game:IsLoaded()
+--// Auto Execute script check
+if not getgenv()["Waiting for Execute"] then getgenv()["Waiting for Execute"] = true
+	game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
+		local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+		if getgenv()["Auto Execute"] and state == Enum.TeleportState.InProgress then
+			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20(Rework)'))()")
+		end
+	end)
+end
+--// Loadscript
 if not game:GetService("Players").LocalPlayer.Character then game:GetService("Players").LocalPlayer.CharacterAdded:Wait()wait()end
 if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
     repeat
