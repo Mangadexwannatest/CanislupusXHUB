@@ -684,7 +684,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
 			coroutine.resume(coroutine.create(function()
 				repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") ~= nil
-				if readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" then return end
+				if readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character1") then return end
 				getgenv().Character = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 				SetParagraphValue(2,"Characters","Current Character",getgenv().Character["Character1"].."\n"..getgenv().Character["Character2"].."\n"..getgenv().Character["Character3"])
 			end))
@@ -699,7 +699,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				end
 				if value and not isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
 					return Notify("Auto Equip Character (Error)","Make sure you save the characters.")
-				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" then 
+				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character1")) then
 					return Notify("Auto Equip Character (Error)","Make sure your file is not empty.")
 				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 					getgenv().IsCharacter = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
