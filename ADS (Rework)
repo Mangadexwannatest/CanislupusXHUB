@@ -1,10 +1,10 @@
 repeat task.wait() until game:IsLoaded()
+if not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,"Anime Dimension") then return end
 --// Auto Execute script check
 if not getgenv()["Waiting for Execute"] then getgenv()["Waiting for Execute"] = true
 	game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
-		if state ~= Enum.TeleportState.Started and state ~= Enum.TeleportState.InProgress then return end
-		if getgenv()["Auto Execute"] then
-			local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+		local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+		if getgenv()["Auto Execute"] and state == Enum.TeleportState.InProgress then
 			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20(Rework)'))()")
 		end
 	end)
@@ -31,7 +31,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		local hwid_onwer = "20840d7e-cecf-44a5-a181-1908adee69bf"
 		local function toInteger(color) return math.floor(color.r*255)*256^2+math.floor(color.g*255)*256+math.floor(color.b*255) end
 		local function toHex(color) local int = toInteger(color) local current = int local final = "" local hexChar = {"a", "b", "c", "d", "e", "f"} repeat local remainder = current % 16 local char = tostring(remainder) if remainder >= 10 then char = hexChar[1 + remainder - 10] end current = math.floor(current/16) final = final..char until current <= 0 return "0x"..string.reverse(final) end
-		local PlayerId,Game,Update = game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name) , "Anime Dimensions Simulator (Rework)" , "Last Update June/13/2024"
+		--// Game and Update
+		local PlayerId,Game,Update = game.Players:GetUserIdFromNameAsync(game.Players.LocalPlayer.Name) , "Anime Dimensions Simulator (Rework) ","1.0"
 		local argae = {"A15912861826125159126999192765710","C2166126169781236091269989162160","B1261692-699976/125)2368125l0&","8261*&762665126+05*7^ALl251699127","Z-01296091828677206-196891267799","A857256666512-1658662-77551512va-"..tostring(PlayerId).."-826166857-88521","ck5756l666x12-125/"..tostring(PlayerId).."-d662-77551-b26166857-o88521","l219586a0-b556666512-o2658662-a5177551-c1826166857-b12241",tostring(PlayerId).."-7256666512-1658662-77551-826166857-241*17259))+^5!&&&","495aw5155-7256lvkd66512-2f1658662-7y755lz1-82x61q6d685f7-24w1w2f"..tostring(PlayerId)}
 		local count_hide = 0
 		local imageid
@@ -143,7 +144,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		local current_character_of_speed_raid
 		local diemnsion_to_num,difficultyc_to_num,raid_to_num,farm_mode_to_num,method_mode_to_num,them_to_num,attack_method_to_num
 		if getgenv().Setup["General"]["Current Dimension"] then for i,v in pairs(Dimension["Dimension Info"]) do if v == getgenv().Setup["General"]["Current Dimension"] then diemnsion_to_num = i end end end
-		if getgenv().Setup["General"]["Current Difficulty"] then for i,v in pairs({"Esay","Hard","Nightmare"}) do if v == getgenv().Setup["General"]["Current Difficulty"] then difficultyc_to_num = i end end end
+		if getgenv().Setup["General"]["Current Difficulty"] then for i,v in pairs({"Easy","Hard","Nightmare"}) do if v == getgenv().Setup["General"]["Current Difficulty"] then difficultyc_to_num = i end end end
 		if getgenv().Setup["General"]["Current Raid"] then for i,v in pairs(Raid["Raids Info"]) do if v == getgenv().Setup["General"]["Current Raid"] then raid_to_num = i end end end
 		if getgenv().Setup["Game"]["Current Farm Mode"] then for i,v in pairs({"Normal Mode","Bring Mode"}) do if v == getgenv().Setup["Game"]["Current Farm Mode"] then farm_mode_to_num = i end end end
 		if getgenv().Setup["Game"]["Current Method"] then for i,v in pairs({"Behind","Front","Over","Under"}) do if v == getgenv().Setup["Game"]["Current Method"] then method_mode_to_num = i end end end
@@ -153,25 +154,27 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		local method_stage = 0
 		--// local of Game
 
+		local tween_s = game:GetService("TweenService")
+		local tween_info
+		local bv = Instance.new("BodyVelocity")
 		local GameMap = game:GetService("Workspace"):WaitForChild("GameMap")
 		local UniversalGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("UniversalGui")
-		local skills = UniversalGui:WaitForChild("UniversalCenterUIFrame"):WaitForChild("SlotsHolder")
 		--// Other
 
-		local card_rewards = {"None"}
-		local other_rewards = {"None"}
-		local blacklist_items = {"TraitToken","RaidCurrency","BossRushCurrency","Gem","BossRushEntryPass"}
+		local card_rewards = {"`None`"}
+		local other_rewards = {"`None`"}
+		local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem","BossRushEntryPass"}
 
 		if Rarity then for i,v in next, Rarity do card_stag = i end end
 		if Assist_Fruits then for i,v in next, Assist_Fruits do assist_stage = i end end
 		local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 		local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-		-- ไม่ได้ใช้ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+		local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 		local function Notify(titile,Content,SubTitle,time)Fluent:Notify({Title = titile,Content = Content,SubContent = (SubTitle or nil),Duration = (time or 5)})end
 		local Tabs = {}
 		local Window = Fluent:CreateWindow({
-			Title = Game,
-			SubTitle = Update.." [YT : @crazyday3693]",
+			Title = Game..Update,
+			SubTitle = "[YT : @crazyday3693]",
 			TabWidth = 160,
 			Size = UDim2.fromOffset(580, 460),
 			Acrylic = getgenv().Setup["Settings"]["Acrylic"] or false,
@@ -198,16 +201,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			}
 		end
 		local Options = Fluent.Options
-		do
-			SaveManager:SetLibrary(Fluent) SaveManager:SetFolder("CrazyDay/"..Game.."/"..PlayerId) SaveManager:IgnoreThemeSettings() SaveManager:SetIgnoreIndexes({})
-			Window:SelectTab(1)
-			-- check configs
-			if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then getgenv().Onloading = true end
-		end
 		for i,v in pairs(game:WaitForChild("CoreGui"):GetChildren()) do
 			if v.Name == "ScreenGui" or v.Name == "CrazyDay" then
 				for k,g in next,v:GetDescendants() do
-					if g.Name == "TextLabel" and ( string.find(g.Text,Game:lower()) or g.Text == Game ) then
+					if g.Name == "TextLabel" and (g.Text == Game..Update or string.find(g.Text,Game)) then
 						for _,imageidof in pairs(g.Parent.Parent:GetChildren()) do
 							if imageidof.Name == "TextButton" and imageidof:FindFirstChild("Icon") and imageidof.Icon.Image == "rbxassetid://9886659276" then
 								imageidof.Visible = false
@@ -222,7 +219,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
 					if v.Name == "ScreenGui" then
 						for k,g in next,v:GetDescendants() do
-							if g.Name == "TextLabel" and ( string.find(g.Text,Game:lower()) or g.Text == Game ) then
+							if g.Name == "TextLabel" and (g.Text == Game..Update or string.find(g.Text,Game)) then
 								g.Parent.Parent.Parent.Parent.Name = "CrazyDay"
 							end
 						end
@@ -249,6 +246,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				end
 			})
 		end
+		local save_stage = 0
 		local cards_rarity
 		local skill_selects
 		local InterfaceSettings = Tabs.Settings:AddSection("Interfaces")
@@ -258,7 +256,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Save all configs automatically.",
 			Default = getgenv().Setup["Settings"]["Auto Save Configs"] or false,
 			Callback = function (value)
-				if not getgenv().Onloading then
+				if value then
+					save_stage += 1
+					SaveManager:Save("Configs")
+				elseif not value and save_stage ~= 0 then
 					SaveManager:Save("Configs")
 				end
 				if cards_rarity and value and not getgenv().Setup["Settings"]["Auto Save Configs"] then
@@ -296,7 +297,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = them_to_num or 5,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				Fluent:SetTheme(value)
@@ -307,7 +308,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "The blurred background requires graphic quallity 8 +.",
 			Default = getgenv().Setup["Settings"]["Acrylic"] or false,
 			Callback = function (value)
-				if not getgenv().Onloading and Options["Auto Save"].Value then
+				if Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				Fluent:ToggleAcrylic(value)
@@ -318,7 +319,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Makes the interface transparent.",
 			Default = getgenv().Setup["Settings"]["Transparency"] or false,
 			Callback = function (value)
-				if not getgenv().Onloading and Options["Auto Save"].Value then
+				if Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				Fluent:ToggleTransparency(value)
@@ -334,26 +335,22 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = diemnsion_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
-				value = value
-				print(value)
 			end
 		})
 
 		DimensionsInterface:AddDropdown("Current Difficulty", {
 			Title = "Select Difficulty",
 			Description = nil,
-			Values = {"Esay","Hard","Nightmare"},
+			Values = {"Easy","Hard","Nightmare"},
 			Multi = false,
 			Default = difficultyc_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
-				value = value
-				print(value)
 			end
 		})
 
@@ -362,7 +359,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = nil,
 			Default = getgenv().Setup["General"]["Hard core"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -373,7 +370,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = nil,
 			Default = getgenv().Setup["General"]["Friends Only"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -384,7 +381,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = nil,
 			Default = getgenv().Setup["General"]["Auto Retry"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -395,7 +392,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Create and Start the selected dimension automatically.",
 			Default = getgenv().Setup["General"]["Auto Current Dimension"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -406,7 +403,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Create and Start the required dimension level automatically.",
 			Default = getgenv().Setup["General"]["Auto Dimension Level"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if value and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
@@ -496,7 +493,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = raid_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -506,7 +503,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = nil,
 			Default = getgenv().Setup["General"]["Auto Raid (Normal)"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if not value then
@@ -519,7 +516,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Join Raid challenge if the reward available automatically.",
 			Default = getgenv().Setup["General"]["Auto Raid (Challenge)"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -529,7 +526,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Join Speed Raid if ready automatically.",
 			Default = getgenv().Setup["General"]["Auto Raid (Speed Raid)"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -540,7 +537,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Join Boss Rush if have free ticket automatically.",
 			Default = getgenv().Setup["General"]["Auto Boss Rush"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -550,7 +547,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Join Infinite Mode if the reward available \nrequire(level 20 +) automatically.",
 			Default = getgenv().Setup["General"]["Auto Infinite Mode"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -560,10 +557,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Makes your dash have no cooldown.",
 			Default = getgenv().Setup["General"]["Dash no cooldown"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
-				game:GetService("ReplicatedStorage"):WaitForChild(game.Players.LocalPlayer.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
+				game:GetService("ReplicatedStorage"):WaitForChild(game:GetService("Players").LocalPlayer.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
 			end
 		})
 		MiscGeneralInterface:AddButton({
@@ -602,12 +599,14 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = farm_mode_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				method_stage = 0
 				getgenv()["On counting"] = false
-				getgenv()["bring fully doing"] = false
+				if tween_info then
+					tween_info = false
+				end
 			end
 		})
 		GameInterface:AddDropdown("Current Method", {
@@ -617,7 +616,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = method_mode_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -630,7 +629,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Max = 10,
 			Rounding = 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -643,7 +642,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Max = 100,
 			Rounding = 0,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -653,7 +652,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Set the distance calculated from the size of the enemy automatically.",
 			Default = getgenv().Setup["Game"]["Auto Set Distance"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -663,7 +662,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Dodge all enemy skills.",
 			Default = getgenv().Setup["Game"]["Dodge Skill"] or true,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -673,7 +672,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Stop all farm if player below x % HP.",
 			Default = getgenv().Setup["Game"]["Auto Safe"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if not value then
@@ -685,7 +684,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
 			coroutine.resume(coroutine.create(function()
 				repeat task.wait() until game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") ~= nil
-				if readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character1") then return end
+				if (readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character")) then return end
 				getgenv().Character = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 				SetParagraphValue(2,"Characters","Current Character",getgenv().Character["Character1"].."\n"..getgenv().Character["Character2"].."\n"..getgenv().Character["Character3"])
 			end))
@@ -695,13 +694,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = nil,
 			Default = getgenv().Setup["Game"]["Auto Equip Character"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if value and not isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") then
+					Options["Auto Equip Character"]:SetValue(false)
 					return Notify("Auto Equip Character (Error)","Make sure you save the characters.")
-				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character1")) then
-					return Notify("Auto Equip Character (Error)","Make sure your file is not empty.")
+				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") == "" or not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character")) then
+					Options["Auto Equip Character"]:SetValue(false)
+					return Notify("Auto Equip Character (Error)","Make sure the values in your file are correct.")
 				elseif value and isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 					getgenv().IsCharacter = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 					local remotes = game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction
@@ -731,8 +732,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				character_table["Character1"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value
 				character_table["Character2"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName1.Value
 				character_table["Character3"] = game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].AssistCharacterName2.Value
-				writefile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json",game:GetService("HttpService"):JSONEncode(character_table))
 				Notify("Successfully saved",character_table["Character1"].."\n"..character_table["Character2"].."\n"..character_table["Character3"])
+				writefile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json",game:GetService("HttpService"):JSONEncode(character_table))
 				SetParagraphValue(2,"Characters","Current Character",character_table["Character1"].."\n"..character_table["Character2"].."\n"..character_table["Character3"])
 			end
 		})
@@ -741,7 +742,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Claim all of the daily // weekly quests automatically.",
 			Default = getgenv().Setup["Game"]["Auto Claim (Quest)"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -751,7 +752,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Claim all of the speed raid reward automatically.",
 			Default = getgenv().Setup["Game"]["Auto Claim (Speed Raid)"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -761,7 +762,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Complete all daily quests automatically.",
 			Default = getgenv().Setup["Game"]["Auto Daily Quest"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -772,7 +773,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = true,
 			Default = Rarity or {"Common"},
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -782,7 +783,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Sell all selected cards automatically.",
 			Default = getgenv().Setup["Game"]["Auto Sell Cards"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -792,7 +793,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "equip your best card automatically.",
 			Default = getgenv().Setup["Game"]["Auto Equip Best Cards"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -802,7 +803,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Upgrade all your equipped cards automatically.",
 			Default = getgenv().Setup["Game"]["Auto Upgrade Equip Cards"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -815,7 +816,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = true,
 			Default = getgenv().Setup["Skill"]["Assists / Fruits"] or {"Assist1","Assist2","Fruit1","Fruit2"},
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -826,7 +827,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = attack_method_to_num or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -837,7 +838,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = getgenv().Setup["Skill"]["Skill One"] or 1,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -848,7 +849,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = getgenv().Setup["Skill"]["Skill Two"] or 2,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -859,7 +860,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = getgenv().Setup["Skill"]["Skill Third"] or 3,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -870,7 +871,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = getgenv().Setup["Skill"]["Skill Fourth"] or 4,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -881,7 +882,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Multi = false,
 			Default = getgenv().Setup["Skill"]["Skill Fifth"] or 5,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -894,7 +895,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Max = 150,
 			Rounding = 0,
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -904,7 +905,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "attacks and skills on enemies automatically.",
 			Default = getgenv().Setup["Skill"]["Auto Skills // Attack"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if value then
@@ -929,7 +930,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Numeric = false,
 			Finished = false,
 			Callback = function(value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -939,7 +940,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Choose the color of the webhook.",
 			Default = getgenv().Setup["Webhook"]["Webhook Color"] or Color3.fromRGB(125, 125, 125),
 			Callback = function (value)
-				if value and not getgenv().Onloading and Options["Auto Save"].Value then
+				if value and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -949,7 +950,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Send a notifaction to your Discord when the game ends,displaying information about that match and what rewards you've received.",
 			Default = getgenv().Setup["Webhook"]["Send Webhook"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -1021,7 +1022,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Execute the script while teleporting automatically.",
 			Default = getgenv().Setup["Settings"]["Auto Execute"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				getgenv()["Auto Execute"] = value
@@ -1030,10 +1031,10 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 
 		SettingsInterface:AddToggle("Auto Close Gui After Execute", {
 			Title = "Auto Close Gui After Execute",
-			Description = "Hide your Gui after Execute the script automatically.",
+			Description = "Hide your gui after execute the script automatically.",
 			Default = getgenv().Setup["Settings"]["Auto Close Gui After Execute"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if value and is_gui() and count_hide == 0 then
@@ -1048,7 +1049,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Disable 3DRendering for best performance.",
 			Default = getgenv().Setup["Settings"]["Black Screen"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 				if (value or not value) and BlackScreen_Gui() then
@@ -1062,7 +1063,7 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			Description = "Show information while black screen is enabled.",
 			Default = getgenv().Setup["Settings"]["Show information"] or false,
 			Callback = function (value)
-				if (value or not value) and not getgenv().Onloading and Options["Auto Save"].Value then
+				if (value or not value) and Options["Auto Save"].Value then
 					SaveManager:Save("Configs")
 				end
 			end
@@ -1078,10 +1079,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						{
 							Title = "Yes",
 							Callback = function()
-								writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Theme","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Equip Best Cards","type":"Toggle","value":false},{"idx":"Auto Current Dimension","type":"Toggle","value":false},{"idx":"Auto Raid (Speed Raid)","type":"Toggle","value":false},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Infinite Mode","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Current Assists (Assists / Fruits)","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Upgrade Equip Cards","type":"Toggle","value":false},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Auto Close Gui After Execute","type":"Toggle","value":false},{"idx":"Auto Execute","type":"Toggle","value":false},{"idx":"Auto Sell Cards","type":"Toggle","value":false},{"idx":"Current Skills Distance","type":"Slider","value":"35"},{"idx":"Dodge Skill","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Skills // Attack","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Esay"},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Raid (Normal)","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Auto Dimension Level","type":"Toggle","value":false},{"idx":"Current Rarity (Cards)","type":"Dropdown","mutli":true,"value":{"Common":true,"Uncommon":true,"Rare":true}},{"idx":"Auto Raid (Challenge)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"ff0000"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Friends Only","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Boss Rush","type":"Toggle","value":false}]}]])
+								writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Theme","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Equip Best Cards","type":"Toggle","value":false},{"idx":"Auto Current Dimension","type":"Toggle","value":false},{"idx":"Auto Raid (Speed Raid)","type":"Toggle","value":false},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Infinite Mode","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Current Assists (Assists / Fruits)","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Upgrade Equip Cards","type":"Toggle","value":false},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Auto Close Gui After Execute","type":"Toggle","value":false},{"idx":"Auto Execute","type":"Toggle","value":false},{"idx":"Auto Sell Cards","type":"Toggle","value":false},{"idx":"Current Skills Distance","type":"Slider","value":"35"},{"idx":"Dodge Skill","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Skills // Attack","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Raid (Normal)","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Auto Dimension Level","type":"Toggle","value":false},{"idx":"Current Rarity (Cards)","type":"Dropdown","mutli":true,"value":{"Common":true,"Uncommon":true,"Rare":true}},{"idx":"Auto Raid (Challenge)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"ff0000"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Friends Only","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Boss Rush","type":"Toggle","value":false}]}]])
 								Notify("Successfully reseted configs",[[]])
 								task.wait(0.35)
-								SaveManager:Load("Configs")
+								do
+									SaveManager:Load("Configs")
+								end
 								Notify("Successfully loaded configs",[[]])
 							end
 						},
@@ -1098,7 +1101,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 
 
 		--//load configs
-		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then SaveManager:Load("Configs") getgenv().Onloading = false end
+		do
+			SaveManager:SetLibrary(Fluent) SaveManager:SetFolder("CrazyDay/"..Game.."/"..PlayerId) SaveManager:IgnoreThemeSettings() SaveManager:SetIgnoreIndexes({})
+			Window:SelectTab(1)
+			if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then SaveManager:Load("Configs") end
+			getgenv()["Successfully loaded"] = true
+		end
 		coroutine.resume(coroutine.create(function()
 			repeat task.wait() until is_gui()
 			for i,v in pairs(game:GetService("CoreGui"):FindFirstChild("CrazyDay"):GetChildren()) do
@@ -1127,18 +1135,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 		end
 		coroutine.resume(coroutine.create(unload_ui))
 		--//functions
-		repeat task.wait() until getgenv()["Script Loaded"] ~= nil
+		repeat task.wait() until getgenv()["Script Loaded"] ~= nil and game:GetService("CoreGui"):FindFirstChild("CrazyDay") and getgenv()["Successfully loaded"] == true
 		if getgenv()["Script Loaded"] == true then
-			-- // Wait until the gui has loaded
-			repeat task.wait() until game:GetService("CoreGui"):FindFirstChild("CrazyDay")
 
 			if game:GetService("CoreGui"):FindFirstChild("functionruning") and game:GetService("CoreGui"):FindFirstChild("functionruning").Enabled == false then
 				game:GetService("CoreGui"):FindFirstChild("functionruning").Enabled = true
 			end
-
-			if game:GetService("Workspace"):WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name == "CharacterTest" then return Notify("Failed to load function (Error)","This map is not supported.") end
-			local tween_s = game:GetService("TweenService")
-			local tween_info
+			if GameMap:FindFirstChildOfClass("Model").Name == "CharacterTest" then return Notify("Failed to load function (Error)","This map is not supported.") end
+			
+			--// Start Function
 			local function tween_enemy(part,speed)
 				tween_info = tween_s:Create(game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart"),TweenInfo.new((part.Position - game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude/speed,Enum.EasingStyle.Linear),{CFrame = part.CFrame * method_mode})
 			end
@@ -1147,11 +1152,11 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			end
 			local function getClosestMob()
 				local dist, thing = math.huge
-					for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-						if v:FindFirstChildOfClass("BillboardGui") then
+					for i, v in next, game:GetService("Workspace").Folders.Monsters:GetChildren() do
+						if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
 							local mag = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
 							if mag < dist then
-								dist = mag 
+								dist = mag
 								thing = v
 							end
 						end
@@ -1160,8 +1165,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			end
 			local function getClosestobJect()
 				local dist, thing = math.huge
-					for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-						if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
+					for i, v in next, game:GetService("Workspace").Folders.Monsters:GetChildren() do
+						if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
 							local mag = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
 							if mag < dist then
 								dist = mag
@@ -1173,8 +1178,8 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 			end
 			local function getClosestBoss()
 				local dist, thing = math.huge
-					for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-						if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == false then
+					for i, v in next, game:GetService("Workspace").Folders.Monsters:GetChildren() do
+						if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == false then
 							local mag = (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
 							if mag < dist then
 								dist = mag
@@ -1184,28 +1189,15 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end
 				return thing
 			end
-			local function getClosestPos(name,thedist)
-				local dist, thing = thedist
-					for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-						if v:FindFirstChildOfClass("BillboardGui") then
-							local mag = (name.Position - v.HumanoidRootPart.Position).magnitude
-							if mag < dist then
-								dist = mag
-								thing = v
-							end
-						end
-					end
-				return thing
-			end
 			local  function getNormalEnemy()
-				for i,v in pairs(game.Workspace.Folders.Monsters:GetChildren()) do
-					if v:FindFirstChildOfClass("BillboardGui") then
+				for i,v in pairs(game:GetService("Workspace").Folders.Monsters:GetChildren()) do
+					if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
 						return v
 					end
 				end
 			end
 			local function setCollide(value)
-				for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+				for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
 					if v:IsA("BasePart") and v.CanCollide ~= value then
 						v.CanCollide = value
 					end
@@ -1215,21 +1207,25 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				return game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
 			end
 			local function dist_of_enemy()
-				return (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestMob().HumanoidRootPart.Position).magnitude
+				return (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - getClosestMob().HumanoidRootPart.Position).magnitude
 			end
 			local function dist_enemy_Bring(part)
 				return (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - part.Position).magnitude
 			end
 			local function current_map()
-				return game:GetService("Workspace"):WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name
+				if string.find(GameMap:FindFirstChildOfClass("Model").Name,"Dimension") then
+					return GameMap:FindFirstChildOfClass("Model").Name:split("Dimension")[1]
+				else
+					return GameMap:FindFirstChildOfClass("Model").Name
+				end
 			end
 			local function current_stage()
-				return tonumber(game:GetService("Players").LocalPlayer.RespawnLocation.Name:split("SpawnLocation")[2])
+				return game:GetService("Players").LocalPlayer.RespawnLocation.Name:split("SpawnLocation")[2]
 			end
 			local function blacklist_getgenv()
-				if not getgenv()["On Dodgeing skill"] and not getgenv()["player it's nil"] and not getgenv()["enemy spawning"] then
+				if not getgenv()["player it's nil"] and not getgenv()["enemy spawning"] then
 					return "is false"
-				elseif getgenv()["On Dodgeing skill"] or getgenv()["player it's nil"] or getgenv()["enemy spawning"] then
+				elseif getgenv()["player it's nil"] or getgenv()["enemy spawning"] then
 					return "is true"
 				end
 			end
@@ -1241,37 +1237,385 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 				end
 			end
 			game:GetService("Players").LocalPlayer:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
-				method_stage = 0
-				getgenv()["enemy spawning"] = true
-				task.wait(1)
-				getgenv()["enemy spawning"] = false
+				pcall(function()
+					method_stage = 0
+					getgenv()["enemy spawning"] = true
+					task.wait(1)
+					getgenv()["enemy spawning"] = false
+				end)
 			end)
-			coroutine.resume(coroutine.create(function() --// Character functions
-				game:GetService("Workspace"):WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
+			hookfunction(warn, newcclosure(function (value)
+				return nil
+			end))
+			coroutine.resume(coroutine.create(function ()--// Safe Mode
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function ()
-						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
-							local a = v:Clone()
-							local side = math.clamp(2.85,0,10)
-							local Sizeto = v.Size + Vector3.new(side,100,side)
-							a.Size = Vector3.new(0,0,v.Size.Z)
-							if v.ClassName == "MeshPart" then
-								a.Size = Vector3.new(0,0,100)
-								Sizeto = v.Size + Vector3.new(side,side,100)
+						-- // Check to Safe
+						local xp12i3 = game:GetService("Players").LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text:split("/")[2]
+						local bo215 = Options["Health to Safe"].Value * (xp12i3 / 100)
+						if Options["Auto Safe"].Value and auto_farm() == "is true" and tonumber(UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) <= tonumber(bo215) then
+							getgenv()["On Safe Mode"] = true
+						elseif Options["Auto Safe"].Value and auto_farm() == "is true" and tonumber(UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) >= tonumber(bo215) then
+							getgenv()["On Safe Mode"] = false
+						end
+						--// Safe Mode Playing
+						if getgenv()["On Safe Mode"] then
+							for i,v in next,game:GetService("Workspace").Folders.SpawnPoints:GetChildren() do
+								if v.Name == game:GetService("Players").LocalPlayer.RespawnLocation.Name then
+									tween_modify(v,CFrame.new(0,75,0),135)
+									tween_info:Play()
+									tween_info.Completed:Wait()
+									tween_info:Cancel()
+								end
 							end
-							game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
-							a.CFrame = v.CFrame + Vector3.new(0,0,0)
-							a.Anchored = true
-							a.Transparency = 1
-							a.CanCollide = true
-							a.Name = "Ignore"
-							a.Parent = v.Parent
-							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On counting"] or getgenv()["bring fully doing"]
-							a:Destroy()
 						end
 					end)
-				end)
-				local function ontounching_ignore()
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Miscfarm setiings
+				while task.wait() do
 					pcall(function ()
+						local Is_Blacklist = table.find(BlackList_Characters,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value)
+						--// Auto Retry
+						if Options["Auto Retry"].Value and not getgenv()["Raid Opening"] then
+							if UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
+								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("RetryDungeon")
+							end
+						end
+						--// Check RaidOpened
+						if Options["Auto Raid (Normal)"].Value and tonumber(os.date("!*t").min) <= 9 then
+							getgenv()["Raid Opening"] = true
+						elseif Options["Auto Raid (Normal)"].Value and tonumber(os.date("!*t").min) > 9 then
+							getgenv()["Raid Opening"] = false
+						elseif not Options["Auto Raid (Normal)"].Value and getgenv()["Raid Opening"] then
+							getgenv()["Raid Opening"] = false
+						end
+						--// Teleport Lobby (Raid)
+						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Raid Opening"] then
+							if getgenv()["Raid Opening"] and not boss_bar() then
+								game:GetService("TeleportService"):Teleport(7338881230)
+							end
+						end
+						--// Check method
+						if not Is_Blacklist then --// Not blacklist character
+							if boss_bar() then
+								if Options["Current Method"].Value == "Over" then
+									method_mode = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
+								elseif Options["Current Method"].Value == "Under" then
+									method_mode = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
+								elseif Options["Current Method"].Value == "Front" then
+									method_mode = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
+								elseif Options["Current Method"].Value == "Behind" then
+									method_mode = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
+								end
+							elseif not boss_bar() then
+								if Options["Current Method"].Value == "Over" then
+									method_mode = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.85 ,0) * CFrame.Angles(math.rad(-90),0,0)
+								elseif Options["Current Method"].Value == "Under" then
+									method_mode = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.85 ,0) * CFrame.Angles(math.rad(90),0,0)
+								elseif Options["Current Method"].Value == "Front" then
+									method_mode = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
+								elseif Options["Current Method"].Value == "Behind" then
+									method_mode = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
+								end
+							end
+						elseif Is_Blacklist then -- // Blacklist character
+							if Options["Current Method"].Value == "Over" then
+								method_mode = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
+							elseif Options["Current Method"].Value == "Under" then
+								method_mode = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
+							elseif Options["Current Method"].Value == "Front" then
+								method_mode = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
+							elseif Options["Current Method"].Value == "Behind" then
+								method_mode = CFrame.new(0, 0, 1.5)
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Autofarm misc
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
+					pcall(function()
+						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is true" then
+							--// Noclip
+							if not getgenv()["On Dodgeing skill"] then
+								setCollide(false)
+							elseif getgenv()["On Dodgeing skill"] then
+								if tween_info then
+									tween_info:Cancel()
+								end
+								setCollide(true)
+							end
+							game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
+							bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+							bv.MaxForce = Vector3.new(100000,100000,100000)
+							bv.Velocity = Vector3.new(0,0,0)
+
+							local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
+							for _, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+								if v.IsA(v, "BasePart") then
+									v.Velocity, v.RotVelocity = V3, V3
+								end
+							end
+
+							--// Bring Misc
+							if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 16.5 then
+								for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
+										if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
+											v.Head.Transparency = 10
+										end
+									end
+								end
+							end
+						elseif (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and auto_farm() == "is false" then
+							if game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand == true then
+								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+								bv.Parent = nil
+							end
+							if tween_info then
+								tween_info:Cancel()
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Autofarm infinite mode playing
+				if current_map() == "Infinite Mode" then
+					game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText"):GetPropertyChangedSignal("Text"):Connect(function ()
+						local wave_value = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText").Text
+						if string.len(wave_value) == 2 and string.find(wave_value,"0") then
+							getgenv()["Waiting for enemy"] = false
+						else
+							getgenv()["Waiting for enemy"] = true
+							task.wait(3)
+							getgenv()["Waiting for enemy"] = false
+						end
+					end)
+				end
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() ~= "Infinite Mode" then break end
+					pcall(function()
+						local base = game:GetService("Workspace"):WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"]
+						if auto_farm() == "is true" then
+							if getgenv()["Waiting for enemy"] then
+								tween_modify(base,CFrame.new(0,100,0) * CFrame.Angles(math.rad(-90),0,0),150)
+								tween_info:Play()
+								tween_info.Completed:Wait()
+								tween_info:Cancel()
+							elseif not getgenv()["Waiting for enemy"] and not boss_bar() and not getgenv()["On Dodgeing skill"] and not getgenv()["On Safe Mode"] then
+								tween_enemy(getClosestMob().HumanoidRootPart,125)
+								tween_info:Play()
+								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+									tween_info:Cancel()
+								end
+							elseif not getgenv()["Waiting for enemy"] and boss_bar() and not getgenv()["On Dodgeing skill"] and not getgenv()["On Safe Mode"] then
+								tween_enemy(getClosestBoss().HumanoidRootPart,125)
+								tween_info:Play()
+								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+									tween_info:Cancel()
+								end
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() --// Autofarm normal/bring mode playing
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
+					pcall(function ()
+						if auto_farm() == "is true" then
+							--// Normal Mode
+							if Options["Current Farm Mode"].Value == "Normal Mode" then
+								--// Not Boss
+								if not boss_bar() and not getgenv()["On Dodgeing skill"] and not getgenv()["On Safe Mode"] then
+									tween_enemy(getClosestMob().HumanoidRootPart,125)
+									tween_info:Play()
+									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+										tween_info:Cancel()
+									end
+									--// Is Boss
+								elseif boss_bar() and not getgenv()["On Dodgeing skill"] and not getgenv()["On Safe Mode"] then
+									tween_enemy(getClosestBoss().HumanoidRootPart,125)
+									tween_info:Play()
+									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+										tween_info:Cancel()
+									end
+								end
+							--// Bring Mode
+							elseif Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["enemy spawning"] then
+								--// Stage 0 
+								if not boss_bar() and method_stage == 0 and getClosestobJect() and not getgenv()["Using Skill"] then
+									repeat
+										getgenv()["On counting"] = true
+										tween_modify(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),150)
+										tween_info:Play()
+										task.wait(0.0875)
+									until boss_bar() or method_stage ~= 0 or not getClosestobJect() or auto_farm() == "is false" or getgenv()["enemy spawning"]
+									method_stage = 1
+								--// Stage 1
+								elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and not getgenv()["Using Skill"] then
+									getgenv()["On counting"] = true
+									tween_modify(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
+									tween_info:Play()
+									tween_info.Completed:Wait()
+									task.wait(2.75)
+									method_stage = 2
+								--// Stage 2
+								elseif not boss_bar() and method_stage == 2 and not getgenv()["On Safe Mode"] then
+									getgenv()["On counting"] = false
+									tween_enemy(getClosestMob().HumanoidRootPart,125)
+									tween_info:Play()
+									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+										tween_info:Cancel()
+									end
+								--// Boss Stage
+								elseif boss_bar() and not getgenv()["On Safe Mode"] then
+									getgenv()["On counting"] = false
+									tween_enemy(getClosestBoss().HumanoidRootPart,125)
+									tween_info:Play()
+									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing skill"]) and tween_info then
+										tween_info:Cancel()
+									end
+								end
+							end
+						end
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function() -- // Webhook functions
+				if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then
+					--// insert webhook
+					UniversalGui.UniversalCenterUIFrame:WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
+						if not table.find(blacklist_items,v.Name) then
+							if table.find(card_rewards,"`None`") then
+								repeat
+									table.remove(card_rewards,table.find(card_rewards,"`None`"))
+								task.wait()
+								until not table.find(card_rewards,"`None`")
+							end
+							if not v:FindFirstChild("Gradient") then
+								table.insert(card_rewards,"`"..v.Name.." [Common]`")
+							elseif v:FindFirstChild("Gradient") then
+								if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
+									table.insert(card_rewards,"`"..v.Name.." [Uncommon]`")
+								elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
+									table.insert(card_rewards,"`"..v.Name.." [Rare]`")
+								elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
+									table.insert(card_rewards,"`"..v.Name.." [Epic]`")
+								elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
+									table.insert(card_rewards,"`"..v.Name.." [Legendary]`")
+								else
+									table.insert(card_rewards,"`"..v.Name.." [Mythic]`")
+								end
+							end
+						elseif table.find(blacklist_items,v.Name) and v.Name ~= "BossRushEntryPass" then
+							if table.find(other_rewards,"`None`") then
+								repeat
+									table.remove(other_rewards,table.find(card_rewards,"`None`"))
+								task.wait()
+								until not table.find(other_rewards,"`None`")
+							end
+							if tonumber(v.LevelReq.Text) then
+								if not other_rewards[v.Name] then
+									repeat
+										other_rewards[v.Name] = {}
+										task.wait()
+									until other_rewards[v.Name]
+								end
+								table.insert(other_rewards[v.Name] , tonumber(v.LevelReq.Text))
+							end
+						end
+					end)
+					--// Send Webhook
+					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+						pcall(function ()
+							if Options["Send Webhook"].Value then
+								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
+								task.wait(2.5)
+								local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
+								local current_rank_res
+								local currnet_status
+								if not table.find(other_rewards,"`None`") then
+									local name_count
+									local sum
+									for i,v in pairs(other_rewards) do
+										if #v ~= 0 then
+											sum = 0
+											for i = 1,#v do
+												sum = sum + v[i]
+											end
+										end
+										name_count = "`"..i.." ["..sum.."]`"
+										table.insert(other_rewards,name_count)
+									end
+								end
+								if rank_res.Image == "rbxassetid://7443889715" then
+									current_rank_res = "Rank: S+"
+								elseif rank_res.Image == "rbxassetid://6715353612" then
+									current_rank_res = "Rank: S"
+								elseif rank_res.Image == "rbxassetid://6891959728" then
+									current_rank_res = "Rank: A"
+								elseif rank_res.Image == "rbxassetid://6891959611" then
+									current_rank_res = "Rank: B"
+								elseif rank_res.Image == "rbxassetid://6891959460" then
+									current_rank_res = "Rank: C"
+								elseif rank_res.Image == "rbxassetid://6782568839" then
+									current_rank_res = "Rank: F"
+								else
+									current_rank_res = "Rank: D"
+								end
+								if table.find(other_rewards,"`None`") and table.find(card_rewards,"`None`") and current_rank_res == "Rank: F" then
+									currnet_status = " [Defeat!]"
+								else
+									currnet_status = " [Victory!]"
+								end
+								local Data = game:GetService("HttpService"):JSONEncode({
+									["username"] = "Anime Dimensions Simulator : Notification",
+									["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+									content = nil,
+									embeds = {{
+									  ["title"] = nil,
+									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
+									  ["description"] = nil,
+									  ["footer"] = {
+										["text"] = "Time : "..os.date("%c").."\nCredit : YT » @crazyday3693",
+										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+									  },
+									  ["thumbnail"] = {
+										["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+									  },
+									  ["fields"] = {
+										{
+											["name"] = "**Item Rewards**",
+											["value"] = "\n`[+]` "..table.concat(card_rewards,"\n`[+]` "),
+											["inline"] = true
+										},
+										{
+											["name"] = "**Currency Rewards**",
+											["value"] = "\n`[+]` "..table.concat(other_rewards,"\n`[+]` "),
+											["inline"] = true
+										},
+										{
+											["name"] = "**Match Information"..currnet_status.."**",
+											["value"] = "```\nDimension: "..tostring(current_map()).."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
+											["inline"] = false
+										}
+									},
+								}}
+								})
+								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+								response({Url = Options["Webhook URL"].Value or nil,Method = "POST",Headers = {["Content-Type"] = "application/json"},Body = Data})
+							end
+						end)
+					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function () --// Character functions
+				local function ontounching_ignore()
+					pcall(function() --// ใส่กัน มันหา humanoidrootpart ไม่เจอ
 						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Touched:Connect(function(part)
 							if part.Name == "Ignore" then
 								getgenv()["On Dodgeing skill"] = true
@@ -1283,15 +1627,17 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 					end)
 				end
 				local function humanod_anchored()
-					pcall(function ()
+					pcall(function() --// ใส่กัน มันหา humanoidrootpart ไม่เจอ
 						game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:GetPropertyChangedSignal("Anchored"):Connect(function()
-							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored then
-								getgenv()["Using Skill"] = true
-								print("Using a invincible skill : true")
-								repeat task.wait() until game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored == false
-								getgenv()["Using Skill"] = false
-								print("Using a invincible skill : false")
-							end
+							pcall(function () -- ใส่กัน มันหา humanoidrootpart ไม่เจอ เหมือนกันเพราะช้างล่างมีการเรียกใช้ humanoidrootpart
+								if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored then
+									getgenv()["Using Skill"] = true
+									print("Using a invincible skill : true")
+									repeat task.wait() until not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Anchored or getgenv()["player it's nil"]
+									getgenv()["Using Skill"] = false
+									print("Using a invincible skill : false")
+								end
+							end)
 						end)
 					end)
 				end
@@ -1306,10 +1652,9 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						getgenv()["Using Skill"] = false
 						getgenv()["On Safe Mode"] = false
 						getgenv()["On counting"] = false
-						getgenv()["bring fully doing"] = false
 						getgenv()["player it's nil"] = true
 						is_connect_value =  game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function()
-							task.wait(1.25)
+							task.wait(1.15)
 							getgenv()["player it's nil"] = false
 							ontounching_ignore()
 							humanod_anchored()
@@ -1329,157 +1674,81 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						onCharacterAdded(plr_on_character)
 					end
 				end
-			end))
-			coroutine.resume(coroutine.create(function() -- // Webhook # Connect functions
-				if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then
-					--// insert webhook
-					UniversalGui.UniversalCenterUIFrame:WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
-						if not table.find(blacklist_items,v.Name) then
-							if table.find(card_rewards,"None") then
-								repeat
-									table.remove(card_rewards,table.find(card_rewards,"None"))
-								task.wait()
-								until not table.find(card_rewards,"None")
-							end
-							if not v:FindFirstChild("Gradient") then
-								table.insert(card_rewards,v.Name.." [Common]")
-							elseif v:FindFirstChild("Gradient") then
-								if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
-									table.insert(card_rewards,v.Name.." [Uncommon]")
-								elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
-									table.insert(card_rewards,v.Name.." [Rare]")
-								elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
-									table.insert(card_rewards,v.Name.." [Epic]")
-								elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
-									table.insert(card_rewards,v.Name.." [Legendary]")
-								else
-									table.insert(card_rewards,v.Name.." [Mythic]")
-								end
-							end
-						elseif table.find(blacklist_items,v.Name) then
-							if table.find(other_rewards,"None") then
-								repeat
-									table.remove(other_rewards,table.find(card_rewards,"None"))
-								task.wait()
-								until not table.find(other_rewards,"None")
-							end
-							if tonumber(v.LevelReq.Text) then
-								if not other_rewards[v.Name] then
-									repeat
-										other_rewards[v.Name] = {}
-										task.wait()
-									until other_rewards[v.Name]
-								end
-								table.insert(other_rewards[v.Name] , tonumber(v.LevelReq.Text))
-							end
-						end
-					end)
-					--// Send Webhook
-					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						pcall(function ()
-							if Options["Send Webhook"].Value then
-								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
-								task.wait(1.25)
-								if not table.find(other_rewards,"None") then
-									local name_count
-									local sum
-									for i,v in pairs(other_rewards) do
-										if #v ~= 0 then
-											sum = 0
-											for i = 1,#v do
-												sum = sum + v[i]
-											end
-										end
-										name_count = i.." ["..sum.."]"
-										table.insert(other_rewards,name_count)
-									end
-								end
-								local Data = game:GetService("HttpService"):JSONEncode({
-									["username"] = "Anime Dimensions Simulator : Notification",
-									["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									content = nil,
-									embeds = {{
-									  ["title"] = nil,
-									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
-									  ["description"] = nil,
-									  ["footer"] = {
-										["text"] = "Time : "..os.date("%c").."\nCredit : YT » @crazyday3693",
-										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
-									  },
-									  ["thumbnail"] = {
-										["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									  },
-									  ["fields"] = {
-										{
-											["name"] = "**Card Rewards**",
-											["value"] = "```\n[+] "..table.concat(card_rewards,"\n[+] ").."```",
-											["inline"] = true
-										},
-										{
-											["name"] = "**Item Rewards**",
-											["value"] = "```\n[+] "..table.concat(other_rewards,"\n[+] ").."```",
-											["inline"] = true
-										}
-									},
-								}}
-								})
-								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
-								response({Url = Options["Webhook URL"].Value or nil,Method = "POST",Headers = {["Content-Type"] = "application/json"},Body = Data})
-							end
-						end)
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() --// Quests functions
-				while task.wait() do
+				game:GetService("Workspace"):WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
 					pcall(function ()
-						if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) and (Options["Auto Claim (Quest)"].Value or Options["Auto Claim (Speed Raid)"].Value) then
-							if Options["Auto Claim (Speed Raid)"].Value then
-								--// Speed Raid
-								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidFrame:GetChildren()) do
-									if v.Name == "Shade" and i == 11 then
-										shade_current = v
-									end
-								end
-								for i,v in pairs(shade_current:FindFirstChild("SpeedRaidScrollingFrame"):GetChildren()) do
-									if v:IsA("ImageButton") then
-										if v.RaidsButton.Cost.Text == "CLAIM" then
-											local a_b = v.Name:split("SpeedRaidRewardTemplate")[2]
-											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("ClaimWeeklySpeedRaidReward",tonumber(a_b))
-											v.RaidsButton.Cost.Text = "CLAIMED"
-										end
-									end
+						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On counting"] then
+							local a = v:Clone()
+							local side = math.clamp(2.85,0,10)
+							local Sizeto = v.Size + Vector3.new(side,100,side)
+							a.Size = Vector3.new(0,0,v.Size.Z)
+							if v.ClassName == "MeshPart" then
+								a.Size = Vector3.new(0,0,100)
+								Sizeto = v.Size + Vector3.new(side,side,100)
+							end
+							game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
+							a.CFrame = v.CFrame + Vector3.new(0,0,0)
+							a.Anchored = true
+							a.Transparency = 1
+							a.CanCollide = true
+							a.Name = "Ignore"
+							a.Parent = v.Parent
+							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On counting"]
+							a:Destroy()
+						end
+					end)
+				end)
+			end))
+			coroutine.resume(coroutine.create(function() --// Quests
+				while task.wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) and (Options["Auto Claim (Quest)"].Value or Options["Auto Claim (Speed Raid)"].Value) then
+						if Options["Auto Claim (Speed Raid)"].Value then
+							--// Speed Raid
+							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidFrame:GetChildren()) do
+								if v.Name == "Shade" and i == 11 then
+									shade_current = v
 								end
 							end
-							if Options["Auto Claim (Quest)"].Value then
-								--// Daily Quest
-								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.DailyQuestFrame.DailyQuestScrollingFrame:GetChildren()) do
-									if v:IsA("ImageLabel") then
-										if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
-											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
-											v.Complete.Visible = true
-										end
-									end
-								end
-								--// Weekly Quest
-								for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.WeeklyQuestFrame.WeeklyQuestScrollingFrame:GetChildren()) do
-									if v:IsA("ImageLabel") then
-										if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
-											game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
-											v.Complete.Visible = true
-										end
+							for i,v in pairs(shade_current:FindFirstChild("SpeedRaidScrollingFrame"):GetChildren()) do
+								if v:IsA("ImageButton") then
+									if v.RaidsButton.Cost.Text == "CLAIM" then
+										local a_b = v.Name:split("SpeedRaidRewardTemplate")[2]
+										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("ClaimWeeklySpeedRaidReward",tonumber(a_b))
+										v.RaidsButton.Cost.Text = "CLAIMED"
 									end
 								end
 							end
 						end
-					end)
+						if Options["Auto Claim (Quest)"].Value then
+							--// Daily Quest
+							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.DailyQuestFrame.DailyQuestScrollingFrame:GetChildren()) do
+								if v:IsA("ImageLabel") then
+									if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+										v.Complete.Visible = true
+									end
+								end
+							end
+							--// Weekly Quest
+							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.WeeklyQuestFrame.WeeklyQuestScrollingFrame:GetChildren()) do
+								if v:IsA("ImageLabel") then
+									if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+										v.Complete.Visible = true
+									end
+								end
+							end
+						end
+
+					end
 				end
 			end))
-			coroutine.resume(coroutine.create(function() -- // Skill Main
+			coroutine.resume(coroutine.create(function() -- // Skill Configs
 				while task.wait(0.115) do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function ()
-						if Options["Auto Skills // Attack"].Value  and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
+						if Options["Auto Skills // Attack"].Value and blacklist_getgenv() == "is false" and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] then
+							local skills = UniversalGui.UniversalCenterUIFrame.SlotsHolder
+							--// Skill Main
 							if skills["Skill"..Options["Skill One"].Value].Visible == true and tonumber(skills["Skill"..Options["Skill One"].Value].SkillName.Text) == nil then
 								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill One"].Value))
 							end
@@ -1495,15 +1764,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 							if skills["Skill"..Options["Skill Fifth"].Value].Visible and tonumber(skills["Skill"..Options["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skills["Skill"..Options["Skill Fifth"].Value].SkillName.Text) == nil then
 								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fifth"].Value))
 							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() -- // Skill Assist and Attack
-				while task.wat(0.115) do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
-					pcall(function ()
-						if Options["Auto Skills // Attack"].Value and dist_of_enemy() <= tonumber(Options["Current Skills Distance"].Value) and not getgenv()["Using Skill"] and not getgenv()["On counting"] and not getgenv()["bring fully doing"] then
 							--// Skill Assist
 							for i,v in next,Options["Current Assists (Assists / Fruits)"].Value do
 								if i and v == true then
@@ -1554,12 +1814,12 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 						--// Start Raid (Normal)
 						if getgenv()["Raid Opening"] then
 							game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CreateRoom",{
-								["Difficulty"] = "Esay",
+								["Difficulty"] = "Easy",
 								["FriendsOnly"] = Options["Friends Only"].Value,
 								["MapName"] = Options["Current Raid"].Value,
 								["Hardcore"] = false
 							})
-							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Esay\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
+							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Easy\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
 							task.wait(5)
 							game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("TeleportPlayers")
 							break
@@ -1617,256 +1877,6 @@ if game:WaitForChild("CoreGui"):FindFirstChild("CrazyDay") then return end
 							break
 						end
 					end
-				end
-			end))
-			coroutine.resume(coroutine.create(function ()--// Safe Mode
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
-					pcall(function ()
-						-- // Check to Safe
-						local xp12i3 = game:GetService("Players").LocalPlayer.Character.Head.PlayerHealthBarGui.HealthText.Text:split("/")[2]
-						local bo215 = Options["Health to Safe"].Value * (xp12i3 / 100)
-						if Options["Auto Safe"].Value and auto_farm() == "is true" and tonumber(UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) <= tonumber(bo215) then
-							getgenv()["On Safe Mode"] = true
-						elseif Options["Auto Safe"].Value and auto_farm() == "is true" and tonumber(UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) >= tonumber(bo215) then
-							getgenv()["On Safe Mode"] = false
-						end
-						--// Safe Mode Playing
-						if getgenv()["On Safe Mode"] then
-							for i,v in next,game:GetService("Workspace").Folders.SpawnPoints:GetChildren() do
-								if v.Name == game:GetService("Players").LocalPlayer.RespawnLocation.Name then
-									tween_modify(v,CFrame.new(0,75,- dist_of_enemy() or 0),80)
-									tween_info:Play()
-									tween_info.Completed:Wait()
-									tween_info:Cancel()
-								end
-							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() --// Miscfarm setiings
-				local bv = Instance.new("BodyVelocity")
-				while task.wait() do
-					pcall(function ()
-						local Is_Blacklist = table.find(BlackList_Characters,game:GetService("ReplicatedStorage")[game.Players.LocalPlayer.Name.."StatDisplay"].CharacterName.Value)
-						--// Auto Retry
-						if Options["Auto Retry"].Value and not getgenv()["Raid Opening"] then
-							if UniversalGui.UniversalCenterUIFrame.ResultUI.RetryDungeonButton.Visible and game:GetService("Players").LocalPlayer.PlayerGui.BattleGui.CenterUIFrame.WaveClearClearText.Text == "1" then
-								game:GetService("ReplicatedStorage").RemoteEvents.MainRemoteEvent:FireServer("RetryDungeon")
-							end
-						end
-						--// Check RaidOpened
-						if Options["Auto Raid (Normal)"].Value and tonumber(os.date("!*t").min) <= 9 then
-							getgenv()["Raid Opening"] = true
-						elseif Options["Auto Raid (Normal)"].Value and tonumber(os.date("!*t").min) > 9 then
-							getgenv()["Raid Opening"] = false
-						elseif not Options["Auto Raid (Normal)"].Value and getgenv()["Raid Opening"] then
-							getgenv()["Raid Opening"] = false
-						end
-						--// Teleport Lobby (Raid)
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Raid Opening"] then
-							if getgenv()["Raid Opening"] and not boss_bar() then
-								game:GetService("TeleportService"):Teleport(7338881230)
-							end
-						end
-						--// Set Method
-						if not Is_Blacklist then --// Not blacklist character
-							if boss_bar() then
-								if Options["Current Method"].Value == "Over" then
-									method_mode = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
-								elseif Options["Current Method"].Value == "Under" then
-									method_mode = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
-								elseif Options["Current Method"].Value == "Front" then
-									method_mode = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
-								elseif Options["Current Method"].Value == "Behind" then
-									method_mode = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
-								end
-							elseif not boss_bar() then
-								if Options["Current Method"].Value == "Over" then
-									method_mode = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.85 ,0) * CFrame.Angles(math.rad(-90),0,0)
-								elseif Options["Current Method"].Value == "Under" then
-									method_mode = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.85 ,0) * CFrame.Angles(math.rad(90),0,0)
-								elseif Options["Current Method"].Value == "Front" then
-									method_mode = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
-								elseif Options["Current Method"].Value == "Behind" then
-									method_mode = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
-								end
-							end
-						elseif Is_Blacklist then -- // Blacklist character
-							if Options["Current Method"].Value == "Over" then
-								method_mode = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
-							elseif Options["Current Method"].Value == "Under" then
-								method_mode = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
-							elseif Options["Current Method"].Value == "Front" then
-								method_mode = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
-							elseif Options["Current Method"].Value == "Behind" then
-								method_mode = CFrame.new(0, 0, 1.5)
-							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() -- // Set Noclip
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
-					pcall(function()
-						if auto_farm() == "is true" then
-							if not getgenv()["On Dodgeing skill"] then
-								setCollide(false)
-							elseif getgenv()["On Dodgeing skill"]then
-								setCollide(true)
-							end
-							if not getgenv()["player it's nil"] then
-								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
-								bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
-								bv.MaxForce = Vector3.new(100000,100000,100000)
-								bv.Velocity = Vector3.new(0,0,0)
-
-								local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
-								for _, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-									if v.IsA(v, "BasePart") then
-										v.Velocity, v.RotVelocity = V3, V3
-									end
-								end
-							end
-						elseif auto_farm() == "is false" then
-							if not getgenv()["player it's nil"] and game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand == true then
-								game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
-								bv.Parent = nil
-							end
-							--// cancel all tween
-							if tween_info then
-								--tween_info.Completed:Wait()
-								tween_info:Cancel()
-								tween_info = nil
-							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() -- // Infinite Mode Playing
-				if current_map() == "Infinite Mode" then
-					game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText"):GetPropertyChangedSignal("Text"):Connect(function ()
-						local wave_value = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"):WaitForChild("WaveClearClearText").Text
-						if string.len(wave_value) == 2 and string.find(wave_value,"0") then
-							getgenv()["Waiting for enemy"] = false
-						else
-							getgenv()["Waiting for enemy"] = true
-							task.wait(3)
-							getgenv()["Waiting for enemy"] = false
-						end
-					end)
-				end
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() ~= "Infinite Mode" then break end
-					pcall(function ()
-						if auto_farm() == "is true" and not getgenv()["player it's nil"] and not getgenv()["On Safe Mode"] then
-							if getgenv()["Waiting for enemy"] then
-								local base = game:GetService("Workspace"):WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"]
-								tween_modify(base,CFrame.new(0,100,0) * CFrame.Angles(math.rad(-90),0,0),125)
-								tween_info:Play()
-								tween_info.Completed:Wait()
-								tween_info:Cancel()
-							elseif not getgenv()["Waiting for enemy"] and not boss_bar() and blacklist_getgenv() == "is false" then
-								repeat
-									tween_enemy(getClosestMob().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							elseif not getgenv()["Waiting for enemy"] and boss_bar() and blacklist_getgenv() == "is false" then
-								repeat
-									tween_enemy(getClosestBoss().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() --// Normal Mode
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
-					pcall(function ()
-						if auto_farm() == "is true" and Options["Current Farm Mode"].Value == "Normal Mode" and not getgenv()["player it's nil"] and not getgenv()["On Safe Mode"] then
-							if not boss_bar() and blacklist_getgenv() == "is false" then
-								repeat
-									tween_enemy(getClosestMob().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							elseif boss_bar() and blacklist_getgenv() == "is false" then
-								repeat
-									tween_enemy(getClosestBoss().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							end
-						end
-					end)
-				end
-			end))
-			coroutine.resume(coroutine.create(function() --// Autofarm Configs Bring Mode // ใส่แยกเพราะ ping แดก
-				while task.wait() do
-					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() == "Infinite Mode" then break end
-					pcall(function ()
-						--// Bring Misc
-						if getgenv()["On counting"] and getClosestobJect() and dist_enemy_Bring(getClosestobJect().HumanoidRootPart) <= 16.5 then
-							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
-								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-									if (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
-										v.Head.Transparency = 10
-									end
-								end
-							end
-						end
-						--// Bring Main
-						if auto_farm() == "is true" and Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["enemy spawning"] and not getgenv()["player it's nil"] then
-							--// Stage 0
-							if not boss_bar() and method_stage == 0 and getClosestobJect() and not getgenv()["Using Skill"] then
-								repeat
-									getgenv()["On counting"] = true
-									tween_modify(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),150)
-									tween_info:Play()
-									task.wait(0.0875)
-								until method_stage ~= 0 or not getClosestobJect() or boss_bar() or auto_farm() == "is false"
-								method_stage = 1
-							--// Stage 1
-							elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and not getgenv()["Using Skill"] then
-								repeat
-									getgenv()["On counting"] = true
-									tween_modify(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
-									tween_info:Play()
-									task.wait()
-								until method_stage ~= 1 or boss_bar() or auto_farm() == "is false" or dist_enemy_Bring(getNormalEnemy().HumanoidRootPart) <= 50
-								task.wait(2.75)
-								method_stage = 2
-							--// Stage 2
-							elseif not boss_bar() and method_stage == 2 and blacklist_getgenv() == "is false" and not getgenv()["On Safe Mode"] then
-								repeat
-									getgenv()["On counting"] = false
-									tween_enemy(getClosestMob().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until method_stage ~= 2 or boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestMob():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							--// Boss stage
-							elseif boss_bar() and blacklist_getgenv() == "is false" and not getgenv()["On Safe Mode"] then
-								repeat
-									getgenv()["On counting"] = false
-									tween_enemy(getClosestBoss().HumanoidRootPart,125)
-									tween_info:Play()
-									task.wait()
-								until not boss_bar() or blacklist_getgenv() == "is true" or auto_farm() == "is false" or getgenv()["On Safe Mode"] or tonumber(getClosestBoss():FindFirstChild("EnemyHealthBarGui"):FindFirstChild("HealthText").Text) <= 0
-								tween_info:Cancel()
-							end
-						end
-					end)
 				end
 			end))
 		end
