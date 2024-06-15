@@ -1299,8 +1299,8 @@ repeat
 		if getgenv()["Script Loaded"] == true then
 			if current_map() == "CharacterTest" then CoreGui:FindFirstChild("function running").Enabled = true getgenv()["Executeing"] = false return Notify("Failed to load function (Error)","This map is not supported.") end
 			local UniversalGui = plr_gui:WaitForChild("UniversalGui")
-			local main_remote_event = ReplicatedStorage.RemoteEvents.MainRemoteEvent
-			local main_remote_function = ReplicatedStorage.RemoteFunctions.MainRemoteFunction
+			local main_remote_event = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MainRemoteEvent")
+			local main_remote_function = ReplicatedStorage:WaitForChild("RemoteFunctions"):WaitForChild("MainRemoteFunction")
 			local bv = Instance.new("BodyVelocity")
 			local player_disply = ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay")
 			local current_method
@@ -1923,7 +1923,6 @@ repeat
 					end)
 					--// Send Webhook (Raid Webhook)
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						pcall(function ()
 							if Options["Send Webhook"].Value then
 								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
 								task.wait(2.5)
@@ -2003,7 +2002,6 @@ repeat
 								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
 								response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
 							end
-						end)
 					end)
 				end
 			end))
@@ -2015,10 +2013,10 @@ repeat
 							Notify("Auto Equip Character (Error)","Make sure the values in your file are correct")
 							break
 						else
-							local lowjuwi = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
-							if player_disply.CharacterName.Value ~= lowjuwi["Character1"]
-							and player_disply.AssistCharacterName1.Value ~= lowjuwi["Character2"]
-							and player_disply.AssistCharacterName2.Value ~= lowjuwi["Character3"] then
+							local lowjuwi = HttpService:JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
+							if (player_disply.CharacterName.Value ~= lowjuwi["Character1"]
+							or player_disply.AssistCharacterName1.Value ~= lowjuwi["Character2"]
+							or player_disply.AssistCharacterName2.Value ~= lowjuwi["Character3"]) then
 								main_remote_function:InvokeServer("EquipCharacter",lowjuwi['Character1'])
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
