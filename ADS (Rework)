@@ -70,6 +70,7 @@ repeat
 			"Gear 5 Fluffy Raid"
 		}
     }
+	local current_speedraid
     local current_gui
 	local gui_stage = 0
 
@@ -1815,8 +1816,102 @@ repeat
 					end)
 				end
 			end))
+			coroutine.resume(coroutine.create(function ()--// Game \ Character
+				while task.wait() do
+					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if Options["Auto Equip Character"].Value then
+						if isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character") then
+							Notify("Auto Equip Character (Error)","Make sure the values in your file are correct")
+							break
+						else
+							local lowjuwi = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
+							if ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value ~= lowjuwi["Character1"]
+							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value ~= lowjuwi["Character2"]
+							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value ~= lowjuwi["Character3"] then
+								main_remote:InvokeServer("EquipCharacter",lowjuwi['Character1'])
+								main_remote:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
+								main_remote:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
+							else
+								Notify("Successfully Equip Characters",ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value)
+								break
+							end
+						end
+					end
+				end
+			end))
 			coroutine.resume(coroutine.create(function () --// Create \ Start Room
-
+				while task.wait() do
+					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if auto_farm() then
+						task.wait(0.55)
+						--// Auto Join (Raid)
+						if getgenv()["Auto Join (Raid)"] then
+							main_remote:InvokeServer("CreateRoom",{
+								["Difficulty"] = "Easy",
+								["FriendsOnly"] = Options["Friends Only"].Value,
+								["MapName"] = Options["Current Raid"].Value,
+								["Hardcore"] = false
+							})
+							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Easy\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
+							task.wait(5)
+							main_remote:InvokeServer("TeleportPlayers")
+							break
+						else
+							--// Auto Join (Speed Raid)
+							if Options["Auto Join (Speed Raid)"].Value and plr_gui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
+								for i,v in pairs(plr_gui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
+									if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
+										current_speedraid = v.Name
+									end
+								end
+								Notify("Successfully room created","MapName : ShadowRaid".."\nCharacter : "..current_speedraid,"Starting in 5 Second")
+								task.wait(5)
+								main_remote:InvokeServer("TeleportToShadowRaid",current_speedraid)
+								break
+							end
+							--// Auto Join (Raid Challenge)
+							if Options["Auto Join (Raid Challenge)"].Value and plr_gui.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
+								Notify("Successfully room created","MapName : RaidChallenge".."\nAward Status : Reward Available","Starting in 5 Second")
+								task.wait(5)
+								main_remote:InvokeServer("TeleportToRaidChallenge")
+								break
+							end
+							--// Auto Join (Boss Rush)
+							if Options["Auto Join (Boss Rush)"].Value and plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text ~= "0 Free Entry Left" then
+								Notify("Successfully room created","MapName : BossRush".."\nFree Entry Left : "..plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],"Starting in 5 Second")
+								task.wait(5)
+								main_remote:InvokeServer("TeleportToBossRush")
+								break
+							end
+							--// Auto Join (Infinite Mode)
+							if Options["Auto Join (Infinite Mode)"].Value and plr_gui.MainGui.CenterUIFrame.PlayFrame.Frame.PlayRoomFrame.MapSelectionScrollingFrame["Infinite Mode"].PlayerReq.Text == "Trait Tokens Available" and plr.leaderstats.Level.Value >= 20 then
+								main_remote:InvokeServer("CreateRoom",{
+									["Difficulty"] = "Infinite",
+									["FriendsOnly"] = Options["Friends Only"].Value,
+									["MapName"] = "Infinite Mode",
+									["Hardcore"] = false
+								})
+								Notify("Successfully room created","MapName : Infinite Mode\nDifficulty : Infinite\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
+								task.wait(5)
+								main_remote:InvokeServer("TeleportPlayers")
+								break
+							end
+							--// Auto Join (Dimension)
+							if (Options["Auto Join (Current Dimension)"].Value or Options["Auto Join (Highnest)"].Value) then
+								main_remote:InvokeServer("CreateRoom",{
+									["Difficulty"] = Options["Current Difficulty"].Value,
+									["FriendsOnly"] = Options["Friends Only"].Value,
+									["MapName"] = Options["Current Dimension"].Value,
+									["Hardcore"] = Options["Hard core"].Value
+								})
+								Notify("Successfully room created","MapName : "..Options["Current Dimension"].Value.."\nDifficulty : "..Options["Current Difficulty"].Value.."\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : "..tostring(Options["Hard core"].Value),"Starting in 5 Second")
+								task.wait(5)
+								main_remote:InvokeServer("TeleportPlayers")
+								break
+							end
+						end
+					end
+				end
 			end))
 
 		end
