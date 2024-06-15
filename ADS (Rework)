@@ -29,7 +29,7 @@ repeat
     --// Local normal
 	local tween_s = game:GetService("TweenService")
 	local tween_info
-    local PlayerId,Game,Update = game:GetService("Players"):GetUserIdFromNameAsync(plr.Name) , "Anime Dimensions Simulator (Rework)" , " 1.0"
+    local PlayerId,Game,Update = game:GetService("Players"):GetUserIdFromNameAsync(plr.Name) , "Anime Dimensions Simulator (Rework)" , " 1.0.0"
 	local method_stage = 0
 	local Tabs = {}
     local character = {}
@@ -37,8 +37,6 @@ repeat
 	local currency_rewards = {"`None`"}
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
-	local Assist_Table = {}
-	local Rarity_Table = {}
     local dimension = {
         ["Current Dimension"] = {},
         ["Info"] = {},
@@ -1618,7 +1616,7 @@ repeat
 								end
 							--// Bring Mode
 							elseif Options["Current Farm Mode"].Value == "Bring Mode" and not getgenv()["enemy spawning"] and not getgenv()["humanoid Died"] then
-								if not boss_bar() and method_stage == 0 and getClosestobJect() and plr.HumanoidRootPart.Anchored == false then
+								if not boss_bar() and method_stage == 0 and getClosestobJect() and plr.Character.HumanoidRootPart.Anchored == false then
 									repeat
 										getgenv()["On Bringing"] = true
 										tween_function(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),150)
@@ -1626,7 +1624,7 @@ repeat
 										task.wait(0.0875)
 									until boss_bar() or method_stage ~= 0 or not getClosestobJect() or not auto_farm() or getgenv()["enemy spawning"] or getgenv()["humanoid Died"]
 									method_stage = 1
-								elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and plr.HumanoidRootPart.Anchored == false then
+								elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and plr.Character.HumanoidRootPart.Anchored == false then
 									getgenv()["On Bringing"] = true
 									tween_function(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
 									tween_info:Play()
@@ -1657,7 +1655,7 @@ repeat
 				while task.wait(0.115) do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					pcall(function ()
-						if Options["Auto Skill"].Value and auto_farm() and dist_enemy(getClosestMob().HumanoidRootPart) <= Options["Current Skill Distance"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] and not getgenv()["On Bringing (Infinite)"] and plr.HumanoidRootPart.Anchored == false then
+						if Options["Auto Skill"].Value and auto_farm() and dist_enemy(getClosestMob().HumanoidRootPart) <= Options["Current Skill Distance"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] and not getgenv()["On Bringing (Infinite)"] and plr.Character.HumanoidRootPart.Anchored == false then
 							local skill = UniversalGui.UniversalCenterUIFrame.SlotsHolder
 							--// Main
 							if skill["Skill"..Options["Skill One"].Value].Visible and tonumber(skill["Skill"..Options["Skill One"].Value].SkillName.Text) == nil then
