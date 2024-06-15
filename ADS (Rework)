@@ -1079,7 +1079,7 @@ repeat
 				  ["fields"] = {
 					{
 						["name"] = "__**Status**__",
-						["value"] = "__**||Username : "..tostring(plr.Name).."||**__w\n`The webhook is working.`",
+						["value"] = "__**||Username : "..tostring(plr.Name).."||**__\n`The webhook is working.`",
 						["inline"] = false
 					}
 				},
@@ -1296,7 +1296,8 @@ repeat
 		if getgenv()["Script Loaded"] == true then
 			if current_map() == "CharacterTest" then CoreGui:FindFirstChild("function running").Enabled = true getgenv()["Executeing"] = false return Notify("Failed to load function (Error)","This map is not supported.") end
 			local UniversalGui = plr_gui:WaitForChild("UniversalGui")
-			local main_remote = ReplicatedStorage.RemoteEvents.MainRemoteEvent
+			local main_remote_event = ReplicatedStorage.RemoteEvents.MainRemoteEvent
+			local main_remote_function = ReplicatedStorage.RemoteFunctions.MainRemoteFunction
 			local bv = Instance.new("BodyVelocity")
 			local current_method
 
@@ -1436,7 +1437,7 @@ repeat
 						--// Auto Retry
 						if Options["Auto Retry"].Value and not getgenv()["Auto Join (Raid)"] then
 							if UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
-								main_remote:FireServer("RetryDungeon")
+								main_remote_event:FireServer("RetryDungeon")
 							end
 						end
 						--// Auto Join (Raid) #check
@@ -1640,28 +1641,28 @@ repeat
 							local skill = UniversalGui.UniversalCenterUIFrame.SlotsHolder
 							--// Main
 							if skill["Skill"..Options["Skill One"].Value].Visible and tonumber(skill["Skill"..Options["Skill One"].Value].SkillName.Text) == nil then
-								main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill One"].Value))
+								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill One"].Value))
 							end
 							if skill["Skill"..Options["Skill Two"].Value].Visible and tonumber(skill["Skill"..Options["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..Options["Skill Two"].Value].SkillName.Text) == nil then
-								main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Two"].Value))
+								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Two"].Value))
 							end
 							if skill["Skill"..Options["Skill Third"].Value].Visible and tonumber(skill["Skill"..Options["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..Options["Skill Third"].Value].SkillName.Text) == nil then
-								main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Third"].Value))
+								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Third"].Value))
 							end
 							if skill["Skill"..Options["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..Options["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..Options["Skill Fourth"].Value].SkillName.Text) == nil then
-								main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fourth"].Value))
+								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fourth"].Value))
 							end
 							if skill["Skill"..Options["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..Options["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..Options["Skill Fifth"].Value].SkillName.Text) == nil then
-								main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fifth"].Value))
+								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fifth"].Value))
 							end
 							--// Assist
 							for i,v in next,Options["Current Assists"].Value do
 								if i and v == true then
 									if skill["Skill"..i].Visible and (tostring(skill["Skill"..i].SkillName.Text) == "Dash" or tonumber(skill["Skill"..tostring(i)].SkillName.Text) == nil or 0) then
 										if string.find(i,"1") then
-											main_remote:FireServer("Use"..i:split("1")[1].."Skill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
+											main_remote_event:FireServer("Use"..i:split("1")[1].."Skill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
 										elseif string.find(i,"2") then
-											main_remote:FireServer("Use"..i:split("2")[1].."Skill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
+											main_remote_event:FireServer("Use"..i:split("2")[1].."Skill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},2)
 										end
 									end
 								end
@@ -1670,14 +1671,14 @@ repeat
 							if tonumber(skill["Skill1"].SkillName.Text) and tonumber(skill["Skill2"].SkillName.Text) and tonumber(skill["Skill3"].SkillName.Text) and tonumber(skill["Skill4"].SkillName.Text) then
 								if skill["Skill5"].Visible and tonumber(skill["Skill5"].SkillName.Text) then
 									if Options["Current Attack Method"].Value == "Remote" then
-										main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+										main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
 									elseif Options["Current Attack Method"].Value == "Click" then
 										game:GetService("VirtualUser"):CaptureController()
 										game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
 									end
 								elseif not skill["Skill5"].Visible then
 									if Options["Current Attack Method"].Value == "Remote" then
-										main_remote:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+										main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
 									elseif Options["Current Attack Method"].Value == "Click" then
 										game:GetService("VirtualUser"):CaptureController()
 										game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
@@ -1805,6 +1806,11 @@ repeat
 											["name"] = "**Match Information"..currnet_status.."**",
 											["value"] = "```\nDimension: "..tostring(current_map()).."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
 											["inline"] = false
+										},
+										{
+											["name"] = "**Player Information**".."__**||Username : "..tostring(plr.Name).."||**__".."**",
+											["value"] = "```\nLevel: "..tostring(plr.leaderstats.Level.Value),
+											["inline"] = false
 										}
 									},
 								}}
@@ -1828,9 +1834,9 @@ repeat
 							if ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value ~= lowjuwi["Character1"]
 							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value ~= lowjuwi["Character2"]
 							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value ~= lowjuwi["Character3"] then
-								main_remote:InvokeServer("EquipCharacter",lowjuwi['Character1'])
-								main_remote:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
-								main_remote:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
+								main_remote_function:InvokeServer("EquipCharacter",lowjuwi['Character1'])
+								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
+								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
 							else
 								Notify("Successfully Equip Characters",ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value)
 								break
@@ -1846,7 +1852,7 @@ repeat
 						task.wait(0.55)
 						--// Auto Join (Raid)
 						if getgenv()["Auto Join (Raid)"] then
-							main_remote:InvokeServer("CreateRoom",{
+							main_remote_function:InvokeServer("CreateRoom",{
 								["Difficulty"] = "Easy",
 								["FriendsOnly"] = Options["Friends Only"].Value,
 								["MapName"] = Options["Current Raid"].Value,
@@ -1854,7 +1860,7 @@ repeat
 							})
 							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Easy\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
 							task.wait(5)
-							main_remote:InvokeServer("TeleportPlayers")
+							main_remote_function:InvokeServer("TeleportPlayers")
 							break
 						else
 							--// Auto Join (Speed Raid)
@@ -1866,26 +1872,26 @@ repeat
 								end
 								Notify("Successfully room created","MapName : ShadowRaid".."\nCharacter : "..current_speedraid,"Starting in 5 Second")
 								task.wait(5)
-								main_remote:InvokeServer("TeleportToShadowRaid",current_speedraid)
+								main_remote_function:InvokeServer("TeleportToShadowRaid",current_speedraid)
 								break
 							end
 							--// Auto Join (Raid Challenge)
 							if Options["Auto Join (Raid Challenge)"].Value and plr_gui.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
 								Notify("Successfully room created","MapName : RaidChallenge".."\nAward Status : Reward Available","Starting in 5 Second")
 								task.wait(5)
-								main_remote:InvokeServer("TeleportToRaidChallenge")
+								main_remote_function:InvokeServer("TeleportToRaidChallenge")
 								break
 							end
 							--// Auto Join (Boss Rush)
 							if Options["Auto Join (Boss Rush)"].Value and plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text ~= "0 Free Entry Left" then
 								Notify("Successfully room created","MapName : BossRush".."\nFree Entry Left : "..plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],"Starting in 5 Second")
 								task.wait(5)
-								main_remote:InvokeServer("TeleportToBossRush")
+								main_remote_function:InvokeServer("TeleportToBossRush")
 								break
 							end
 							--// Auto Join (Infinite Mode)
 							if Options["Auto Join (Infinite Mode)"].Value and plr_gui.MainGui.CenterUIFrame.PlayFrame.Frame.PlayRoomFrame.MapSelectionScrollingFrame["Infinite Mode"].PlayerReq.Text == "Trait Tokens Available" and plr.leaderstats.Level.Value >= 20 then
-								main_remote:InvokeServer("CreateRoom",{
+								main_remote_function:InvokeServer("CreateRoom",{
 									["Difficulty"] = "Infinite",
 									["FriendsOnly"] = Options["Friends Only"].Value,
 									["MapName"] = "Infinite Mode",
@@ -1893,12 +1899,12 @@ repeat
 								})
 								Notify("Successfully room created","MapName : Infinite Mode\nDifficulty : Infinite\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
 								task.wait(5)
-								main_remote:InvokeServer("TeleportPlayers")
+								main_remote_function:InvokeServer("TeleportPlayers")
 								break
 							end
 							--// Auto Join (Dimension)
 							if (Options["Auto Join (Current Dimension)"].Value or Options["Auto Join (Highnest)"].Value) then
-								main_remote:InvokeServer("CreateRoom",{
+								main_remote_function:InvokeServer("CreateRoom",{
 									["Difficulty"] = Options["Current Difficulty"].Value,
 									["FriendsOnly"] = Options["Friends Only"].Value,
 									["MapName"] = Options["Current Dimension"].Value,
@@ -1906,7 +1912,7 @@ repeat
 								})
 								Notify("Successfully room created","MapName : "..Options["Current Dimension"].Value.."\nDifficulty : "..Options["Current Difficulty"].Value.."\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : "..tostring(Options["Hard core"].Value),"Starting in 5 Second")
 								task.wait(5)
-								main_remote:InvokeServer("TeleportPlayers")
+								main_remote_function:InvokeServer("TeleportPlayers")
 								break
 							end
 						end
