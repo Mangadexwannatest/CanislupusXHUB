@@ -37,6 +37,8 @@ repeat
 	local currency_rewards = {"`None`"}
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
+	local Assist_Table = {}
+	local Rarity_Table = {}
     local dimension = {
         ["Current Dimension"] = {},
         ["Info"] = {},
@@ -865,8 +867,11 @@ repeat
 		Multi = true,
 		Default = {"Common", "Uncommon"},
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
+			if (value) then
+				getgenv()["Rarity Insert"] = true
+				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+					SaveManager:Save("Configs")
+				end
 			end
 		end
 	})
@@ -908,8 +913,11 @@ repeat
 		Multi = true,
 		Default = {"Assist1", "Assist2", "Fruit1", "Fruit2"},
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
+			if (value) then
+				getgenv()["Assist Insert"] = true
+				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+					SaveManager:Save("Configs")
+				end
 			end
 		end
 	})
@@ -1063,7 +1071,7 @@ repeat
 				  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
 				  ["description"] = nil,
 				  ["footer"] = {
-					["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693\nSupported Exploit: Fluxus / Code X",
+					["text"] = "Time: "..os.date("%c").."\nSupported Exploit: Fluxus / Code X\nCredit: YT » @crazyday3693",
 					["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
 				  },
 				  ["thumbnail"] = {
@@ -1148,7 +1156,9 @@ repeat
 					{
 						Title = "Yes",
 						Callback = function()
-							writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[]])
+							writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[
+							{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Execute","type":"Toggle","value":true},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Auto Skill","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Friends Only","type":"Toggle","value":false}]}
+						    ]])
 							Notify("Successfully reseted configs")
 							task.wait(0.35)
 							do
@@ -1160,7 +1170,7 @@ repeat
 					{
 						Title = "No",
 						Callback = function()
-							setclipboard(tostring(readfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json")))
+							--// setclipboard(tostring(readfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json")))
 						end
 					}
 				}
@@ -1177,6 +1187,74 @@ repeat
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then
 			SaveManager:Load("Configs")
 			getgenv()["Loading Configs"] = false
+		end
+	end
+	--// Set Multiple Dropdown
+	if not getgenv()["Assist Insert"] then
+		if #Options["Current Assists"].Value == 1 then
+			Options["Current Assists"]:SetValue({
+				[Options["Current Assists"].Value[1]] = true
+			})
+		elseif #Options["Current Assists"].Value == 2 then
+			Options["Current Assists"]:SetValue({
+				[Options["Current Assists"].Value[1]] = true,
+				[Options["Current Assists"].Value[2]] = true
+			})
+		elseif #Options["Current Assists"].Value == 3 then
+			Options["Current Assists"]:SetValue({
+				[Options["Current Assists"].Value[1]] = true,
+				[Options["Current Assists"].Value[2]] = true,
+				[Options["Current Assists"].Value[3]] = true
+			})
+		elseif #Options["Current Assists"].Value == 4 then
+			Options["Current Assists"]:SetValue({
+				[Options["Current Assists"].Value[1]] = true,
+				[Options["Current Assists"].Value[2]] = true,
+				[Options["Current Assists"].Value[3]] = true,
+				[Options["Current Assists"].Value[4]] = true
+			})
+		end
+	end
+	if not getgenv()["Rarity Insert"] then
+		if #Options["Current Rarity"].Value == 1 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true
+			})
+		elseif #Options["Current Rarity"].Value == 2 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true,
+				[Options["Current Rarity"].Value[2]] = true
+			})
+		elseif #Options["Current Rarity"].Value == 3 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true,
+				[Options["Current Rarity"].Value[2]] = true,
+				[Options["Current Rarity"].Value[3]] = true
+			})
+		elseif #Options["Current Rarity"].Value == 4 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true,
+				[Options["Current Rarity"].Value[2]] = true,
+				[Options["Current Rarity"].Value[3]] = true,
+				[Options["Current Rarity"].Value[4]] = true
+			})
+		elseif #Options["Current Rarity"].Value == 5 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true,
+				[Options["Current Rarity"].Value[2]] = true,
+				[Options["Current Rarity"].Value[3]] = true,
+				[Options["Current Rarity"].Value[4]] = true,
+				[Options["Current Rarity"].Value[5]] = true
+			})
+		elseif #Options["Current Rarity"].Value == 6 then
+			Options["Current Rarity"]:SetValue({
+				[Options["Current Rarity"].Value[1]] = true,
+				[Options["Current Rarity"].Value[2]] = true,
+				[Options["Current Rarity"].Value[3]] = true,
+				[Options["Current Rarity"].Value[4]] = true,
+				[Options["Current Rarity"].Value[5]] = true,
+				[Options["Current Rarity"].Value[6]] = true
+			})
 		end
 	end
 		repeat task.wait() until gui()
@@ -1707,7 +1785,7 @@ repeat
 									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
 									  ["description"] = nil,
 									  ["footer"] = {
-										["text"] = "Time : "..os.date("%c").."\nCredit : YT » @crazyday3693\nSupported Exploit: Fluxus / Code X",
+										["text"] = "Time: "..os.date("%c").."\nSupported Exploit: Fluxus / Code X\nCredit: YT » @crazyday3693",
 										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
 									  },
 									  ["thumbnail"] = {
