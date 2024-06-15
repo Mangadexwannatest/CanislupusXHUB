@@ -1989,7 +1989,7 @@ repeat
 										},
 										{
 											["name"] = "**Match Information [End!]**",
-											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..damage_deal.."```",
+											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..damage_deal.."\nTime : 08:00".."```",
 											["inline"] = false
 										},
 										{
