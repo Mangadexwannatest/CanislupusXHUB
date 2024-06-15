@@ -274,8 +274,13 @@ repeat
 		return (plr.Character.HumanoidRootPart.Position - part.Position).magnitude
 	end
 	local function current_map()
+		return Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name
+	end
+	local function map_split()
 		if string.find(Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name,"Dimension") then
 			return Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name:split("Dimension")[1]
+		elseif string.find(Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name,"Raid") then
+			return Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name:split("Raid")[1]
 		else
 			return Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name
 		end
@@ -1742,6 +1747,7 @@ repeat
 								local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
 								local current_rank_res
 								local currnet_status
+								local dimension_or_raid
 								if not table.find(currency_rewards,"`None`") then
 									local name_count
 									local sum
@@ -1776,6 +1782,11 @@ repeat
 								else
 									currnet_status = " [Victory!]"
 								end
+								if string.find(current_map(),"Raid") then
+									dimension_or_raid = "Raid"
+								else
+									dimension_or_raid = "Dimension"
+								end
 								local Data = game:GetService("HttpService"):JSONEncode({
 									["username"] = "Anime Dimensions Simulator : Notification",
 									["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
@@ -1804,12 +1815,12 @@ repeat
 										},
 										{
 											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\nDimension: "..tostring(current_map()).."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
+											["value"] = "```\n"..dimension_or_raid..": "..tostring(map_split()).."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
 											["inline"] = false
 										},
 										{
-											["name"] = "**Player Information**".."__**||Username : "..tostring(plr.Name).."||**__".."**",
-											["value"] = "```\nLevel: "..tostring(plr.leaderstats.Level.Value),
+											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
+											["value"] = "```\nLevel: "..tostring(plr.leaderstats.Level.Value).."```",
 											["inline"] = false
 										}
 									},
