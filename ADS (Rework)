@@ -1159,7 +1159,7 @@ repeat
 						Title = "Yes",
 						Callback = function()
 							writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[
-							{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Execute","type":"Toggle","value":true},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Blue Devil Raid"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Friends Only","type":"Toggle","value":false}]}
+							{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Execute","type":"Toggle","value":true},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Blue Devil Raid"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Friends Only","type":"Toggle","value":false}]}
 						    ]])
 							Notify("Successfully reseted configs")
 							task.wait(0.35)
@@ -1773,15 +1773,15 @@ repeat
 								local how_much_clear
 								local time_end
 								if player_disply.StageClear.Value ~= clear_table[1] then
-									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
 									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: "..tostring(current_stage())
 									how_much_clear = "Dimension Clears: "..player_disply.StageClear.Value
 								elseif player_disply.BossRushClears.Value ~= clear_table[2] then
-									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..player_disply.BossRushRecordString.Value
+									time_end =UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..player_disply.BossRushRecordString.Value
 									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: 3"
 									how_much_clear = "BossRush Clears: "..player_disply.BossRushClears.Value
 								elseif player_disply.RaidClears.Value ~= clear_table[3] then
-									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
 									for i,v in next,RaidBeat do
 										if player_disply:FindFirstChild(i).Value ~= v[1] then
 											dimension_or_raid = "Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
@@ -1789,7 +1789,7 @@ repeat
 										end
 									end
 								elseif player_disply.WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
-									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
 									dimension_or_raid = "Speed Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
 									how_much_clear = "SpeedRaid Clears: "..player_disply.WeeklyShadowRaidsCleared.Value
 								else
@@ -1863,7 +1863,7 @@ repeat
 										},
 										{
 											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res..time_end.."```",
+											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..time_end.."```",
 											["inline"] = false
 										},
 										{
