@@ -793,16 +793,6 @@ repeat
 			end
 		end
 	})
-	Farm_Section:AddToggle("Stop Dodge Skill", {
-		Title = "Stop Dodge Skill",
-		Description = "Stops dodging skills if the player is invincible..",
-		Default = true,
-		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
-		end
-	})
 	Farm_Section:AddToggle("Auto Safe", {
 		Title = "Auto Safe",
 		Description = "Stop all farm if player below x % HP.",
@@ -1169,7 +1159,7 @@ repeat
 						Title = "Yes",
 						Callback = function()
 							writefile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json",[[
-							{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Execute","type":"Toggle","value":true},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Stop Dodge Skill","type":"Toggle","value":true},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Blue Devil Raid"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Friends Only","type":"Toggle","value":false}]}
+							{"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"50"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Show information","type":"Toggle","value":false},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Auto Execute","type":"Toggle","value":true},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Blue Devil Raid"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"Auto Daily Quest","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Friends Only","type":"Toggle","value":false}]}
 						    ]])
 							Notify("Successfully reseted configs")
 							task.wait(0.35)
@@ -1312,22 +1302,27 @@ repeat
 			local main_remote_event = ReplicatedStorage.RemoteEvents.MainRemoteEvent
 			local main_remote_function = ReplicatedStorage.RemoteFunctions.MainRemoteFunction
 			local bv = Instance.new("BodyVelocity")
+			local player_disply = ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay")
 			local current_method
 			local clear_table = {
-				ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):WaitForChild("StageClear").Value,
-				ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):WaitForChild("BossRushClears").Value,
-				ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):WaitForChild("RaidClears").Value,
-				ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):WaitForChild("WeeklyShadowRaidsCleared").Value,
+				player_disply:WaitForChild("StageClear").Value,
+				player_disply:WaitForChild("BossRushClears").Value,
+				player_disply:WaitForChild("RaidClears").Value,
+				player_disply:WaitForChild("WeeklyShadowRaidsCleared").Value,
 			}
+			local RaidBeat = {}
+			for i,v in next,player_disply:GetChildren() do
+				if string.find(v.Name,"RaidBeat") then
+					if not RaidBeat[v.Name] then
+						RaidBeat[v.Name] = {}
+					end
+					table.insert(RaidBeat[v.Name],v.Value)
+				end
+			end
 			local function auto_farm()
 				if (not Options["Auto Join (Current Dimension)"].Value and not Options["Auto Join (Highnest)"].Value and not Options["Auto Join (Raid)"].Value and not Options["Auto Join (Raid Challenge)"].Value and not Options["Auto Join (Speed Raid)"].Value and not Options["Auto Join (Boss Rush)"].Value and not Options["Auto Join (Infinite Mode)"].Value) then
 					return false
 				elseif (Options["Auto Join (Current Dimension)"].Value or Options["Auto Join (Highnest)"].Value or Options["Auto Join (Raid)"].Value or Options["Auto Join (Raid Challenge)"].Value or Options["Auto Join (Speed Raid)"].Value or Options["Auto Join (Boss Rush)"].Value or Options["Auto Join (Infinite Mode)"].Value) then
-					return true
-				end
-			end
-			local function stop_dodge()
-				if Options["Stop Dodge Skill"].Value and getgenv()["On invincible"] then
 					return true
 				end
 			end
@@ -1363,7 +1358,7 @@ repeat
 						end)
 					end)
 				end
-				local function humanoid_invicible()
+				--[[local function humanoid_invicible()
 					pcall(function ()
 						plr.Character.HumanoidRootPart.ChildAdded:Connect(function(v)
 							if v.Name == "IFrameText" then
@@ -1375,7 +1370,7 @@ repeat
 							end
 						end)
 					end)
-				end
+				end]]
 				local is_connect_value
 				local function onCharacterAdded(char)
 					local humanoid = char:WaitForChild("Humanoid", 5)
@@ -1384,7 +1379,6 @@ repeat
 					end
 					humanoid.Died:Connect(function()
 						getgenv()["On Dodgeing"] = false
-						getgenv()["On invincible"] = false
 						getgenv()["On Safe Mode"] = false
 						getgenv()["On Bringing"] = false
 						getgenv()["humanoid Died"] = true
@@ -1394,7 +1388,6 @@ repeat
 							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
-							humanoid_invicible()
 							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
 								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
 									v.Head.Transparency = 1
@@ -1412,13 +1405,12 @@ repeat
 					local plr_on_character = plr.Character or plr.CharacterAdded:Wait()
 					if plr_on_character then
 						ontounching_ignore()
-						humanoid_invicible()
 						onCharacterAdded(plr_on_character)
 					end
 				end
 				Workspace:WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
 					pcall(function ()
-						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] and not stop_dodge() then
+						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] then
 							local a = v:Clone()
 							local side = math.clamp(2.85,0,10)
 							local Sizeto = v.Size + Vector3.new(side,100,side)
@@ -1434,7 +1426,7 @@ repeat
 							a.CanCollide = true
 							a.Name = "Ignore"
 							a.Parent = v.Parent
-							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On Bringing"] or stop_dodge()
+							repeat task.wait() until not v.Parent or not Options["Dodge Skill"].Value or getgenv()["On Safe Mode"] or getgenv()["On Bringing"]
 							a:Destroy()
 						end
 					end)
@@ -1468,7 +1460,7 @@ repeat
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 1
 				while task.wait() do
 					pcall(function ()
-						local is_blacklist = table.find(blacklist_characters,ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value)
+						local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
 						--// Auto Retry
 						if Options["Auto Retry"].Value and not getgenv()["Auto Join (Raid)"] then
 							if UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
@@ -1779,18 +1771,27 @@ repeat
 								local currnet_status
 								local dimension_or_raid
 								local how_much_clear
-								if ReplicatedStorage[plr.Name.."StatDisplay"].StageClear.Value ~= clear_table[1] then
-									dimension_or_raid = "Dimension: "..map_split()
-									how_much_clear = "Dimension Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].StageClear.Value
-								elseif ReplicatedStorage[plr.Name.."StatDisplay"].BossRushClears.Value ~= clear_table[2] then
-									dimension_or_raid = "Dimension: "..map_split()
-									how_much_clear = "BossRush Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].BossRushClears.Value
-								elseif ReplicatedStorage[plr.Name.."StatDisplay"].RaidClears.Value ~= clear_table[3] then
-									dimension_or_raid = "Raid: "..map_split()
-									how_much_clear = "Raid Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].RaidClears.Value
-								elseif ReplicatedStorage[plr.Name.."StatDisplay"].WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
-									dimension_or_raid = "Speed Raid: "..map_split()
-									how_much_clear = "SpeedRaid Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].WeeklyShadowRaidsCleared.Value
+								local time_end
+								if player_disply.StageClear.Value ~= clear_table[1] then
+									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: "..tostring(current_stage())
+									how_much_clear = "Dimension Clears: "..player_disply.StageClear.Value
+								elseif player_disply.BossRushClears.Value ~= clear_table[2] then
+									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..player_disply.BossRushRecordString.Value
+									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: 3"
+									how_much_clear = "BossRush Clears: "..player_disply.BossRushClears.Value
+								elseif player_disply.RaidClears.Value ~= clear_table[3] then
+									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									for i,v in next,RaidBeat do
+										if player_disply:FindFirstChild(i).Value ~= v[1] then
+											dimension_or_raid = "Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
+											how_much_clear = "Raid Clears: "..player_disply.RaidClears.Value.."\n"..i..": "..v[1]
+										end
+									end
+								elseif player_disply.WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
+									time_end = "\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+									dimension_or_raid = "Speed Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
+									how_much_clear = "SpeedRaid Clears: "..player_disply.WeeklyShadowRaidsCleared.Value
 								else
 									dimension_or_raid = "Error: d970%&&&&x"
 									how_much_clear = "Error: 087&650+2"
@@ -1829,8 +1830,10 @@ repeat
 								else
 									currnet_status = " [Victory!]"
 								end
+								local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
 								local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
 								local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
+								local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
 								local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
 								local Data = game:GetService("HttpService"):JSONEncode({
 									["username"] = "Anime Dimensions Simulator : Notification",
@@ -1860,12 +1863,12 @@ repeat
 										},
 										{
 											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
+											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res..time_end.."```",
 											["inline"] = false
 										},
 										{
 											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..ReplicatedStorage[plr.Name.."StatDisplay"].CardsOwned.Value.."/"..ReplicatedStorage[plr.Name.."StatDisplay"].MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n  ∘ Coin: "..get_currency_gem_gold("Gold").."\n  ∘ Gem: "..get_currency_gem_gold("Gem").."\n  ∘ RaidToken: "..raid_token.."\n  ∘ SpeedRaidToken: "..speed_token.."```",
+											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n  ∘ Coin: "..get_currency_gem_gold("Gold").."\n  ∘ Gem: "..get_currency_gem_gold("Gem").."\n  ∘ TraitToken: "..trait_token.."\n  ∘ RaidToken: "..raid_token.."\n  ∘ SpeedRaidToken: "..speed_token.."\n  ∘ BossRushToken: "..bossrush_token.."```",
 											["inline"] = false
 										}
 									},
@@ -1887,13 +1890,13 @@ repeat
 							break
 						else
 							local lowjuwi = game:GetService("HttpService"):JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
-							if ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value ~= lowjuwi["Character1"]
-							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value ~= lowjuwi["Character2"]
-							and ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value ~= lowjuwi["Character3"] then
+							if player_disply.CharacterName.Value ~= lowjuwi["Character1"]
+							and player_disply.AssistCharacterName1.Value ~= lowjuwi["Character2"]
+							and player_disply.AssistCharacterName2.Value ~= lowjuwi["Character3"] then
 								main_remote_function:InvokeServer("EquipCharacter",lowjuwi['Character1'])
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
-								Notify("Successfully Equip Characters",ReplicatedStorage[plr.Name.."StatDisplay"].CharacterName.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName1.Value.."\n"..ReplicatedStorage[plr.Name.."StatDisplay"].AssistCharacterName2.Value)
+								Notify("Successfully Equip Characters",player_disply.CharacterName.Value.."\n"..player_disply.AssistCharacterName1.Value.."\n"..player_disply.AssistCharacterName2.Value)
 								break
 							end
 						end
