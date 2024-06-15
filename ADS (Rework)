@@ -1761,6 +1761,7 @@ repeat
 								local current_rank_res
 								local currnet_status
 								local dimension_or_raid
+								local how_much_clear
 								if not table.find(currency_rewards,"`None`") then
 									local name_count
 									local sum
@@ -1797,8 +1798,10 @@ repeat
 								end
 								if string.find(current_map(),"Raid") then
 									dimension_or_raid = "Raid"
+									how_much_clear = "Raid Clear: "..ReplicatedStorage[plr.Name.."StatDisplay"].RaidClears.Value
 								else
 									dimension_or_raid = "Dimension"
+									how_much_clear = "Dimension Clear: "..ReplicatedStorage[plr.Name.."StatDisplay"].StageClear.Value
 								end
 								local Data = game:GetService("HttpService"):JSONEncode({
 									["username"] = "Anime Dimensions Simulator : Notification",
@@ -1828,12 +1831,12 @@ repeat
 										},
 										{
 											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\n"..dimension_or_raid..": "..tostring(map_split()).."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
+											["value"] = "```\n"..dimension_or_raid..": "..map_split().."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
 											["inline"] = false
 										},
 										{
 											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..tostring(plr.leaderstats.Level.Value).."```",
+											["value"] = "```\nLevel: "..tostring(plr.leaderstats.Level.Value).."\nCardsOwned: "..ReplicatedStorage[plr.Name.."StatDisplay"].CardsOwned.Value.."/"..ReplicatedStorage[plr.Name.."StatDisplay"].MaxCardsOwned.Value.."\n"..how_much_clear.."```",
 											["inline"] = false
 										}
 									},
