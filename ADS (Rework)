@@ -1768,7 +1768,7 @@ repeat
 							end
 						end
 					end)
-					raid_resultUI().ChildAdded:Connect(function ()
+					raid_resultUI().ChildAdded:Connect(function (v)
 						if not table.find(blacklist_items,v.Name) then
 							if table.find(item_rewards,"`None`") then
 								repeat
@@ -1923,6 +1923,7 @@ repeat
 					end)
 					--// Send Webhook (Raid Webhook)
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+						pcall(function ()
 							if Options["Send Webhook"].Value then
 								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
 								task.wait(2.5)
@@ -2002,6 +2003,7 @@ repeat
 								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
 								response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
 							end
+						end)
 					end)
 				end
 			end))
