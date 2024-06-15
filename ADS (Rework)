@@ -81,7 +81,7 @@ repeat
 
     --// Make Folder
     if not isfolder("CrazyDay") then
-        makefolder("CrazyDay")
+		repeat makefolder("CrazyDay") task.wait() until isfolder("CrazyDay") makefolder("CrazyDay/"..Game)
     elseif isfolder("CrazyDay") and not isfolder("CrazyDay/"..Game) then
         makefolder("CrazyDay/"..Game)
     end
@@ -1182,10 +1182,10 @@ repeat
 		SaveManager:IgnoreThemeSettings()
 		Window:SelectTab(1)
 		getgenv()["Successfully loaded"] = true
-		getgenv()["Loading Configs"] = false
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then
 			SaveManager:Load("Configs")
 		end
+		getgenv()["Loading Configs"] = false
 	end
 	--// Set Multiple Dropdown
 	if not getgenv()["Assist Insert"] then
