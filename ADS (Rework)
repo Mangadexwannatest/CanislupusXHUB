@@ -397,9 +397,7 @@ repeat
 		end
 	end
 	do
-		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then
-			getgenv()["Loading Configs"] = true
-		end
+		getgenv()["Loading Configs"] = true
 	end
 	--// Settings Tab
 	Settings_Section:AddToggle("Auto Save", {
@@ -1184,9 +1182,9 @@ repeat
 		SaveManager:IgnoreThemeSettings()
 		Window:SelectTab(1)
 		getgenv()["Successfully loaded"] = true
+		getgenv()["Loading Configs"] = false
 		if isfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json") then
 			SaveManager:Load("Configs")
-			getgenv()["Loading Configs"] = false
 		end
 	end
 	--// Set Multiple Dropdown
