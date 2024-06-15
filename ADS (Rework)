@@ -1834,7 +1834,7 @@ repeat
 									dimension_or_raid = "Speed Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
 									how_much_clear = "SpeedRaid Clears: "..player_disply.WeeklyShadowRaidsCleared.Value
 								else
-									dimension_or_raid = "Error: d970%&&&&x"
+									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
 									how_much_clear = "Error: 087&650+2"
 								end
 								if not table.find(currency_rewards,"`None`") then
@@ -1922,7 +1922,7 @@ repeat
 						end)
 					end)
 					--// Send Webhook (Raid Webhook)
-					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
+					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
 						pcall(function ()
 							if Options["Send Webhook"].Value then
 								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
@@ -1939,7 +1939,7 @@ repeat
 										end
 									end
 								else
-									dimension_or_raid = "Error: d970%&&&&x"
+									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
 									how_much_clear = "Error: 087&650+2"
 								end
 								if not table.find(currency_rewards,"`None`") then
