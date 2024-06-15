@@ -1016,7 +1016,7 @@ repeat
 	Skill_Section:AddToggle("Auto Skill", {
 		Title = "Auto Skill",
 		Description = "Automatically attacks and skills on enemies.",
-		Default = false,
+		Default = true,
 		Callback = function (value)
 			if (value or not value) then
 				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
@@ -1083,7 +1083,7 @@ repeat
 				  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
 				  ["description"] = nil,
 				  ["footer"] = {
-					["text"] = "Time: "..os.date("%c").."\nSupported Exploit: Fluxus / Code X\nCredit: YT » @crazyday3693",
+					["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
 					["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
 				  },
 				  ["thumbnail"] = {
@@ -1331,6 +1331,13 @@ repeat
 					return true
 				end
 			end
+			local function get_currency_gem_gold(name)
+				for i,v in pairs(UniversalGui.LeftUIFrame.OwnHealthBarFrame:GetDescendants()) do
+					if v.Name == name and v:IsA("TextLabel") then --[[ Gold / Gem]]
+						return v.Text
+					end
+				end
+			end
 			--// Misc function
 			plr:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
 				pcall(function()
@@ -1383,11 +1390,16 @@ repeat
 						getgenv()["humanoid Died"] = true
 						method_stage = 0
 						is_connect_value =  plr.CharacterAdded:Connect(function()
-							method_stage = 0
 							task.wait(1.15)
+							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
 							humanoid_invicible()
+							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
+									v.Head.Transparency = 1
+								end
+							end
 							if is_connect_value then
 								is_connect_value:Disconnect()
 								is_connect_value = nil
@@ -1768,17 +1780,20 @@ repeat
 								local dimension_or_raid
 								local how_much_clear
 								if ReplicatedStorage[plr.Name.."StatDisplay"].StageClear.Value ~= clear_table[1] then
-									dimension_or_raid = "Dimension: "
+									dimension_or_raid = "Dimension: "..map_split()
 									how_much_clear = "Dimension Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].StageClear.Value
 								elseif ReplicatedStorage[plr.Name.."StatDisplay"].BossRushClears.Value ~= clear_table[2] then
-									dimension_or_raid = "Dimension: "
+									dimension_or_raid = "Dimension: "..map_split()
 									how_much_clear = "BossRush Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].BossRushClears.Value
 								elseif ReplicatedStorage[plr.Name.."StatDisplay"].RaidClears.Value ~= clear_table[3] then
-									dimension_or_raid = "Raid: "
+									dimension_or_raid = "Raid: "..map_split()
 									how_much_clear = "Raid Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].RaidClears.Value
 								elseif ReplicatedStorage[plr.Name.."StatDisplay"].WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
-									dimension_or_raid = "Speed Raid: "
+									dimension_or_raid = "Speed Raid: "..map_split()
 									how_much_clear = "SpeedRaid Clears: "..ReplicatedStorage[plr.Name.."StatDisplay"].WeeklyShadowRaidsCleared.Value
+								else
+									dimension_or_raid = "Error: d970%&&&&x"
+									how_much_clear = "Error: 087&650+2"
 								end
 								if not table.find(currency_rewards,"`None`") then
 									local name_count
@@ -1814,6 +1829,8 @@ repeat
 								else
 									currnet_status = " [Victory!]"
 								end
+								local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
+								local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
 								local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
 								local Data = game:GetService("HttpService"):JSONEncode({
 									["username"] = "Anime Dimensions Simulator : Notification",
@@ -1824,7 +1841,7 @@ repeat
 									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
 									  ["description"] = nil,
 									  ["footer"] = {
-										["text"] = "Time: "..os.date("%c").."\nSupported Exploit: Fluxus / Code X\nCredit: YT » @crazyday3693",
+										["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
 										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
 									  },
 									  ["thumbnail"] = {
@@ -1843,12 +1860,12 @@ repeat
 										},
 										{
 											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\n"..dimension_or_raid..map_split().."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
+											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: "..tostring(current_stage()).."\n"..current_rank_res.."\n"..UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."```",
 											["inline"] = false
 										},
 										{
 											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.."["..exp.."]\nCardsOwned: "..ReplicatedStorage[plr.Name.."StatDisplay"].CardsOwned.Value.."/"..ReplicatedStorage[plr.Name.."StatDisplay"].MaxCardsOwned.Value.."\n"..how_much_clear.."```",
+											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..ReplicatedStorage[plr.Name.."StatDisplay"].CardsOwned.Value.."/"..ReplicatedStorage[plr.Name.."StatDisplay"].MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n  ∘ Coin: "..get_currency_gem_gold("Gold").."\n  ∘ Gem: "..get_currency_gem_gold("Gem").."\n  ∘ RaidToken: "..raid_token.."\n  ∘ SpeedRaidToken: "..speed_token.."```",
 											["inline"] = false
 										}
 									},
