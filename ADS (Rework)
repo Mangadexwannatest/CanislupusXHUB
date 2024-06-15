@@ -1927,20 +1927,20 @@ repeat
 							if Options["Send Webhook"].Value then
 								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
 								task.wait(2.5)
-								local current_rank_res = "Rank: "..UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
-								local damage_deal = "Damage: "..UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
+								local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+								local damage_deal = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
 								local dimension_or_raid
 								local how_much_clear
 								if player_disply.RaidClears.Value ~= clear_table[3] then
 									for i,v in next,RaidBeat do
 										if player_disply:FindFirstChild(i).Value ~= v[1] then
-											dimension_or_raid = "Raid: "..map_split().."\nStage Clear: 0"
+											dimension_or_raid = "Raid: "..map_split()
 											how_much_clear = "Raid Clears: "..player_disply.RaidClears.Value.."\n"..i..": "..v[1]
 										end
 									end
 								else
-									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
-									how_much_clear = "Error: 087&650+2"
+									dimension_or_raid = "Raid: "..map_split()
+									how_much_clear = "Raid Clears: Unknown"
 								end
 								if not table.find(currency_rewards,"`None`") then
 									local name_count
@@ -1989,7 +1989,7 @@ repeat
 										},
 										{
 											["name"] = "**Match Information [End!]**",
-											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..damage_deal.."\nTime : 08:00".."```",
+											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank: "..current_rank_res.."\nDamage: "..damage_deal.."\nTime : 08:00".."```",
 											["inline"] = false
 										},
 										{
