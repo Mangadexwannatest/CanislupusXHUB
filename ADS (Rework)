@@ -33,8 +33,8 @@ repeat
 	local method_stage = 0
 	local Tabs = {}
     local character = {}
-	local item_rewards = {"`None`"}
-	local currency_rewards = {"`None`"}
+	local item_rewards = {"`None     `"}
+	local currency_rewards = {"`None    `"}
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
     local dimension = {
@@ -1729,11 +1729,11 @@ repeat
 					--// Insert Webhook
 					UniversalGui.UniversalCenterUIFrame:WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
 						if not table.find(blacklist_items,v.Name) then
-							if table.find(item_rewards,"`None`") then
+							if table.find(item_rewards,"`None     `") then
 								repeat
-									table.remove(item_rewards,table.find(item_rewards,"`None`"))
+									table.remove(item_rewards,table.find(item_rewards,"`None     `"))
 								task.wait()
-								until not table.find(item_rewards,"`None`")
+								until not table.find(item_rewards,"`None     `")
 							end
 							if not v:FindFirstChild("Gradient") then
 								table.insert(item_rewards,"`"..v.Name.." [Common]`")
@@ -1751,11 +1751,11 @@ repeat
 								end
 							end
 						elseif table.find(blacklist_items,v.Name) and v.Name ~= "BossRushEntryPass" then
-							if table.find(currency_rewards,"`None`") then
+							if table.find(currency_rewards,"`None    `") then
 								repeat
-									table.remove(currency_rewards,table.find(currency_rewards,"`None`"))
+									table.remove(currency_rewards,table.find(currency_rewards,"`None    `"))
 								task.wait()
-								until not table.find(currency_rewards,"`None`")
+								until not table.find(currency_rewards,"`None    `")
 							end
 							if tonumber(v.LevelReq.Text) then
 								if not currency_rewards[v.Name] then
@@ -1770,11 +1770,11 @@ repeat
 					end)
 					raid_resultUI().ChildAdded:Connect(function (v)
 						if not table.find(blacklist_items,v.Name) then
-							if table.find(item_rewards,"`None`") then
+							if table.find(item_rewards,"`None     `") then
 								repeat
-									table.remove(item_rewards,table.find(item_rewards,"`None`"))
+									table.remove(item_rewards,table.find(item_rewards,"`None     `"))
 								task.wait()
-								until not table.find(item_rewards,"`None`")
+								until not table.find(item_rewards,"`None     `")
 							end
 							if not v:FindFirstChild("Gradient") then
 								table.insert(item_rewards,"`"..v.Name.." [Common]`")
@@ -1792,11 +1792,11 @@ repeat
 								end
 							end
 						elseif table.find(blacklist_items,v.Name) and v.Name ~= "BossRushEntryPass" then
-							if table.find(currency_rewards,"`None`") then
+							if table.find(currency_rewards,"`None    `") then
 								repeat
-									table.remove(currency_rewards,table.find(currency_rewards,"`None`"))
+									table.remove(currency_rewards,table.find(currency_rewards,"`None    `"))
 								task.wait()
-								until not table.find(currency_rewards,"`None`")
+								until not table.find(currency_rewards,"`None    `")
 							end
 							if tonumber(v.LevelReq.Text) then
 								if not currency_rewards[v.Name] then
@@ -1817,7 +1817,7 @@ repeat
 								task.wait(2.5)
 								local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
 								local current_rank_res
-								local currnet_status
+								local currnet_status = " [End!]"
 								local dimension_or_raid
 								local how_much_clear
 								local time_end
@@ -1837,7 +1837,7 @@ repeat
 									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
 									how_much_clear = "Error: 087&650+2"
 								end
-								if not table.find(currency_rewards,"`None`") then
+								if not table.find(currency_rewards,"`None    `") then
 									local name_count
 									local sum
 									for i,v in pairs(currency_rewards) do
@@ -1866,7 +1866,7 @@ repeat
 								else
 									current_rank_res = "Rank: D"
 								end
-								if table.find(currency_rewards,"`None`") and table.find(item_rewards,"`None`") and current_rank_res == "Rank: F" then
+								if table.find(currency_rewards,"`None    `") and table.find(item_rewards,"`None     `") and current_rank_res == "Rank: F" then
 									currnet_status = " [Defeat!]"
 								else
 									currnet_status = " [Victory!]"
@@ -1910,7 +1910,7 @@ repeat
 										},
 										{
 											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n  ∘ Gold: "..get_currency_gem_gold("Gold").."\n  ∘ Gem: "..get_currency_gem_gold("Gem").."\n  ∘ TraitToken: "..trait_token.."\n  ∘ RaidToken: "..raid_token.."\n  ∘ SpeedRaidToken: "..speed_token.."\n  ∘ BossRushToken: "..bossrush_token.."```",
+											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
 											["inline"] = false
 										}
 									},
@@ -1942,7 +1942,7 @@ repeat
 									dimension_or_raid = "Raid: "..map_split()
 									how_much_clear = "Raid Clears: Unknown"
 								end
-								if not table.find(currency_rewards,"`None`") then
+								if not table.find(currency_rewards,"`None    `") then
 									local name_count
 									local sum
 									for i,v in pairs(currency_rewards) do
@@ -1994,7 +1994,7 @@ repeat
 										},
 										{
 											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n  ∘ Gold: "..get_currency_gem_gold("Gold").."\n  ∘ Gem: "..get_currency_gem_gold("Gem").."\n  ∘ TraitToken: "..trait_token.."\n  ∘ RaidToken: "..raid_token.."\n  ∘ SpeedRaidToken: "..speed_token.."\n  ∘ BossRushToken: "..bossrush_token.."```",
+											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
 											["inline"] = false
 										}
 									},
@@ -2115,4 +2115,3 @@ if CoreGui:FindFirstChild("function running") and CoreGui:FindFirstChild("functi
 		CoreGui:FindFirstChild("function running").Enabled = true
 	end
 end
-
