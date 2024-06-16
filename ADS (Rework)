@@ -1455,6 +1455,7 @@ repeat
 				end
 				plr.CharacterAdded:Connect(onCharacterAdded)
 				do
+					repeat task.wait() until tonumber(UniversalGui.LeftUIFrame.OwnHealthBarFrame.HealthAmount.Text) > 0
 					local plr_on_character = plr.Character or plr.CharacterAdded:Wait()
 					if plr_on_character then
 						ontounching_ignore()
