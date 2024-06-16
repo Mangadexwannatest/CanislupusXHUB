@@ -1511,8 +1511,7 @@ repeat
 				end
 			end))
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 1
-				while task.wait() do
-					local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
+				while wait() do
 					--// Auto Join (Raid) #check
 					if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
 						getgenv()["Auto Join (Raid)"] = true
@@ -1527,7 +1526,12 @@ repeat
 						game:GetService("TeleportService"):Teleport(7338881230)
 						break
 					end
+				end
+			end))
+			coroutine.resume(coroutine.create(function ()
+				while wait() do
 					--// Current Method
+					local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
 					if not is_blacklist then
 						if Options["Auto Set Distance"].Value then
 							if boss_bar() then
