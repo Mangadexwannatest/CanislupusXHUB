@@ -1514,9 +1514,9 @@ repeat
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 1
 				while wait() do
 					--// Auto Join (Raid) #check
-					if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
+					if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 8 then
 						getgenv()["Auto Join (Raid)"] = true
-					elseif Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) > 9 then
+					elseif Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) > 8 then
 						getgenv()["Auto Join (Raid)"] = false
 					elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
 						getgenv()["Auto Join (Raid)"] = false
