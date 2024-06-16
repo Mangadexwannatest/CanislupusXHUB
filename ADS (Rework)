@@ -228,6 +228,45 @@ repeat
 			end
 		end
 	end
+	local function update_card()
+		local wdiwaji2 = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay
+		if ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value >= 3 then
+			if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "" or wdiwaji2.Slot3.ItemImage.Image == "") then
+				return true
+			else
+				return false
+			end
+		elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 2 then
+			if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "") then
+				return true
+			else
+				return false
+			end
+		elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 1 then
+			if (wdiwaji2.Slot1.ItemImage.Image == "") then
+				return true
+			else
+				return false
+			end
+		end
+	end
+	local function unequip_cards()
+		for i,v in pairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+			firesignal(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.CardInventoryOverlayClose.MouseButton1Click,plr)
+			if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
+				if v.CardImage.BackgroundColor3 == Color3.fromRGB(255, 223, 167) then
+					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Name)
+				end
+			end
+		end
+	end
+	local function equip_best()
+		for i,v in pairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+			if v:IsA("ImageButton") and v.LayoutOrder <= 3 then
+				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+			end
+		end
+	end
     local function getClosestMob()
         local dist, thing = math.huge
             for i, v in next, Workspace.Folders.Monsters:GetChildren() do
@@ -425,7 +464,7 @@ repeat
 		Description = "Automatically saves all configuration settings.",
 		Default = true,
 		Callback = function (value)
-			if (value or not value) and not getgenv()["Loading Configs"] then
+			if not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -438,7 +477,7 @@ repeat
 		Default = 5,
 		Callback = function (value)
 			Fluent:SetTheme(value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -449,7 +488,7 @@ repeat
 		Default = false,
 		Callback = function (value)
 			Fluent:ToggleAcrylic(value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -460,7 +499,7 @@ repeat
 		Default = false,
 		Callback = function (value)
 			Fluent:ToggleTransparency(value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -473,16 +512,14 @@ repeat
 		Multi = false,
 		Default = 1,
 		Callback = function (value)
-			if (value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if Options["Current Difficulty"] then
-					if (value == "Sword Dimension" or "Ghoul Dimension" or "Fate Dimension" or "Slime Dimension") and Options["Current Difficulty"].Value == "Hard" then
-						Options["Current Difficulty"]:SetValue("Easy")
-					elseif (value == "Devil Dimension" or value == "Pirate Dimension" or value == "Alien Dimension" or value == "Level Dimension") and Options["Current Difficulty"].Value ~= "Nightmare" then
-						Options["Current Difficulty"]:SetValue("Nightmare")
-					end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if Options["Current Difficulty"] then
+				if (value == "Sword Dimension" or "Ghoul Dimension" or "Fate Dimension" or "Slime Dimension") and Options["Current Difficulty"].Value == "Hard" then
+					Options["Current Difficulty"]:SetValue("Easy")
+				elseif (value == "Devil Dimension" or value == "Pirate Dimension" or value == "Alien Dimension" or value == "Level Dimension") and Options["Current Difficulty"].Value ~= "Nightmare" then
+					Options["Current Difficulty"]:SetValue("Nightmare")
 				end
 			end
 		end
@@ -494,16 +531,14 @@ repeat
 		Multi = false,
 		Default = 1,
 		Callback = function (value)
-			if (value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if Options["Current Dimension"] then
-					if (Options["Current Dimension"].Value == "Sword Dimension" or Options["Current Dimension"].Value == "Ghoul Dimension" or Options["Current Dimension"].Value == "Fate Dimension" or Options["Current Dimension"].Value == "Slime Dimension") and value == "Hard" then
-						Options["Current Difficulty"]:SetValue("Easy")
-					elseif (Options["Current Dimension"].Value == "Devil Dimension" or Options["Current Dimension"].Value == "Pirate Dimension" or Options["Current Dimension"].Value == "Alien Dimension" or Options["Current Dimension"].Value == "Level Dimension") and value ~= "Nightmare" then
-						Options["Current Difficulty"]:SetValue("Nightmare")
-					end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if Options["Current Dimension"] then
+				if (Options["Current Dimension"].Value == "Sword Dimension" or Options["Current Dimension"].Value == "Ghoul Dimension" or Options["Current Dimension"].Value == "Fate Dimension" or Options["Current Dimension"].Value == "Slime Dimension") and value == "Hard" then
+					Options["Current Difficulty"]:SetValue("Easy")
+				elseif (Options["Current Dimension"].Value == "Devil Dimension" or Options["Current Dimension"].Value == "Pirate Dimension" or Options["Current Dimension"].Value == "Alien Dimension" or Options["Current Dimension"].Value == "Level Dimension") and value ~= "Nightmare" then
+					Options["Current Difficulty"]:SetValue("Nightmare")
 				end
 			end
 		end
@@ -513,7 +548,7 @@ repeat
 		Description = nil,
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -523,7 +558,7 @@ repeat
 		Description = nil,
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -533,7 +568,7 @@ repeat
 		Description = "Automatically replay the game if the game ends.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -543,7 +578,7 @@ repeat
 		Description = "Automatically creates and starts the selected dimension.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -553,85 +588,83 @@ repeat
 		Description = "Automatically create and start the highest dimension.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if value and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
-					local Lvl = plr.leaderstats.Level.Value
-					if Lvl > 0 and Lvl < 6 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Titan Dimension"
-					elseif Lvl > 5 and Lvl < 11 then
-						Options["Current Difficulty"].Value = "Hard"
-						Options["Current Dimension"].Value = "Titan Dimension"
-					elseif Lvl > 10 and Lvl < 16 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Titan Dimension"
-					elseif Lvl > 15 and Lvl < 21 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Demon Dimension"
-					elseif Lvl > 20 and Lvl < 26 then
-						Options["Current Difficulty"].Value = "Hard"
-						Options["Current Dimension"].Value = "Demon Dimension"
-					elseif Lvl > 25 and Lvl < 31 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Demon Dimension"
-					elseif Lvl > 30 and Lvl < 36 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Curse Dimension"
-					elseif Lvl > 35 and Lvl < 41 then
-						Options["Current Difficulty"].Value = "Hard"
-						Options["Current Dimension"].Value = "Curse Dimension"
-					elseif Lvl > 40 and Lvl < 46 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Curse Dimension"
-					elseif Lvl > 45 and Lvl < 51 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Villain Dimension"
-					elseif Lvl > 50 and Lvl < 56 then
-						Options["Current Difficulty"].Value = "Hard"
-						Options["Current Dimension"].Value = "Villain Dimension"
-					elseif Lvl > 55 and Lvl < 61 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Villain Dimension"
-					elseif Lvl > 60 and Lvl < 68 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Sword Dimension"
-					elseif Lvl > 67 and Lvl < 76 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Sword Dimension"
-					elseif Lvl > 75 and Lvl < 83 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Ghoul Dimension"
-					elseif Lvl > 82 and Lvl < 91 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Ghoul Dimension"
-					elseif Lvl > 90 and Lvl < 98 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Fate Dimension"
-					elseif Lvl > 97 and Lvl < 106 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Fate Dimension"
-					elseif Lvl > 105 and Lvl < 113 then
-						Options["Current Difficulty"].Value = "Easy"
-						Options["Current Dimension"].Value = "Slime Dimension"
-					elseif Lvl > 112 and Lvl < 121 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Slime Dimension"
-					elseif Lvl > 120 and Lvl < 131 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Devil Dimension"
-					elseif Lvl > 130 and Lvl < 141 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Pirate Dimension"
-					elseif Lvl > 140 and Lvl < 151 then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Alien Dimension"
-					elseif Lvl > 150  then
-						Options["Current Difficulty"].Value = "Nightmare"
-						Options["Current Dimension"].Value = "Level Dimension"
-					end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if value and (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
+				local Lvl = plr.leaderstats.Level.Value
+				if Lvl > 0 and Lvl < 6 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Titan Dimension"
+				elseif Lvl > 5 and Lvl < 11 then
+					Options["Current Difficulty"].Value = "Hard"
+					Options["Current Dimension"].Value = "Titan Dimension"
+				elseif Lvl > 10 and Lvl < 16 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Titan Dimension"
+				elseif Lvl > 15 and Lvl < 21 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Demon Dimension"
+				elseif Lvl > 20 and Lvl < 26 then
+					Options["Current Difficulty"].Value = "Hard"
+					Options["Current Dimension"].Value = "Demon Dimension"
+				elseif Lvl > 25 and Lvl < 31 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Demon Dimension"
+				elseif Lvl > 30 and Lvl < 36 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Curse Dimension"
+				elseif Lvl > 35 and Lvl < 41 then
+					Options["Current Difficulty"].Value = "Hard"
+					Options["Current Dimension"].Value = "Curse Dimension"
+				elseif Lvl > 40 and Lvl < 46 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Curse Dimension"
+				elseif Lvl > 45 and Lvl < 51 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Villain Dimension"
+				elseif Lvl > 50 and Lvl < 56 then
+					Options["Current Difficulty"].Value = "Hard"
+					Options["Current Dimension"].Value = "Villain Dimension"
+				elseif Lvl > 55 and Lvl < 61 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Villain Dimension"
+				elseif Lvl > 60 and Lvl < 68 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Sword Dimension"
+				elseif Lvl > 67 and Lvl < 76 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Sword Dimension"
+				elseif Lvl > 75 and Lvl < 83 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Ghoul Dimension"
+				elseif Lvl > 82 and Lvl < 91 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Ghoul Dimension"
+				elseif Lvl > 90 and Lvl < 98 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Fate Dimension"
+				elseif Lvl > 97 and Lvl < 106 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Fate Dimension"
+				elseif Lvl > 105 and Lvl < 113 then
+					Options["Current Difficulty"].Value = "Easy"
+					Options["Current Dimension"].Value = "Slime Dimension"
+				elseif Lvl > 112 and Lvl < 121 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Slime Dimension"
+				elseif Lvl > 120 and Lvl < 131 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Devil Dimension"
+				elseif Lvl > 130 and Lvl < 141 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Pirate Dimension"
+				elseif Lvl > 140 and Lvl < 151 then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Alien Dimension"
+				elseif Lvl > 150  then
+					Options["Current Difficulty"].Value = "Nightmare"
+					Options["Current Dimension"].Value = "Level Dimension"
 				end
 			end
 		end
@@ -643,7 +676,7 @@ repeat
 		Multi = false,
 		Default = 1,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -653,7 +686,7 @@ repeat
 		Description = "Automatically creates and starts the selected raid",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -663,7 +696,7 @@ repeat
 		Description = "Automatically join the raid challenge if reward available.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -673,7 +706,7 @@ repeat
 		Description = "Automatically join the speed raid if not cooldown.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -683,7 +716,7 @@ repeat
 		Description = "Automatically join the boss rush if have free ticket.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -693,7 +726,7 @@ repeat
 		Description = "Automatically join the infinite mode if reward available.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -703,10 +736,10 @@ repeat
 		Description = "Makes your dash have no cooldown.",
 		Default = false,
 		Callback = function (value)
-			ReplicatedStorage:WaitForChild(game:GetService("Players").LocalPlayer.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			ReplicatedStorage:WaitForChild(plr.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
 		end
 	})
 	Misc_Section:AddButton({
@@ -741,14 +774,14 @@ repeat
 		Multi = false,
 		Default = 2,
 		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
 			getgenv()["On Bringing"] = false
 			if tween_info then
 				tween_info:Cancel()
 			end
 			method_stage = 0
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
 		end
 	})
 	Farm_Section:AddDropdown("Current Method", {
@@ -758,7 +791,7 @@ repeat
 		Multi = false,
 		Default = 3,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -771,7 +804,7 @@ repeat
 		Max = 10,
 		Rounding = 1,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -784,7 +817,7 @@ repeat
 		Max = 100,
 		Rounding = 0,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -794,7 +827,7 @@ repeat
 		Description = "Automatically set the distance calculated from the size of the enemy.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -804,7 +837,7 @@ repeat
 		Description = "Dodge all enemy skills.",
 		Default = true,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -814,13 +847,11 @@ repeat
 		Description = "Stop all farm if player below x % HP.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if not value then
-					getgenv()["On Safe Mode"] = false
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if not value then
+				getgenv()["On Safe Mode"] = false
 			end
 		end
 	})
@@ -831,7 +862,7 @@ repeat
 		Description = "Automatically equips characters.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -853,7 +884,7 @@ repeat
 		Description = "Automatically claim all of the daily // weekly quests.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -863,7 +894,7 @@ repeat
 		Description = "Automatically claim all of the speed raid reward.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -873,7 +904,7 @@ repeat
 		Description = "Automatically complete all daily quests.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -885,14 +916,12 @@ repeat
 		Multi = true,
 		Default = {"Common", "Uncommon"},
 		Callback = function (value)
-			if (value) then
-				getgenv()["Rarity Insert"] = true
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if Options["Auto Sell"] and Options["Auto Sell"].Value then
-					sell_card(value)
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			getgenv()["Rarity Insert"] = true
+			if Options["Auto Sell"] and Options["Auto Sell"].Value then
+				sell_card(value)
 			end
 		end
 	})
@@ -901,13 +930,11 @@ repeat
 		Description = "Automatically sell all of the selected cards (rarity).",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if value then
-					sell_card(Options["Current Rarity"].Value)
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if value then
+				sell_card(Options["Current Rarity"].Value)
 			end
 		end
 	})
@@ -916,8 +943,11 @@ repeat
 		Description = "Automatically equip your best card.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
+			end
+			if value then
+				unequip_cards()
 			end
 		end
 	})
@@ -926,7 +956,7 @@ repeat
 		Description = "Automatically upgrade all your equipped cards.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -939,12 +969,10 @@ repeat
 		Multi = true,
 		Default = {"Assist1", "Assist2", "Fruit1", "Fruit2"},
 		Callback = function (value)
-			if (value) then
-				getgenv()["Assist Insert"] = true
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
 			end
+			getgenv()["Assist Insert"] = true
 		end
 	})
 	Skill_Section:AddDropdown("Current Attack Method", {
@@ -954,7 +982,7 @@ repeat
 		Multi = false,
 		Default = 1,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -965,7 +993,7 @@ repeat
 		Multi = false,
 		Default = 1,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -976,7 +1004,7 @@ repeat
 		Multi = false,
 		Default = 2,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -987,7 +1015,7 @@ repeat
 		Multi = false,
 		Default = 3,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -998,7 +1026,7 @@ repeat
 		Multi = false,
 		Default = 4,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1009,7 +1037,7 @@ repeat
 		Multi = false,
 		Default = 5,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1022,7 +1050,7 @@ repeat
 		Max = 150,
 		Rounding = 0,
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1032,20 +1060,8 @@ repeat
 		Description = "Automatically attacks and skills on enemies.",
 		Default = true,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if value then
-					if (Options["Skill One"].Value == (Options["Skill Two"].Value or Options["Skill Third"].Value or Options["Skill Fourth"].Value or Options["Skill Fifth"].Value))
-					or (Options["Skill Two"].Value == (Options["Skill Third"].Value or Options["Skill Fourth"].Value or Options["Skill Fifth"].Value))
-					or (Options["Skill Third"].Value == (Options["Skill Fourth"].Value or Options["Skill Fifth"].Value))
-					or (Options["Skill Fourth"].Value == (Options["Skill Fifth"].Value))
-					or (Options["Skill Fifth"].Value == (Options["Skill Two"].Value or Options["Skill Third"].Value or Options["Skill Fourth"].Value)) then
-						Options["Auto Skill"]:SetValue(false)
-						Notify("Auto Skill (Error)","Please make sure that no two skills are the same.")
-					end
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
 			end
 		end
 	})
@@ -1058,7 +1074,7 @@ repeat
 		Numeric = false,
 		Finished = false,
 		Callback = function(value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1068,7 +1084,7 @@ repeat
 		Description = "Choose the color of the webhook.",
 		Default = Color3.fromRGB(125, 125, 125),
 		Callback = function (value)
-			if (value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1078,7 +1094,7 @@ repeat
 		Description = "Send a notifaction to your Discord when the game ends,displaying information about that match and what rewards you've received.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1122,10 +1138,10 @@ repeat
 		Description = "Automatically execute the script while teleporting.",
 		Default = false,
 		Callback = function (value)
-			getgenv()["Auto Execute"] = value
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			getgenv()["Auto Execute"] = value
 		end
 	})
 	Settings_Section:AddToggle("Auto Hide Gui", {
@@ -1133,15 +1149,13 @@ repeat
 		Description = "Automatically hide your gui after execute the script.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if value and gui() and gui_stage == 0 then
-					gui_stage += 1
-					gui().Visible = false
-					CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if value and gui() and gui_stage == 0 then
+				gui_stage += 1
+				gui().Visible = false
+				CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
 			end
 		end
 	})
@@ -1150,14 +1164,12 @@ repeat
 		Description = "Disable 3DRendering for best performance.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) then
-				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-					SaveManager:Save("Configs")
-				end
-				if BlackScreen_Gui() then
-					BlackScreen_Gui().Visible = value
-					RunService:Set3dRenderingEnabled(not value)
-				end
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			if BlackScreen_Gui() then
+				BlackScreen_Gui().Visible = value
+				RunService:Set3dRenderingEnabled(not value)
 			end
 		end
 	})
@@ -1166,7 +1178,7 @@ repeat
 		Description = "Show information while black screen is enabled.",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
 		end
@@ -1442,7 +1454,7 @@ repeat
 					pcall(function ()
 						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] then
 							local a = v:Clone()
-							local side = math.clamp(2.85,0,10)
+							local side = math.clamp(3.175,0,10)
 							local Sizeto = v.Size + Vector3.new(side,100,side)
 							a.Size = Vector3.new(0,0,v.Size.Z)
 							if v.ClassName == "MeshPart" then
@@ -1595,12 +1607,12 @@ repeat
 								end
 							end
 						elseif not auto_farm() then
-							if tween_info then
-								tween_info:Cancel()
-							end
 							bv.Parent = nil
 							if plr.Character.Humanoid.PlatformStand == true then
 								plr.Character.Humanoid.PlatformStand = false
+							end
+							if tween_info then
+								tween_info:Cancel()
 							end
 						end
 					end)
@@ -2058,6 +2070,20 @@ repeat
 							end
 						end
 					end
+				end
+			end))
+			coroutine.resume(coroutine.create(function () --// Game \ Cards
+				while task.wait() do
+					pcall(function ()
+						if Options["Auto Equip"].Value then
+							if update_card() then
+								unequip_cards()
+								task.wait(0.025)
+								equip_best()
+								task.wait(0.115)
+							end
+						end
+					end)
 				end
 			end))
 			coroutine.resume(coroutine.create(function () --// Create \ Start Room
