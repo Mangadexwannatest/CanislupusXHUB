@@ -1393,6 +1393,7 @@ repeat
 						end
 						task.wait(0.55)
 					until not Options["Auto Retry"].Value or UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == false or getgenv()["Auto Join (Raid)"]
+					firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Click,plr)
 				end
 			end)
 			hookfunction(warn, newcclosure(function (value)
@@ -1521,10 +1522,8 @@ repeat
 						elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
 							getgenv()["Auto Join (Raid)"] = false
 						end
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] then
-							if getgenv()["Raid Opening"] and not boss_bar() then
-								game:GetService("TeleportService"):Teleport(7338881230)
-							end
+						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] and not boss_bar() then
+							game:GetService("TeleportService"):Teleport(7338881230)
 						end
 						--// Current Method
 						if not is_blacklist then
