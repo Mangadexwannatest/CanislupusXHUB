@@ -1389,11 +1389,11 @@ repeat
 				if Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == true and tonumber(current_stage()) ~= 1 then
 					repeat
 						if not getgenv()["Auto Join (Raid)"] then
-							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.MouseButton1Click,plr)
+							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.MouseButton1Down,plr)
 						end
 						task.wait(0.55)
 					until not Options["Auto Retry"].Value or UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == false or getgenv()["Auto Join (Raid)"]
-					firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Click,plr)
+					firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Down,plr)
 				end
 			end)
 			hookfunction(warn, newcclosure(function (value)
@@ -1522,7 +1522,8 @@ repeat
 						elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
 							getgenv()["Auto Join (Raid)"] = false
 						end
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] and not boss_bar() then
+						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] and not string.find(current_map(),"Raid") then
+							Notify("Auto Join (Raid)","The raid has opened.","Teleporting in 5 second")
 							game:GetService("TeleportService"):Teleport(7338881230)
 						end
 						--// Current Method
@@ -2102,7 +2103,7 @@ repeat
 								["MapName"] = Options["Current Raid"].Value,
 								["Hardcore"] = false
 							})
-							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Easy\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
+							Notify("Successfully room created","MapName : "..Options["Current Raid"].Value.."\nDifficulty : Easy\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 second")
 							task.wait(5)
 							main_remote_function:InvokeServer("TeleportPlayers")
 							break
@@ -2115,21 +2116,21 @@ repeat
 									end
 								end
 								getgenv()["Can't Equip Character"] = true
-								Notify("Successfully room created","MapName : ShadowRaid".."\nCharacter : "..current_speedraid,"Starting in 5 Second")
+								Notify("Successfully room created","MapName : ShadowRaid".."\nCharacter : "..current_speedraid,"Starting in 5 second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToShadowRaid",current_speedraid)
 								break
 							end
 							--// Auto Join (Raid Challenge)
 							if Options["Auto Join (Raid Challenge)"].Value and plr.leaderstats.Level.Value >= 30 and plr_gui.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
-								Notify("Successfully room created","MapName : RaidChallenge".."\nAward Status : Reward Available","Starting in 5 Second")
+								Notify("Successfully room created","MapName : RaidChallenge".."\nAward Status : Reward Available","Starting in 5 second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToRaidChallenge")
 								break
 							end
 							--// Auto Join (Boss Rush)
 							if Options["Auto Join (Boss Rush)"].Value and plr.leaderstats.Level.Value >= 15 and plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text ~= "0 Free Entry Left" then
-								Notify("Successfully room created","MapName : BossRush".."\nFree Entry Left : "..plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],"Starting in 5 Second")
+								Notify("Successfully room created","MapName : BossRush".."\nFree Entry Left : "..plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],"Starting in 5 second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToBossRush")
 								break
@@ -2142,7 +2143,7 @@ repeat
 									["MapName"] = "Infinite Mode",
 									["Hardcore"] = false
 								})
-								Notify("Successfully room created","MapName : Infinite Mode\nDifficulty : Infinite\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 Second")
+								Notify("Successfully room created","MapName : Infinite Mode\nDifficulty : Infinite\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : false","Starting in 5 second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportPlayers")
 								break
@@ -2155,7 +2156,7 @@ repeat
 									["MapName"] = Options["Current Dimension"].Value,
 									["Hardcore"] = Options["Hard core"].Value
 								})
-								Notify("Successfully room created","MapName : "..Options["Current Dimension"].Value.."\nDifficulty : "..Options["Current Difficulty"].Value.."\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : "..tostring(Options["Hard core"].Value),"Starting in 5 Second")
+								Notify("Successfully room created","MapName : "..Options["Current Dimension"].Value.."\nDifficulty : "..Options["Current Difficulty"].Value.."\nFriendsOnly : "..tostring(Options["Friends Only"].Value).."\nHardcore : "..tostring(Options["Hard core"].Value),"Starting in 5 second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportPlayers")
 								break
