@@ -24,6 +24,7 @@ local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local plr = game:GetService("Players").LocalPlayer
 local plr_gui = plr.PlayerGui
+local firesignal = function(signal, arg2) if getconnections(signal) then firesignal(signal, arg2) end end
 repeat
     if CoreGui:FindFirstChild("CrazyDay") or getgenv()["Executeing"] then return end getgenv()["Executeing"] = true
     --// Local normal
@@ -212,6 +213,21 @@ repeat
             end
         end
     end
+	local function sell_card(tableMe)
+		if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
+			for i,v in next,plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren() do
+				if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
+					firesignal(v.MouseButton1Down,plr)
+					task.wait(0.055)
+					for Rarity,_ in next,tableMe do
+						if plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Rarity then
+							game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",v.Name)
+						end
+					end
+				end
+			end
+		end
+	end
     local function getClosestMob()
         local dist, thing = math.huge
             for i, v in next, Workspace.Folders.Monsters:GetChildren() do
@@ -710,7 +726,7 @@ repeat
 					{
 						Title = "No",
 						Callback = function()
-							print(method_stage)
+
 						end
 					}
 				}
@@ -874,6 +890,9 @@ repeat
 				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 					SaveManager:Save("Configs")
 				end
+				if Options["Auto Sell"] and Options["Auto Sell"].Value then
+					sell_card(value)
+				end
 			end
 		end
 	})
@@ -882,8 +901,13 @@ repeat
 		Description = "Automatically sell all of the selected cards (rarity).",
 		Default = false,
 		Callback = function (value)
-			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
+			if (value or not value) then
+				if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+					SaveManager:Save("Configs")
+				end
+				if value then
+					sell_card(Options["Current Rarity"].Value)
+				end
 			end
 		end
 	})
