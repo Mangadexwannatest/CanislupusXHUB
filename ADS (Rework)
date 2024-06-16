@@ -1389,7 +1389,7 @@ repeat
 				if Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == true and tonumber(current_stage()) ~= 1 then
 					repeat
 						if not getgenv()["Auto Join (Raid)"] then
-							main_remote_event:FireServer("RetryDungeon")
+							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.MouseButton1Click,plr)
 						end
 						task.wait(0.55)
 					until not Options["Auto Retry"].Value or UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == false or getgenv()["Auto Join (Raid)"]
