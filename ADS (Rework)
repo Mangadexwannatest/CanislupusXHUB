@@ -1823,115 +1823,116 @@ repeat
 					end)
 					--// Send Webhook (Normal Webhook)
 					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						pcall(function ()
-							if Options["Send Webhook"].Value then
-								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
-								task.wait(2.5)
-								local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
-								local current_rank_res
-								local currnet_status = " [End!]"
-								local dimension_or_raid
-								local how_much_clear
-								local time_end
-								if player_disply.StageClear.Value ~= clear_table[1] then
-									time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
-									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: "..tostring(current_stage())
-									how_much_clear = "Dimension Clears: "..player_disply.StageClear.Value
-								elseif player_disply.BossRushClears.Value ~= clear_table[2] then
-									time_end =UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..player_disply.BossRushRecordString.Value
-									dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: 3"
-									how_much_clear = "BossRush Clears: "..player_disply.BossRushClears.Value
-								elseif player_disply.WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
-									time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
-									dimension_or_raid = "Speed Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
-									how_much_clear = "SpeedRaid Clears: "..player_disply.WeeklyShadowRaidsCleared.Value
-								else
-									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
-									how_much_clear = "Error: 087&650+2"
-								end
-								if not table.find(currency_rewards,"`None     `") then
-									local name_count
-									local sum
-									for i,v in pairs(currency_rewards) do
-										if #v ~= 0 then
-											sum = 0
-											for i = 1,#v do
-												sum = sum + v[i]
-											end
-										end
-										name_count = "`"..i.." ["..sum.."]`"
-										table.insert(currency_rewards,name_count)
-									end
-								end
-								if rank_res.Image == "rbxassetid://7443889715" then
-									current_rank_res = "Rank: S+"
-								elseif rank_res.Image == "rbxassetid://6715353612" then
-									current_rank_res = "Rank: S"
-								elseif rank_res.Image == "rbxassetid://6891959728" then
-									current_rank_res = "Rank: A"
-								elseif rank_res.Image == "rbxassetid://6891959611" then
-									current_rank_res = "Rank: B"
-								elseif rank_res.Image == "rbxassetid://6891959460" then
-									current_rank_res = "Rank: C"
-								elseif rank_res.Image == "rbxassetid://6782568839" then
-									current_rank_res = "Rank: F"
-								else
-									current_rank_res = "Rank: D"
-								end
-								if table.find(currency_rewards,"`None     `") and table.find(item_rewards,"`None      `") and current_rank_res == "Rank: F" then
-									currnet_status = " [Defeat!]"
-								else
-									currnet_status = " [Victory!]"
-								end
-								local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
-								local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
-								local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
-								local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
-								local damage_deal = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.DamageDealtText.Text
-								local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
-								local Data = game:GetService("HttpService"):JSONEncode({
-									["username"] = "Anime Dimensions Simulator : Notification",
-									["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									content = nil,
-									embeds = {{
-									  ["title"] = nil,
-									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
-									  ["description"] = nil,
-									  ["footer"] = {
-										["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
-										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
-									  },
-									  ["thumbnail"] = {
-										["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									  },
-									  ["fields"] = {
-										{
-											["name"] = "**Item Rewards**",
-											["value"] = "\n`[+]` "..table.concat(item_rewards,"\n`[+]` "),
-											["inline"] = true
-										},
-										{
-											["name"] = "**Currency Rewards**",
-											["value"] = "\n`[+]` "..table.concat(currency_rewards,"\n`[+]` "),
-											["inline"] = true
-										},
-										{
-											["name"] = "**Match Information"..currnet_status.."**",
-											["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..damage_deal.."\n"..time_end.."```",
-											["inline"] = false
-										},
-										{
-											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
-											["inline"] = false
-										}
-									},
-								}}
-								})
-								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
-								response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+						if Options["Send Webhook"].Value then
+							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
+							task.wait(2.5)
+							local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
+							local current_rank_res = "Unknown"
+							local currnet_status = " [End!]"
+							local dimension_or_raid
+							local how_much_clear
+							local time_end
+							if player_disply.StageClear.Value ~= clear_table[1] then
+								time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+								dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: "..tostring(current_stage())
+								how_much_clear = "Dimension Clears: "..player_disply.StageClear.Value
+							elseif player_disply.BossRushClears.Value ~= clear_table[2] then
+								time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..player_disply.BossRushRecordString.Value
+								dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: 3"
+								how_much_clear = "BossRush Clears: "..player_disply.BossRushClears.Value
+							elseif player_disply.WeeklyShadowRaidsCleared.Value ~= clear_table[4] then
+								time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+								dimension_or_raid = "Speed Raid: "..map_split().."\nStage Clear: "..tostring(current_stage())
+								how_much_clear = "SpeedRaid Clears: "..player_disply.WeeklyShadowRaidsCleared.Value
+							else
+								dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
+								how_much_clear = "Error: 087&650+2"
 							end
-						end)
+							if not table.find(currency_rewards,"`None     `") then
+								local name_count
+								local sum
+								for i,v in pairs(currency_rewards) do
+									if #v ~= 0 then
+										sum = 0
+										for i = 1,#v do
+											sum = sum + v[i]
+										end
+									end
+									name_count = "`"..i.." ["..sum.."]`"
+									table.insert(currency_rewards,name_count)
+								end
+							end
+							if rank_res.Image == "rbxassetid://7443889715" then
+								current_rank_res = "Rank: S+"
+							elseif rank_res.Image == "rbxassetid://6715353612" then
+								current_rank_res = "Rank: S"
+							elseif rank_res.Image == "rbxassetid://6891959728" then
+								current_rank_res = "Rank: A"
+							elseif rank_res.Image == "rbxassetid://6891959611" then
+								current_rank_res = "Rank: B"
+							elseif rank_res.Image == "rbxassetid://6891959460" then
+								current_rank_res = "Rank: C"
+							elseif rank_res.Image == "rbxassetid://6782568839" then
+								current_rank_res = "Rank: F"
+							else
+								current_rank_res = "Rank: D"
+							end
+							if table.find(currency_rewards,"`None     `") and table.find(item_rewards,"`None      `") and current_rank_res == "Rank: F" then
+								currnet_status = " [Defeat!]"
+								dimension_or_raid = "Dimension: "..map_split().."\nStage Clear: "..tostring(current_stage())
+								how_much_clear = "Dimension Clears: "..player_disply.StageClear.Value
+								time_end = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
+							else
+								currnet_status = " [Victory!]"
+							end
+							local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
+							local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
+							local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
+							local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
+							local damage_deal = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.DamageDealtText.Text
+							local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
+							local Data = game:GetService("HttpService"):JSONEncode({
+								["username"] = "Anime Dimensions Simulator : Notification",
+								["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+								content = nil,
+								embeds = {{
+								  ["title"] = nil,
+								  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
+								  ["description"] = nil,
+								  ["footer"] = {
+									["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
+									["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+								  },
+								  ["thumbnail"] = {
+									["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+								  },
+								  ["fields"] = {
+									{
+										["name"] = "**Item Rewards**",
+										["value"] = "\n`[+]` "..table.concat(item_rewards,"\n`[+]` "),
+										["inline"] = true
+									},
+									{
+										["name"] = "**Currency Rewards**",
+										["value"] = "\n`[+]` "..table.concat(currency_rewards,"\n`[+]` "),
+										["inline"] = true
+									},
+									{
+										["name"] = "**Match Information"..currnet_status.."**",
+										["value"] = "```\n"..dimension_or_raid.."\n"..current_rank_res.."\n"..damage_deal.."\n"..time_end.."```",
+										["inline"] = false
+									},
+									{
+										["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
+										["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
+										["inline"] = false
+									}
+								},
+							}}
+							})
+							local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+							response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+						end
 					end)
 					--// Send Webhook (Raid Webhook)
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
