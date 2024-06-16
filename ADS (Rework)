@@ -1989,7 +1989,7 @@ repeat
 										},
 										{
 											["name"] = "**Match Information [End!]**",
-											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank: "..current_rank_res.."\nDamage: "..damage_deal.."\nTime : 08:00".."```",
+											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank:"..current_rank_res.."\nDamage:"..damage_deal.."\nTime : 08:00".."```",
 											["inline"] = false
 										},
 										{
@@ -2009,7 +2009,7 @@ repeat
 			end))
 			coroutine.resume(coroutine.create(function ()--// Game \ Character
 				while task.wait() do
-					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or getgenv()["Can't Equip Character"] then break end
 					if Options["Auto Equip Character"].Value then
 						if isfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json") and not string.find(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"),"Character") then
 							Notify("Auto Equip Character (Error)","Make sure the values in your file are correct")
@@ -2018,7 +2018,7 @@ repeat
 							local lowjuwi = HttpService:JSONDecode(readfile("CrazyDay/"..Game.."/"..PlayerId.."/Character Save.json"))
 							if (player_disply.CharacterName.Value ~= lowjuwi["Character1"]
 							or player_disply.AssistCharacterName1.Value ~= lowjuwi["Character2"]
-							or player_disply.AssistCharacterName2.Value ~= lowjuwi["Character3"]) then
+							or player_disply.AssistCharacterName2.Value ~= lowjuwi["Character3"]) and not getgenv()["Can't Equip Character"] then
 								main_remote_function:InvokeServer("EquipCharacter",lowjuwi['Character1'])
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character2'],1)
 								main_remote_function:InvokeServer("EquipCharacterAssist",lowjuwi['Character3'],2)
@@ -2054,6 +2054,7 @@ repeat
 										current_speedraid = v.Name
 									end
 								end
+								getgenv()["Can't Equip Character"] = true
 								Notify("Successfully room created","MapName : ShadowRaid".."\nCharacter : "..current_speedraid,"Starting in 5 Second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToShadowRaid",current_speedraid)
