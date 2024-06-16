@@ -1692,7 +1692,7 @@ repeat
 							--// Assist
 							for i,v in next,Options["Current Assists"].Value do
 								if i and v == true then
-									if skill["Skill"..i].Visible and (tostring(skill["Skill"..i].SkillName.Text) == "Dash" or tonumber(skill["Skill"..tostring(i)].SkillName.Text) == nil or 0) then
+									if skill["Skill"..i].Visible and (tostring(skill["Skill"..i].SkillName.Text) ~= "None" or tonumber(skill["Skill"..tostring(i)].SkillName.Text) == nil or 0) then
 										if string.find(i,"1") then
 											main_remote_event:FireServer("Use"..i:split("1")[1].."Skill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},1)
 										elseif string.find(i,"2") then
