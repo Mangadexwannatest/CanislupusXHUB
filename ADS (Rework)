@@ -1359,7 +1359,6 @@ repeat
 							if part.Name == "Ignore" then
 								getgenv()["On Dodgeing"] = true
 								repeat task.wait() until not part.Parent
-								task.wait(0.115)
 								getgenv()["On Dodgeing"] = false
 							end
 						end)
@@ -1941,8 +1940,8 @@ repeat
 							task.wait(2.5)
 							local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
 							local damage_deal = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
-							local dimension_or_raid
-							local how_much_clear
+							local dimension_or_raid = "Raid: "..map_split()
+							local how_much_clear = "Raid Clears: Unknown"
 							if player_disply.RaidClears.Value ~= clear_table[3] then
 								for i,v in next,RaidBeat do
 									if player_disply:FindFirstChild(i).Value ~= v[1] then
@@ -1950,10 +1949,6 @@ repeat
 										how_much_clear = "Raid Clears: "..player_disply.RaidClears.Value.."\n"..i..": "..v[1]
 									end
 								end
-							else
-								dimension_or_raid = "Raid: "..map_split()
-								how_much_clear = "Raid Clears: Unknown"
-								current_rank_res = " 1"
 							end
 							if not table.find(currency_rewards,"`None     `") then
 								local name_count
@@ -2002,7 +1997,7 @@ repeat
 									},
 									{
 										["name"] = "**Match Information [End!]**",
-										["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank:"..current_rank_res.."\nDamage:"..damage_deal.."\nTime : 08:00```",
+										["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank:"..current_rank_res.."\nDamage:"..damage_deal.."\nTime: 08:00```",
 										["inline"] = false
 									},
 									{
