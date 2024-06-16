@@ -101,7 +101,7 @@ repeat
         end)
     end
     for i = 1,#dimension["Current Dimension"] do
-        for i,v in next,dimension["Current Dimension"][i] do
+        for i,v in pairs(dimension["Current Dimension"][i]) do
             table.insert(dimension["Info"],v.Name)
         end
         writefile("CrazyDay/"..Game.."/Dimension.json",HttpService:JSONEncode(dimension["Info"]))
@@ -277,7 +277,7 @@ repeat
 	end
     local function getClosestMob()
         local dist, thing = math.huge
-            for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -290,7 +290,7 @@ repeat
     end
     local function getClosestBoss()
         local dist, thing = math.huge
-            for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == false then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -303,7 +303,7 @@ repeat
     end
     local function getClosestobJect()
         local dist, thing = math.huge
-            for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+            for i, v in next,Workspace.Folders.Monsters:GetChildren() do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -315,14 +315,14 @@ repeat
         return thing
     end
     local  function getNormalEnemy()
-        for i,v in next, Workspace.Folders.Monsters:GetChildren() do
+        for i,v in next,Workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                 return v
             end
         end
     end
 	local function setCollide(value)
-		for i,v in pairs(plr.Character:GetChildren()) do
+		for i,v in ipairs(plr.Character:GetChildren()) do
 			if v:IsA("BasePart") and v.CanCollide ~= value then
 				v.CanCollide = value
 			end
@@ -1407,7 +1407,7 @@ repeat
 				pcall(function()
 					method_stage = 0
 					getgenv()["enemy spawning"] = true
-					task.wait(1)
+					task.wait(0.35)
 					getgenv()["enemy spawning"] = false
 				end)
 			end)
@@ -1456,7 +1456,7 @@ repeat
 							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
-							for i, v in pairs(Workspace.Folders.Monsters:GetChildren()) do
+							for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
 								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
 									v.Head.Transparency = 1
 								end
@@ -1630,10 +1630,10 @@ repeat
 							bv.Velocity = Vector3.new(0,0,0)
 
 							--// Bring Mode Misc
-							if getgenv()["On Bringing"] and getClosestobJect() and dist_enemy(getClosestobJect().HumanoidRootPart) <= 16.5 then
-								for i, v in pairs(Workspace.Folders.Monsters:GetChildren()) do
+							if getgenv()["On Bringing"] and getClosestobJect() and dist_enemy(getClosestobJect().HumanoidRootPart) <= 17.5 then
+								for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
 									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
+										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 45 then
 											v.Head.Transparency = 10
 										end
 									end
@@ -1668,19 +1668,19 @@ repeat
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() ~= "Infinite Mode" then break end
 					pcall(function ()
 						if getgenv()["On Bringing (Infinite)"] and not getgenv()["humanoid Died"] then
-							tween_function(Workspace:WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"],CFrame.new(0,75,0) * CFrame.Angles(math.rad(-90),0,0),125)
+							tween_function(Workspace:WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"],CFrame.new(0,75,0) * CFrame.Angles(math.rad(-90),0,0),175)
 							tween_info:Play()
 							tween_info.Completed:Wait()
 							tween_info:Cancel()
 						elseif not getgenv()["On Bringing (Infinite)"] then
 							if not boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] and not getgenv()["humanoid Died"] then
-								tween_function(getClosestMob().HumanoidRootPart,current_method,125)
+								tween_function(getClosestMob().HumanoidRootPart,current_method,150)
 								tween_info:Play()
 								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 									tween_info:Cancel()
 								end
 							elseif boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] and not getgenv()["humanoid Died"] then
-								tween_function(getClosestBoss().HumanoidRootPart,current_method,125)
+								tween_function(getClosestBoss().HumanoidRootPart,current_method,150)
 								tween_info:Play()
 								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 									tween_info:Cancel()
@@ -1698,13 +1698,13 @@ repeat
 							--// Normal Mode
 							if Options["Current Farm Mode"].Value == "Normal Mode" and not getgenv()["humanoid Died"] then
 								if not boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] then
-									tween_function(getClosestMob().HumanoidRootPart,current_method,125)
+									tween_function(getClosestMob().HumanoidRootPart,current_method,150)
 									tween_info:Play()
 									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 										tween_info:Cancel()
 									end
 								elseif boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] then
-									tween_function(getClosestBoss().HumanoidRootPart,current_method,125)
+									tween_function(getClosestBoss().HumanoidRootPart,current_method,150)
 									tween_info:Play()
 									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 										tween_info:Cancel()
@@ -1715,28 +1715,28 @@ repeat
 								if not boss_bar() and method_stage == 0 and getClosestobJect() and plr.Character.HumanoidRootPart.Anchored == false then
 									repeat
 										getgenv()["On Bringing"] = true
-										tween_function(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),150)
+										tween_function(getClosestobJect().HumanoidRootPart,CFrame.new(0,13.5,0),175)
 										tween_info:Play()
 										task.wait(0.0875)
 									until boss_bar() or method_stage ~= 0 or not getClosestobJect() or not auto_farm() or getgenv()["enemy spawning"] or getgenv()["humanoid Died"]
 									method_stage = 1
 								elseif not boss_bar() and method_stage == 1 and not getClosestobJect() and getNormalEnemy() and plr.Character.HumanoidRootPart.Anchored == false then
 									getgenv()["On Bringing"] = true
-									tween_function(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),150)
+									tween_function(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),175)
 									tween_info:Play()
 									tween_info.Completed:Wait()
 									task.wait(2.75)
 									method_stage = 2
 								elseif not boss_bar() and method_stage == 2 and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] then
 									getgenv()["On Bringing"] = false
-									tween_function(getClosestMob().HumanoidRootPart,current_method,125)
+									tween_function(getClosestMob().HumanoidRootPart,current_method,150)
 									tween_info:Play()
 									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 										tween_info:Cancel()
 									end
 								elseif boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] then
 									getgenv()["On Bringing"] = false
-									tween_function(getClosestBoss().HumanoidRootPart,current_method,125)
+									tween_function(getClosestBoss().HumanoidRootPart,current_method,150)
 									tween_info:Play()
 									if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 										tween_info:Cancel()
