@@ -1512,67 +1512,67 @@ repeat
 			end))
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 1
 				while task.wait() do
-					pcall(function ()
-						local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
-						--// Auto Join (Raid) #check
-						if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
-							getgenv()["Auto Join (Raid)"] = true
-						elseif Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) > 9 then
-							getgenv()["Auto Join (Raid)"] = false
-						elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
-							getgenv()["Auto Join (Raid)"] = false
-						end
-						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] and not string.find(current_map(),"Raid") then
-							Notify("Auto Join (Raid)","The raid has opened.","Teleporting in 5 second")
-							game:GetService("TeleportService"):Teleport(7338881230)
-						end
-						--// Current Method
-						if not is_blacklist then
-							if Options["Auto Set Distance"].Value then
-								if boss_bar() then
-									if Options["Current Method"].Value == "Over" then
-										current_method = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
-									elseif Options["Current Method"].Value == "Under" then
-										current_method = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
-									elseif Options["Current Method"].Value == "Front" then
-										current_method = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
-									elseif Options["Current Method"].Value == "Behind" then
-										current_method = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
-									end
-								elseif not boss_bar() then
-									if Options["Current Method"].Value == "Over" then
-										current_method = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.35 ,0) * CFrame.Angles(math.rad(-90),0,0)
-									elseif Options["Current Method"].Value == "Under" then
-										current_method = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.35 ,0) * CFrame.Angles(math.rad(90),0,0)
-									elseif Options["Current Method"].Value == "Front" then
-										current_method = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
-									elseif Options["Current Method"].Value == "Behind" then
-										current_method = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
-									end
-								end
-							elseif not Options["Auto Set Distance"].Value then
+					local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
+					--// Auto Join (Raid) #check
+					if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
+						getgenv()["Auto Join (Raid)"] = true
+					elseif Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) > 9 then
+						getgenv()["Auto Join (Raid)"] = false
+					elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
+						getgenv()["Auto Join (Raid)"] = false
+					end
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] and not string.find(current_map(),"Raid") then
+						Notify("Auto Join (Raid)","The raid has opened.","Teleporting in 5 second")
+						task.wait(5)
+						game:GetService("TeleportService"):Teleport(7338881230)
+						break
+					end
+					--// Current Method
+					if not is_blacklist then
+						if Options["Auto Set Distance"].Value then
+							if boss_bar() then
 								if Options["Current Method"].Value == "Over" then
-									current_method = CFrame.new(0 , Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(-90),0,0)
+									current_method = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
 								elseif Options["Current Method"].Value == "Under" then
-									current_method = CFrame.new(0 , -Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(90),0,0)
+									current_method = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
 								elseif Options["Current Method"].Value == "Front" then
-									current_method = CFrame.new(0 ,0 ,-Options["Current Distance"].Value) * CFrame.Angles(math.rad(0),1800,0)
+									current_method = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
 								elseif Options["Current Method"].Value == "Behind" then
-									current_method = CFrame.new(0 ,0 ,Options["Current Distance"].Value)
+									current_method = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
+								end
+							elseif not boss_bar() then
+								if Options["Current Method"].Value == "Over" then
+									current_method = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.35 ,0) * CFrame.Angles(math.rad(-90),0,0)
+								elseif Options["Current Method"].Value == "Under" then
+									current_method = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.35 ,0) * CFrame.Angles(math.rad(90),0,0)
+								elseif Options["Current Method"].Value == "Front" then
+									current_method = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
+								elseif Options["Current Method"].Value == "Behind" then
+									current_method = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
 								end
 							end
-						elseif is_blacklist then
+						elseif not Options["Auto Set Distance"].Value then
 							if Options["Current Method"].Value == "Over" then
-								current_method = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
+								current_method = CFrame.new(0 , Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(-90),0,0)
 							elseif Options["Current Method"].Value == "Under" then
-								current_method = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
+								current_method = CFrame.new(0 , -Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(90),0,0)
 							elseif Options["Current Method"].Value == "Front" then
-								current_method = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
+								current_method = CFrame.new(0 ,0 ,-Options["Current Distance"].Value) * CFrame.Angles(math.rad(0),1800,0)
 							elseif Options["Current Method"].Value == "Behind" then
-								current_method = CFrame.new(0, 0, 1.5)
+								current_method = CFrame.new(0 ,0 ,Options["Current Distance"].Value)
 							end
 						end
-					end)
+					elseif is_blacklist then
+						if Options["Current Method"].Value == "Over" then
+							current_method = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
+						elseif Options["Current Method"].Value == "Under" then
+							current_method = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
+						elseif Options["Current Method"].Value == "Front" then
+							current_method = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
+						elseif Options["Current Method"].Value == "Behind" then
+							current_method = CFrame.new(0, 0, 1.5)
+						end
+					end
 				end
 			end))
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 2
