@@ -277,7 +277,7 @@ repeat
 	end
     local function getClosestMob()
         local dist, thing = math.huge
-            for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+            for i, v in next,Workspace.Folders.Monsters:GetChildren() do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -290,7 +290,7 @@ repeat
     end
     local function getClosestBoss()
         local dist, thing = math.huge
-            for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+            for i, v in next,Workspace.Folders.Monsters:GetChildren() do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == false then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -1456,7 +1456,7 @@ repeat
 							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
-							for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+							for i, v in next,Workspace.Folders.Monsters:GetChildren() do
 								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
 									v.Head.Transparency = 1
 								end
@@ -1631,7 +1631,7 @@ repeat
 
 							--// Bring Mode Misc
 							if getgenv()["On Bringing"] and getClosestobJect() and dist_enemy(getClosestobJect().HumanoidRootPart) <= 17.5 then
-								for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+								for i, v in next,Workspace.Folders.Monsters:GetChildren() do
 									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
 										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 45 then
 											v.Head.Transparency = 10
