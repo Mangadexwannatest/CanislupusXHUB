@@ -33,8 +33,8 @@ repeat
 	local method_stage = 0
 	local Tabs = {}
     local character = {}
-	local item_rewards = {"`None     `"}
-	local currency_rewards = {"`None    `"}
+	local item_rewards = {"`None      `"}
+	local currency_rewards = {"`None     `"}
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
     local dimension = {
@@ -674,7 +674,7 @@ repeat
 	})
 	Misc_Section:AddToggle("Auto Join (Infinite Mode)", {
 		Title = "Auto Join (Infinite Mode)",
-		Description = "Automatically join the infinite mode if reward available \nrequire(level 20 +).",
+		Description = "Automatically join the infinite mode if reward available.",
 		Default = false,
 		Callback = function (value)
 			if (value or not value) and Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
@@ -1475,11 +1475,11 @@ repeat
 							end
 						end
 						--// Auto Join (Raid) #check
-						if Options["Auto Join (Raid)"].Value and tonumber(os.date("!*t").min) <= 9 then
+						if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
 							getgenv()["Auto Join (Raid)"] = true
-						elseif Options["Auto Join (Raid)"].Value and tonumber(os.date("!*t").min) > 9 then
+						elseif Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) > 9 then
 							getgenv()["Auto Join (Raid)"] = false
-						elseif not Options["Auto Join (Raid)"].Value and getgenv()["Auto Join (Raid)"] then
+						elseif not Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and getgenv()["Auto Join (Raid)"] then
 							getgenv()["Auto Join (Raid)"] = false
 						end
 						if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and getgenv()["Auto Join (Raid)"] then
@@ -1729,11 +1729,11 @@ repeat
 					--// Insert Webhook
 					UniversalGui.UniversalCenterUIFrame:WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RewardFrame"):WaitForChild("RewardGridFrame").ChildAdded:Connect(function(v)
 						if not table.find(blacklist_items,v.Name) then
-							if table.find(item_rewards,"`None     `") then
+							if table.find(item_rewards,"`None      `") then
 								repeat
-									table.remove(item_rewards,table.find(item_rewards,"`None     `"))
+									table.remove(item_rewards,table.find(item_rewards,"`None      `"))
 								task.wait()
-								until not table.find(item_rewards,"`None     `")
+								until not table.find(item_rewards,"`None      `")
 							end
 							if not v:FindFirstChild("Gradient") then
 								table.insert(item_rewards,"`"..v.Name.." [Common]`")
@@ -1751,11 +1751,11 @@ repeat
 								end
 							end
 						elseif table.find(blacklist_items,v.Name) and v.Name ~= "BossRushEntryPass" then
-							if table.find(currency_rewards,"`None    `") then
+							if table.find(currency_rewards,"`None     `") then
 								repeat
-									table.remove(currency_rewards,table.find(currency_rewards,"`None    `"))
+									table.remove(currency_rewards,table.find(currency_rewards,"`None     `"))
 								task.wait()
-								until not table.find(currency_rewards,"`None    `")
+								until not table.find(currency_rewards,"`None     `")
 							end
 							if tonumber(v.LevelReq.Text) then
 								if not currency_rewards[v.Name] then
@@ -1770,11 +1770,11 @@ repeat
 					end)
 					raid_resultUI().ChildAdded:Connect(function (v)
 						if not table.find(blacklist_items,v.Name) then
-							if table.find(item_rewards,"`None     `") then
+							if table.find(item_rewards,"`None      `") then
 								repeat
-									table.remove(item_rewards,table.find(item_rewards,"`None     `"))
+									table.remove(item_rewards,table.find(item_rewards,"`None      `"))
 								task.wait()
-								until not table.find(item_rewards,"`None     `")
+								until not table.find(item_rewards,"`None      `")
 							end
 							if not v:FindFirstChild("Gradient") then
 								table.insert(item_rewards,"`"..v.Name.." [Common]`")
@@ -1792,11 +1792,11 @@ repeat
 								end
 							end
 						elseif table.find(blacklist_items,v.Name) and v.Name ~= "BossRushEntryPass" then
-							if table.find(currency_rewards,"`None    `") then
+							if table.find(currency_rewards,"`None     `") then
 								repeat
-									table.remove(currency_rewards,table.find(currency_rewards,"`None    `"))
+									table.remove(currency_rewards,table.find(currency_rewards,"`None     `"))
 								task.wait()
-								until not table.find(currency_rewards,"`None    `")
+								until not table.find(currency_rewards,"`None     `")
 							end
 							if tonumber(v.LevelReq.Text) then
 								if not currency_rewards[v.Name] then
@@ -1837,7 +1837,7 @@ repeat
 									dimension_or_raid = "Error: d970%&&&&x".."\nStage Clear: 0"
 									how_much_clear = "Error: 087&650+2"
 								end
-								if not table.find(currency_rewards,"`None    `") then
+								if not table.find(currency_rewards,"`None     `") then
 									local name_count
 									local sum
 									for i,v in pairs(currency_rewards) do
@@ -1866,7 +1866,7 @@ repeat
 								else
 									current_rank_res = "Rank: D"
 								end
-								if table.find(currency_rewards,"`None    `") and table.find(item_rewards,"`None     `") and current_rank_res == "Rank: F" then
+								if table.find(currency_rewards,"`None     `") and table.find(item_rewards,"`None      `") and current_rank_res == "Rank: F" then
 									currnet_status = " [Defeat!]"
 								else
 									currnet_status = " [Victory!]"
@@ -1923,87 +1923,86 @@ repeat
 					end)
 					--// Send Webhook (Raid Webhook)
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						pcall(function ()
-							if Options["Send Webhook"].Value then
-								if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
-								task.wait(2.5)
-								local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
-								local damage_deal = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
-								local dimension_or_raid
-								local how_much_clear
-								if player_disply.RaidClears.Value ~= clear_table[3] then
-									for i,v in next,RaidBeat do
-										if player_disply:FindFirstChild(i).Value ~= v[1] then
-											dimension_or_raid = "Raid: "..map_split()
-											how_much_clear = "Raid Clears: "..player_disply.RaidClears.Value.."\n"..i..": "..v[1]
-										end
-									end
-								else
-									dimension_or_raid = "Raid: "..map_split()
-									how_much_clear = "Raid Clears: Unknown"
-								end
-								if not table.find(currency_rewards,"`None    `") then
-									local name_count
-									local sum
-									for i,v in pairs(currency_rewards) do
-										if #v ~= 0 then
-											sum = 0
-											for i = 1,#v do
-												sum = sum + v[i]
-											end
-										end
-										name_count = "`"..i.." ["..sum.."]`"
-										table.insert(currency_rewards,name_count)
+						if Options["Send Webhook"].Value then
+							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
+							task.wait(2.5)
+							local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+							local damage_deal = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
+							local dimension_or_raid
+							local how_much_clear
+							if player_disply.RaidClears.Value ~= clear_table[3] then
+								for i,v in next,RaidBeat do
+									if player_disply:FindFirstChild(i).Value ~= v[1] then
+										dimension_or_raid = "Raid: "..map_split()
+										how_much_clear = "Raid Clears: "..player_disply.RaidClears.Value.."\n"..i..": "..v[1]
 									end
 								end
-								local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
-								local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
-								local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
-								local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
-								local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
-								local Data = game:GetService("HttpService"):JSONEncode({
-									["username"] = "Anime Dimensions Simulator : Notification",
-									["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									content = nil,
-									embeds = {{
-									  ["title"] = nil,
-									  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
-									  ["description"] = nil,
-									  ["footer"] = {
-										["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
-										["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
-									  },
-									  ["thumbnail"] = {
-										["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-									  },
-									  ["fields"] = {
-										{
-											["name"] = "**Item Rewards**",
-											["value"] = "\n`[+]` "..table.concat(item_rewards,"\n`[+]` "),
-											["inline"] = true
-										},
-										{
-											["name"] = "**Currency Rewards**",
-											["value"] = "\n`[+]` "..table.concat(currency_rewards,"\n`[+]` "),
-											["inline"] = true
-										},
-										{
-											["name"] = "**Match Information [End!]**",
-											["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank:"..current_rank_res.."\nDamage:"..damage_deal.."\nTime : 08:00".."```",
-											["inline"] = false
-										},
-										{
-											["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
-											["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
-											["inline"] = false
-										}
-									},
-								}}
-								})
-								local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
-								response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+							else
+								dimension_or_raid = "Raid: "..map_split()
+								how_much_clear = "Raid Clears: Unknown"
+								current_rank_res = " 1"
 							end
-						end)
+							if not table.find(currency_rewards,"`None     `") then
+								local name_count
+								local sum
+								for i,v in pairs(currency_rewards) do
+									if #v ~= 0 then
+										sum = 0
+										for i = 1,#v do
+											sum = sum + v[i]
+										end
+									end
+									name_count = "`"..i.." ["..sum.."]`"
+									table.insert(currency_rewards,name_count)
+								end
+							end
+							local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
+							local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
+							local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
+							local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
+							local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
+							local Data = game:GetService("HttpService"):JSONEncode({
+								["username"] = "Anime Dimensions Simulator : Notification",
+								["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+								content = nil,
+								embeds = {{
+								  ["title"] = nil,
+								  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
+								  ["description"] = nil,
+								  ["footer"] = {
+									["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
+									["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+								  },
+								  ["thumbnail"] = {
+									["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+								  },
+								  ["fields"] = {
+									{
+										["name"] = "**Item Rewards**",
+										["value"] = "\n`[+]` "..table.concat(item_rewards,"\n`[+]` "),
+										["inline"] = true
+									},
+									{
+										["name"] = "**Currency Rewards**",
+										["value"] = "\n`[+]` "..table.concat(currency_rewards,"\n`[+]` "),
+										["inline"] = true
+									},
+									{
+										["name"] = "**Match Information [End!]**",
+										["value"] = "```\n"..dimension_or_raid.."\nStage Clear: 0\nRank:"..current_rank_res.."\nDamage:"..damage_deal.."\nTime : 08:00```",
+										["inline"] = false
+									},
+									{
+										["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
+										["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\n"..how_much_clear.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
+										["inline"] = false
+									}
+								},
+							}}
+							})
+							local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+							response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+						end
 					end)
 				end
 			end))
@@ -2048,7 +2047,7 @@ repeat
 							break
 						else
 							--// Auto Join (Speed Raid)
-							if Options["Auto Join (Speed Raid)"].Value and plr_gui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
+							if Options["Auto Join (Speed Raid)"].Value and plr.leaderstats.Level.Value >= 25 and plr_gui.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
 								for i,v in pairs(plr_gui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
 									if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
 										current_speedraid = v.Name
@@ -2061,21 +2060,21 @@ repeat
 								break
 							end
 							--// Auto Join (Raid Challenge)
-							if Options["Auto Join (Raid Challenge)"].Value and plr_gui.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
+							if Options["Auto Join (Raid Challenge)"].Value and plr.leaderstats.Level.Value >= 30 and plr_gui.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
 								Notify("Successfully room created","MapName : RaidChallenge".."\nAward Status : Reward Available","Starting in 5 Second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToRaidChallenge")
 								break
 							end
 							--// Auto Join (Boss Rush)
-							if Options["Auto Join (Boss Rush)"].Value and plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text ~= "0 Free Entry Left" then
+							if Options["Auto Join (Boss Rush)"].Value and plr.leaderstats.Level.Value >= 15 and plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text ~= "0 Free Entry Left" then
 								Notify("Successfully room created","MapName : BossRush".."\nFree Entry Left : "..plr_gui.MainGui.CenterUIFrame.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],"Starting in 5 Second")
 								task.wait(5)
 								main_remote_function:InvokeServer("TeleportToBossRush")
 								break
 							end
 							--// Auto Join (Infinite Mode)
-							if Options["Auto Join (Infinite Mode)"].Value and plr_gui.MainGui.CenterUIFrame.PlayFrame.Frame.PlayRoomFrame.MapSelectionScrollingFrame["Infinite Mode"].PlayerReq.Text == "Trait Tokens Available" and plr.leaderstats.Level.Value >= 20 then
+							if Options["Auto Join (Infinite Mode)"].Value and plr.leaderstats.Level.Value >= 20 and plr_gui.MainGui.CenterUIFrame.PlayFrame.Frame.PlayRoomFrame.MapSelectionScrollingFrame["Infinite Mode"].PlayerReq.Text == "Trait Tokens Available" then
 								main_remote_function:InvokeServer("CreateRoom",{
 									["Difficulty"] = "Infinite",
 									["FriendsOnly"] = Options["Friends Only"].Value,
