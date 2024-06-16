@@ -213,9 +213,20 @@ repeat
             end
         end
     end
+	local function getcard_count()
+		POP = {}
+		for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay:GetChildren()) do
+			if v.Name == "Slot1" or v.Name == "Slot2" or v.Name == "Slot3" then
+				if v.ItemImage.Image ~= "" then
+					table.insert(POP,v.Name)
+				end
+			end
+		end
+		return #POP
+	end
 	local function sell_card(tableMe)
 		if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
-			for i,v in next,plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren() do
+			for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
 				if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
 					firesignal(v.MouseButton1Down,plr)
 					task.wait(0.055)
@@ -251,17 +262,14 @@ repeat
 		end
 	end
 	local function unequip_cards()
-		for i,v in pairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-			firesignal(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.CardInventoryOverlayClose.MouseButton1Click,plr)
-			if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
-				if v.CardImage.BackgroundColor3 == Color3.fromRGB(255, 223, 167) then
-					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Name)
-				end
+		for i,v in ipairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+			if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" and v.CardImage.BackgroundTransparency == 0 then
+				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Name)
 			end
 		end
 	end
 	local function equip_best()
-		for i,v in pairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+		for i,v in ipairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
 			if v:IsA("ImageButton") and v.LayoutOrder <= 3 then
 				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
 			end
@@ -307,7 +315,7 @@ repeat
         return thing
     end
     local  function getNormalEnemy()
-        for i,v in pairs(Workspace.Folders.Monsters:GetChildren()) do
+        for i,v in next, Workspace.Folders.Monsters:GetChildren() do
             if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                 return v
             end
@@ -753,7 +761,11 @@ repeat
 					{
 						Title = "Yes",
 						Callback = function()
-							game:GetService("TeleportService"):Teleport(6938803436)
+							if game.PlaceId == 6938803436 then
+								game:GetService("TeleportService"):Teleport(7274690025)
+							else
+								game:GetService("TeleportService"):Teleport(6938803436)
+							end
 						end
 					},
 					{
@@ -764,6 +776,20 @@ repeat
 					}
 				}
 			})
+		end
+	})
+	Misc_Section:AddButton({
+		Title = "Redeem All Code",
+		Description = "Press the button to redeem all code.",
+		Callback = function()
+			Code = {}
+			for i,v in pairs(workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
+				if v.ClassName == "Frame" then
+					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
+					table.insert(Code,v.MilestoneCode.Text)
+				end
+			end
+			Notify("Successfully redeem code",table.concat(Code,"\n"))
 		end
 	})
 	--// Game Tabs
@@ -1430,7 +1456,7 @@ repeat
 							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
-							for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+							for i, v in pairs(Workspace.Folders.Monsters:GetChildren()) do
 								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
 									v.Head.Transparency = 1
 								end
@@ -1488,7 +1514,7 @@ repeat
 						end
 						--// Safe Mode Playing
 						if getgenv()["On Safe Mode"] and not getgenv()["humanoid Died"] then
-							for i,v in next,Workspace.Folders.SpawnPoints:GetChildren() do
+							for i,v in pairs(Workspace.Folders.SpawnPoints:GetChildren()) do
 								if v.Name == plr.RespawnLocation.Name then
 									tween_function(v,CFrame.new(0, 75, 0),125)
 									tween_info:Play()
@@ -1605,7 +1631,7 @@ repeat
 
 							--// Bring Mode Misc
 							if getgenv()["On Bringing"] and getClosestobJect() and dist_enemy(getClosestobJect().HumanoidRootPart) <= 16.5 then
-								for i, v in next, Workspace.Folders.Monsters:GetChildren() do
+								for i, v in pairs(Workspace.Folders.Monsters:GetChildren()) do
 									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
 										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 30 then
 											v.Head.Transparency = 10
@@ -1744,7 +1770,7 @@ repeat
 								main_remote_event:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(getClosestMob().HumanoidRootPart.Position)},tonumber(Options["Skill Fifth"].Value))
 							end
 							--// Assist
-							for i,v in next,Options["Current Assists"].Value do
+							for i,v in pairs(Options["Current Assists"].Value) do
 								if i and v == true then
 									if skill["Skill"..i].Visible and (tostring(skill["Skill"..i].SkillName.Text) ~= "None" or tonumber(skill["Skill"..tostring(i)].SkillName.Text) == nil or 0) then
 										if string.find(i,"1") then
