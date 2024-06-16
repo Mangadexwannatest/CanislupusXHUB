@@ -1385,6 +1385,16 @@ repeat
 					getgenv()["enemy spawning"] = false
 				end)
 			end)
+			UniversalGui:WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RetryDungeonButton"):GetPropertyChangedSignal("Visible"):Connect(function ()
+				if Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == true and tonumber(current_stage()) ~= 1 then
+					repeat
+						if not getgenv()["Auto Join (Raid)"] then
+							main_remote_event:FireServer("RetryDungeon")
+						end
+						task.wait(0.55)
+					until not Options["Auto Retry"].Value or UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == false or getgenv()["Auto Join (Raid)"]
+				end
+			end)
 			hookfunction(warn, newcclosure(function (value)
 				return nil
 			end))
@@ -1503,12 +1513,6 @@ repeat
 				while task.wait() do
 					pcall(function ()
 						local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
-						--// Auto Retry
-						if Options["Auto Retry"].Value and not getgenv()["Auto Join (Raid)"] then
-							if UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
-								main_remote_event:FireServer("RetryDungeon")
-							end
-						end
 						--// Auto Join (Raid) #check
 						if Options["Auto Join (Raid)"].Value and plr.leaderstats.Level.Value >= 15 and tonumber(os.date("!*t").min) <= 9 then
 							getgenv()["Auto Join (Raid)"] = true
