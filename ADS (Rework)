@@ -1385,17 +1385,6 @@ repeat
 					getgenv()["enemy spawning"] = false
 				end)
 			end)
-			UniversalGui:WaitForChild("UniversalCenterUIFrame"):WaitForChild("ResultUI"):WaitForChild("Frame"):WaitForChild("RetryDungeonButton"):GetPropertyChangedSignal("Visible"):Connect(function ()
-				if Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == true and tonumber(current_stage()) ~= 1 then
-					repeat
-						if not getgenv()["Auto Join (Raid)"] then
-							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.MouseButton1Down,plr)
-						end
-						task.wait(0.55)
-					until not Options["Auto Retry"].Value or UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible == false or getgenv()["Auto Join (Raid)"]
-					firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Down,plr)
-				end
-			end)
 			hookfunction(warn, newcclosure(function (value)
 				return nil
 			end))
@@ -1526,6 +1515,15 @@ repeat
 						task.wait(5)
 						game:GetService("TeleportService"):Teleport(7338881230)
 						break
+					end
+					if Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Visible and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
+						if not getgenv()["Auto Join (Raid)"] then
+							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RetryDungeonButton.MouseButton1Down,plr)
+						elseif getgenv()["Auto Join (Raid)"] then
+							firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Down,plr)
+						end
+					elseif not Options["Auto Retry"].Value and UniversalGui.UniversalCenterUIFrame.ResultUI.Visible and UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.Visible and tonumber(current_stage()) ~= 1 then
+						firesignal(UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.LeaveDungeonButton.MouseButton1Down,plr)
 					end
 				end
 			end))
