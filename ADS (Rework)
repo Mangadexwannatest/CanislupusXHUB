@@ -417,7 +417,7 @@ repeat
         Instance_ImageButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         Instance_ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
         Instance_ImageButton.BorderSizePixel = 0
-        Instance_ImageButton.ZIndex = math.huge
+        Instance_ImageButton.ZIndex = 9999
         Instance_ImageButton.Position = UDim2.new(0, 41, 0, 523)
         Instance_ImageButton.Size = UDim2.new(0, 65, 0, 65)
         Instance_ImageButton.Image = "rbxassetid://17789924997"
@@ -1380,7 +1380,7 @@ repeat
 		repeat task.wait() until gui()
 		for i,v in pairs(CoreGui:FindFirstChild("CrazyDay"):GetChildren()) do
 			if v:IsA("Frame") then
-				v.ZIndex = math.huge
+				v.ZIndex = 999
 			end
 		end
 		if Options["Auto Hide Gui"].Value and gui_stage == 0 then
@@ -1394,7 +1394,7 @@ repeat
 		Instance_Frame.AnchorPoint = Vector2.new(1, 1)
 		Instance_Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		Instance_Frame.BorderSizePixel = 0
-		Instance_Frame.ZIndex = 10
+		Instance_Frame.ZIndex = 1
 		Instance_Frame.Position = UDim2.new(1.00222063, 0, 1.01891279, 0)
 		Instance_Frame.Size = UDim2.new(10, 0, 10, 0)
 		Instance_Frame.Visible = Options["Black Screen"].Value or false
@@ -2297,7 +2297,7 @@ repeat
 										table.insert(To_SEND,"None")
 									end
 								end
-								table.insert(The_CardTables,color_Rarity(Card_Rarity)..Card_Name.." ["..Card_Rarity.."]\n   ∘ Card Id: "..i.."\n   ∘ Card Level: "..get_cardlvl(i).."\n   ∘ Gold Spent: "..Gold_spent.."\n   ∘ Upgrade: "..current_level_upgrade().."/"..Options["Max Upgrade"].Value.."\n   ∘ Status Main:\n     - "..MAIN_Attack.."\n     - "..MAIN_Health.."\n   ∘ Status Sub:".."\n     - "..table.concat(To_SEND,"\n     - "))
+								table.insert(The_CardTables,color_Rarity(Card_Rarity)..Card_Name.." ["..Card_Rarity.."]\n   ∘ Card Id: "..i.."\n   ∘ Card Level: "..get_cardlvl(i).."\n   ∘ Gold Spent: "..Gold_spent.."\n   ∘ Upgrade: "..Options["Max Upgrade"].Value.."/"..current_level_upgrade().."\n   ∘ Status Main:\n     - "..MAIN_Attack.."\n     - "..MAIN_Health.."\n   ∘ Status Sub:".."\n     - "..table.concat(To_SEND,"\n     - "))
 								Gold_spent = 0
 								To_SEND = {}
 								Check_ITS = false
