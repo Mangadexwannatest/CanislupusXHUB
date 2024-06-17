@@ -38,6 +38,7 @@ repeat
 	local currency_rewards = {"`None     `"}
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
+	local Ignore_webhook = {}
     local dimension = {
         ["Current Dimension"] = {},
         ["Info"] = {},
@@ -224,6 +225,11 @@ repeat
 		end
 		return num * values
 	end
+	local function roundNumber(number)
+		local suffixes = {"K", "M", "B", "T", "Q"}
+		local finalNr = math.floor((((number/1000^(math.floor(math.log(number, 1e3))))*100)+0.5)) /100 .. (suffixes[math.floor(math.log(number, 1e3))] or "")
+		return finalNr
+	end
 	local function sell_card(tableMe)
 		if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 			for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
@@ -262,6 +268,7 @@ repeat
 		end
 	end
 	local function unequip_cards()
+		if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then return end
 		for i,v in ipairs(ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):GetChildren()) do
 			if string.find(v.Name,"Slot") and v.Value ~= "" then
 				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Value)
@@ -920,7 +927,6 @@ repeat
 				SaveManager:Save("Configs")
 			end
 			if value then
-				if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
 				unequip_cards()
 			end
 		end
@@ -1119,6 +1125,10 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			Ignore_webhook = {}
+			for i,v in pairs(value) do
+				table.insert(Ignore_webhook,i)
+			end
 		end
 	})
 	Webhook_Section:AddToggle("Send Webhook", {
@@ -1128,6 +1138,12 @@ repeat
 		Callback = function (value)
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
+			end
+			if value and Options["Webhook URL"] then
+				if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") then 
+					Notify("Send Webhook (Error)","URL does not match the database.") 
+					Options["Send Webhook"]:SetValue(false)
+				end
 			end
 		end
 	})
@@ -1240,7 +1256,7 @@ repeat
 					{
 						Title = "No",
 						Callback = function()
-							--// setclipboard(tostring(readfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json")))
+							setclipboard(tostring(readfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json")))
 						end
 					}
 				}
@@ -1374,11 +1390,17 @@ repeat
 			local current_method
 			local shade_current
 			local card_Table = {}
+			local The_CardTables = {}
 			local clear_table = {
 				player_disply:WaitForChild("StageClear").Value,
 				player_disply:WaitForChild("BossRushClears").Value,
 				player_disply:WaitForChild("RaidClears").Value,
 				player_disply:WaitForChild("WeeklyShadowRaidsCleared").Value,
+			}
+			local slot_Table = {
+				["Slot1"] = player_disply:WaitForChild("Slot1").Value,
+				["Slot2"] = player_disply:WaitForChild("Slot2").Value,
+				["Slot3"] = player_disply:WaitForChild("Slot3").Value
 			}
 			local RaidBeat = {}
 			for i,v in next,player_disply:GetChildren() do
@@ -1415,6 +1437,22 @@ repeat
 						return v
 					end
 				end
+			end
+			local function current_amout()
+				XAdda2 = {}
+				for i,v in pairs(card_Table) do
+					if v == Options["Max Upgrade"].Value then
+						table.insert(XAdda2,i)
+					end
+				end
+				return #XAdda2
+			end
+			local function Max_current_amout()
+				XAdda2 = {}
+				for i,v in pairs(card_Table) do
+					table.insert(XAdda2,i)
+				end
+				return #XAdda2
 			end
 			--// Misc function
 			plr:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
@@ -1493,7 +1531,13 @@ repeat
 				end
 				Workspace:WaitForChild("Folders"):WaitForChild("Debris").ChildAdded:Connect(function (v)
 					pcall(function ()
-						if table.find({"telegraph"},v.Name:lower()) and v.Material ~= Enum.Material.Neon and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] then
+						if (table.find({"telegraph"},v.Name:lower()) or v.Name == "FlameTrail") and v.ClassName ~= "Model" and Options["Dodge Skill"].Value and not getgenv()["On Safe Mode"] and not getgenv()["On Bringing"] then
+							if v.Name == "FlameTrail" then
+								task.wait(0.065)
+								if v:FindFirstChild("P1") == nil then return
+								elseif v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return
+								end
+							end
 							local a = v:Clone()
 							local side = math.clamp(3.175,0,10)
 							local Sizeto = v.Size + Vector3.new(side,100,side)
@@ -1569,6 +1613,7 @@ repeat
 			end))
 			coroutine.resume(coroutine.create(function ()
 				while wait() do
+					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
 					--// Current Method
 					local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
 					if not is_blacklist then
@@ -1905,7 +1950,7 @@ repeat
 					end)
 					--// Send Webhook (Normal Webhook)
 					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						if Options["Send Webhook"].Value then
+						if Options["Send Webhook"].Value and not table.find(Ignore_webhook,"Match Result") then
 							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
 							task.wait(2.5)
 							local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
@@ -2018,7 +2063,7 @@ repeat
 					end)
 					--// Send Webhook (Raid Webhook)
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
-						if Options["Send Webhook"].Value then
+						if Options["Send Webhook"].Value and not table.find(Ignore_webhook,"Match Result") then
 							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
 							task.wait(2.5)
 							local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
@@ -2123,15 +2168,18 @@ repeat
 				while task.wait() do
 					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					pcall(function ()
-						for i,v in ipairs(player_disply:GetChildren()) do
-							if string.find(v.Name,"Slot") and v.Value ~= "" then
-								if not card_Table[v.Value] then
-									card_Table[v.Value] = "None"
+						if Options["Auto Upgrade"].Value then
+							for i,v in ipairs(player_disply:GetChildren()) do
+								if string.find(v.Name,"Slot") and v.Value ~= "" and not getgenv()["On Card Equiping"] then
+									if not card_Table[v.Value] then
+										card_Table[v.Value] = "None"
+									end
 								end
 							end
 						end
 						if Options["Auto Equip"].Value then
 							if update_card() then
+								getgenv()["On Card Equiping"] = true
 								unequip_cards()
 								task.wait(0.025)
 								for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
@@ -2139,8 +2187,12 @@ repeat
 										main_remote_function:InvokeServer("EquipCard",v.Name)
 									end
 								end
-								task.wait(0.075)
+								task.wait(0.035)
+							elseif not update_card() then
+								getgenv()["On Card Equiping"] = false
 							end
+						elseif not Options["Auto Equip"].Value and getgenv()["On Card Equiping"] then
+							getgenv()["On Card Equiping"] = false
 						end
 					end)
 				end
@@ -2149,19 +2201,115 @@ repeat
 				while task.wait(0.115) do
 					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					if Options["Auto Upgrade"].Value then
-						local card_location = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+						local card_inventory = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay
+						local Card_Name
+						local Card_Rarity
+						local Gold_spent = 0
+						local To_SEND = {}
+						local Check_ITS = false
+						local MAIN_Health
+						local MAIN_Attack
 						for i,v in pairs(card_Table) do
 							if v ~= Options["Max Upgrade"].Value then
 								repeat
-									firesignal(card_location:FindFirstChild(i).MouseButton1Down,plr)
+									firesignal(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down,plr)
 									if tonumber(Options["Max Upgrade"].Value) > tonumber(current_level_upgrade()) and tonumber(stringofnum(get_currency_gem_gold("Gold"))) > tonumber(current_gold_upgrade()) then
 										main_remote_function:InvokeServer("UpgradeCard",i)
+										Card_Name = card_inventory.ItemName.Text
+										Card_Rarity = card_inventory.Rarity.Text
+										MAIN_Health = card_inventory.CardDataFrame.CardScrollingFrame.Health.Stat.Text
+										MAIN_Attack = card_inventory.CardDataFrame.CardScrollingFrame.Attack.Stat.Text
+										Gold_spent += tonumber(current_gold_upgrade())
 									end
-									task.wait(0.075)
+									task.wait()
 								until  tonumber(current_level_upgrade()) >= tonumber(Options["Max Upgrade"].Value) or tonumber(current_gold_upgrade()) > tonumber(stringofnum(get_currency_gem_gold("Gold")))
+								Card_Name = card_inventory.ItemName.Text
+								Card_Rarity = card_inventory.Rarity.Text
+								MAIN_Health = card_inventory.CardDataFrame.CardScrollingFrame.Health.Stat.Text
+								MAIN_Attack = card_inventory.CardDataFrame.CardScrollingFrame.Attack.Stat.Text
+								for _,k in next,plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.CardDataFrame.CardScrollingFrame:GetChildren() do
+									if k.Name == "CardStatTemplate" then
+										table.insert(To_SEND,k.Stat.Text)
+										repeat
+											Check_ITS = true
+											task.wait()
+										until Check_ITS == true
+									end
+								end
+								for _,k in next,plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.CardDataFrame.CardScrollingFrame:GetChildren() do
+									if Check_ITS == false and k:FindFirstChild("CardStatTemplate") == nil and k.Name == "UIGridLayout" then
+										table.insert(To_SEND,"None")
+									end
+								end
+								table.insert(The_CardTables,Card_Name.." ["..Card_Rarity.."]\n  ∘ ID: "..i.."\n  ∘ Gold Spent: "..Gold_spent.." ["..roundNumber(Gold_spent).."]\n  ∘ Upgrade: "..current_level_upgrade().."/"..Options["Max Upgrade"].Value.."\n  ∘ Status Main:\n    - "..MAIN_Attack.."\n    - "..MAIN_Health.."\n  ∘ Status Sub:".."\n    - "..table.concat(To_SEND,"\n    - "))
+								Gold_spent = 0
+								To_SEND = {}
+								Check_ITS = false
 								card_Table[i] = Options["Max Upgrade"].Value
 							end
 						end
+					end
+				end
+			end))
+			coroutine.resume(coroutine.create(function ()
+				while task.wait() do
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
+					for i,v in pairs(player_disply:GetChildren()) do
+						if string.find(v.Name,"Slot") and v.Value ~= "" and not getgenv()["On Card Equiping"] then
+							if v.Value ~= slot_Table[v.Name] then
+								slot_Table[v.Name] = v.Value
+								getgenv()["Send Alrdy"] = false
+							end
+						end
+					end
+				end
+			end))
+			coroutine.resume(coroutine.create(function () --// Send Webhook (card Upgrade)
+				while task.wait(0.85) do
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
+					if #The_CardTables > 0 and current_amout() == Max_current_amout() and not getgenv()["Send Alrdy"] and not getgenv()["On Card Equiping"] and not table.find(Ignore_webhook,"Upgrade Card") and Options["Send Webhook"].Value then
+						local trait_token = plr_gui.MainGui.CenterUIFrame.CharacterTraitFrame.Frame.TraitGearChangeTrait.Text
+						local raid_token = plr_gui.MainGui.CenterUIFrame.Shop.Frame.ShopRaidTokenCounter.ShopRaidTokenAmount.Text
+						local speed_token = plr_gui.MainGui.CenterUIFrame.RaidShop.SpeedRaidShopUIHolder.SpeedRaidShopCurrencyCounter.SpeedRaidShopCurrencyAmount.Text
+						local bossrush_token = plr_gui.MainGui.CenterUIFrame.BossRushShop.BossRushShopCurrencyCounter.BossRushShopCurrencyAmount.Text
+						local exp = UniversalGui.LeftUIFrame.OwnHealthBarFrame.Exp.Text:split("%")[1].."/100%"
+						local Data = game:GetService("HttpService"):JSONEncode({
+							["username"] = "Anime Dimensions Simulator : Notification",
+							["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+							content = nil,
+							embeds = {{
+							  ["title"] = nil,
+							  ["color"] = tonumber(toHex(Options["Webhook Color"].Value)) or 0x7d7d7d,
+							  ["description"] = nil,
+							  ["footer"] = {
+								["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
+								["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+							  },
+							  ["thumbnail"] = {
+								["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+							  },
+							  ["fields"] = {
+								{
+									["name"] = "                                                                       ",
+									["value"] = "`                                                        `",
+									["inline"] = false
+								},
+								{
+									["name"] = "**Upgraded card**",
+									["value"] = "```\n"..table.concat(The_CardTables,"\n").."```",
+									["inline"] = false
+								},
+								{
+									["name"] = "**Player Information**".." __**|| ["..tostring(plr.Name).."] ||**__",
+									["value"] = "```\nLevel: "..plr.leaderstats.Level.Value.." ["..exp.."]\nCardsOwned: "..player_disply.CardsOwned.Value.."/"..player_disply.MaxCardsOwned.Value.."\nCurrency:\n ∘ Gold: "..get_currency_gem_gold("Gold").."\n ∘ Gem: "..get_currency_gem_gold("Gem").."\n ∘ TraitToken: "..trait_token.."\n ∘ RaidToken: "..raid_token.."\n ∘ SpeedRaidToken: "..speed_token.."\n ∘ BossRushToken: "..bossrush_token.."```",
+									["inline"] = false
+								}
+							},
+						}}
+						})
+						local response = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
+						response({Url = Options["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+						getgenv()["Send Alrdy"] = true
 					end
 				end
 			end))
