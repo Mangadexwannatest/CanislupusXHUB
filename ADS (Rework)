@@ -213,23 +213,23 @@ repeat
             end
         end
     end
-	local function getcard_count()
-		POP = {}
-		for i,v in pairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay:GetChildren()) do
-			if v.Name == "Slot1" or v.Name == "Slot2" or v.Name == "Slot3" then
-				if v.ItemImage.Image ~= "" then
-					table.insert(POP,v.Name)
-				end
-			end
+	local function stringofnum(values)
+		local tablead = {"K","M","B"}
+		local num = 1
+			for i,v in pairs(tablead) do
+				values = string.gsub(values, v ,function ()
+				num = num * (10 ^ (i * 3))
+				return ''
+			end)
 		end
-		return #POP
+		return num * values
 	end
 	local function sell_card(tableMe)
 		if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 			for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
 				if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
 					firesignal(v.MouseButton1Down,plr)
-					task.wait(0.055)
+					task.wait(0.0895)
 					for Rarity,_ in next,tableMe do
 						if plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Rarity then
 							game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",v.Name)
@@ -262,22 +262,15 @@ repeat
 		end
 	end
 	local function unequip_cards()
-		for i,v in ipairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-			if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" and v.CardImage.BackgroundTransparency == 0 then
-				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Name)
-			end
-		end
-	end
-	local function equip_best()
-		for i,v in ipairs(game.Players.LocalPlayer.PlayerGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-			if v:IsA("ImageButton") and v.LayoutOrder <= 3 then
-				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("EquipCard",v.Name)
+		for i,v in ipairs(ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay"):GetChildren()) do
+			if string.find(v.Name,"Slot") and v.Value ~= "" then
+				game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("UnequipCard",v.Value)
 			end
 		end
 	end
     local function getClosestMob()
         local dist, thing = math.huge
-            for i, v in next,Workspace.Folders.Monsters:GetChildren() do
+            for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                     local mag = (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude
                     if mag < dist then
@@ -315,7 +308,7 @@ repeat
         return thing
     end
     local  function getNormalEnemy()
-        for i,v in next,Workspace.Folders.Monsters:GetChildren() do
+        for i,v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
             if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                 return v
             end
@@ -782,8 +775,9 @@ repeat
 		Title = "Redeem All Code",
 		Description = "Press the button to redeem all code.",
 		Callback = function()
+			if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
 			Code = {}
-			for i,v in pairs(workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
+			for i,v in pairs(Workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
 				if v.ClassName == "Frame" then
 					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
 					table.insert(Code,v.MilestoneCode.Text)
@@ -938,7 +932,7 @@ repeat
 	Card_Section:AddDropdown("Current Rarity", {
 		Title = "Select Rarity",
 		Description = nil,
-		Values = {"Common", "Uncommon", "Rare", "Epic ", "Legendary", "Mythic"},
+		Values = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"},
 		Multi = true,
 		Default = {"Common", "Uncommon"},
 		Callback = function (value)
@@ -948,6 +942,19 @@ repeat
 			getgenv()["Rarity Insert"] = true
 			if Options["Auto Sell"] and Options["Auto Sell"].Value then
 				sell_card(value)
+			end
+		end
+	})
+	Card_Section:AddSlider("Max Upgrade",{
+		Title = "Current Max Upgrade",
+		Description = "Select the value you want for upgrade your card.",
+		Default = 5,
+		Min = 1,
+		Max = 25,
+		Rounding = 0,
+		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
 			end
 		end
 	})
@@ -973,6 +980,7 @@ repeat
 				SaveManager:Save("Configs")
 			end
 			if value then
+				if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
 				unequip_cards()
 			end
 		end
@@ -1366,6 +1374,7 @@ repeat
 			local bv = Instance.new("BodyVelocity")
 			local player_disply = ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay")
 			local current_method
+			local card_Table = {}
 			local clear_table = {
 				player_disply:WaitForChild("StageClear").Value,
 				player_disply:WaitForChild("BossRushClears").Value,
@@ -1394,6 +1403,12 @@ repeat
 						return v.Text
 					end
 				end
+			end
+			local function current_level_upgrade()
+				return plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.CardLevel.Text:split(". ")[2]:split(" / ")[1]
+			end
+			local function current_gold_upgrade()
+				return plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.GoldCost.Text
 			end
 			local function raid_resultUI()
 				for i,v in next,UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame:GetDescendants() do
@@ -1456,7 +1471,7 @@ repeat
 							method_stage = 0
 							getgenv()["humanoid Died"] = false
 							ontounching_ignore()
-							for i, v in next,Workspace.Folders.Monsters:GetChildren() do
+							for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
 								if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
 									v.Head.Transparency = 1
 								end
@@ -1631,9 +1646,9 @@ repeat
 
 							--// Bring Mode Misc
 							if getgenv()["On Bringing"] and getClosestobJect() and dist_enemy(getClosestobJect().HumanoidRootPart) <= 17.5 then
-								for i, v in next,Workspace.Folders.Monsters:GetChildren() do
+								for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
 									if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 45 then
+										if (plr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 37.5 then
 											v.Head.Transparency = 10
 										end
 									end
@@ -2105,18 +2120,50 @@ repeat
 					end
 				end
 			end))
-			coroutine.resume(coroutine.create(function () --// Game \ Cards
+			coroutine.resume(coroutine.create(function () --// Game \ Cards Equip
 				while task.wait() do
+					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
 					pcall(function ()
+						for i,v in ipairs(player_disply:GetChildren()) do
+							if string.find(v.Name,"Slot") and v.Value ~= "" then
+								if not card_Table[v.Value] then
+									card_Table[v.Value] = "None"
+								end
+							end
+						end
 						if Options["Auto Equip"].Value then
 							if update_card() then
 								unequip_cards()
 								task.wait(0.025)
-								equip_best()
-								task.wait(0.115)
+								for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+									if v:IsA("ImageButton") and v.LayoutOrder <= 3 then
+										main_remote_function:InvokeServer("EquipCard",v.Name)
+									end
+								end
+								task.wait(0.075)
 							end
 						end
 					end)
+				end
+			end))
+			coroutine.resume(coroutine.create(function () --// Game \ Cards Upgrade
+				while task.wait(0.115) do
+					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if Options["Auto Upgrade"].Value then
+						local card_location = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame
+						for i,v in pairs(card_Table) do
+							if v ~= Options["Max Upgrade"].Value then
+								repeat
+									firesignal(card_location:FindFirstChild(i).MouseButton1Down,plr)
+									if tonumber(Options["Max Upgrade"].Value) > tonumber(current_level_upgrade()) and tonumber(stringofnum(get_currency_gem_gold("Gold"))) > tonumber(current_gold_upgrade()) then
+										main_remote_function:InvokeServer("UpgradeCard",i)
+									end
+									task.wait(0.075)
+								until  tonumber(current_level_upgrade()) >= tonumber(Options["Max Upgrade"].Value) or tonumber(current_gold_upgrade()) > tonumber(stringofnum(get_currency_gem_gold("Gold")))
+								card_Table[i] = Options["Max Upgrade"].Value
+							end
+						end
+					end
 				end
 			end))
 			coroutine.resume(coroutine.create(function () --// Create \ Start Room
