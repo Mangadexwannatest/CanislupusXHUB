@@ -1740,7 +1740,7 @@ repeat
 									tween_function(getNormalEnemy().HumanoidRootPart,CFrame.new(0,50,0),175)
 									tween_info:Play()
 									tween_info.Completed:Wait()
-									task.wait(2.75)
+									task.wait(2.675)
 									method_stage = 2
 								elseif not boss_bar() and method_stage == 2 and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] then
 									getgenv()["On Bringing"] = false
