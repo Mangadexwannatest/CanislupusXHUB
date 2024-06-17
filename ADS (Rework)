@@ -419,8 +419,8 @@ repeat
 	local Misc_Section = Tabs.General:AddSection("Misc")
 	local Farm_Section = Tabs.Game:AddSection("Farm")
 	local Character_Section = Tabs.Game:AddSection("Character")
-	local Quest_Section = Tabs.Game:AddSection("Quest")
 	local Card_Section = Tabs.Game:AddSection("Card")
+	local MiscGame_Section = Tabs.Game:AddSection("Misc")
 	local Skill_Section = Tabs.Skill:AddSection("Skill")
 	local Webhook_Section = Tabs.Webhook:AddSection("Webhook")
 	local Interfaces_Section = Tabs.Settings:AddSection("Interfaces")
@@ -732,17 +732,6 @@ repeat
 			end
 		end
 	})
-	Misc_Section:AddToggle("Dash no cooldown", {
-		Title = "Dash no cooldown",
-		Description = "Makes your dash have no cooldown.",
-		Default = false,
-		Callback = function (value)
-			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
-			ReplicatedStorage:WaitForChild(plr.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
-		end
-	})
 	Misc_Section:AddButton({
 		Title = "Return to Lobby",
 		Description = "Press the button to return to the lobby.",
@@ -754,11 +743,7 @@ repeat
 					{
 						Title = "Yes",
 						Callback = function()
-							if game.PlaceId == 6938803436 then
-								game:GetService("TeleportService"):Teleport(7274690025)
-							else
-								game:GetService("TeleportService"):Teleport(6938803436)
-							end
+							game:GetService("TeleportService"):Teleport(6938803436)
 						end
 					},
 					{
@@ -769,21 +754,6 @@ repeat
 					}
 				}
 			})
-		end
-	})
-	Misc_Section:AddButton({
-		Title = "Redeem All Code",
-		Description = "Press the button to redeem all code.",
-		Callback = function()
-			if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
-			Code = {}
-			for i,v in pairs(Workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
-				if v.ClassName == "Frame" then
-					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
-					table.insert(Code,v.MilestoneCode.Text)
-				end
-			end
-			Notify("Successfully redeem code",table.concat(Code,"\n"))
 		end
 	})
 	--// Game Tabs
@@ -899,36 +869,6 @@ repeat
 			SetParagraphValue(2,"Character","Current Character",character["Character1"].."\n"..character["Character2"].."\n"..character["Character3"])
 		end
 	})
-	Quest_Section:AddToggle("Auto Claim (Quest)", {
-		Title = "Auto Claim (Quest)",
-		Description = "Automatically claim all of the daily // weekly quests.",
-		Default = false,
-		Callback = function (value)
-			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
-		end
-	})
-	Quest_Section:AddToggle("Auto Claim (Speed Raid)", {
-		Title = "Auto Claim (Speed Raid)",
-		Description = "Automatically claim all of the speed raid reward.",
-		Default = false,
-		Callback = function (value)
-			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
-		end
-	})
-	Quest_Section:AddToggle("Auto Daily Quest", {
-		Title = "Auto Daily Quest",
-		Description = "Automatically complete all daily quests.",
-		Default = false,
-		Callback = function (value)
-			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
-				SaveManager:Save("Configs")
-			end
-		end
-	})
 	Card_Section:AddDropdown("Current Rarity", {
 		Title = "Select Rarity",
 		Description = nil,
@@ -993,6 +933,52 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+		end
+	})
+	MiscGame_Section:AddToggle("Auto Claim (Quest)", {
+		Title = "Auto Claim (Quest)",
+		Description = "Automatically claim all of the daily // weekly quests.",
+		Default = false,
+		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+		end
+	})
+	MiscGame_Section:AddToggle("Auto Claim (Speed Raid)", {
+		Title = "Auto Claim (Speed Raid)",
+		Description = "Automatically claim all of the speed raid reward.",
+		Default = false,
+		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+		end
+	})
+	MiscGame_Section:AddToggle("Dash no cooldown", {
+		Title = "Dash no cooldown",
+		Description = "Makes your dash have no cooldown.",
+		Default = false,
+		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+			ReplicatedStorage:WaitForChild(plr.Name .. "StatDisplay"):WaitForChild("No_DashCooldown").Value = value
+		end
+	})
+	MiscGame_Section:AddButton({
+		Title = "Redeem All Code",
+		Description = "Press the button to redeem all code.",
+		Callback = function()
+			if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
+			Code = {}
+			for i,v in pairs(Workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
+				if v.ClassName == "Frame" and v.MilestoneCode.Text ~= "LOCKED" then
+					game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
+					table.insert(Code,v.MilestoneCode.Text)
+				end
+			end
+			Notify("Successfully redeem code",table.concat(Code,"\n"))
 		end
 	})
 	--// Skill Tabs
@@ -1123,9 +1109,21 @@ repeat
 			end
 		end
 	})
+	Webhook_Section:AddDropdown("Current Ignore Action", {
+		Title = "Select Ignore",
+		Description = "Select the action about webhook that you want to ignore.",
+		Values = {"Match Result", "Upgrade Card"},
+		Multi = true,
+		Default = {nil},
+		Callback = function (value)
+			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
+				SaveManager:Save("Configs")
+			end
+		end
+	})
 	Webhook_Section:AddToggle("Send Webhook", {
 		Title = "Send Webhook",
-		Description = "Send a notifaction to your Discord when the game ends,displaying information about that match and what rewards you've received.",
+		Description = "Send a notifaction to your discord.",
 		Default = false,
 		Callback = function (value)
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
@@ -1374,6 +1372,7 @@ repeat
 			local bv = Instance.new("BodyVelocity")
 			local player_disply = ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay")
 			local current_method
+			local shade_current
 			local card_Table = {}
 			local clear_table = {
 				player_disply:WaitForChild("StageClear").Value,
@@ -1683,19 +1682,19 @@ repeat
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or current_map() ~= "Infinite Mode" then break end
 					pcall(function ()
 						if getgenv()["On Bringing (Infinite)"] and not getgenv()["humanoid Died"] then
-							tween_function(Workspace:WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"],CFrame.new(0,75,0) * CFrame.Angles(math.rad(-90),0,0),175)
+							tween_function(Workspace:WaitForChild("GameMap"):FindFirstChild("Infinite Mode").Base.Base["Hexagon Base"],CFrame.new(0,75,0) * CFrame.Angles(math.rad(-90),0,0),150)
 							tween_info:Play()
 							tween_info.Completed:Wait()
 							tween_info:Cancel()
 						elseif not getgenv()["On Bringing (Infinite)"] then
 							if not boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] and not getgenv()["humanoid Died"] then
-								tween_function(getClosestMob().HumanoidRootPart,current_method,150)
+								tween_function(getClosestMob().HumanoidRootPart,current_method,125)
 								tween_info:Play()
 								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 									tween_info:Cancel()
 								end
 							elseif boss_bar() and not getgenv()["On Safe Mode"] and not getgenv()["On Dodgeing"] and not getgenv()["humanoid Died"] then
-								tween_function(getClosestBoss().HumanoidRootPart,current_method,150)
+								tween_function(getClosestBoss().HumanoidRootPart,current_method,125)
 								tween_info:Play()
 								if (getgenv()["On Safe Mode"] or getgenv()["On Dodgeing"] or getgenv()["humanoid Died"] or not auto_farm()) and tween_info then
 									tween_info:Cancel()
@@ -2122,7 +2121,7 @@ repeat
 			end))
 			coroutine.resume(coroutine.create(function () --// Game \ Cards Equip
 				while task.wait() do
-					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					pcall(function ()
 						for i,v in ipairs(player_disply:GetChildren()) do
 							if string.find(v.Name,"Slot") and v.Value ~= "" then
@@ -2148,7 +2147,7 @@ repeat
 			end))
 			coroutine.resume(coroutine.create(function () --// Game \ Cards Upgrade
 				while task.wait(0.115) do
-					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					if Options["Auto Upgrade"].Value then
 						local card_location = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame
 						for i,v in pairs(card_Table) do
@@ -2166,9 +2165,54 @@ repeat
 					end
 				end
 			end))
+			coroutine.resume(coroutine.create(function() --// Quests
+				while task.wait() do
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
+					if Options["Auto Claim (Speed Raid)"].Value then
+						--// Speed Raid
+						if shade_current == nil then
+							for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.SpeedRaidFrame:GetChildren()) do
+								if v.Name == "Shade" and i == 11 then
+									shade_current = v
+								end
+							end
+						else
+							for i,v in pairs(shade_current:FindFirstChild("SpeedRaidScrollingFrame"):GetChildren()) do
+								if v:IsA("ImageButton") then
+									if v.RaidsButton.Cost.Text == "CLAIM" then
+										local a_b = v.Name:split("SpeedRaidRewardTemplate")[2]
+										game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("ClaimWeeklySpeedRaidReward",tonumber(a_b))
+										v.RaidsButton.Cost.Text = "CLAIMED"
+									end
+								end
+							end
+						end
+					end
+					if Options["Auto Claim (Quest)"].Value then
+						--// Daily Quest
+						for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.DailyQuestFrame.DailyQuestScrollingFrame:GetChildren()) do
+							if v:IsA("ImageLabel") then
+								if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+									game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+									v.Complete.Visible = true
+								end
+							end
+						end
+						--// Weekly Quest
+						for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.MainGui.CenterUIFrame.QuestFrame.QuestFrames.WeeklyQuestFrame.WeeklyQuestScrollingFrame:GetChildren()) do
+							if v:IsA("ImageLabel") then
+								if v.QuestCounter.Text:split(" / ")[1] >= v.QuestCounter.Text:split(" / ")[2] and v.Complete.Visible == false then
+									game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("CompleteDailyQuest",v.Name)
+									v.Complete.Visible = true
+								end
+							end
+						end
+					end
+				end
+			end))
 			coroutine.resume(coroutine.create(function () --// Create \ Start Room
 				while task.wait() do
-					if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then break end
+					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					if auto_farm() then
 						task.wait(0.55)
 						--// Auto Join (Raid)
