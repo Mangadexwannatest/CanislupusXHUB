@@ -1493,6 +1493,15 @@ repeat
 				end
 				return #XAdda2
 			end
+			local function wait_for_a_second()
+				if Options["Auto Equip"].Value and update_card() then
+					return true
+				elseif Options["Auto Upgrade"].Value and current_amout() ~= Max_current_amout() then
+					return true
+				else
+					return false
+				end
+			end
 			--// Misc function
 			plr:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
 				pcall(function()
@@ -2235,7 +2244,6 @@ repeat
 										main_remote_function:InvokeServer("EquipCard",v.Name)
 									end
 								end
-								task.wait(0.035)
 							elseif not update_card() then
 								getgenv()["On Card Equiping"] = false
 							end
@@ -2409,7 +2417,7 @@ repeat
 			coroutine.resume(coroutine.create(function () --// Create \ Start Room
 				while task.wait() do
 					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
-					if auto_farm() then
+					if auto_farm() and not wait_for_a_second() then
 						task.wait(0.55)
 						--// Auto Join (Raid)
 						if getgenv()["Auto Join (Raid)"] then
