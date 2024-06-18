@@ -2285,9 +2285,8 @@ repeat
 										Gold_spent += tonumber(current_gold_upgrade())
 										All_GoldSpent += tonumber(current_gold_upgrade())
 									end
-									task.wait()
+									task.wait(0.75)
 								until  tonumber(current_level_upgrade()) >= tonumber(Options["Max Upgrade"].Value) or tonumber(current_gold_upgrade()) > tonumber(stringofnum(get_currency_gem_gold("Gold")))
-								task.wait(0.35)
 								Card_Name = card_inventory.ItemName.Text
 								Card_Rarity = card_inventory.Rarity.Text
 								MAIN_Health = card_inventory.CardDataFrame.CardScrollingFrame.Health.Stat.Text
