@@ -2315,7 +2315,7 @@ repeat
 										table.insert(To_SEND,"None")
 									end
 								end
-								table.insert(The_CardTables,color_Rarity(Card_Rarity)..Card_Name.." ["..Card_Rarity.."]\n   ∘ Card Id: "..i.."\n   ∘ Card Level: "..get_cardlvl(i).."\n   ∘ Gold Spent: "..Gold_spent.."\n   ∘ Upgrade: "..current_level_upgrade().."/25".."\n   ∘ Status Main:\n     - "..MAIN_Attack.."\n     - "..MAIN_Health.."\n   ∘ Status Sub:".."\n     - "..table.concat(To_SEND,"\n     - "))
+								table.insert(The_CardTables,"▾ "..Card_Name.." ["..Card_Rarity.."]:\n   ∘ Card Id: "..i.."\n   ∘ Card Level: "..get_cardlvl(i).."\n   ∘ Gold Spent: "..Gold_spent.."\n   ∘ Upgrade: "..current_level_upgrade().."/25".."\n   ∘ Status Main:\n     - "..MAIN_Attack.."\n     - "..MAIN_Health.."\n   ∘ Status Sub:".."\n     - "..table.concat(To_SEND,"\n     - "))
 								Gold_spent = 0
 								To_SEND = {}
 								Check_ITS = false
