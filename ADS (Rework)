@@ -1249,10 +1249,10 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
-			if value and gui() and gui_stage == 0 then
+			if value and gui() and gui_stage == 0 and CoreGui:WaitForChild("CrazyDay"):FindFirstChild("ToggleClose") then
 				gui_stage += 1
 				gui().Visible = false
-				CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
+				CoreGui:WaitForChild("CrazyDay"):FindFirstChild("ToggleClose").Image = "rbxassetid://17789926070"
 			end
 		end
 	})
