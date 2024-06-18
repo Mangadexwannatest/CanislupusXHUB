@@ -442,36 +442,6 @@ repeat
         Instance_ScreenGui.Parent = CoreGui
         Instance_ScreenGui.Enabled = false
         Instance_ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-        --// ImageButton Instance
-        Instance_ImageButton.Parent = Instance_ScreenGui
-        Instance_ImageButton.AnchorPoint = Vector2.new(0.5, 0.5)
-        Instance_ImageButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        Instance_ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        Instance_ImageButton.BorderSizePixel = 0
-        Instance_ImageButton.ZIndex = 9999
-        Instance_ImageButton.Position = UDim2.new(0, 41, 0, 523)
-        Instance_ImageButton.Size = UDim2.new(0, 65, 0, 65)
-        Instance_ImageButton.Image = "rbxassetid://17789924997"
-
-        Instance_ImageButton.InputBegan:Connect(function(input)
-            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and gui() then
-                gui().Visible = not gui().Visible
-				if not gui().Visible then
-					Instance_ImageButton.Image = "rbxassetid://17789926070"
-				else
-					Instance_ImageButton.Image = "rbxassetid://17789924997"
-				end
-            end
-        end)
-        --// UICorner Instance
-        Instance_UICorner.Parent = Instance_ImageButton
-        Instance_UICorner.CornerRadius = UDim.new(1, 1)
-        --// UiStroke Instance
-        Instance_UIStroke.Parent = Instance_ImageButton
-        Instance_UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-        Instance_UIStroke.LineJoinMode = Enum.LineJoinMode.Round
-        Instance_UIStroke.Thickness = 1
-        Instance_UIStroke.Color = Color3.fromRGB(120, 120, 120)
     end
 	--// Load Fluent Gui
 	local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -1422,9 +1392,6 @@ repeat
 			gui().Visible = false
 			CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
 		end
-		if CoreGui:FindFirstChild("function running") then
-			Instance_ImageButton.Parent = CoreGui:FindFirstChild("CrazyDay")
-		end
 		--// Instance Black Screen
 		Instance_Frame.Name = "Black Screen"
 		Instance_Frame.Parent = CoreGui:FindFirstChild("CrazyDay")
@@ -1436,11 +1403,40 @@ repeat
 		Instance_Frame.Size = UDim2.new(10, 0, 10, 0)
 		Instance_Frame.Visible = Options["Black Screen"].Value or false
 		RunService:Set3dRenderingEnabled(not Options["Black Screen"].Value or true)
+		--// ImageButton Instance
+		Instance_ImageButton.Parent = CoreGui:FindFirstChild("CrazyDay")
+		Instance_ImageButton.AnchorPoint = Vector2.new(0.5, 0.5)
+		Instance_ImageButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+		Instance_ImageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		Instance_ImageButton.BorderSizePixel = 0
+		Instance_ImageButton.ZIndex = 9999
+		Instance_ImageButton.Position = UDim2.new(0, 41, 0, 523)
+		Instance_ImageButton.Size = UDim2.new(0, 65, 0, 65)
+		Instance_ImageButton.Image = "rbxassetid://17789924997"
+
+		Instance_ImageButton.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and gui() then
+				gui().Visible = not gui().Visible
+				if not gui().Visible then
+					Instance_ImageButton.Image = "rbxassetid://17789926070"
+				else
+					Instance_ImageButton.Image = "rbxassetid://17789924997"
+				end
+			end
+		end)
+		--// UICorner Instance
+		Instance_UICorner.Parent = Instance_ImageButton
+		Instance_UICorner.CornerRadius = UDim.new(1, 1)
+		--// UiStroke Instance
+		Instance_UIStroke.Parent = Instance_ImageButton
+		Instance_UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		Instance_UIStroke.LineJoinMode = Enum.LineJoinMode.Round
+		Instance_UIStroke.Thickness = 1
+		Instance_UIStroke.Color = Color3.fromRGB(120, 120, 120)
 
 		local function unload_ui()
 			while wait() do
 				if Fluent.Unloaded then
-					Instance_ImageButton.Parent = Instance_ScreenGui
 					CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
 					RunService:Set3dRenderingEnabled(true)
 					CoreGui:FindFirstChild("function running").Enabled = false
@@ -2363,12 +2359,7 @@ repeat
 								},
 								{
 									["name"] = "**Upgraded card**",
-									["value"] = "```\n"..table.concat(The_CardTables,"\n").."```",
-									["inline"] = false
-								},
-								{
-									["name"] = "`All Gold Spent: "..All_GoldSpent.." ["..roundNumber(All_GoldSpent).."]`",
-									["value"] = "                                                         ",
+									["value"] = "```━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"..table.concat(The_CardTables,"\n").."\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n▸ All Gold Spent:"..All_GoldSpent.."["..roundNumber(All_GoldSpent).."]```",
 									["inline"] = false
 								},
 								{
