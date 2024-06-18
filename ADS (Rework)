@@ -39,6 +39,7 @@ repeat
 	local blacklist_characters = {"Naruto","Sasuke"}
 	local blacklist_items = {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"}
 	local Ignore_webhook = {}
+	local card_Table = {}
     local dimension = {
         ["Current Dimension"] = {},
         ["Info"] = {},
@@ -259,40 +260,70 @@ repeat
 		end
 		return NotationToUse
 	end
+	local function update_card()
+		if getgenv()["Auto Equip"] then
+			local wdiwaji2 = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay
+			if ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value >= 3 then
+				if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "" or wdiwaji2.Slot3.ItemImage.Image == "") then
+					return true
+				else
+					return false
+				end
+			elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 2 then
+				if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "") then
+					return true
+				else
+					return false
+				end
+			elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 1 then
+				if (wdiwaji2.Slot1.ItemImage.Image == "") then
+					return true
+				else
+					return false
+				end
+			end
+		else
+			return false
+		end
+	end
+	local function current_amout()
+		local XAdda2 = {}
+		for i,v in pairs(card_Table) do
+			if v == getgenv()["Max Upgrade"] then
+				table.insert(XAdda2,i)
+			end
+		end
+		return #XAdda2
+	end
+	local function Max_current_amout()
+		local XAdda2 = {}
+		for i,v in pairs(card_Table) do
+			table.insert(XAdda2,i)
+		end
+		return #XAdda2
+	end
+	local function wait_for_a_second()
+		if getgenv()["Auto Equip"] and update_card() then
+			return true
+		elseif getgenv()["Auto Upgrade"] and current_amout() ~= Max_current_amout() then
+			return true
+		else
+			return false
+		end
+	end
 	local function sell_card(tableMe)
 		if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
 			for i,v in ipairs(plr_gui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
 				if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
+					repeat task.wait() until not wait_for_a_second()
 					firesignal(v.MouseButton1Down,plr)
-					task.wait(0.0895)
+					task.wait(0.015)
 					for Rarity,_ in next,tableMe do
 						if plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Rarity then
 							game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("SellCard",v.Name)
 						end
 					end
 				end
-			end
-		end
-	end
-	local function update_card()
-		local wdiwaji2 = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.EquippedOverlay
-		if ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value >= 3 then
-			if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "" or wdiwaji2.Slot3.ItemImage.Image == "") then
-				return true
-			else
-				return false
-			end
-		elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 2 then
-			if (wdiwaji2.Slot1.ItemImage.Image == "" or wdiwaji2.Slot2.ItemImage.Image == "") then
-				return true
-			else
-				return false
-			end
-		elseif ReplicatedStorage:WaitForChild(plr.Name.."StatDisplay").CardsOwned.Value == 1 then
-			if (wdiwaji2.Slot1.ItemImage.Image == "") then
-				return true
-			else
-				return false
 			end
 		end
 	end
@@ -947,6 +978,7 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			getgenv()["Max Upgrade"] = value
 		end
 	})
 	Card_Section:AddToggle("Auto Sell", {
@@ -970,6 +1002,7 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			getgenv()["Auto Equip"] = value
 			if value then
 				unequip_cards()
 			end
@@ -983,6 +1016,7 @@ repeat
 			if Options["Auto Save"].Value and not getgenv()["Loading Configs"] then
 				SaveManager:Save("Configs")
 			end
+			getgenv()["Auto Upgrade"] = value
 		end
 	})
 	MiscGame_Section:AddToggle("Auto Claim (Quest)", {
@@ -1424,7 +1458,6 @@ repeat
 			local current_method
 			local All_GoldSpent = 0
 			local shade_current
-			local card_Table = {}
 			local The_CardTables = {}
 			local clear_table = {
 				player_disply:WaitForChild("StageClear").Value,
@@ -1475,31 +1508,6 @@ repeat
 							return v.LevelReq.Text:split(". ")[2]
 						end
 					end
-				end
-			end
-			local function current_amout()
-				local XAdda2 = {}
-				for i,v in pairs(card_Table) do
-					if v == Options["Max Upgrade"].Value then
-						table.insert(XAdda2,i)
-					end
-				end
-				return #XAdda2
-			end
-			local function Max_current_amout()
-				local XAdda2 = {}
-				for i,v in pairs(card_Table) do
-					table.insert(XAdda2,i)
-				end
-				return #XAdda2
-			end
-			local function wait_for_a_second()
-				if Options["Auto Equip"].Value and update_card() then
-					return true
-				elseif Options["Auto Upgrade"].Value and current_amout() ~= Max_current_amout() then
-					return true
-				else
-					return false
 				end
 			end
 			--// Misc function
@@ -2222,18 +2230,6 @@ repeat
 				while task.wait() do
 					if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then break end
 					pcall(function ()
-						if Options["Auto Upgrade"].Value and not getgenv()["On Card Equiping"] then
-							for i,v in ipairs(player_disply:GetChildren()) do
-								if string.find(v.Name,"Slot") and v.Value ~= "" then
-									if not card_Table[v.Value] then
-										card_Table[v.Value] = "None"
-										All_GoldSpent = 0
-										table.clear(The_CardTables)
-										getgenv()["Send Alrdy"] = false
-									end
-								end
-							end
-						end
 						if Options["Auto Equip"].Value then
 							if update_card() then
 								getgenv()["On Card Equiping"] = true
@@ -2244,7 +2240,6 @@ repeat
 									end
 								end
 							elseif not update_card() and getgenv()["On Card Equiping"] then
-								task.wait(0.55)
 								getgenv()["On Card Equiping"] = false
 							end
 						elseif not Options["Auto Equip"].Value and getgenv()["On Card Equiping"] then
@@ -2262,6 +2257,21 @@ repeat
 							getgenv()["Send Alrdy"] = false
 							task.wait()
 						until not getgenv()["Send Alrdy"]
+					end
+					if Options["Auto Upgrade"].Value and not getgenv()["On Card Equiping"] then
+						for i,v in ipairs(player_disply:GetChildren()) do
+							if string.find(v.Name,"Slot") and v.Value ~= "" then
+								if not card_Table[v.Value] then
+									repeat
+										table.clear(The_CardTables)
+										getgenv()["Send Alrdy"] = false
+										card_Table[v.Value] = "None"
+										All_GoldSpent = 0
+										task.wait()
+									until card_Table[v.Value]
+								end
+							end
+						end
 					end
 					if Options["Auto Upgrade"].Value then
 						local card_inventory = plr_gui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay
@@ -2285,7 +2295,7 @@ repeat
 										Gold_spent += tonumber(current_gold_upgrade())
 										All_GoldSpent += tonumber(current_gold_upgrade())
 									end
-									task.wait(0.75)
+									task.wait()
 								until  tonumber(current_level_upgrade()) >= tonumber(Options["Max Upgrade"].Value) or tonumber(current_gold_upgrade()) > tonumber(stringofnum(get_currency_gem_gold("Gold")))
 								Card_Name = card_inventory.ItemName.Text
 								Card_Rarity = card_inventory.Rarity.Text
