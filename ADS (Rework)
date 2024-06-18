@@ -1388,11 +1388,6 @@ repeat
 				v.ZIndex = 999
 			end
 		end
-		if Options["Auto Hide Gui"].Value and gui_stage == 0 then
-			gui_stage += 1
-			gui().Visible = false
-			CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
-		end
 		--// Instance Black Screen
 		Instance_Frame.Name = "Black Screen"
 		Instance_Frame.Parent = CoreGui:FindFirstChild("CrazyDay")
@@ -1405,6 +1400,7 @@ repeat
 		Instance_Frame.Visible = Options["Black Screen"].Value or false
 		RunService:Set3dRenderingEnabled(not Options["Black Screen"].Value or true)
 		--// ImageButton Instance
+		Instance_ImageButton.Name = "ToggleClose"
 		Instance_ImageButton.Parent = CoreGui:FindFirstChild("CrazyDay")
 		Instance_ImageButton.AnchorPoint = Vector2.new(0.5, 0.5)
 		Instance_ImageButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -1415,6 +1411,11 @@ repeat
 		Instance_ImageButton.Size = UDim2.new(0, 65, 0, 65)
 		Instance_ImageButton.Image = "rbxassetid://17789924997"
 
+		if Options["Auto Hide Gui"].Value and gui_stage == 0 then
+			gui_stage += 1
+			gui().Visible = false
+			CoreGui:FindFirstChild("CrazyDay"):FindFirstChild("ToggleClose").Image = "rbxassetid://17789926070"
+		end
 		connet_immage = Instance_ImageButton.InputBegan:Connect(function(input)
 			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and gui() then
 				gui().Visible = not gui().Visible
