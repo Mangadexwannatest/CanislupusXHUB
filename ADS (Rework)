@@ -24,6 +24,7 @@ local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local plr = game:GetService("Players").LocalPlayer
 local plr_gui = plr.PlayerGui
+local connet_immage
 local firesignal = function(signal, arg2) if getconnections(signal) then firesignal(signal, arg2) end end
 repeat
     if CoreGui:FindFirstChild("CrazyDay") or getgenv()["Executeing"] then return end getgenv()["Executeing"] = true
@@ -1414,7 +1415,7 @@ repeat
 		Instance_ImageButton.Size = UDim2.new(0, 65, 0, 65)
 		Instance_ImageButton.Image = "rbxassetid://17789924997"
 
-		Instance_ImageButton.InputBegan:Connect(function(input)
+		connet_immage = Instance_ImageButton.InputBegan:Connect(function(input)
 			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and gui() then
 				gui().Visible = not gui().Visible
 				if not gui().Visible then
@@ -1437,7 +1438,8 @@ repeat
 		local function unload_ui()
 			while wait() do
 				if Fluent.Unloaded then
-					CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
+					connet_immage:Disconnect()
+					connet_immage = nil
 					RunService:Set3dRenderingEnabled(true)
 					CoreGui:FindFirstChild("function running").Enabled = false
 					getgenv()["Script Loaded"] = false
