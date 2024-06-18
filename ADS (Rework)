@@ -1674,53 +1674,55 @@ repeat
 			coroutine.resume(coroutine.create(function ()
 				while wait() do
 					if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then break end
-					--// Current Method
-					local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
-					if not is_blacklist then
-						if Options["Auto Set Distance"].Value then
-							if boss_bar() then
-								if Options["Current Method"].Value == "Over" then
-									current_method = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
-								elseif Options["Current Method"].Value == "Under" then
-									current_method = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
-								elseif Options["Current Method"].Value == "Front" then
-									current_method = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
-								elseif Options["Current Method"].Value == "Behind" then
-									current_method = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
+					pcall(function ()
+						local is_blacklist = table.find(blacklist_characters,player_disply.CharacterName.Value)
+						--// Current Method
+						if not is_blacklist then
+							if Options["Auto Set Distance"].Value then
+								if boss_bar() then
+									if Options["Current Method"].Value == "Over" then
+										current_method = CFrame.new(0 ,getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y  - 3.5),0) * CFrame.Angles(math.rad(-90),0,0)
+									elseif Options["Current Method"].Value == "Under" then
+										current_method = CFrame.new(0 ,-getClosestBoss().HumanoidRootPart.Size.Y - (getClosestBoss().HumanoidRootPart.Size.Y - 3.5),0) * CFrame.Angles(math.rad(90),0,0)
+									elseif Options["Current Method"].Value == "Front" then
+										current_method = CFrame.new(0 ,0 ,-getClosestBoss().HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
+									elseif Options["Current Method"].Value == "Behind" then
+										current_method = CFrame.new(0 ,0 ,getClosestBoss().HumanoidRootPart.Size.Z + 4.5)
+									end
+								elseif not boss_bar() then
+									if Options["Current Method"].Value == "Over" then
+										current_method = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.35 ,0) * CFrame.Angles(math.rad(-90),0,0)
+									elseif Options["Current Method"].Value == "Under" then
+										current_method = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.35 ,0) * CFrame.Angles(math.rad(90),0,0)
+									elseif Options["Current Method"].Value == "Front" then
+										current_method = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
+									elseif Options["Current Method"].Value == "Behind" then
+										current_method = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
+									end
 								end
-							elseif not boss_bar() then
+							elseif not Options["Auto Set Distance"].Value then
 								if Options["Current Method"].Value == "Over" then
-									current_method = CFrame.new(0 ,getClosestMob().HumanoidRootPart.Size.Y + 4.35 ,0) * CFrame.Angles(math.rad(-90),0,0)
+									current_method = CFrame.new(0 , Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(-90),0,0)
 								elseif Options["Current Method"].Value == "Under" then
-									current_method = CFrame.new(0 ,-getClosestMob().HumanoidRootPart.Size.Y - 4.35 ,0) * CFrame.Angles(math.rad(90),0,0)
+									current_method = CFrame.new(0 , -Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(90),0,0)
 								elseif Options["Current Method"].Value == "Front" then
-									current_method = CFrame.new(0 ,0 ,-getClosestMob().HumanoidRootPart.Size.Z + 5.5) * CFrame.Angles(math.rad(0),1800,0)
+									current_method = CFrame.new(0 ,0 ,-Options["Current Distance"].Value) * CFrame.Angles(math.rad(0),1800,0)
 								elseif Options["Current Method"].Value == "Behind" then
-									current_method = CFrame.new(0 ,0 ,getClosestMob().HumanoidRootPart.Size.Z + 5.5)
+									current_method = CFrame.new(0 ,0 ,Options["Current Distance"].Value)
 								end
 							end
-						elseif not Options["Auto Set Distance"].Value then
+						elseif is_blacklist then
 							if Options["Current Method"].Value == "Over" then
-								current_method = CFrame.new(0 , Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(-90),0,0)
+								current_method = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
 							elseif Options["Current Method"].Value == "Under" then
-								current_method = CFrame.new(0 , -Options["Current Distance"].Value, 0) * CFrame.Angles(math.rad(90),0,0)
+								current_method = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
 							elseif Options["Current Method"].Value == "Front" then
-								current_method = CFrame.new(0 ,0 ,-Options["Current Distance"].Value) * CFrame.Angles(math.rad(0),1800,0)
+								current_method = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
 							elseif Options["Current Method"].Value == "Behind" then
-								current_method = CFrame.new(0 ,0 ,Options["Current Distance"].Value)
+								current_method = CFrame.new(0, 0, 1.5)
 							end
 						end
-					elseif is_blacklist then
-						if Options["Current Method"].Value == "Over" then
-							current_method = CFrame.new(0 ,1.5 ,0) * CFrame.Angles(math.rad(-90),0,0)
-						elseif Options["Current Method"].Value == "Under" then
-							current_method = CFrame.new(0 ,-1.5 ,0) * CFrame.Angles(math.rad(90),0,0)
-						elseif Options["Current Method"].Value == "Front" then
-							current_method = CFrame.new(0, 0, -1.5) * CFrame.Angles(math.rad(0),1800,0)
-						elseif Options["Current Method"].Value == "Behind" then
-							current_method = CFrame.new(0, 0, 1.5)
-						end
-					end
+					end)
 				end
 			end))
 			coroutine.resume(coroutine.create(function ()--// Misc Farm 2
@@ -2012,7 +2014,7 @@ repeat
 					UniversalGui.UniversalCenterUIFrame.ResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
 						if Options["Send Webhook"].Value and not table.find(Ignore_webhook,"Match Result") then
 							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
-							task.wait(2.5)
+							task.wait(1.5)
 							local rank_res = UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
 							local current_rank_res = "Unknown"
 							local currnet_status = " [End!]"
@@ -2131,7 +2133,7 @@ repeat
 					UniversalGui.UniversalCenterUIFrame.RaidResultUI:GetPropertyChangedSignal("Visible"):Connect(function()
 						if Options["Send Webhook"].Value and not table.find(Ignore_webhook,"Match Result") then
 							if not string.find(Options["Webhook URL"].Value,"https://discord.com/api/webhooks") or Options["Webhook URL"].Value == nil then return Notify("Send Webhook (Error)","URL does not match the database.") end
-							task.wait(2.5)
+							task.wait(1.5)
 							local current_rank_res = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
 							local damage_deal = UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
 							local dimension_or_raid = "Raid: "..map_split()
