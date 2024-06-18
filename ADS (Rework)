@@ -1422,6 +1422,9 @@ repeat
 			gui().Visible = false
 			CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
 		end
+		if CoreGui:FindFirstChild("function running") then
+			Instance_ImageButton.Parent = CoreGui:FindFirstChild("CrazyDay")
+		end
 		--// Instance Black Screen
 		Instance_Frame.Name = "Black Screen"
 		Instance_Frame.Parent = CoreGui:FindFirstChild("CrazyDay")
@@ -1437,6 +1440,7 @@ repeat
 		local function unload_ui()
 			while wait() do
 				if Fluent.Unloaded then
+					Instance_ImageButton.Parent = Instance_ScreenGui
 					CoreGui:FindFirstChild("function running"):FindFirstChildOfClass("ImageButton").Image = "rbxassetid://17789926070"
 					RunService:Set3dRenderingEnabled(true)
 					CoreGui:FindFirstChild("function running").Enabled = false
