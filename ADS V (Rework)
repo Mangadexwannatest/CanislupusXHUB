@@ -1356,7 +1356,8 @@
 					pcall(function()
 						LocalPlr.Character.HumanoidRootPart.Touched:Connect(function(part)
                             if Fluent.Unloaded then coroutine.yield() end
-							if part.Name == "Ignore" and not G["Dodgeing"] then
+                            if G["Dodgeing"] then return end
+							if not G["Dodgeing"] and part.Name == "Ignore" then
 								G["Dodgeing"] = true
 								repeat task.wait() if Tween_Info ~= nil then Tween_Info:Cancel() end until not part.Parent
                                 G["Dodgeing"] = false
@@ -1976,6 +1977,17 @@
                                     T = { ["H"] = 0, ["M"] = 0, ["S"] = 0 }
                                     writefile(CrazyDayF.."Timer.json",game:GetService("HttpService"):JSONEncode(T))
                                 end
+                            end
+
+                            if tonumber(T["S"]) == nil or tonumber(T["M"]) == nil or tonumber(T["H"]) == nil then
+                                Fluent:Notify({
+                                    Title = "FUCK YOU SHIT DONT TOUCH MY FILE",
+                                    Content = "",
+                                    SubContent = nil,
+                                    Duration = 5
+                                })
+                                T = { ["H"] = 0, ["M"] = 0, ["S"] = 0 }
+                                writefile(CrazyDayF.."Timer.json",game:GetService("HttpService"):JSONEncode(T))
                             end
 
                             T["S"] += 1
