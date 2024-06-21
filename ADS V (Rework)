@@ -2169,72 +2169,73 @@
                     local GameName = "Unknown: nil"
                     local GameStatus = " [End!]"
 
-                    if GameMap == "Virtual Garden" then
-                        TimeEnd = "Time: 08:00"
-                        GameName = "GameMap: "..GameMap.."\nScore: "..PlrGui.BattleGui.CenterUIFrame.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..StatDisplay.TimeChallengeHighScore.Value
-                        ClearTime = "Unknown: 0"
-                    elseif GameMap == "Infinite Mode" then
+                    if resulteVisible == PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI then
+
+                        local RaIKD = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
                         TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
-                        GameName = "GameMap: "..GameMap.."\nWave Reach: "..PlrGui.BattleGui.CenterUIFrame.WaveClearClearText.Text.."\nWave Reach (Highest): "..StatDisplay.InfiniteRecord.Value
-                        ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
+                        DamageDeal = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.DamageDealtText.Text
+
+                        if RaIKD.Image == "rbxassetid://7443889715" then
+                            Rank = "Rank: S+"
+                        elseif RaIKD.Image == "rbxassetid://6715353612" then
+                            Rank = "Rank: S"
+                        elseif RaIKD.Image == "rbxassetid://6891959728" then
+                            Rank = "Rank: A"
+                        elseif RaIKD.Image == "rbxassetid://6891959611" then
+                            Rank = "Rank: B"
+                        elseif RaIKD.Image == "rbxassetid://6891959460" then
+                            Rank = "Rank: C"
+                        elseif RaIKD.Image == "rbxassetid://6782568839" then
+                            Rank = "Rank: F"
+                        else
+                            Rank = "Rank: D"
+                        end
+
+
+                        if table.find(Currency_Rewards,"`None     `") and table.find(Item_Rewards,"`None      `") and Rank == "Rank: F" then
+                            GameStatus = " [Defeat!]"
+                            GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..Stage()
+                            ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
+                        else
+                            GameStatus = " [Victory!]"
+                        end
+
+                        if GameMap == "Virtual Garden" then
+                            TimeEnd = "Time: 08:00"
+                            GameName = "GameMap: "..GameMap.."\nScore: "..PlrGui.BattleGui.CenterUIFrame.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..StatDisplay.TimeChallengeHighScore.Value
+                            ClearTime = "Unknown: 0"
+
+                        elseif GameMap == "Infinite Mode" then
+                            GameName = "GameMap: "..GameMap.."\nWave Reach: "..PlrGui.BattleGui.CenterUIFrame.WaveClearClearText.Text.."\nWave Reach (Highest): "..StatDisplay.InfiniteRecord.Value
+                            ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
+
+                        elseif StatDisplay.StageClear.Value ~= Clear1 then
+                            GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..Stage()
+                            ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
+
+                        elseif StatDisplay.BossRushClears.Value ~= Clear2 then
+                            TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..StatDisplay.BossRushRecordString.Value
+                            GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
+                            ClearTime = "BossRush Clears: "..StatDisplay.BossRushClears.Value
+
+                        elseif StatDisplay.WeeklyShadowRaidsCleared.Value ~= Clear3 then
+                            GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..Stage()
+                            ClearTime = "SpeedRaid Clears: "..StatDisplay.WeeklyShadowRaidsCleared.Value
+                        end
                     else
-                        if resulteVisible == PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI then
-                            local RaIKD = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
-                            TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
-                            DamageDeal = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.DamageDealtText.Text
-
-                            if RaIKD.Image == "rbxassetid://7443889715" then
-                                Rank = "Rank: S+"
-							elseif RaIKD.Image == "rbxassetid://6715353612" then
-								Rank = "Rank: S"
-							elseif RaIKD.Image == "rbxassetid://6891959728" then
-								Rank = "Rank: A"
-							elseif RaIKD.Image == "rbxassetid://6891959611" then
-								Rank = "Rank: B"
-							elseif RaIKD.Image == "rbxassetid://6891959460" then
-								Rank = "Rank: C"
-							elseif RaIKD.Image == "rbxassetid://6782568839" then
-								Rank = "Rank: F"
-							else
-								Rank = "Rank: D"
-							end
-
-                            if table.find(Currency_Rewards,"`None     `") and table.find(Item_Rewards,"`None      `") and Rank == "Rank: F" then
-								GameStatus = " [Defeat!]"
-								GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..Stage()
-								ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
-							else
-								GameStatus = " [Victory!]"
-							end
-
-                            if StatDisplay.StageClear.Value ~= Clear1 then
-                                GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..Stage()
-                                ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
-
-                            elseif StatDisplay.BossRushClears.Value ~= Clear2 then
-                                TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text.."\nBest Record: "..StatDisplay.BossRushRecordString.Value
-                                GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
-                                ClearTime = "BossRush Clears: "..StatDisplay.BossRushClears.Value
-
-                            elseif StatDisplay.WeeklyShadowRaidsCleared.Value ~= Clear3 then
-                                GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..Stage()
-                                ClearTime = "SpeedRaid Clears: "..StatDisplay.WeeklyShadowRaidsCleared.Value
+                        TimeEnd = "Time: 08:00"
+                        DamageDeal = "Damage:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
+                        Rank = "Rank:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+                        if StatDisplay.RaidClears.Value ~= Clear4 then
+                            for i,v in pairs(raidBeatTime) do
+                                if StatDisplay:FindFirstChild(i).Value ~= v[1] then
+                                    GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                                    ClearTime = "Raid Clears: "..StatDisplay.RaidClears.Value.."\n"..i..": "..v[1]
+                                end
                             end
                         else
-                            TimeEnd = "Time: 08:00"
-                            DamageDeal = "Damage:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
-                            Rank = "Rank:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
-                            if StatDisplay.RaidClears.Value ~= Clear4 then
-								for i,v in pairs(raidBeatTime) do
-									if StatDisplay:FindFirstChild(i).Value ~= v[1] then
-										GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-										ClearTime = "Raid Clears: "..StatDisplay.RaidClears.Value.."\n"..i..": "..v[1]
-									end
-								end
-                            else
-                                GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                                ClearTime = "Raid Clears: Unknown"
-                            end
+                            GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                            ClearTime = "Raid Clears: Unknown"
                         end
                     end
 
