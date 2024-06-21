@@ -2226,6 +2226,9 @@
                         TimeEnd = "Time: 08:00"
                         DamageDeal = "Damage:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
                         Rank = "Rank:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+                        GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                        ClearTime = "Raid Clears: Unknown"
+
                         if StatDisplay.RaidClears.Value ~= Clear4 then
                             for i,v in pairs(raidBeatTime) do
                                 if StatDisplay:FindFirstChild(i).Value ~= v[1] then
@@ -2233,9 +2236,6 @@
                                     ClearTime = "Raid Clears: "..StatDisplay.RaidClears.Value.."\n"..i..": "..v[1]
                                 end
                             end
-                        else
-                            GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                            ClearTime = "Raid Clears: Unknown"
                         end
                     end
 
