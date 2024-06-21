@@ -4,14 +4,15 @@
     if not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,"Anime Dimension") then return end
 
     do
-        if getgenv()["auto execute enable"] == true then return end
-        getgenv()["auto execute enable"] = true
-        game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
-            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-            if state == Enum.TeleportState.InProgress then
-                QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)'))()")
-            end
-        end)
+        if not getgenv()["auto execute enable"] then
+            getgenv()["auto execute enable"] = true
+            game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
+                local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+                if state == Enum.TeleportState.InProgress then
+                    QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)'))()")
+                end
+            end)
+        end
     end
 
     --// Variable
@@ -429,13 +430,25 @@
                             {
                                 Title = "Yes",
                                 Callback = function()
-
+                                    writefile(CrazyDayF.."settings/Configs.json",[[
+                                        {"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Max Upgrade","type":"Slider","value":"5"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Current Time Type","type":"Dropdown","mutli":false,"value":"Minute"},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"55"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Set Distance","type":"Toggle","value":false},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Auto Back to Lobby","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Current Time","type":"Slider","value":"15"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Common":true,"Uncommon":true}},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Friends Only","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"}]}
+                                        ]])
+                                        task.wait(0.35)
+                                        do
+                                            SaveManager:Load("Configs")
+                                        end
+                                        Fluent:Notify({
+                                            Title = "Successfully reseted configs",
+                                            Content = " ",
+                                            SubContent = nil,
+                                            Duration = 3.5
+                                        })
                                 end
                             },
                             {
                                 Title = "No",
                                 Callback = function()
-                                    -- /// setclipboard(tostring(readfile("CrazyDay/"..Game.."/"..PlayerId.."/settings/Configs.json")))
+                                   --// setclipboard(tostring(readfile(CrazyDayF.."settings/Configs.json")))
                                 end
                             }
                         }
@@ -2156,7 +2169,11 @@
                     local GameName = "Unknown: nil"
                     local GameStatus = " [End!]"
 
-                    if GameMap == "Infinite Mode" then
+                    if GameMap == "Virtual Garden" then
+                        TimeEnd = "Time: 08:00"
+                        GameName = "GameMap: "..GameMap.."\nScore: "..PlrGui.BattleGui.CenterUIFrame.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..StatDisplay.TimeChallengeHighScore.Value
+                        ClearTime = "Unknown: 0"
+                    elseif GameMap == "Infinite Mode" then
                         TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
                         GameName = "GameMap: "..GameMap.."\nWave Reach: "..PlrGui.BattleGui.CenterUIFrame.WaveClearClearText.Text.."\nWave Reach (Highest): "..StatDisplay.InfiniteRecord.Value
                         ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
