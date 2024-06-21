@@ -1407,7 +1407,7 @@
                             a.Size = Vector3.new(0,0,100)
                             Sizeto = v.Size + Vector3.new(side,side,100)
                         end
-                        game:GetService("TweenService"):Create(a,TweenInfo.new(0.1),{Size = Sizeto}):Play()
+                        game:GetService("TweenService"):Create(a,TweenInfo.new(0.175),{Size = Sizeto}):Play()
                         a.CFrame = v.CFrame + Vector3.new(0,0,0)
                         a.Anchored = true
                         a.Transparency = 1
@@ -1617,7 +1617,8 @@
                         if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap ~= "Infinite Mode" then coroutine.yield() end
                         if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                             if G["Bringing Infinite"] then
-                                tween_function(Workspace.GameMap["Infinite Mode"].Base.Base["Hexagon Base"], CFrame.new(0, 85, 0) * CFrame.Angles(math.rad(-90),0,0),150)
+                                local Base = Workspace.GameMap["Infinite Mode"].Base.Base:FindFirstChild("Hexagon Base")
+                                tween_function(Base, CFrame.new(0, 85, 0) ,125)
                                 Tween_Info:Play()
                             elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                                 repeat
@@ -1947,7 +1948,7 @@
                             T = { ["H"] = 0, ["M"] = 0, ["S"] = 0 }
                             writefile(CrazyDayF.."Timer.json",game:GetService("HttpService"):JSONEncode(T))
                             SetParagraphValue(2,"Time",1,"Time: 00:00:00",3)
-                        elseif not G["Auto Lobby (Actived)"] then
+                        elseif not G["Auto Lobby (Actived)"] and GameMap ~= "Infinite Mode" and not string.find(GameMap,"Raid") then
                             if isfile(CrazyDayF.."Timer.json") then
                                 local r = {
                                     string.find(readfile(CrazyDayF.."Timer.json"),"H"),
