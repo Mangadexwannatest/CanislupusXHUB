@@ -2146,7 +2146,7 @@
                 resulteVisible:GetPropertyChangedSignal("Visible"):Connect(function ()
                     if Fluent.Unloaded then coroutine.yield() end
                     if O["Send Webhook"].Value == false or not string.find(O["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
-                    wait(1.35)
+                    wait(3)
                     if not table.find(Currency_Rewards,"`None     `") then
                         local name_count
                         local sum
