@@ -214,6 +214,15 @@
                     end
                 end
             end
+            local function enemy_count()
+                local CCCCCCC = {}
+                for i,v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+                    if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
+                        table.insert(CCCCCCC,v.Name)
+                    end
+                end
+                return #CCCCCCC
+            end
             local function toHex(color)
                 local int = math.floor(color.r*255)*256^2+math.floor(color.g*255)*256+math.floor(color.b*255)
                 local current = int
@@ -1414,7 +1423,7 @@
                         a.CanCollide = true
                         a.Name = "Ignore"
                         a.Parent = v.Parent
-                        repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or Fluent.Unloaded
+                        repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_count() == 0 or Fluent.Unloaded
                         a:Destroy()
                     end
                 end)
@@ -1425,7 +1434,7 @@
                         if Val:len() == 2 and Val.find(Val,"0") == 2 then
                             G["Bringing Infinite"] = false
                         elseif Val:len() == 3 and Val.find(Val,"0") == 3 or (Val.find(Val,"00")) then
-                            G["Bringing Infinite"] = true
+                            G["Bringing Infinite"] = false
                         else
                             G["Bringing Infinite"] = true
                             task.wait(3.35)
@@ -1616,16 +1625,16 @@
                     pcall(function ()
                         if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap ~= "Infinite Mode" then coroutine.yield() end
                         if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
-                            if G["Bringing Infinite"] then
-                                local Base = Workspace.GameMap["Infinite Mode"].Base.Base:FindFirstChild("Hexagon Base")
-                                tween_function(Base, CFrame.new(0, 85, 0) ,125)
+                            if enemy_count() == 0 then
+                                local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
+                                tween_function(Base, CFrame.new(0, 55, 0) ,125)
                                 Tween_Info:Play()
                             elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                                 repeat
                                     tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
                                     Tween_Info:Play()
                                     task.wait(0)
-                                until G["Safe Mode"] == true or G["Bringing Infinite"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
+                                until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                                 Tween_Info:Cancel()
                             end
                         end
