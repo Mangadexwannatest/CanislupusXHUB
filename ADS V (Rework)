@@ -1356,10 +1356,9 @@
 					pcall(function()
 						LocalPlr.Character.HumanoidRootPart.Touched:Connect(function(part)
                             if Fluent.Unloaded then coroutine.yield() end
-                            if G["Dodgeing"] then return end
 							if not G["Dodgeing"] and part.Name == "Ignore" then
 								G["Dodgeing"] = true
-								repeat task.wait() if Tween_Info ~= nil then Tween_Info:Cancel() end until not part.Parent
+								repeat task.wait(0) if Tween_Info ~= nil then Tween_Info:Cancel() end until not part.Parent
                                 G["Dodgeing"] = false
 							end
 						end)
@@ -1424,7 +1423,7 @@
                         a.CanCollide = true
                         a.Name = "Ignore"
                         a.Parent = v.Parent
-                        repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_count() == 0 or Fluent.Unloaded
+                        repeat task.wait(0) until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_count() == 0 or Fluent.Unloaded
                         a:Destroy()
                     end
                 end)
