@@ -2,6 +2,18 @@
 --local script_loaded,script_error = pcall(function ()
     repeat wait() until game:IsLoaded()
     if not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name,"Anime Dimension") then return end
+
+    do
+        if getgenv()["auto execute enable"] == true then return end
+        getgenv()["auto execute enable"] = true
+        game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
+            local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
+            if state == Enum.TeleportState.InProgress then
+                QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)'))()")
+            end
+        end)
+    end
+
     --// Variable
     local G = getgenv()
     G["response"] = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
