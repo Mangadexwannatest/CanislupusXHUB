@@ -1347,7 +1347,7 @@
 					pcall(function()
 						LocalPlr.Character.HumanoidRootPart.Touched:Connect(function(part)
                             if Fluent.Unloaded then coroutine.yield() end
-							if part.Name == "Ignore" then
+							if part.Name == "Ignore" and not G["Dodgeing"] then
 								G["Dodgeing"] = true
 								repeat task.wait() if Tween_Info ~= nil then Tween_Info:Cancel() end until not part.Parent
                                 G["Dodgeing"] = false
@@ -1407,7 +1407,7 @@
                             a.Size = Vector3.new(0,0,100)
                             Sizeto = v.Size + Vector3.new(side,side,100)
                         end
-                        game:GetService("TweenService"):Create(a,TweenInfo.new(0.175),{Size = Sizeto}):Play()
+                        game:GetService("TweenService"):Create(a,TweenInfo.new(0.155),{Size = Sizeto}):Play()
                         a.CFrame = v.CFrame + Vector3.new(0,0,0)
                         a.Anchored = true
                         a.Transparency = 1
@@ -1943,12 +1943,12 @@
                 }
                 while true do
                     if Fluent.Unloaded then coroutine.yield() end
-                    if O["Auto Back to Lobby"].Value == true then
+                    if O["Auto Back to Lobby"].Value == true and GameMap ~= "Infinite Mode" and not string.find(GameMap,"Raid") then
                         if G["Auto Lobby (Actived)"] then
                             T = { ["H"] = 0, ["M"] = 0, ["S"] = 0 }
                             writefile(CrazyDayF.."Timer.json",game:GetService("HttpService"):JSONEncode(T))
                             SetParagraphValue(2,"Time",1,"Time: 00:00:00",3)
-                        elseif not G["Auto Lobby (Actived)"] and GameMap ~= "Infinite Mode" and not string.find(GameMap,"Raid") then
+                        elseif not G["Auto Lobby (Actived)"] then
                             if isfile(CrazyDayF.."Timer.json") then
                                 local r = {
                                     string.find(readfile(CrazyDayF.."Timer.json"),"H"),
