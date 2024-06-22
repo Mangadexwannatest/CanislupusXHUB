@@ -1440,7 +1440,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         G["Bringing Infinite"] = false
                     else
                         G["Bringing Infinite"] = true
-                        task.wait(3.65)
+                        task.wait(3.5)
                         G["Bringing Infinite"] = false
                     end
                 end)
@@ -2168,7 +2168,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             resulteVisible:GetPropertyChangedSignal("Visible"):Connect(function ()
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Send Webhook"].Value == false or not string.find(O["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
-                wait(3)
+                wait(5)
                 if not table.find(Currency_Rewards,"`None     `") then
                     local name_count
                     local sum
