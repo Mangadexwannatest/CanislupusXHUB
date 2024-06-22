@@ -73,6 +73,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
     {"`None     `"}
     if not LocalPlr.Character then LocalPlr.CharacterAdded:Wait()wait()end
     if CoreGui:FindFirstChild("CrazyDay") then return end
+    if not isfolder("CrazyDay") then repeat makefolder("CrazyDay") task.wait(0) until isfolder("CrazyDay") makefolder("CrazyDay/"..Game)
+    elseif isfolder("CrazyDay") and not isfolder("CrazyDay/"..Game) then makefolder("CrazyDay/"..Game) end
     --// local function
         local function Gui_CrazyDay()
             if CoreGui:FindFirstChild("CrazyDay") then
@@ -1417,7 +1419,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.155),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.225),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
