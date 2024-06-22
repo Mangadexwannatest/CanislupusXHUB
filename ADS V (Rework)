@@ -1450,7 +1450,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
+                        a.Size = Vector3.new(0,0,85)
                         Sizeto = v.Size + Vector3.new(side,side,85)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.315),{Size = Sizeto}):Play()
