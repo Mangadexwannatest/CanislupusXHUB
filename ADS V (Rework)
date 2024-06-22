@@ -178,6 +178,40 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             end
             return num * values
         end
+        local function roundNumber(numberHere,Notation)
+            local DigitsInNumber = math.max(math.ceil(math.log10(numberHere+1)),1)
+            local FormattedNumber
+            local NotationToUse
+            if Notation == 1 then
+                FormattedNumber = string.sub(tostring(numberHere/10^(DigitsInNumber-1)),1,3)
+                NotationToUse = FormattedNumber.."e"..DigitsInNumber-1
+            elseif (Notation and Notation == 2) or not Notation then
+                local TableOfLetters = {
+                    "",
+                    "K",
+                    "M",
+                    "B",
+                    "T",
+                    "Qa",
+                    "Qi",
+                    "Sx",
+                    "Sp",
+                    "Oc",
+                    "No",
+                    "Dc",
+                    "Ud",
+                    "Dd"
+                }
+                local NumberOfDigitsToShow = 1.5*(DigitsInNumber%3)^2 - 3.5*(DigitsInNumber%3) + 5
+                FormattedNumber = string.sub(tostring(numberHere/10^(DigitsInNumber-1)),1,NumberOfDigitsToShow) 
+                local FinalNumber = string.sub(FormattedNumber*(10^((DigitsInNumber-1)%3)),1,NumberOfDigitsToShow) 
+                if DigitsInNumber == 3 then 
+                    FinalNumber = tostring(math.ceil(tonumber(FinalNumber)))
+                end
+                NotationToUse = FinalNumber..TableOfLetters[math.ceil(DigitsInNumber/3)]
+            end
+            return NotationToUse
+        end
         local function enemy(name)
             local dist, thing = math.huge, false
             for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
@@ -1419,7 +1453,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.325),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -2185,7 +2219,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 end
 
                 local TimeEnd = "Time: 00:00"
-                local DamageDeal = "Damage: 0"
+                local DamageDeal = "Damage: "..roundNumber(LocalPlr.leaderstats.Damage.Value)
                 local Rank = "Unknown: F"
                 local ClearTime = "Unknown: 0"
                 local GameName = "Unknown: nil"
@@ -2195,7 +2229,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
 
                     local RaIKD = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.ResultDiamond.ResultRank
                     TimeEnd = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.TimeText.Text
-                    DamageDeal = PlrGui.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.DamageDealtText.Text
 
                     if RaIKD.Image == "rbxassetid://7443889715" then
                         Rank = "Rank: S+"
@@ -2246,7 +2279,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     end
                 else
                     TimeEnd = "Time: 08:00"
-                    DamageDeal = "Damage:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.DamageText.Text:split(":")[2]
                     Rank = "Rank:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
                     GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
                     ClearTime = "Raid Clears: Unknown"
