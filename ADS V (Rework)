@@ -1447,13 +1447,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     end
                     local a = v:Clone()
                     local side = math.clamp(3.25,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,100,side)
+                    local Sizeto = v.Size + Vector3.new(side,85,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
+                        print("This is mesh part")
                         a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        Sizeto = v.Size + Vector3.new(side,side,85)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.315),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1498,19 +1499,19 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 elseif O["Current Method"].Value == "Under" then
                                     G["Method"] = CFrame.new(0,-enemy("Boss").HumanoidRootPart.Size.Y - (enemy("Boss").HumanoidRootPart.Size.Y - 3.5), 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("Boss").HumanoidRootPart.Size.Z + 4.5) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -enemy("Boss").HumanoidRootPart.Size.Z + 3.5) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
-                                    G["Method"] = CFrame.new(0, 0, enemy("Boss").HumanoidRootPart.Size.Z + 4.5)
+                                    G["Method"] = CFrame.new(0, 0, enemy("Boss").HumanoidRootPart.Size.Z + 3.5)
                                 end
                             elseif Boss_Actived() == false then
                                 if O["Current Method"].Value == "Over" then
-                                    G["Method"] = CFrame.new(0, enemy("AllMob").HumanoidRootPart.Size.Y + 4.25, 0) * CFrame.Angles(math.rad(-90),0,0)
+                                    G["Method"] = CFrame.new(0, enemy("AllMob").HumanoidRootPart.Size.Y + 3.65, 0) * CFrame.Angles(math.rad(-90),0,0)
                                 elseif O["Current Method"].Value == "Under" then
-                                    G["Method"] = CFrame.new(0, -enemy("AllMob").HumanoidRootPart.Size.Y - 4.25, 0) * CFrame.Angles(math.rad(90),0,0)
+                                    G["Method"] = CFrame.new(0, -enemy("AllMob").HumanoidRootPart.Size.Y - 3.65, 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 4.25) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 3.65) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
-                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 4.25)
+                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 3.65)
                                 end
                             end
                         elseif O["Auto Set Distance"].Value == false then
