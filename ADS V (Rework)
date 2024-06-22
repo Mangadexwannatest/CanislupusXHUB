@@ -275,6 +275,18 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             until current <= 0
             return "0x"..string.reverse(final)
         end
+        local function is_usingskill()
+            local aim = {}
+            for i,v in ipairs(LocalPlr.Character.Humanoid:GetPlayingAnimationTracks()) do
+                if v.Name == "Animation" then
+                    table.insert(aim,v.Name)
+                end
+            end
+            if LocalPlr.Character.Humanoid.WalkSpeed == 0 then
+                table.insert(aim,"Animation")
+            end
+            return #aim
+        end
         local function Boss_Actived()
             return PlrGui.BattleGui.CenterUIFrame.BossHealthFrame.Visible
         end
@@ -1453,7 +1465,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.315),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1484,9 +1496,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
+                    if LocalPlr.Character.HumanoidRootPart.Anchored == true then LocalPlr.Character.HumanoidRootPart.Anchored = false end
                     local is_blacklist = table.find(BlackList_Characters,StatDisplay.CharacterName.Value)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
-                        tween_function(teleport_circle(), CFrame.new(0, 0, 0), 125)
+                        tween_function(teleport_circle(), CFrame.new(0, 0, 0), 150)
                         Tween_Info:Play()
                         Tween_Info.Completed:Wait()
                     end
@@ -1642,14 +1655,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if G["Safe Mode"] == true and not G["Died"] and not G["Bringing"] and not G["Bringing Infinite"] then
                         for i,v in pairs(Workspace.Folders.SpawnPoints:GetChildren()) do
                             if v.Name == LocalPlr.RespawnLocation.Name then
-                                tween_function(v, CFrame.new(0, 75, 0), 125)
+                                tween_function(v, CFrame.new(0, 75, 0), 150)
                                 Tween_Info:Play()
                             end
                         end
                     end
                     if auto_farm() == true and Boss_Actived() == true and teleport_circle() == false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
                         repeat
-                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 125)
+                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 150)
                             Tween_Info:Play()
                             task.wait(0)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == false or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1666,11 +1679,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 55, 0) ,125)
+                            tween_function(Base, CFrame.new(0, 55, 0) ,150)
                             Tween_Info:Play()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
@@ -1687,17 +1700,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap == "Infinite Mode" then coroutine.yield() end
                     if auto_farm() == true and Boss_Actived() == false and teleport_circle() == false and not G["Died"] then
                         if O["Current Farm Mode"].Value == "Bring Mode" and not G["Spawning Enemy"] then
-                            if Playing_Mode == 0 and enemy("Bring") ~= false and LocalPlr.Character.HumanoidRootPart.Anchored == false then
+                            if Playing_Mode == 0 and enemy("Bring") ~= false then
                                 repeat
                                     G["Bringing"] = true
-                                    tween_function(enemy("Bring").HumanoidRootPart, CFrame.new(0,10,0), 135)
+                                    tween_function(enemy("Bring").HumanoidRootPart, CFrame.new(0,10,0), 150)
                                     Tween_Info:Play()
                                     task.wait(0.0875)
                                 until Playing_Mode > 0 or enemy("Bring") == false or auto_farm() == false or G["Spawning Enemy"] == true or G["Died"] == true or Boss_Actived() == true or teleport_circle() ~= false or Fluent.Unloaded
                                 Playing_Mode = 1
-                            elseif Playing_Mode == 1 and enemy("Bring") == false and LocalPlr.Character.HumanoidRootPart.Anchored == false then
+                            elseif Playing_Mode == 1 and enemy("Bring") == false then
                                 G["Bringing"] = true
-                                tween_function(enemy_Normal().HumanoidRootPart, CFrame.new(0,50,0), 135)
+                                tween_function(enemy_Normal().HumanoidRootPart, CFrame.new(0,50,0), 150)
                                 Tween_Info:Play()
                                 Tween_Info.Completed:Wait()
                                 task.wait(2.675)
@@ -1705,7 +1718,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             elseif Playing_Mode == 2 and not G["Safe Mode"] and not G["Dodgeing"] then
                                 repeat
                                     G["Bringing"] = false
-                                    tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
+                                    tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
                                     Tween_Info:Play()
                                     task.wait(0)
                                 until Playing_Mode ~= 2 or G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1713,7 +1726,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         elseif O["Current Farm Mode"].Value == "Normal Mode" and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1728,22 +1741,21 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                    if O["Auto Skill"].Value == true and auto_farm() == true and dist_enemy(enemy("AllMob").HumanoidRootPart) <= O["Current Skill Distance"].Value and not G["Safe Mode"] and not G["Bringing"] and not G["Bringing Infinite"] and not G["Died"] and LocalPlr.Character.HumanoidRootPart.Anchored == false then
+
+                    if is_usingskill() == 0 and O["Auto Skill"].Value == true and auto_farm() == true and dist_enemy(enemy("AllMob").HumanoidRootPart) <= O["Current Skill Distance"].Value and not G["Safe Mode"] and not G["Bringing"] and not G["Bringing Infinite"] and not G["Died"] then
                         local skill = PlrGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder
+
+                        if is_usingskill() > 0 then return end
 
                         if skill["Skill"..O["Skill One"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
-                        end
-                        if skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
+                        elseif skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
-                        end
-                        if skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
+                        elseif skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
-                        end
-                        if skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
+                        elseif skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
-                        end
-                        if skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
+                        elseif skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
                         end
 
@@ -1759,26 +1771,16 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
 
-                        if tonumber(skill["Skill1"].SkillName.Text) and tonumber(skill["Skill2"].SkillName.Text) and tonumber(skill["Skill3"].SkillName.Text) and tonumber(skill["Skill4"].SkillName.Text) then
-                            if skill["Skill5"].Visible and tonumber(skill["Skill5"].SkillName.Text) then
-                                if O["Current Attack Method"].Value == "Remote" then
-                                    RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
-                                elseif O["Current Attack Method"].Value == "Click" then
-                                    game:GetService("VirtualUser"):CaptureController()
-                                    game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
-                                end
-                            elseif not skill["Skill5"].Visible then
-                                if O["Current Attack Method"].Value == "Remote" then
-                                    RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
-                                elseif O["Current Attack Method"].Value == "Click" then
-                                    game:GetService("VirtualUser"):CaptureController()
-                                    game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
-                                end
-                            end
+                        if O["Current Attack Method"].Value == "Remote" then
+                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
+                        elseif O["Current Attack Method"].Value == "Click" then
+                            game:GetService("VirtualUser"):CaptureController()
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
                         end
+
                     end
                 end)
-                task.wait(0.275)
+                task.wait(0.135)
             end
         end))
         coroutine.resume(coroutine.create(function () --// Cards
