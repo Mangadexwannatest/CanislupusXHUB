@@ -1465,7 +1465,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.3),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.325),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1662,7 +1662,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     end
                     if auto_farm() == true and Boss_Actived() == true and teleport_circle() == false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
                         repeat
-                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 150)
+                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 135)
                             Tween_Info:Play()
                             task.wait(0)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == false or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1683,7 +1683,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             Tween_Info:Play()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 135)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
@@ -1718,7 +1718,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             elseif Playing_Mode == 2 and not G["Safe Mode"] and not G["Dodgeing"] then
                                 repeat
                                     G["Bringing"] = false
-                                    tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
+                                    tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 135)
                                     Tween_Info:Play()
                                     task.wait(0)
                                 until Playing_Mode ~= 2 or G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1726,7 +1726,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         elseif O["Current Farm Mode"].Value == "Normal Mode" and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 150)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 135)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
