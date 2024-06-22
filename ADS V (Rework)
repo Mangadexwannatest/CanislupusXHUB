@@ -1465,7 +1465,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,100)
                         Sizeto = v.Size + Vector3.new(side,side,100)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.325),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.315),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
@@ -1499,7 +1499,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if LocalPlr.Character.HumanoidRootPart.Anchored == true then LocalPlr.Character.HumanoidRootPart.Anchored = false end
                     local is_blacklist = table.find(BlackList_Characters,StatDisplay.CharacterName.Value)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
-                        tween_function(teleport_circle(), CFrame.new(0, 0, 0), 150)
+                        tween_function(teleport_circle(), CFrame.new(0, 0, 0), 140)
                         Tween_Info:Play()
                         Tween_Info.Completed:Wait()
                     end
@@ -1621,6 +1621,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
                     elseif auto_farm() == false then
+                        Playing_Mode = 0
                         bv.Parent = nil
                         if LocalPlr.Character.Humanoid.PlatformStand == true then LocalPlr.Character.Humanoid.PlatformStand = false end
                         if Tween_Info ~= nil then Tween_Info:Cancel() end
@@ -1655,13 +1656,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if G["Safe Mode"] == true and not G["Died"] and not G["Bringing"] and not G["Bringing Infinite"] then
                         for i,v in pairs(Workspace.Folders.SpawnPoints:GetChildren()) do
                             if v.Name == LocalPlr.RespawnLocation.Name then
-                                tween_function(v, CFrame.new(0, 75, 0), 150)
+                                tween_function(v, CFrame.new(0, 75, 0), 140)
                                 Tween_Info:Play()
                             end
                         end
                     end
                     if auto_farm() == true and Boss_Actived() == true and teleport_circle() == false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
                         repeat
+                            Playing_Mode = 0
                             tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 135)
                             Tween_Info:Play()
                             task.wait(0)
@@ -1679,7 +1681,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 55, 0) ,150)
+                            tween_function(Base, CFrame.new(0, 55, 0) ,140)
                             Tween_Info:Play()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
@@ -1703,14 +1705,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             if Playing_Mode == 0 and enemy("Bring") ~= false then
                                 repeat
                                     G["Bringing"] = true
-                                    tween_function(enemy("Bring").HumanoidRootPart, CFrame.new(0,10,0), 150)
+                                    tween_function(enemy("Bring").HumanoidRootPart, CFrame.new(0,10,0), 140)
                                     Tween_Info:Play()
                                     task.wait(0.0875)
                                 until Playing_Mode > 0 or enemy("Bring") == false or auto_farm() == false or G["Spawning Enemy"] == true or G["Died"] == true or Boss_Actived() == true or teleport_circle() ~= false or Fluent.Unloaded
                                 Playing_Mode = 1
                             elseif Playing_Mode == 1 and enemy("Bring") == false then
                                 G["Bringing"] = true
-                                tween_function(enemy_Normal().HumanoidRootPart, CFrame.new(0,50,0), 150)
+                                tween_function(enemy_Normal().HumanoidRootPart, CFrame.new(0,50,0), 140)
                                 Tween_Info:Play()
                                 Tween_Info.Completed:Wait()
                                 task.wait(2.675)
