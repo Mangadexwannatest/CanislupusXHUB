@@ -163,9 +163,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         end
         local function get_valueCard(name)
             if name == "Level" then
-                return tonumber(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.CardLevel.Text:split(". ")[2]:split(" / ")[1])
+                return PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.CardLevel.Text:split(". ")[2]:split(" / ")[1]
             elseif name == "Gold" then
-                return tonumber(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.GoldCost.Text)
+                return PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.GoldCost.Text
             end
         end
         local function stringofnum(values)
@@ -352,6 +352,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 end
             end
             return thing
+        end
+        local function GOLD()
+            if string.find(get_value("Gold"),",") then
+                local b = string.gsub(get_value("Gold"),",","")
+                return b
+            else
+                return stringofnum(get_value("Gold"))
+            end
         end
         --// Loading Gui
         local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -1811,16 +1819,15 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
                     end
-
                     for i,v in pairs(CardUpgrade) do
                         if v ~= O["Max Upgrade"].Value then
                             repeat
                                 firesignal(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down)
-                                if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(stringofnum(get_value("Gold"))) > tonumber(get_valueCard("Gold")) then
+                                if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(GOLD()) >= tonumber(get_valueCard("Gold")) then
                                     RemoteFunction:InvokeServer("UpgradeCard",i)
                                 end
                                 task.wait(0)
-                            until tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(stringofnum(get_value("Gold")))
+                            until tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD())
                             CardUpgrade[i] = O["Max Upgrade"].Value
                         end
                     end
