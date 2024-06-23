@@ -2127,6 +2127,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 game:GetService("TeleportService"):Teleport(6938803436)
                                 task.wait(0.25)
                                 game:GetService("TeleportService"):Teleport(6938803436)
+                                coroutine.yield()
                             elseif O["Current Time Type"].Value == "Minute" and T["M"] >= O["Current Time"].Value then
                                 G["Auto Lobby (Actived)"] = true
                                 Fluent:Notify({
@@ -2139,6 +2140,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 game:GetService("TeleportService"):Teleport(6938803436)
                                 task.wait(0.25)
                                 game:GetService("TeleportService"):Teleport(6938803436)
+                                coroutine.yield()
                             elseif O["Current Time Type"].Value == "Hour" and T["H"] >= O["Current Time"].Value then
                                 G["Auto Lobby (Actived)"] = true
                                 Fluent:Notify({
@@ -2151,6 +2153,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 game:GetService("TeleportService"):Teleport(6938803436)
                                 task.wait(0.25)
                                 game:GetService("TeleportService"):Teleport(6938803436)
+                                coroutine.yield()
                             end
                         end
                     end
@@ -2233,7 +2236,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             resulteVisible:GetPropertyChangedSignal("Visible"):Connect(function ()
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Send Webhook"].Value == false or not string.find(O["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
-                wait(5)
+                wait(3.5)
                 if not table.find(Currency_Rewards,"`None     `") then
                     local name_count
                     local sum
