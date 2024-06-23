@@ -1326,7 +1326,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         instance_I.BorderColor3 = Color3.fromRGB(0, 0, 0)
         instance_I.BorderSizePixel = 0
         instance_I.ZIndex = 9999
-        instance_I.Position = UDim2.new(0, 41, 0, 523)
+        instance_I.Position = UDim2.new(0, 40, 0, 505)
         instance_I.Size = UDim2.new(0, 65, 0, 65)
         instance_I.Image = "rbxassetid://17789924997"
 
