@@ -1546,13 +1546,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 end
                             elseif Boss_Actived() == false then
                                 if O["Current Method"].Value == "Over" then
-                                    G["Method"] = CFrame.new(0, enemy("AllMob").HumanoidRootPart.Size.Y + 3.65, 0) * CFrame.Angles(math.rad(-90),0,0)
+                                    G["Method"] = CFrame.new(0, enemy("AllMob").HumanoidRootPart.Size.Y + 3.375, 0) * CFrame.Angles(math.rad(-90),0,0)
                                 elseif O["Current Method"].Value == "Under" then
-                                    G["Method"] = CFrame.new(0, -enemy("AllMob").HumanoidRootPart.Size.Y - 3.65, 0) * CFrame.Angles(math.rad(90),0,0)
+                                    G["Method"] = CFrame.new(0, -enemy("AllMob").HumanoidRootPart.Size.Y - 3.375, 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 3.65) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 3.375) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
-                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 3.65)
+                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 3.375)
                                 end
                             end
                         elseif O["Auto Set Distance"].Value == false then
