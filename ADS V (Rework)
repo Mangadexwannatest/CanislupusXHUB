@@ -50,7 +50,7 @@ local LocalID, Game, Update, BlackList_Characters, Currency_Items, Room =
     Plr:GetUserIdFromNameAsync(LocalPlr.Name),
     "Anime Dimensions Simulator (Rework)",
     " 1.0.1",
-    {"rbxassetid://13621197148","rbxassetid://12020894294"},
+    {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
         "Titan Dimension",
@@ -1519,7 +1519,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                    local is_blacklist = table.find(BlackList_Characters,PlrGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.CharacterTriIcon.Image)
+                    local is_blacklist = table.find(BlackList_Characters,StatDisplay.BattleCharacterName.Value)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
                         tween_function(teleport_circle(), CFrame.new(0, 0, 0), 140)
                         Tween_Info:Play()
@@ -2199,28 +2199,29 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             resulteMe.ChildAdded:Connect(function(v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if not table.find(Currency_Items,v.Name) then
-                    if v.Name == "RewardTemplate" then
-                        v.Name = "Character ???"
-                    end
                     if table.find(Item_Rewards,"`None      `") then
                         repeat
                             table.remove(Item_Rewards,table.find(Item_Rewards,"`None      `"))
                         wait()
                         until not table.find(Item_Rewards,"`None      `")
                     end
-                    if not v:FindFirstChild("Gradient") then
-                        table.insert(Item_Rewards,"`"..v.Name.." [Common]`")
-                    elseif v:FindFirstChild("Gradient") then
-                        if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
-                            table.insert(Item_Rewards,"`"..v.Name.." [Uncommon]`")
-                        elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
-                            table.insert(Item_Rewards,"`"..v.Name.." [Rare]`")
-                        elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
-                            table.insert(Item_Rewards,"`"..v.Name.." [Epic]`")
-                        elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
-                            table.insert(Item_Rewards,"`"..v.Name.." [Legendary]`")
-                        else
-                            table.insert(Item_Rewards,"`"..v.Name.." [Mythic]`")
+                    if v.Name == "RewardTemplate" then
+                        table.insert(Item_Rewards,"`Character ???`")
+                    else
+                        if not v:FindFirstChild("Gradient") then
+                            table.insert(Item_Rewards,"`"..v.Name.." [Common]`")
+                        elseif v:FindFirstChild("Gradient") then
+                            if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
+                                table.insert(Item_Rewards,"`"..v.Name.." [Uncommon]`")
+                            elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
+                                table.insert(Item_Rewards,"`"..v.Name.." [Rare]`")
+                            elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
+                                table.insert(Item_Rewards,"`"..v.Name.." [Epic]`")
+                            elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
+                                table.insert(Item_Rewards,"`"..v.Name.." [Legendary]`")
+                            else
+                                table.insert(Item_Rewards,"`"..v.Name.." [Mythic]`")
+                            end
                         end
                     end
                 elseif table.find(Currency_Items,v.Name) then
