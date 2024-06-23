@@ -1465,7 +1465,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,95)
                         Sizeto = v.Size + Vector3.new(side,side,95)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.335),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
