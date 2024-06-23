@@ -1814,11 +1814,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         coroutine.resume(coroutine.create(function () --// Cards
             while true do
                 if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                if O["Auto Equip"].Value == true and NotEquip() == true then
+                if O["Auto Equip"].Value == true and NotEquip() == true and NotEquip() ~= "Zero" then
                     UnEquip()
                     repeat
                         for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                            if v:IsA("ImageButton") and v.LayoutOrder <= 3 then
+                            if v:IsA("ImageButton") and v.LayoutOrder < 4 then
                                 RemoteFunction:InvokeServer("EquipCard",v.Name)
                             end
                         end
