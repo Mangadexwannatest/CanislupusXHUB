@@ -1441,6 +1441,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 humanoid.Died:Connect(function()
                     G["Dodgeing"] = false
                     G["Bringing"] = false
+                    G["Bringing Infinite"] = false
                     G["Safe Mode"] = false
                     G["Died"] = true
                     Playing_Mode = 0
@@ -1692,6 +1693,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == true and teleport_circle() == false and FlameTrailC() == false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
                         repeat
                             Playing_Mode = 0
+                            G["Bringing"] = false
+                            G["Bringing Infinite"] = false
                             tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 140)
                             Tween_Info:Play()
                             task.wait(0)
@@ -2196,6 +2199,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             resulteMe.ChildAdded:Connect(function(v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if not table.find(Currency_Items,v.Name) then
+                    if v.Name == "RewardTemplate" then
+                        v.Name = "Character ???"
+                    end
                     if table.find(Item_Rewards,"`None      `") then
                         repeat
                             table.remove(Item_Rewards,table.find(Item_Rewards,"`None      `"))
