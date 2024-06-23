@@ -1458,12 +1458,12 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         end
                     end
                     local a = v:Clone()
-                    local side = math.clamp(3.585,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,80,side)
+                    local side = math.clamp(3.685,0,10)
+                    local Sizeto = v.Size + Vector3.new(side,90,side)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,80)
-                        Sizeto = v.Size + Vector3.new(side,side,80)
+                        a.Size = Vector3.new(0,0,90)
+                        Sizeto = v.Size + Vector3.new(side,side,90)
                     end
                     game:GetService("TweenService"):Create(a,TweenInfo.new(0.315),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
