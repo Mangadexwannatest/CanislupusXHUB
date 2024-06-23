@@ -50,7 +50,7 @@ local LocalID, Game, Update, BlackList_Characters, Currency_Items, Room =
     Plr:GetUserIdFromNameAsync(LocalPlr.Name),
     "Anime Dimensions Simulator (Rework)",
     " 1.0.1",
-    {"Naruto","Sasuke"},
+    {"rbxassetid://13621197148","rbxassetid://12020894294"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
         "Titan Dimension",
@@ -1516,7 +1516,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                    local is_blacklist = table.find(BlackList_Characters,StatDisplay.CharacterName.Value)
+                    local is_blacklist = table.find(BlackList_Characters,PlrGui.UniversalGui.LeftUIFrame.OwnHealthBarFrame.CharacterTriIcon.Image)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
                         tween_function(teleport_circle(), CFrame.new(0, 0, 0), 140)
                         Tween_Info:Play()
