@@ -1463,9 +1463,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
                     if v.Name == "FlameTrail" then
                         task.wait(0.1)
-                        if v:FindFirstChild("P1") == nil then return
-                        elseif v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return
-                        end
+                        if v:FindFirstChild("P1") == nil then return end
+                        if v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return end
                     end
                     local a = v:Clone()
                     local side = math.clamp(3.85,0,10)
@@ -1667,6 +1666,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             if v.Name == LocalPlr.RespawnLocation.Name then
                                 tween_function(v, CFrame.new(0, 75, 0), 140)
                                 Tween_Info:Play()
+                            end
+                        end
+                    end
+                    if Boss_Actived() == true then
+                        for i, v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
+                            if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == true then
+                                v:Destroy()
                             end
                         end
                     end
