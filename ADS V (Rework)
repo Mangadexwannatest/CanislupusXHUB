@@ -252,7 +252,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         end
         local function enemy_count()
             local CCCCCCC = {}
-            for i,v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
+            for i,v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                     table.insert(CCCCCCC,v.Name)
                 end
