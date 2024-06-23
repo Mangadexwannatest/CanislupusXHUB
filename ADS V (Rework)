@@ -252,7 +252,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         end
         local function enemy_count()
             local CCCCCCC = {}
-            for i,v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+            for i,v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
                 if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 then
                     table.insert(CCCCCCC,v.Name)
                 end
@@ -1496,7 +1496,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                    if LocalPlr.Character.HumanoidRootPart.Anchored == true then LocalPlr.Character.HumanoidRootPart.Anchored = false end
                     local is_blacklist = table.find(BlackList_Characters,StatDisplay.CharacterName.Value)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
                         tween_function(teleport_circle(), CFrame.new(0, 0, 0), 140)
