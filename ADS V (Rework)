@@ -1477,7 +1477,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     game:GetService("TweenService"):Create(a,TweenInfo.new(IgnoreSpeed),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0.8
                     a.CanCollide = true
                     a.Name = "Ignore"
                     a.Parent = v.Parent
@@ -1672,7 +1672,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if Boss_Actived() == true then
                         for i, v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
                             if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == true then
-                                v:Destroy()
+                                v:FindFirstChildOfClass("BillboardGui"):Destroy()
                             end
                         end
                     end
