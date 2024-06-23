@@ -1816,11 +1816,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         if v ~= O["Max Upgrade"].Value then
                             repeat
                                 firesignal(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down)
-                                if O["Max Upgrade"].Value > get_valueCard("Level") and stringofnum(get_value("Gold")) > get_valueCard("Gold") then
+                                if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(stringofnum(get_value("Gold"))) > tonumber(get_valueCard("Gold")) then
                                     RemoteFunction:InvokeServer("UpgradeCard",i)
                                 end
                                 task.wait(0)
-                            until get_valueCard("Level") >= O["Max Upgrade"].Value or get_valueCard("Gold") > stringofnum(get_value("Gold"))
+                            until tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(stringofnum(get_value("Gold")))
                             CardUpgrade[i] = O["Max Upgrade"].Value
                         end
                     end
