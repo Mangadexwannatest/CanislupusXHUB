@@ -20,6 +20,7 @@ local G = getgenv()
 G["response"] = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
 local Playing_Mode = 0
 local CardStepNumber = 0
+local IgnoreSpeed = 0.135
 local Tween_Info = nil
 local Rarity, CardUpgrade =
     {},
@@ -1448,6 +1449,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     onCharacterAdded(char)
                 end
             end
+            if GameMap == "Infinite Mode" then IgnoreSpeed = 0.335 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1465,7 +1467,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         a.Size = Vector3.new(0,0,95)
                         Sizeto = v.Size + Vector3.new(side,side,95)
                     end
-                    game:GetService("TweenService"):Create(a,TweenInfo.new(0.35),{Size = Sizeto}):Play()
+                    game:GetService("TweenService"):Create(a,TweenInfo.new(IgnoreSpeed),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
                     a.Transparency = 1
