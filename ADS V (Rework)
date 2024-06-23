@@ -1522,6 +1522,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         Tween_Info:Play()
                         Tween_Info.Completed:Wait()
                     end
+                    if Boss_Actived() == true then
+                        for i, v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
+                            if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == true then
+                                v:FindFirstChildOfClass("BillboardGui"):Destroy()
+                            end
+                        end
+                    end
                     if is_blacklist == nil then
                         if O["Auto Set Distance"].Value == true then
                             if Boss_Actived() == true then
@@ -1677,13 +1684,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             if v.Name == LocalPlr.RespawnLocation.Name then
                                 tween_function(v, CFrame.new(0, 75, 0), 140)
                                 Tween_Info:Play()
-                            end
-                        end
-                    end
-                    if Boss_Actived() == true then
-                        for i, v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
-                            if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == true then
-                                v:FindFirstChildOfClass("BillboardGui"):Destroy()
                             end
                         end
                     end
