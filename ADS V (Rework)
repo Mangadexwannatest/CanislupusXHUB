@@ -40,13 +40,12 @@ local Plr, LocalPlr, CoreGui, Workspace, ReplicatedStorage, HttpService, RunServ
     game:GetService "RunService",
     game:GetService "Players".LocalPlayer.PlayerGui,
     game:GetService "TweenService"
-local instance_S, instance_I, instance_F, instance_U1, instance_U2, bv =
+local instance_S, instance_I, instance_F, instance_U1, instance_U2 =
     Instance.new("ScreenGui"),
     Instance.new("ImageButton"),
     Instance.new("Frame"),
     Instance.new("UICorner"),
-    Instance.new("UIStroke"),
-    Instance.new("BodyVelocity")
+    Instance.new("UIStroke")
 local Connect1, Connect2
 local RemoteEvent , RemoteFunction =
     ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("MainRemoteEvent"),
@@ -1328,6 +1327,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             PlrGui:WaitForChild("MainGui"):WaitForChild("CenterUIFrame"),
             PlrGui:WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"),
             Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name
+        local bv = Instance.new("BodyVelocity")
         for i,v in ipairs(CoreGui:FindFirstChild("CrazyDay"):GetChildren()) do
             if v:IsA("Frame") then
                 v.ZIndex = math.huge
@@ -1498,7 +1498,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then igspeed = 0.385 end
+            if GameMap == "Infinite Mode" then igspeed = 0.425 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1668,16 +1668,19 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             if LocalPlr.Character.Humanoid.PlatformStand == true then LocalPlr.Character.Humanoid.PlatformStand = false end
                             setCollide(true)
                         end
+
+
+                        bv.Parent = LocalPlr.Character.HumanoidRootPart
+                        bv.MaxForce = Vector3.new(100000,100000,100000)
+                        bv.Velocity = Vector3.new(0,0,0)
+
+
                         local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
                         for _, v in ipairs(LocalPlr.Character:GetDescendants()) do
                             if v.IsA(v, "BasePart") then
                                 v.Velocity, v.RotVelocity = V3, V3
                             end
                         end
-
-                        bv.Parent = LocalPlr.Character.HumanoidRootPart
-                        bv.MaxForce = Vector3.new(100000,100000,100000)
-                        bv.Velocity = Vector3.new(0,0,0)
 
                         if G["Bringing"] == true and enemy("Bring") ~= false and dist_enemy(enemy("Bring").HumanoidRootPart) <= 13.75 then
                             for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
@@ -1753,15 +1756,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 50, 0) ,125)
+                            tween_function(Base, CFrame.new(0, 50, 0) ,115)
                             Tween_Info:Play()
+                            Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 115)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
+                            task.wait(0.65)
                         end
                     end
                 end)
@@ -1854,7 +1859,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
 
                     end
                 end)
-                task.wait(0.135)
+                task.wait(0.235)
             end
         end))
         coroutine.resume(coroutine.create(function () --// Auto Equip Card
