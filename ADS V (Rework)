@@ -1574,7 +1574,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                     G["B -Y"] = - enemy("Boss").HumanoidRootPart
                                 elseif enemy("Boss").HumanoidRootPart.Size.Y < 80 then
                                     G["B Y"] = enemy("Boss").Head.Size.Y + 5.75
-                                    G["B -Y"] = - (enemy("Boss").LowerTorso.Size.Y + enemy("Boss").HumanoidRootPart.Size.Y + 5.35)
+                                    G["B -Y"] = - (enemy("Boss").LowerTorso.Size.Y + enemy("Boss").HumanoidRootPart.Size.Y + 5.55)
                                 end
                                 if O["Current Method"].Value == "Over" then
                                     G["Method"] = CFrame.new(0, G["B Y"], 0) * CFrame.Angles(math.rad(-90),0,0)
@@ -1889,6 +1889,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
                     end
+                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == false then return end end
                     for i,v in pairs(CardUpgrade) do
                         if v ~= O["Max Upgrade"].Value then
                             repeat
@@ -1903,6 +1904,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     end
                 end
                 if O["Auto Sell"].Value == true and #Rarity > 0 and CardStepNumber < G["Number of cards"] then
+                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == false then return end end
                     for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
                         if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
                             firesignal(v.MouseButton1Down)
