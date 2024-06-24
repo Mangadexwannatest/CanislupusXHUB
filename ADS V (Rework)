@@ -361,6 +361,35 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 return stringofnum(get_value("Gold"))
             end
         end
+        local function LayoutOrder3(name)
+            if name == "get" then
+                local w = {}
+                for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+                    if v:IsA("ImageButton") and v.LayoutOrder <= 3 and v.LayoutOrder ~= 0 then
+                        table.insert(w,v.Name)
+                    end
+                end
+                return #w
+            elseif name == "val" then
+                local a = {}
+                local b = {}
+                for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+                    if v:IsA("ImageButton") and v.LayoutOrder >= 1 and v.LayoutOrder ~= 0 then
+                        table.insert(a,{
+                            ["name"] = v.Name,
+                            ["lvl"] = v.LayoutOrder
+                        })
+                    end
+                end
+                table.sort(a,function (x,c)
+                    return x["lvl"] < c["lvl"]
+                end)
+                for i,v in pairs(a) do
+                    table.insert(b,v["name"])
+                end
+                return b
+            end
+        end
         --// Loading Gui
         local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
         local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -1837,12 +1866,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     UnEquip()
                     repeat
                         for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                            if v:IsA("ImageButton") and v.LayoutOrder < 4 then
+                            if v:IsA("ImageButton") and v.LayoutOrder <= 3 and v.LayoutOrder ~= 0 then
                                 RemoteFunction:InvokeServer("EquipCard",v.Name)
                             end
                         end
+                        if (StatDisplay.CardsOwned.Value >= 3 and LayoutOrder3("get") < 3) or (StatDisplay.CardsOwned.Value == 2 and LayoutOrder3("get") < 2) then
+                            for i,v in ipairs(LayoutOrder3("val")) do
+                                RemoteFunction:InvokeServer("EquipCard",v)
+                            end
+                        end
                         task.wait(0)
-                    until NotEquip() == false
+                    until NotEquip() == false or O["Auto Equip"].Value == false or Fluent.Unloaded
                 end
                 if O["Auto Upgrade"].Value == true then
                     for i,v in ipairs(StatDisplay:GetChildren()) do
@@ -1875,7 +1909,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             task.wait(0.015)
                             CardStepNumber += 1
                             for _,Sell in ipairs(Rarity) do
-                                if PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Sell then
+                                if PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Sell and (v.Name ~= StatDisplay.Slot1.Value and v.Name ~= StatDisplay.Slot2.Value and v.Name ~= StatDisplay.Slot3.Value) then
                                     RemoteFunction:InvokeServer("SellCard",v.Name)
                                 end
                             end
