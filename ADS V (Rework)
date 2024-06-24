@@ -1418,9 +1418,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     G["Auto Lobby (Actived)"] = false
                     G["Died"] = false
                     G["Dodgeing"] = false
-                    G["Bringing"] = false
                     G["Bringing Infinite"] = false
                     G["Safe Mode"] = false
+                    G["Bringing"] = false
+                    G["Successfully Hide"] = false
                     Playing_Mode = 0
                     bv.Parent = nil
                     if LocalPlr.Character ~= nil then LocalPlr.Character.Humanoid.PlatformStand = false end
@@ -1492,6 +1493,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     return
                 end
                 humanoid.Died:Connect(function()
+                    if Fluent.Unloaded then coroutine.yield() end
                     G["Dodgeing"] = false
                     G["Bringing"] = false
                     G["Bringing Infinite"] = false
@@ -1500,8 +1502,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     Playing_Mode = 0
                     Connect2 =  LocalPlr.CharacterAdded:Connect(function()
                         task.wait(1)
-                        if Fluent.Unloaded then G["Died"] = false coroutine.yield() end
                         G["Died"] = false
+                        G["Bringing"] = false
                         Playing_Mode = 0
                         ontounching_ignore()
                         for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
@@ -1848,30 +1850,34 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
 
                         if is_usingskill() > 0 then return end
 
-                        if is_usingskill() == 0 and skill["Skill"..O["Skill One"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
+                        if skill["Skill"..O["Skill One"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
-                                wait(0.5)
+                                task.wait(0.25)
                             until is_usingskill() > 0 or Fluent.Unloaded
-                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
+                        end
+                        if skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
-                                wait(0.5)
+                                task.wait(0.25)
                             until is_usingskill() > 0 or Fluent.Unloaded
-                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
+                        end
+                        if skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
-                                wait(0.5)
+                                task.wait(0.25)
                             until is_usingskill() > 0 or Fluent.Unloaded
-                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
+                        end
+                        if skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
-                                wait(0.5)
+                                task.wait(0.25)
                             until is_usingskill() > 0 or Fluent.Unloaded
-                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
+                        end
+                        if skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
-                                wait(0.5)
+                                task.wait(0.25)
                             until is_usingskill() > 0 or Fluent.Unloaded
                         end
 
@@ -1896,7 +1902,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
 
                     end
                 end)
-                task.wait(0.185)
+                task.wait(0.155)
             end
         end))
         coroutine.resume(coroutine.create(function () --// Auto Equip Card
