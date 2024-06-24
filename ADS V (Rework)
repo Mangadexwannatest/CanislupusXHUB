@@ -1527,7 +1527,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
                     igname = "Ignore"
                     if v.Name == "FlameTrail" then
-                        task.wait(LocalPlr:GetNetworkPing())
+                        task.wait(0.0375)
                         if v:FindFirstChild("P1") == nil then return end
                         if v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return end
                         igname = "FlameTrailIgnore"
