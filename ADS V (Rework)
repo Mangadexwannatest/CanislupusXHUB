@@ -24,7 +24,9 @@ local G = getgenv()
 G["response"] = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
 local Playing_Mode = 0
 local CardStepNumber = 0
-local IgnoreSpeed = 0.135
+local IgnoreSpeed, BossSpeed =
+    0.135,
+    140
 local Tween_Info = nil
 local Rarity, CardUpgrade =
     {},
@@ -1497,7 +1499,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then IgnoreSpeed = 0.335 end
+            if GameMap == "Infinite Mode" then IgnoreSpeed = 0.335 BossSpeed = 125 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1722,7 +1724,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if G["Safe Mode"] == true and not G["Died"] and not G["Bringing"] and not G["Bringing Infinite"] then
                         for i,v in pairs(Workspace.Folders.SpawnPoints:GetChildren()) do
                             if v.Name == LocalPlr.RespawnLocation.Name then
-                                tween_function(v, CFrame.new(0, 75, 0), 140)
+                                tween_function(v, CFrame.new(0, 75, 0), BossSpeed)
                                 Tween_Info:Play()
                             end
                         end
@@ -1732,7 +1734,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             Playing_Mode = 0
                             G["Bringing"] = false
                             G["Bringing Infinite"] = false
-                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 140)
+                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], BossSpeed)
                             Tween_Info:Play()
                             task.wait(0)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or FlameTrailC() == true or Boss_Actived() == false or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
@@ -1749,7 +1751,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 55, 0) ,125)
+                            tween_function(Base, CFrame.new(0, 50, 0) ,125)
                             Tween_Info:Play()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
