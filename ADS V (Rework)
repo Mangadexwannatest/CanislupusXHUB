@@ -1908,15 +1908,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == true then return end end
-                    if O["Auto Sell"].Value == true and #Rarity > 0 and CardStepNumber < G["Number of cards"] then return end
-                    if O["Auto Upgrade"].Value == true then
-                        for i,v in pairs(CardUpgrade) do
-                            if v ~= O["Max Upgrade"].Value then
-                                return
-                            end
-                        end
-                    end
                     if auto_farm() == true then
                         if G["Auto Join (Raid)"] == true then
                             Fluent:Notify({
