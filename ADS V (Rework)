@@ -2561,7 +2561,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         for i,v in pairs(raidBeatTime) do
                             if StatDisplay:FindFirstChild(i).Value ~= v[1] then
                                 GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                                ClearTime = "Raid Clears: "..StatDisplay.RaidClears.Value.."\n"..i..": "..v[1]
+                                ClearTime = "Raid Clears: "..StatDisplay.RaidClears.Value.."\n"..i..": "..(v[1] + 1)
                             end
                         end
                     end
