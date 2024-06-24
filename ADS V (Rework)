@@ -53,7 +53,7 @@ local RemoteEvent , RemoteFunction =
 local LocalID, Game, Update, BlackList_Characters, Currency_Items, Room =
     Plr:GetUserIdFromNameAsync(LocalPlr.Name),
     "Anime Dimensions Simulator (Rework)",
-    " 1.0.1",
+    " 1.0.2",
     {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
@@ -1099,11 +1099,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             Callback = function()
                 if game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025 then return end
                 local Code = {}
+                table.insert(Code,"3YEARS")
                 for i,v in pairs(Workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
                     if v:IsA("Frame") and v.MilestoneCode.Text ~= "LOCKED" then
-                        RemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
                         table.insert(Code,v.MilestoneCode.Text)
                     end
+                end
+                for i,v in pairs(Code) do
+                    RemoteFunction:InvokeServer("RedeemPromoCode",v)
                 end
                 Fluent:Notify({
                     Title = "Successfully redeem code",
@@ -1916,50 +1919,51 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
         end))
         coroutine.resume(coroutine.create(function () --// Upgrade // Sell Card
             while true do
-                if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                if O["Auto Upgrade"].Value == true or O["Auto Sell"].Value == true then
-                    if O["Auto Equip"].Value == true and NotEquip() == true then
-                        repeat task.wait(0) until NotEquip() == false or O["Auto Equip"].Value == false or Fluent.Unloaded
-                    end
-                    if O["Auto Sell"].Value == true and StatDisplay.CardsOwned.Value ~= 0 and #Rarity > 0 and CardStepNumber < G["Number of cards"] then
-                        for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                            if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
-                                firesignal(v.MouseButton1Down)
-                                task.wait(0.015)
-                                CardStepNumber += 1
-                                for _,Sell in ipairs(Rarity) do
-                                    if PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.Rarity.Text == Sell and v.Name ~= StatDisplay.Slot1.Value and v.Name ~= StatDisplay.Slot2.Value and v.Name ~= StatDisplay.Slot3.Value then
-                                        RemoteFunction:InvokeServer("SellCard",v.Name)
+                pcall(function ()
+                    if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
+                    if O["Auto Upgrade"].Value == true or O["Auto Sell"].Value == true then
+                        if O["Auto Equip"].Value == true and NotEquip() == true then
+                            repeat task.wait(0) until NotEquip() == false or O["Auto Equip"].Value == false or Fluent.Unloaded
+                        end
+                        if O["Auto Sell"].Value == true and StatDisplay.CardsOwned.Value ~= 0 and #Rarity > 0 then
+                            for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+                                if v:IsA("ImageButton") and (v.Name ~= "CardInventorySlot" and v.Name ~= StatDisplay.Slot1.Value and v.Name ~= StatDisplay.Slot2.Value and v.Name ~= StatDisplay.Slot3.Value) and v.CardLock.Visible == false then
+                                    for _,Sell in ipairs(Rarity) do
+                                        for k,r in ipairs(ReplicatedStorage.TextGradients:GetChildren()) do
+                                            if Sell == r.Name and tostring(r.Color) == tostring(v.Epic.Color) then
+                                                RemoteFunction:InvokeServer("SellCard",v.Name)
+                                            end
+                                        end
                                     end
                                 end
                             end
                         end
-                    end
-                    if O["Auto Upgrade"].Value == true and StatDisplay.CardsOwned.Value ~= 0 then
-                        for i,v in ipairs(StatDisplay:GetChildren()) do
-                            if string.find(v.Name,"Slot") and v.Value ~= "" then
-                                if not CardUpgrade[v.Value] then
+                        if O["Auto Upgrade"].Value == true and StatDisplay.CardsOwned.Value ~= 0 then
+                            for i,v in ipairs(StatDisplay:GetChildren()) do
+                                if string.find(v.Name,"Slot") and v.Value ~= "" then
+                                    if not CardUpgrade[v.Value] then
+                                        repeat
+                                            CardUpgrade[v.Value] = "None"
+                                            task.wait(0)
+                                        until CardUpgrade[v.Value]
+                                    end
+                                end
+                            end
+                            for i,v in pairs(CardUpgrade) do
+                                if v ~= O["Max Upgrade"].Value then
                                     repeat
-                                        CardUpgrade[v.Value] = "None"
+                                        firesignal(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down)
+                                        if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(GOLD()) >= tonumber(get_valueCard("Gold")) then
+                                            RemoteFunction:InvokeServer("UpgradeCard",i)
+                                        end
                                         task.wait(0)
-                                    until CardUpgrade[v.Value]
+                                    until O["Auto Equip"].Value == false or Fluent.Unloaded or tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD())
+                                    CardUpgrade[i] = O["Max Upgrade"].Value
                                 end
                             end
                         end
-                        for i,v in pairs(CardUpgrade) do
-                            if v ~= O["Max Upgrade"].Value then
-                                repeat
-                                    firesignal(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down)
-                                    if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(GOLD()) >= tonumber(get_valueCard("Gold")) then
-                                        RemoteFunction:InvokeServer("UpgradeCard",i)
-                                    end
-                                    task.wait(0)
-                                until O["Auto Equip"].Value == false or Fluent.Unloaded or tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD())
-                                CardUpgrade[i] = O["Max Upgrade"].Value
-                            end
-                        end
                     end
-                end
+                end)
                 task.wait(0)
             end
         end))
@@ -1968,7 +1972,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 pcall(function ()
                     if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
                     if O["Auto Equip"].Value == true and NotEquip() == true then return end
-                    if O["Auto Sell"].Value == true and StatDisplay.CardsOwned.Value ~= 0 and #Rarity > 0 and CardStepNumber < G["Number of cards"] then return end
                     if O["Auto Upgrade"].Value == true and StatDisplay.CardsOwned.Value ~= 0 then
                         for i,v in pairs(CardUpgrade) do
                             if v ~= O["Max Upgrade"].Value then
