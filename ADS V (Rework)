@@ -25,7 +25,7 @@ G["response"] = (syn and syn.request) or (http and http.request) or http_request
 local Playing_Mode = 0
 local CardStepNumber = 0
 local igname = "Ignore"
-local igspeed = 0.125
+local igspeed = 0.175
 local Tween_Info = nil
 local Rarity, CardUpgrade =
     {},
