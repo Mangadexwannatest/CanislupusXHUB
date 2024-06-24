@@ -1889,11 +1889,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
 
                         if O["Current Attack Method"].Value == "Remote" and is_usingskill() == 0 then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
-                            task.wait(0.085)
                         elseif O["Current Attack Method"].Value == "Click" and is_usingskill() == 0  then
                             game:GetService("VirtualUser"):CaptureController()
                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
-                            task.wait(0.085)
                         end
 
                     end
