@@ -708,13 +708,35 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             Title = "Select Raid",
             Description = nil,
             Values = {
+                "Divine Guardian Raid",
                 "Blue Devil Raid",
-                "Titan Raid",
-                "Tengoku Raid",
-                "Hirito Raid",
                 "Psycho Student Raid",
                 "Buff Boy Raid",
-                "Gear 5 Fluffy Raid"
+                "Warlord Raid",
+                "King of Curses Raid",
+                "Black Pasta Raid",
+                "Cosmic Wolfman Raid",
+                "Joto Raid",
+                "Matsuri Raid",
+                "Tonjuro Sun God Raid",
+                "Vio Raid",
+                "Demon Lord Raid",
+                "Ichini Fullbring Raid",
+                "Roku Ultra Instinct Raid",
+                "Chainsaw Raid",
+                "Nardo Beast Raid",
+                "Cursed Sage Raid",
+                "Red Emperor Raid",
+                "Tengu Raid",
+                "Yomichi Raid",
+                "Christmas Raid",
+                "Infinity Nojo Raid",
+                "Combat Titan Raid",
+                "Esper Raid",
+                "Gear 5 Fluffy Raid",
+                "Tengoku Raid",
+                "Hirito Raid",
+                "Titan Raid"
             },
             Multi = false,
             Default = 1,
@@ -1567,10 +1589,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     if is_blacklist == nil then
                         if O["Auto Set Distance"].Value == true then
                             if Boss_Actived() == true then
-                                if enemy("Boss").HumanoidRootPart.Size.Y > 80 then
-                                    G["B Y"] = enemy("Boss").HumanoidRootPart
-                                    G["B -Y"] = - enemy("Boss").HumanoidRootPart
-                                elseif enemy("Boss").HumanoidRootPart.Size.Y < 80 then
+                                if enemy("Boss").HumanoidRootPart.Size.Y >= 40 then
+                                    G["B Y"] = 2.5
+                                    G["B -Y"] = - 2.5
+                                elseif enemy("Boss").HumanoidRootPart.Size.Y < 40 then
                                     G["B Y"] = enemy("Boss").Head.Size.Y + 5.75
                                     G["B -Y"] = - (enemy("Boss").LowerTorso.Size.Y + enemy("Boss").HumanoidRootPart.Size.Y + 5.55)
                                 end
