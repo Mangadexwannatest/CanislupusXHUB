@@ -5,13 +5,17 @@ if not string.find(game:GetService("MarketplaceService"):GetProductInfo(game.Pla
 
 do
     if not getgenv()["auto execute enable"] then
-        getgenv()["auto execute enable"] = true
         game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(state)
             local QueueOnTeleport = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
             if state == Enum.TeleportState.InProgress then
                 QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)'))()")
             end
         end)
+        game:GetService "Players".LocalPlayer.Idled:connect(function()
+            game:GetService("VirtualUser"):CaptureController()
+            game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+        end)
+        getgenv()["auto execute enable"] = true
     end
 end
 
