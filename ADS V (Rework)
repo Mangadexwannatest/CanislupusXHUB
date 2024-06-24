@@ -1535,10 +1535,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if is_blacklist == nil then
                         if O["Auto Set Distance"].Value == true then
                             if Boss_Actived() == true then
+                                if enemy("Boss").HumanoidRootPart.Size.Y > 80 then
+                                    G["B Y"] = enemy("Boss").HumanoidRootPart
+                                    G["B -Y"] = - enemy("Boss").HumanoidRootPart
+                                elseif enemy("Boss").HumanoidRootPart.Size.Y < 80 then
+                                    G["B Y"] = enemy("Boss").Head.Size.Y + 5.75
+                                    G["B -Y"] = - (enemy("Boss").LowerTorso.Size.Y + enemy("Boss").HumanoidRootPart.Size.Y + 5.35)
+                                end
                                 if O["Current Method"].Value == "Over" then
-                                    G["Method"] = CFrame.new(0, enemy("Boss").HumanoidRootPart.Size.Y - (enemy("Boss").HumanoidRootPart.Size.Y  - 3.5), 0) * CFrame.Angles(math.rad(-90),0,0)
+                                    G["Method"] = CFrame.new(0, G["B Y"], 0) * CFrame.Angles(math.rad(-90),0,0)
                                 elseif O["Current Method"].Value == "Under" then
-                                    G["Method"] = CFrame.new(0,-enemy("Boss").HumanoidRootPart.Size.Y - (enemy("Boss").HumanoidRootPart.Size.Y - 3.5), 0) * CFrame.Angles(math.rad(90),0,0)
+                                    G["Method"] = CFrame.new(0, G["B -Y"], 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
                                     G["Method"] = CFrame.new(0, 0, -enemy("Boss").HumanoidRootPart.Size.Z + 3.5) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
@@ -1546,13 +1553,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 end
                             elseif Boss_Actived() == false then
                                 if O["Current Method"].Value == "Over" then
-                                    G["Method"] = CFrame.new(0, enemy("AllMob").HumanoidRootPart.Size.Y + 3.375, 0) * CFrame.Angles(math.rad(-90),0,0)
+                                    G["Method"] = CFrame.new(0, (enemy("AllMob").Head.Size.Y + 5.75), 0) * CFrame.Angles(math.rad(-90),0,0)
                                 elseif O["Current Method"].Value == "Under" then
-                                    G["Method"] = CFrame.new(0, -enemy("AllMob").HumanoidRootPart.Size.Y - 3.375, 0) * CFrame.Angles(math.rad(90),0,0)
+                                    G["Method"] = CFrame.new(0, - (enemy("AllMob").LowerTorso.Size.Y + enemy("AllMob").HumanoidRootPart.Size.Y + 5.35), 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 3.375) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 4) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
-                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 3.375)
+                                    G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 4)
                                 end
                             end
                         elseif O["Auto Set Distance"].Value == false then
@@ -2206,7 +2213,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         until not table.find(Item_Rewards,"`None      `")
                     end
                     if v.Name == "RewardTemplate" then
-                        table.insert(Item_Rewards,"`Character ???`")
+                        if v.RewardImage.Image == "rbxassetid://12992685998" then
+                            table.insert(Item_Rewards,"`Character [Natsu]`")
+                        else
+                            table.insert(Item_Rewards,"`Character [Unknow]`")
+                        end
                     else
                         if not v:FindFirstChild("Gradient") then
                             table.insert(Item_Rewards,"`"..v.Name.." [Common]`")
