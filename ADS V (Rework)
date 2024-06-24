@@ -1581,7 +1581,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 elseif O["Current Method"].Value == "Under" then
                                     G["Method"] = CFrame.new(0, G["B -Y"], 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("Boss").HumanoidRootPart.Size.Z + 3.5) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -(enemy("Boss").HumanoidRootPart.Size.Z + 3.5)) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
                                     G["Method"] = CFrame.new(0, 0, enemy("Boss").HumanoidRootPart.Size.Z + 3.5)
                                 end
@@ -1591,7 +1591,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 elseif O["Current Method"].Value == "Under" then
                                     G["Method"] = CFrame.new(0, - (enemy("AllMob").LowerTorso.Size.Y + enemy("AllMob").HumanoidRootPart.Size.Y + 5.35), 0) * CFrame.Angles(math.rad(90),0,0)
                                 elseif O["Current Method"].Value == "Front" then
-                                    G["Method"] = CFrame.new(0, 0, -enemy("AllMob").HumanoidRootPart.Size.Z + 4) * CFrame.Angles(math.rad(0),1800,0)
+                                    G["Method"] = CFrame.new(0, 0, -(enemy("AllMob").HumanoidRootPart.Size.Z + 4)) * CFrame.Angles(math.rad(0),1800,0)
                                 elseif O["Current Method"].Value == "Behind" then
                                     G["Method"] = CFrame.new(0 ,0 ,enemy("AllMob").HumanoidRootPart.Size.Z + 4)
                                 end
