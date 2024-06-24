@@ -1498,7 +1498,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then igspeed = 0.425 end
+            if GameMap == "Infinite Mode" then igspeed = 0.435 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1756,12 +1756,12 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 50, 0) ,115)
+                            tween_function(Base, CFrame.new(0, 50, 0) ,100)
                             Tween_Info:Play()
                             Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 115)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
                                 Tween_Info:Play()
                                 task.wait(0)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
@@ -1826,16 +1826,31 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
 
                         if is_usingskill() > 0 then return end
 
-                        if skill["Skill"..O["Skill One"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
-                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
-                        elseif skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
-                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
-                        elseif skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
-                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
-                        elseif skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
-                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
-                        elseif skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
-                            RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
+                        if is_usingskill() == 0 and skill["Skill"..O["Skill One"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
+                            repeat
+                                RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
+                                wait(0.5)
+                            until is_usingskill() > 0
+                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
+                            repeat
+                                RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
+                                wait(0.5)
+                            until is_usingskill() > 0
+                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
+                            repeat
+                                RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
+                                wait(0.5)
+                            until is_usingskill() > 0
+                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
+                            repeat
+                                RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
+                                wait(0.5)
+                            until is_usingskill() > 0
+                        elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
+                            repeat
+                                RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
+                                wait(0.5)
+                            until is_usingskill() > 0
                         end
 
                         for i,v in pairs(O["Current Assists"].Value) do
@@ -1850,16 +1865,18 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
 
-                        if O["Current Attack Method"].Value == "Remote" then
+                        if O["Current Attack Method"].Value == "Remote" and is_usingskill() == 0 then
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
-                        elseif O["Current Attack Method"].Value == "Click" then
+                            task.wait(0.125)
+                        elseif O["Current Attack Method"].Value == "Click" and is_usingskill() == 0  then
                             game:GetService("VirtualUser"):CaptureController()
                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1200,672))
+                            task.wait(0.125)
                         end
 
                     end
                 end)
-                task.wait(0.235)
+                task.wait(0.25)
             end
         end))
         coroutine.resume(coroutine.create(function () --// Auto Equip Card
