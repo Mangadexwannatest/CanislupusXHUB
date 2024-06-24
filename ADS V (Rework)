@@ -2380,6 +2380,48 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             table.insert(Item_Rewards,"`Character [Mob]`")
                         elseif v.RewardImage.Image == "rbxassetid://16913579571" then
                             table.insert(Item_Rewards,"`Character [Mash]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16833352600" then
+                            table.insert(Item_Rewards,"`Character [Mihawk]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16629617713" then
+                            table.insert(Item_Rewards,"`Character [SukunaShibuya]`")
+                        elseif v.RewardImage.Image == "rbxassetid://14785556998" then
+                            table.insert(Item_Rewards,"`Character [Asta (Black Asta)]`")
+                        elseif v.RewardImage.Image == "rbxassetid://13736210016" then
+                            table.insert(Item_Rewards,"`Character [Cosmic Garou]`")
+                        elseif v.RewardImage.Image == "rbxassetid://14295913088" then
+                            table.insert(Item_Rewards,"`Character [Jotaro]`")
+                        elseif v.RewardImage.Image == "rbxassetid://13294872244" then
+                            table.insert(Item_Rewards,"`Character [Mitsuri]`")
+                        elseif v.RewardImage.Image == "rbxassetid://12548891547" then
+                            table.insert(Item_Rewards,"`Character [Tanjiro (Sun God)]`")
+                        elseif v.RewardImage.Image == "rbxassetid://12275838772" then
+                            table.insert(Item_Rewards,"`Character [Dio]`")
+                        elseif v.RewardImage.Image == "rbxassetid://8827725106" then
+                            table.insert(Item_Rewards,"`Character [RimuruDemonLord]`")
+                        elseif v.RewardImage.Image == "rbxassetid://12087483204" then
+                            table.insert(Item_Rewards,"`Character [Ichigo (Fullbring Bankai)]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16833324796" then
+                            table.insert(Item_Rewards,"`Character [Goku UI]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16832872564" then
+                            table.insert(Item_Rewards,"`Character [Denji]`")
+                        elseif v.RewardImage.Image == "rbxassetid://10835672920" then
+                            table.insert(Item_Rewards,"`Character [Naruto (Kurama Mode)]`")
+                        elseif v.RewardImage.Image == "rbxassetid://10688580603" then
+                            table.insert(Item_Rewards,"`Character [Obito]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16834112408" then
+                            table.insert(Item_Rewards,"`Character [Shanks]`")
+                        elseif v.RewardImage.Image == "rbxassetid://10182602891" then
+                            table.insert(Item_Rewards,"`Character [Uzui]`")
+                        elseif v.RewardImage.Image == "rbxassetid://8466801602" then
+                            table.insert(Item_Rewards,"`Character [Yoriichi]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16802362266" then
+                            table.insert(Item_Rewards,"`Character [Ice Queen Esdeath]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16629613889" then
+                            table.insert(Item_Rewards,"`Character [Infinity Gojo]`")
+                        elseif v.RewardImage.Image == "rbxassetid://16832874929" then
+                            table.insert(Item_Rewards,"`Character [Attack Titan]`")
+                        elseif v.RewardImage.Image == "rbxassetid://9432939692" then
+                            table.insert(Item_Rewards,"`Character [Accelerator]`")
                         elseif v.RewardImage.Image == "rbxassetid://17076062883" then
                             table.insert(Item_Rewards,"`Character [Gear 5 Luffy]`")
                         elseif v.RewardImage.Image == "rbxassetid://7210567835" then
@@ -2403,8 +2445,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                                 table.insert(Item_Rewards,"`"..v.Name.." [Epic]`")
                             elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
                                 table.insert(Item_Rewards,"`"..v.Name.." [Legendary]`")
-                            else
+                            elseif tostring(v.Gradient.Color) == "0 0.407843 0.0941176 0.0980392 0 0.510815 1 0 0.0156863 0 1 0.439216 0.0705882 0.0784314 0 " then
                                 table.insert(Item_Rewards,"`"..v.Name.." [Mythic]`")
+                            elseif tostring(v.Gradient.Color) == "0 1 0.976471 0.258824 0 0.541523 1 0.494118 0.976471 0 1 0.333333 1 0.945098 0 " then
+                                table.insert(Item_Rewards,"`"..v.Name.." [Divine]`")
                             end
                         end
                     end
