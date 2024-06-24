@@ -1499,11 +1499,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then igspeed = 0.275 end
+            if GameMap == "Infinite Mode" then igspeed = 0.375 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
-                    if not G["Died"] and LocalPlr.Character.HumanoidRootPart.Anchored == true then return end
                     igname = "Ignore"
                     if v.Name == "FlameTrail" then
                         task.wait(LocalPlr:GetNetworkPing())
