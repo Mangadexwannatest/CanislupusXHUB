@@ -1498,7 +1498,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
                     if v.Name == "FlameTrail" then
-                        task.wait(0.05)
+                        task.wait(0.0375)
                         if v:FindFirstChild("P1") == nil then return end
                         if v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return end
                     end
@@ -1515,7 +1515,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     game:GetService("TweenService"):Create(a,TweenInfo.new(IgnoreSpeed),{Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
                     a.Anchored = true
-                    a.Transparency = 1
+                    a.Transparency = 0.8
                     a.CanCollide = true
                     a.Name = "Ignore"
                     a.Parent = v.Parent
