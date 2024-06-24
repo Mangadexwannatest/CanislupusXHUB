@@ -1368,6 +1368,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 end
                 if Fluent.Unloaded then
                     G["Auto Lobby (Actived)"] = false
+                    G["Died"] = false
+                    G["Dodgeing"] = false
+                    G["Bringing"] = false
+                    G["Bringing Infinite"] = false
+                    G["Safe Mode"] = false
                     Playing_Mode = 0
                     bv.Parent = nil
                     if LocalPlr.Character ~= nil then LocalPlr.Character.Humanoid.PlatformStand = false end
@@ -1446,10 +1451,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                     G["Died"] = true
                     Playing_Mode = 0
                     Connect2 =  LocalPlr.CharacterAdded:Connect(function()
-                        if Fluent.Unloaded then coroutine.yield() end
-                        wait(1.15)
-                        Playing_Mode = 0
+                        task.wait(1)
+                        if Fluent.Unloaded then G["Died"] = false coroutine.yield() end
                         G["Died"] = false
+                        Playing_Mode = 0
                         ontounching_ignore()
                         for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                             if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") then
