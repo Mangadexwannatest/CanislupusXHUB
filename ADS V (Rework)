@@ -361,34 +361,24 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 return stringofnum(get_value("Gold"))
             end
         end
-        local function LayoutOrder3(name)
-            if name == "get" then
-                local w = {}
-                for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                    if v:IsA("ImageButton") and v.LayoutOrder <= 3 and v.LayoutOrder ~= 0 then
-                        table.insert(w,v.Name)
-                    end
+        local function LayoutOrder3()
+            local a = {}
+            local b = {}
+            for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
+                if v:IsA("ImageButton") and v.LayoutOrder >= 1 and v.LayoutOrder ~= 0 then
+                    table.insert(a,{
+                        ["name"] = v.Name,
+                        ["lvl"] = v.LayoutOrder
+                    })
                 end
-                return #w
-            elseif name == "val" then
-                local a = {}
-                local b = {}
-                for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                    if v:IsA("ImageButton") and v.LayoutOrder >= 1 and v.LayoutOrder ~= 0 then
-                        table.insert(a,{
-                            ["name"] = v.Name,
-                            ["lvl"] = v.LayoutOrder
-                        })
-                    end
-                end
-                table.sort(a,function (x,c)
-                    return x["lvl"] < c["lvl"]
-                end)
-                for i,v in pairs(a) do
-                    table.insert(b,v["name"])
-                end
-                return b
             end
+            table.sort(a,function (x,c)
+                return x["lvl"] < c["lvl"]
+            end)
+            for i,v in pairs(a) do
+                table.insert(b,v["name"])
+            end
+            return b
         end
         --// Loading Gui
         local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
@@ -1508,7 +1498,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
                     if v.Name == "FlameTrail" then
-                        task.wait(0.065)
+                        task.wait(0.05)
                         if v:FindFirstChild("P1") == nil then return end
                         if v:FindFirstChild("P1") and v.P1.Texture ~= "rbxassetid://6169516856" then return end
                     end
@@ -1559,9 +1549,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         Tween_Info:Play()
                         Tween_Info.Completed:Wait()
                     end
-                    if Boss_Actived() == true and GameMap ~= "Infinite Mode" then
-                        for i, v in ipairs(game.Workspace.Folders.Monsters:GetChildren()) do
-                            if v:FindFirstChildOfClass("BillboardGui") and tonumber(v.EnemyHealthBarGui.HealthText.Text) > 0 and v.EnemyHealthBarGui.Enabled == true then
+                    if Boss_Actived() == true then
+                        for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
+                            if v:FindFirstChildOfClass("BillboardGui") and v.EnemyHealthBarGui.Enabled == true then
                                 v:FindFirstChildOfClass("BillboardGui"):Destroy()
                             end
                         end
@@ -1684,7 +1674,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         if G["Bringing"] == true and enemy("Bring") ~= false and dist_enemy(enemy("Bring").HumanoidRootPart) <= 13.75 then
                             for i, v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
                                 if v:FindFirstChildOfClass("BillboardGui") and v:FindFirstChild("Head") and v.Head.Transparency ~= 10 then
-                                    if (LocalPlr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 37.5 then
+                                    if (LocalPlr.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude <= 27.35 then
                                         v.Head.Transparency = 10
                                     end
                                 end
@@ -1862,23 +1852,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
         coroutine.resume(coroutine.create(function () --// Cards
             while true do
                 if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
-                if O["Auto Equip"].Value == true and NotEquip() == true and NotEquip() ~= "Zero" then
+                if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" and NotEquip() == true then
                     UnEquip()
                     repeat
-                        for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
-                            if v:IsA("ImageButton") and v.LayoutOrder <= 3 and v.LayoutOrder ~= 0 then
-                                RemoteFunction:InvokeServer("EquipCard",v.Name)
-                            end
-                        end
-                        if (StatDisplay.CardsOwned.Value >= 3 and LayoutOrder3("get") < 3) or (StatDisplay.CardsOwned.Value == 2 and LayoutOrder3("get") < 2) then
-                            for i,v in ipairs(LayoutOrder3("val")) do
-                                RemoteFunction:InvokeServer("EquipCard",v)
-                            end
+                        for i,v in ipairs(LayoutOrder3()) do
+                            RemoteFunction:InvokeServer("EquipCard",v)
                         end
                         task.wait(0)
                     until NotEquip() == false or O["Auto Equip"].Value == false or Fluent.Unloaded
                 end
                 if O["Auto Upgrade"].Value == true then
+                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == true then return end end
                     for i,v in ipairs(StatDisplay:GetChildren()) do
                         if string.find(v.Name,"Slot") and v.Value ~= "" then
                             if not CardUpgrade[v.Value] then
@@ -1889,7 +1873,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             end
                         end
                     end
-                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == false then return end end
                     for i,v in pairs(CardUpgrade) do
                         if v ~= O["Max Upgrade"].Value then
                             repeat
@@ -1898,13 +1881,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                     RemoteFunction:InvokeServer("UpgradeCard",i)
                                 end
                                 task.wait(0)
-                            until tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD())
+                            until O["Auto Equip"].Value == false or Fluent.Unloaded or tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD()) or (O["Auto Equip"].Value == true and NotEquip() == true)
                             CardUpgrade[i] = O["Max Upgrade"].Value
                         end
                     end
                 end
                 if O["Auto Sell"].Value == true and #Rarity > 0 and CardStepNumber < G["Number of cards"] then
-                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == false then return end end
+                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == true then return end end
                     for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
                         if v:IsA("ImageButton") and v.Name ~= "CardInventorySlot" then
                             firesignal(v.MouseButton1Down)
@@ -1925,6 +1908,15 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
             while true do
                 pcall(function ()
                     if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
+                    if O["Auto Equip"].Value == true and NotEquip() ~= "Zero" then if NotEquip() == true then return end end
+                    if O["Auto Sell"].Value == true and #Rarity > 0 and CardStepNumber < G["Number of cards"] then return end
+                    if O["Auto Upgrade"].Value == true then
+                        for i,v in pairs(CardUpgrade) do
+                            if v ~= O["Max Upgrade"].Value then
+                                return
+                            end
+                        end
+                    end
                     if auto_farm() == true then
                         if G["Auto Join (Raid)"] == true then
                             Fluent:Notify({
