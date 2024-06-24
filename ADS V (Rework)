@@ -70,11 +70,12 @@ local LocalID, Game, Update, BlackList_Characters, Currency_Items, Room =
         "Alien Dimension",
         "Level Dimension"
     }
-local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
+local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_num =
     ReplicatedStorage:WaitForChild(LocalPlr.Name.."StatDisplay"),
     LocalPlr.leaderstats.Level,
     "CrazyDay/"..Game.."/"..LocalID.."/",
     {"`None      `"},
+    {"`None     `"},
     {"`None     `"}
     if not LocalPlr.Character then LocalPlr.CharacterAdded:Wait()wait()end
     if CoreGui:FindFirstChild("CrazyDay") then return end
@@ -1766,7 +1767,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                                 task.wait(0)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
-                            task.wait(0.65)
+                            task.wait(1)
                         end
                     end
                 end)
@@ -1830,27 +1831,27 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
                                 wait(0.5)
-                            until is_usingskill() > 0
+                            until is_usingskill() > 0 or Fluent.Unloaded
                         elseif is_usingskill() == 0 and skill["Skill"..O["Skill Two"].Value].Visible and tonumber(skill["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
                                 wait(0.5)
-                            until is_usingskill() > 0
+                            until is_usingskill() > 0 or Fluent.Unloaded
                         elseif is_usingskill() == 0 and skill["Skill"..O["Skill Third"].Value].Visible and tonumber(skill["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
                                 wait(0.5)
-                            until is_usingskill() > 0
+                            until is_usingskill() > 0 or Fluent.Unloaded
                         elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fourth"].Value].Visible and tonumber(skill["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
                                 wait(0.5)
-                            until is_usingskill() > 0
+                            until is_usingskill() > 0 or Fluent.Unloaded
                         elseif is_usingskill() == 0 and skill["Skill"..O["Skill Fifth"].Value].Visible and tonumber(skill["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(skill["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
                             repeat
                                 RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
                                 wait(0.5)
-                            until is_usingskill() > 0
+                            until is_usingskill() > 0 or Fluent.Unloaded
                         end
 
                         for i,v in pairs(O["Current Assists"].Value) do
@@ -2410,17 +2411,15 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                 if O["Send Webhook"].Value == false or not string.find(O["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
                 wait(3.5)
                 if not table.find(Currency_Rewards,"`None     `") then
-                    local name_count
-                    local sum = 0
+                    table.remove(Currency_num,table.find(Currency_num,"`None     `"))
                     for i,v in pairs(Currency_Rewards) do
-                        if #v ~= 0 then
-                            sum = 0
-                            for x = 1,#v do
-                                sum += v[x]
-                                name_count = "`"..i.." ["..sum.."]`"
-                            end
+                        local name_count
+                        local sum = 0
+                        for x = 1,#v do
+                            sum = sum + v[x]
+                            name_count = "`"..i.." ["..sum.."]`"
                         end
-                        table.insert(Currency_Rewards,name_count)
+                        table.insert(Currency_num,name_count)
                     end
                 end
 
@@ -2522,7 +2521,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards =
                         },
                         {
                             ["name"] = "**Currency Rewards**",
-                            ["value"] = "\n`[+]` "..table.concat(Currency_Rewards,"\n`[+]` "),
+                            ["value"] = "\n`[+]` "..table.concat(Currency_num,"\n`[+]` "),
                             ["inline"] = true
                         },
                         {
