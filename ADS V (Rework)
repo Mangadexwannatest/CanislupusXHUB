@@ -1456,13 +1456,19 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
         end
         local function updateIGSP()
             local d = 0.135
+            local b = 50
+            if GameMap == "Infinite Mode" then
+                b = 33.5
+            else
+                b = 50
+            end
             local dist = (LocalPlr.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
-            if dist >= 40 then
-                d = 0.435
+            if dist >= b then
+                d = 0.375
             else
                 if GameMap == "Infinite Mode" then
                     task.wait(2)
-                    d = 0.375
+                    d = 0.275
                 else
                     task.wait(2)
                     d = 0.175
@@ -1533,7 +1539,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
-                    if GameMap == "Infinite Mode" and not G["Died"] and LocalPlr.Character.HumanoidRootPart.Anchored == true then return end
                     igname = "Ignore"
                     if v.Name == "FlameTrail" then
                         task.wait(0.0375)
@@ -1788,15 +1793,19 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap ~= "Infinite Mode" then coroutine.yield() end
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
+                        local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
                         if enemy_count() == 0 then
-                            local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 50, 0) ,100)
+                            task.wait(1.35)
+                            tween_function(Base, CFrame.new(0, 35, 0),100)
                             Tween_Info:Play()
                             Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
-                            tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
-                            Tween_Info:Play()
-                            Tween_Info.Completed:Wait()
+                            repeat
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
+                                Tween_Info:Play()
+                                task.wait(0.35)
+                            until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or enemy_count() == 0 or Fluent.Unloaded
+                            Tween_Info:Cancel()
                         end
                     end
                 end)
@@ -1937,11 +1946,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         if O["Auto Sell"].Value == true and StatDisplay.CardsOwned.Value ~= 0 and #Rarity > 0 then
                             for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
                                 if v:IsA("ImageButton") and (v.Name ~= "CardInventorySlot" and v.Name ~= StatDisplay.Slot1.Value and v.Name ~= StatDisplay.Slot2.Value and v.Name ~= StatDisplay.Slot3.Value) and v.CardLock.Visible == false then
-                                    for _,Sell in ipairs(Rarity) do
-                                        for k,r in ipairs(ReplicatedStorage.TextGradients:GetChildren()) do
-                                            if Sell == r.Name and tostring(r.Color) == tostring(v.Epic.Color) then
-                                                RemoteFunction:InvokeServer("SellCard",v.Name)
-                                            end
+                                    for k,r in ipairs(ReplicatedStorage.TextGradients:GetChildren()) do
+                                        if table.find(Rarity,v.Name) and tostring(r.Color) == tostring(v.Epic.Color) then
+                                            RemoteFunction:InvokeServer("SellCard",v.Name)
                                         end
                                     end
                                 end
