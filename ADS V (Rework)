@@ -1352,7 +1352,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             PlrGui:WaitForChild("MainGui"):WaitForChild("CenterUIFrame"),
             PlrGui:WaitForChild("BattleGui"):WaitForChild("CenterUIFrame"),
             Workspace:WaitForChild("GameMap"):FindFirstChildOfClass("Model").Name
-        local bv = Instance.new("BodyVelocity")
         for i,v in ipairs(CoreGui:FindFirstChild("CrazyDay"):GetChildren()) do
             if v:IsA("Frame") then
                 v.ZIndex = math.huge
@@ -1406,6 +1405,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             G["Successfully Hide"] = true
         end
 
+        local bv = Instance.new("BodyVelocity")
+        bv.MaxForce = Vector3.new(100000,100000,100000)
+        bv.Velocity = Vector3.new(0,0,0)
         coroutine.resume(coroutine.create(function () --// Unload Gui
             while true do
                 if O["Auto Join (Raid)"].Value == true and Level.Value >= 15 and tonumber(os.date("!*t").min) <= 8 then
@@ -1467,17 +1469,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             return FFF
         end
         local function updateIGSP()
-            local d = 0.345
+            local d = 0.135
             local dist = (LocalPlr.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
             if dist >= 40 then
-                d = 0.375
+                d = 0.435
             else
                 if GameMap == "Infinite Mode" then
-                    task.wait(1.75)
-                    d = 0.275
+                    task.wait(2)
+                    d = 0.335
                 else
                     task.wait(1.75)
-                    d = 0.175
+                    d = 0.135
                 end
             end
             return d
@@ -1712,11 +1714,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             setCollide(true)
                         end
 
-
                         bv.Parent = LocalPlr.Character.HumanoidRootPart
-                        bv.MaxForce = Vector3.new(100000,100000,100000)
-                        bv.Velocity = Vector3.new(0,0,0)
-
 
                         local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
                         for _, v in ipairs(LocalPlr.Character:GetDescendants()) do
@@ -1799,14 +1797,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 50, 0) ,140)
+                            tween_function(Base, CFrame.new(0, 50, 0) ,125)
                             Tween_Info:Play()
                             Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 140)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
                                 Tween_Info:Play()
-                                task.wait(0.75)
+                                task.wait((igspeed/0.75) + (igspeed ^ 0.75))
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
                         end
