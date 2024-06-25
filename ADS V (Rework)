@@ -1791,12 +1791,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             Tween_Info:Play()
                             Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
-                            repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
-                                Tween_Info:Play()
-                                Tween_Info.Completed:Wait()
-                            until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
-                            Tween_Info:Cancel()
+                            tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
+                            Tween_Info:Play()
+                            Tween_Info.Completed:Wait()
                         end
                     end
                 end)
