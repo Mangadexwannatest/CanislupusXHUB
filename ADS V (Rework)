@@ -1408,6 +1408,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     G["Safe Mode"] = false
                     G["Bringing"] = false
                     G["Successfully Hide"] = false
+                    G["Equiping Character"] = false
                     Playing_Mode = 0
                     bv.Parent = nil
                     bv.MaxForce = Vector3.new(100000,100000,100000)
@@ -1660,6 +1661,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             local ab = HttpService:JSONDecode(readfile(CrazyDayF.."Character Save.json"))
                             if StatDisplay.CharacterName.Value ~= ab["Character1"] or StatDisplay.AssistCharacterName1.Value ~= ab["Character2"] or StatDisplay.AssistCharacterName2.Value ~= ab["Character3"] then
                                 repeat
+                                    G["Equiping Character"] = true
                                     RemoteFunction:InvokeServer("EquipCharacter",ab['Character1'])
                                     RemoteFunction:InvokeServer("EquipCharacterAssist",ab['Character2'],1)
                                     RemoteFunction:InvokeServer("EquipCharacterAssist",ab['Character3'],2)
@@ -1672,6 +1674,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                                     SubContent = nil,
                                     Duration = 2.75
                                 })
+                                G["Equiping Character"] = false
                             end
                         end
                     end
@@ -1961,13 +1964,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 pcall(function ()
                     if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
                     if O["Auto Equip"].Value == true and NotEquip() == true then return end
-                    if O["Auto Equip Character"].Value == true and not G["Not Equip Character"] and isfile(CrazyDayF.."Character Save.json") and string.find(readfile(CrazyDayF.."Character Save.json"),"Character") then
-                        local ab = HttpService:JSONDecode(readfile(CrazyDayF.."Character Save.json"))
-                        if StatDisplay.CharacterName.Value ~= ab["Character1"] or StatDisplay.AssistCharacterName1.Value ~= ab["Character2"] or StatDisplay.AssistCharacterName2.Value ~= ab["Character3"] then
-                            return
-                        end
-                    end
-                    if auto_farm() == true then
+                    if auto_farm() == true and not G["Equiping Character"] then
                         if G["Auto Join (Raid)"] == true then
                             Fluent:Notify({
                                 Title = "Successfully room created",
