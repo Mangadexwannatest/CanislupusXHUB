@@ -25,6 +25,7 @@ G["response"] = (syn and syn.request) or (http and http.request) or http_request
 local Playing_Mode = 0
 local igname = "Ignore"
 local igspeed = 0.175
+local baspeed = 140
 local Tween_Info = nil
 local Rarity, CardUpgrade =
     {},
@@ -1478,7 +1479,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     task.wait(2)
                     d = 0.335
                 else
-                    task.wait(1.75)
+                    task.wait(2)
                     d = 0.135
                 end
             end
@@ -1543,7 +1544,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then igspeed = 0.375 end
+            if GameMap == "Infinite Mode" then igspeed = 0.375 baspeed = 125 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1780,7 +1781,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             Playing_Mode = 0
                             G["Bringing"] = false
                             G["Bringing Infinite"] = false
-                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], 140)
+                            tween_function(enemy("Boss").HumanoidRootPart, G["Method"], baspeed)
                             Tween_Info:Play()
                             task.wait(0)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or FlameTrailC() == true or Boss_Actived() == false or auto_farm() == false or teleport_circle() ~= false or Fluent.Unloaded
