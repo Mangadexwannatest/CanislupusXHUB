@@ -1474,7 +1474,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             else
                 if GameMap == "Infinite Mode" then
                     task.wait(1.75)
-                    d = 0.335
+                    d = 0.275
                 else
                     task.wait(1.75)
                     d = 0.175
@@ -1806,7 +1806,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             repeat
                                 tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 140)
                                 Tween_Info:Play()
-                                task.wait(0.965)
+                                task.wait(0.75)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
                         end
