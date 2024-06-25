@@ -166,13 +166,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 end
             end
         end
-        local function get_valueCard(name)
-            if name == "Level" then
-                return PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.CardLevel.Text:split(". ")[2]:split(" / ")[1]
-            elseif name == "Gold" then
-                return PlrGui.MainGui.CenterUIFrame.Inventory.Frame.InvOverlayOuterFrame.CardInventoryOverlay.UpgradeFrame.GoldCost.Text
-            end
-        end
         local function stringofnum(values)
             local tablead = {"K","M","B"}
             local num = 1
@@ -358,12 +351,12 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             end
             return thing
         end
-        local function GOLD()
-            if string.find(get_value("Gold"),",") then
-                local b = string.gsub(get_value("Gold"),",","")
+        local function gold_value(value)
+            if string.find(value,",") then
+                local b = string.gsub(value,",","")
                 return b
             else
-                return stringofnum(get_value("Gold"))
+                return stringofnum(value)
             end
         end
         local function LayoutOrder3()
@@ -521,7 +514,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             Title = "Yes",
                             Callback = function()
                                 writefile(CrazyDayF.."settings/Configs.json",[[
-                                    {"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Max Upgrade","type":"Slider","value":"5"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Current Time Type","type":"Dropdown","mutli":false,"value":"Minute"},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"55"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Set Distance","type":"Toggle","value":true},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Auto Back to Lobby","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Current Time","type":"Slider","value":"15"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Common":true,"Uncommon":true}},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Friends Only","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"}]}
+                                    {"objects":[{"idx":"Current Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Current Time Type","type":"Dropdown","mutli":false,"value":"Minute"},{"idx":"Auto Claim (Quest)","type":"Toggle","value":false},{"idx":"Them","type":"Dropdown","mutli":false,"value":"Amethyst"},{"idx":"Auto Equip","type":"Toggle","value":false},{"idx":"Current Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Health to Safe","type":"Slider","value":"55"},{"idx":"Auto Join (Raid)","type":"Toggle","value":false},{"idx":"Current Distance","type":"Slider","value":"6.5"},{"idx":"Transparency","type":"Toggle","value":false},{"idx":"Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Hide Gui","type":"Toggle","value":false},{"idx":"Current Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Hard core","type":"Toggle","value":false},{"idx":"Auto Join (Speed Raid)","type":"Toggle","value":false},{"idx":"Acrylic","type":"Toggle","value":false},{"idx":"Auto Join (Raid Challenge)","type":"Toggle","value":false},{"idx":"Auto Equip Character","type":"Toggle","value":false},{"idx":"Webhook URL","type":"Input","text":""},{"idx":"Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Current Skill Distance","type":"Slider","value":"35"},{"idx":"Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Join (Current Dimension)","type":"Toggle","value":false},{"idx":"Auto Set Distance","type":"Toggle","value":true},{"idx":"Auto Join (Infinite Mode)","type":"Toggle","value":false},{"idx":"Auto Back to Lobby","type":"Toggle","value":false},{"idx":"Send Webhook","type":"Toggle","value":false},{"idx":"Current Attack Method","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Dash no cooldown","type":"Toggle","value":false},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Auto Claim (Speed Raid)","type":"Toggle","value":false},{"idx":"Black Screen","type":"Toggle","value":false},{"idx":"Current Time","type":"Slider","value":"15"},{"idx":"Auto Join (Boss Rush)","type":"Toggle","value":false},{"idx":"Auto Upgrade","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Current Rarity","type":"Dropdown","mutli":true,"value":{"Common":true,"Uncommon":true}},{"idx":"Auto Sell","type":"Toggle","value":false},{"idx":"Auto Join (Highnest)","type":"Toggle","value":false},{"idx":"Current Farm Mode","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Webhook Color","type":"Colorpicker","transparency":0,"value":"7d7d7d"},{"idx":"Current Method","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Friends Only","type":"Toggle","value":false},{"idx":"Dodge Skill","type":"Toggle","value":true},{"idx":"Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Current Raid","type":"Dropdown","mutli":false,"value":"Titan Raid"}]}
                                     ]])
                                     task.wait(0.35)
                                     do
@@ -960,17 +953,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         table.insert(Rarity,Key)
                     end
                 end
-            end
-        })
-        gam3:AddSlider("Max Upgrade",{
-            Title = "Current Max Upgrade",
-            Description = "Select the value you want for upgrade your card.",
-            Default = 5,
-            Min = 1,
-            Max = 25,
-            Rounding = 0,
-            Callback = function (v)
-                if G["Loading (Gui)"] == false and O["Auto Save"].Value == true then SaveManager:Save("Configs") end
             end
         })
         gam3:AddToggle("Auto Sell", {
@@ -1812,10 +1794,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             repeat
                                 tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
                                 Tween_Info:Play()
-                                task.wait(0.575)
+                                task.wait(0.75)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
-                            task.wait(0.75)
                         end
                     end
                 end)
@@ -1969,24 +1950,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         if O["Auto Upgrade"].Value == true and StatDisplay.CardsOwned.Value ~= 0 then
                             for i,v in ipairs(StatDisplay:GetChildren()) do
                                 if string.find(v.Name,"Slot") and v.Value ~= "" then
-                                    if not CardUpgrade[v.Value] then
-                                        repeat
-                                            CardUpgrade[v.Value] = "None"
-                                            task.wait(0)
-                                        until CardUpgrade[v.Value]
-                                    end
-                                end
-                            end
-                            for i,v in pairs(CardUpgrade) do
-                                if v ~= O["Max Upgrade"].Value then
-                                    repeat
-                                        firesignal(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:FindFirstChild(i).MouseButton1Down)
-                                        if tonumber(O["Max Upgrade"].Value) > tonumber(get_valueCard("Level")) and tonumber(GOLD()) >= tonumber(get_valueCard("Gold")) then
-                                            RemoteFunction:InvokeServer("UpgradeCard",i)
-                                        end
-                                        task.wait(0)
-                                    until O["Auto Equip"].Value == false or Fluent.Unloaded or tonumber(get_valueCard("Level")) >= tonumber(O["Max Upgrade"].Value) or tonumber(get_valueCard("Gold")) > tonumber(GOLD())
-                                    CardUpgrade[i] = O["Max Upgrade"].Value
+                                    RemoteFunction:InvokeServer("UpgradeCard",v.Value)
                                 end
                             end
                         end
@@ -2000,13 +1964,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                 pcall(function ()
                     if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
                     if O["Auto Equip"].Value == true and NotEquip() == true then return end
-                    if O["Auto Upgrade"].Value == true and StatDisplay.CardsOwned.Value ~= 0 then
-                        for i,v in pairs(CardUpgrade) do
-                            if v ~= O["Max Upgrade"].Value then
-                                return
-                            end
-                        end
-                    end
                     if O["Auto Equip Character"].Value == true and not G["Not Equip Character"] and isfile(CrazyDayF.."Character Save.json") and string.find(readfile(CrazyDayF.."Character Save.json"),"Character") then
                         local ab = HttpService:JSONDecode(readfile(CrazyDayF.."Character Save.json"))
                         if StatDisplay.CharacterName.Value ~= ab["Character1"] or StatDisplay.AssistCharacterName1.Value ~= ab["Character2"] or StatDisplay.AssistCharacterName2.Value ~= ab["Character3"] then
