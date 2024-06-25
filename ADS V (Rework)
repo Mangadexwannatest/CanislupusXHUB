@@ -1428,6 +1428,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     G["Successfully Hide"] = false
                     Playing_Mode = 0
                     bv.Parent = nil
+                    bv.MaxForce = Vector3.new(100000,100000,100000)
+                    bv.Velocity = Vector3.new(0,0,0)
                     if LocalPlr.Character ~= nil then LocalPlr.Character.Humanoid.PlatformStand = false end
                     RunService:Set3dRenderingEnabled(true)
                     if Connect1 then Connect1:Disconnect() end
@@ -1477,10 +1479,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             else
                 if GameMap == "Infinite Mode" then
                     task.wait(2)
-                    d = 0.335
+                    d = 0.375
                 else
                     task.wait(2)
-                    d = 0.135
+                    d = 0.175
                 end
             end
             return d
@@ -1544,7 +1546,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     onCharacterAdded(char)
                 end
             end
-            if GameMap == "Infinite Mode" then igspeed = 0.375 baspeed = 125 end
+            if GameMap == "Infinite Mode" then igspeed = 0.375 baspeed = 100 end
             Workspace.Folders.Debris.ChildAdded:Connect(function (v)
                 if Fluent.Unloaded then coroutine.yield() end
                 if O["Dodge Skill"].Value == true and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not G["Bringing"] and not G["Safe Mode"] and not G["Bringing Infinite"] then
@@ -1586,7 +1588,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         G["Bringing Infinite"] = false
                     else
                         G["Bringing Infinite"] = true
-                        task.wait(3.5)
+                        task.wait(3.75)
                         G["Bringing Infinite"] = false
                     end
                 end)
@@ -1716,6 +1718,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         end
 
                         bv.Parent = LocalPlr.Character.HumanoidRootPart
+                        bv.MaxForce = Vector3.new(100000,100000,100000)
+                        bv.Velocity = Vector3.new(0,0,0)
 
                         local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
                         for _, v in ipairs(LocalPlr.Character:GetDescendants()) do
@@ -1738,6 +1742,8 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                         G["Bringing Infinite"] = false
                         G["Bringing"] = false
                         bv.Parent = nil
+                        bv.MaxForce = Vector3.new(100000,100000,100000)
+                        bv.Velocity = Vector3.new(0,0,0)
                         if LocalPlr.Character.Humanoid.PlatformStand == true then LocalPlr.Character.Humanoid.PlatformStand = false end
                         if Tween_Info ~= nil then Tween_Info:Cancel() end
                     end
@@ -1798,14 +1804,14 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     if auto_farm() == true and Boss_Actived() == false and not G["Dided"] then
                         if enemy_count() == 0 then
                             local Base = game:GetService("Workspace").Folders.SpawnPoints.SpawnLocation1
-                            tween_function(Base, CFrame.new(0, 50, 0) ,125)
+                            tween_function(Base, CFrame.new(0, 50, 0) ,100)
                             Tween_Info:Play()
                             Tween_Info.Completed:Wait()
                         elseif not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                             repeat
-                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 125)
+                                tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
                                 Tween_Info:Play()
-                                task.wait((igspeed/0.75) + (igspeed ^ 0.75))
+                                task.wait((0.275 +  (igspeed/0.75) + (igspeed ^ 0.75))/7.5)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
                         end
