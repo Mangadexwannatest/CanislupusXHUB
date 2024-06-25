@@ -384,17 +384,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             end
             return b
         end
-        local function updateIGSP()
-            local d
-            local dist = (LocalPlr.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
-            if dist >= 40 then
-                d = 0.375
-            else
-                task.wait(1.75)
-                d = 0.175
-            end
-            return d
-        end
         --// Loading Gui
         local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
         local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -1477,6 +1466,22 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             end
             return FFF
         end
+        local function updateIGSP()
+            local d = 0.345
+            local dist = (LocalPlr.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
+            if dist >= 40 then
+                d = 0.375
+            else
+                if GameMap == "Infinite Mode" then
+                    task.wait(1.75)
+                    d = 0.335
+                else
+                    task.wait(1.75)
+                    d = 0.175
+                end
+            end
+            return d
+        end
 
         coroutine.resume(coroutine.create(function () --// Character Connect
             if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
@@ -1801,7 +1806,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             repeat
                                 tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 140)
                                 Tween_Info:Play()
-                                task.wait(0.85)
+                                task.wait(1)
                             until G["Safe Mode"] == true or enemy_count() == 0 or G["Dodgeing"] == true or G["Died"] == true or Boss_Actived() == true or auto_farm() == false or Fluent.Unloaded
                             Tween_Info:Cancel()
                         end
