@@ -1982,6 +1982,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             end
                         end
                     end
+                    if O["Auto Equip Character"].Value == true and not G["Not Equip Character"] and isfile(CrazyDayF.."Character Save.json") and string.find(readfile(CrazyDayF.."Character Save.json"),"Character") then
+                        local ab = HttpService:JSONDecode(readfile(CrazyDayF.."Character Save.json"))
+                        if StatDisplay.CharacterName.Value ~= ab["Character1"] or StatDisplay.AssistCharacterName1.Value ~= ab["Character2"] or StatDisplay.AssistCharacterName2.Value ~= ab["Character3"] then return end
+                    end
                     if auto_farm() == true then
                         if G["Auto Join (Raid)"] == true then
                             Fluent:Notify({
