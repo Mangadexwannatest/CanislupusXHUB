@@ -384,6 +384,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             end
             return b
         end
+        local function updateIGSP()
+            local d
+            local dist = (LocalPlr.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
+            if dist >= 40 then
+                d = 0.375
+            else
+                task.wait(1.75)
+                d = 0.175
+            end
+            return d
+        end
         --// Loading Gui
         local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
         local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
@@ -1577,6 +1588,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
             while true do
                 pcall(function ()
                     if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
+                    igspeed = updateIGSP()
                     local is_blacklist = table.find(BlackList_Characters,StatDisplay.BattleCharacterName.Value)
                     if auto_farm() == true and teleport_circle() ~= false and not G["Died"] then
                         tween_function(teleport_circle(), CFrame.new(0, 0, 0), 140)
@@ -1589,13 +1601,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                                 v:FindFirstChildOfClass("BillboardGui"):Destroy()
                             end
                         end
-                    end
-                    local dist = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Y - enemy("AllMob").HumanoidRootPart.Position.Y)
-                    if dist >= 40 then
-                        igspeed = 0.375
-                    else
-                        task.wait(1.75)
-                        igspeed = 0.175
                     end
                     if is_blacklist == nil then
                         if O["Auto Set Distance"].Value == true then
