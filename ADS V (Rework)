@@ -1342,6 +1342,17 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             return true
         end
     end
+    local function FlameTrailIgnore()
+        local a = false
+        if O["Dodge Skill"].Value == true then
+            for i,v in ipairs(Workspace.Folders.Debris:GetChildren()) do
+                if v.Name == "FlameTrailIgnore" then
+                    a = true
+                end
+            end
+        end
+        return a
+    end
 
     coroutine.resume(coroutine.create(function ()
         while true do
@@ -1699,7 +1710,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     end
                 end
 
-                if auto_farm() == true and gui_misc("Bossbar") == true and Teleport_circle() == false and enemy("Boss") ~= false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
+                if auto_farm() == true and gui_misc("Bossbar") == true and Teleport_circle() == false and FlameTrailIgnore() == false and enemy("Boss") ~= false and not G["Safe Mode"] and not G["Dodgeing"] and not G["Died"] then
                     repeat
                         Playing_Mode = 0
                         G["Bringing"] = false
@@ -1707,7 +1718,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                         tween_function(enemy("Boss").HumanoidRootPart, G["Method"], baspeed)
                         Tween_Info:Play()
                         task.wait(0)
-                    until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or enemy("Boss") == false or gui_misc("Bossbar") == false or auto_farm() == false or Teleport_circle() ~= false or Fluent.Unloaded
+                    until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or FlameTrailIgnore() == true or enemy("Boss") == false or gui_misc("Bossbar") == false or auto_farm() == false or Teleport_circle() ~= false or Fluent.Unloaded
                     Tween_Info:Cancel()
                 end
             end)
