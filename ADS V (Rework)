@@ -229,6 +229,20 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 final = final..char
             until current <= 0
             return "0x"..string.reverse(final)
+        elseif name == "CharacterShadownActived" then
+            local a = {}
+            for i,v in ipairs(PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
+                if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
+                    table.insert(a,v.Name)
+                end
+            end
+            return #a
+        elseif name == "CharacterGet" then
+            for i,v in ipairs(PlayerGui.MainGui.CenterUIFrame.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
+                if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
+                    return v.Name
+                end
+            end
         end
     end
     local function enemy_misc(name)
@@ -1927,22 +1941,16 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                         RemoteFunction:InvokeServer("TeleportPlayers")
                         coroutine.yield()
                     else
-                        if O["Auto Join (Speed Raid)"].Value == true and Level.Value >= 25 and MainCenterUi.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
-                            local CHrAnD
-                            for i,v in ipairs(MainCenterUi.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
-                                if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
-                                    CHrAnD = v.Name
-                                end
-                            end
+                        if O["Auto Join (Speed Raid)"].Value == true and Level.Value >= 25 and MainCenterUi.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and misc_local("CharacterShadownActived") > 0 then
                             G["Not Equip Character"] = true
                             Fluent:Notify({
                                 Title = "Successfully room created",
-                                Content = "MapName: ShadowRaid".."\nCharacter: "..CHrAnD,
+                                Content = "MapName: ShadowRaid".."\nCharacter: "..misc_local("CharacterGet"),
                                 SubContent = "Starting in 5 seconds.",
                                 Duration = 5
                             })
                             task.wait(5)
-                            RemoteFunction:InvokeServer("TeleportToShadowRaid",CHrAnD)
+                            RemoteFunction:InvokeServer("TeleportToShadowRaid",misc_local("CharacterGet"))
                             coroutine.yield()
                         end
                         if O["Auto Join (Raid Challenge)"].Value == true and Level.Value >= 30 and MainCenterUi.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
@@ -2012,114 +2020,117 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
     end))
     Connect3 = PlayerGui.MainGui.ErrorFrame.ChildAdded:Connect(function (x)
         if x:IsA("TextLabel") and string.find(x.Text, "teleport") then
-            if auto_farm() == true then
-                if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
-                    Fluent:Notify({
-                        Title = "Teleport (Error)",
-                        Content = "Creating room again.",
-                        SubContent = nil,
-                        Duration = 5
-                    })
-                    if G["Auto Join (Raid)"] == true then
+            while true do
+                if auto_farm() == true then
+                    if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) then
                         Fluent:Notify({
-                            Title = "Successfully room created",
-                            Content = "MapName: "..O["Current Raid"].Value.."\nDifficulty: Easy".."\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: false",
-                            SubContent = "Starting in 5 seconds.",
+                            Title = "Teleport (Error)",
+                            Content = "Creating room again.",
+                            SubContent = nil,
                             Duration = 5
                         })
-                        task.wait(5)
-                        RemoteEvent:FireServer("RemovePlayerFromParty")
-                        RemoteFunction:InvokeServer("CreateRoom",{
-                            ["Difficulty"] = "Easy",
-                            ["FriendsOnly"] = O["Friends Only"].Value,
-                            ["MapName"] = O["Current Raid"].Value,
-                            ["Hardcore"] = false
-                        })
-                        RemoteFunction:InvokeServer("TeleportPlayers")
-                    else
-                        if O["Auto Join (Speed Raid)"].Value == true and Level.Value >= 25 and MainCenterUi.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
-                            local CHrAnD
-                            for i,v in ipairs(MainCenterUi.SpeedRaidCharacterSelector.Shade.SpeedRaidCharacterInventoryScrollingFrame:GetChildren()) do
-                                if v:IsA("ImageButton") and v.CharacterImage.ImageTransparency == 0 then
-                                    CHrAnD = v.Name
-                                end
-                            end
-                            G["Not Equip Character"] = true
+                        if G["Auto Join (Raid)"] == true then
                             Fluent:Notify({
                                 Title = "Successfully room created",
-                                Content = "MapName: ShadowRaid".."\nCharacter: "..CHrAnD,
-                                SubContent = "Starting in 5 seconds.",
-                                Duration = 5
-                            })
-                            task.wait(5)
-                            RemoteFunction:InvokeServer("TeleportToShadowRaid",CHrAnD)
-                        end
-                        if O["Auto Join (Raid Challenge)"].Value == true and Level.Value >= 30 and MainCenterUi.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
-                            Fluent:Notify({
-                                Title = "Successfully room created",
-                                Content = "MapName: RaidChallenge".."\nAward Status: Reward Available",
-                                SubContent = "Starting in 5 seconds.",
-                                Duration = 5
-                            })
-                            task.wait(5)
-                            RemoteFunction:InvokeServer("TeleportToRaidChallenge")
-                        end
-                        if O["Auto Join (Boss Rush)"].Value == true and Level.Value >= 15 and StatDisplay.BossRushFreeEntry.Value ~= 0 then
-                            Fluent:Notify({
-                                Title = "Successfully room created",
-                                Content = "MapName: BossRush".."\nFree Entry Left: "..MainCenterUi.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],
-                                SubContent = "Starting in 5 seconds.",
-                                Duration = 5
-                            })
-                            task.wait(5)
-                            RemoteFunction:InvokeServer("TeleportToBossRush")
-                        end
-                        if O["Auto Join (Infinite Mode)"].Value == true and Level.Value >= 20 and StatDisplay.InfiniteModeReward.Value == false then
-                            Fluent:Notify({
-                                Title = "Successfully room created",
-                                Content = "MapName: Infinite Mode".."\nDifficulty: Infinite\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: false",
+                                Content = "MapName: "..O["Current Raid"].Value.."\nDifficulty: Easy".."\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: false",
                                 SubContent = "Starting in 5 seconds.",
                                 Duration = 5
                             })
                             task.wait(5)
                             RemoteEvent:FireServer("RemovePlayerFromParty")
                             RemoteFunction:InvokeServer("CreateRoom",{
-                                ["Difficulty"] = "Infinite",
+                                ["Difficulty"] = "Easy",
                                 ["FriendsOnly"] = O["Friends Only"].Value,
-                                ["MapName"] = "Infinite Mode",
+                                ["MapName"] = O["Current Raid"].Value,
                                 ["Hardcore"] = false
                             })
                             RemoteFunction:InvokeServer("TeleportPlayers")
+                            break
+                        else
+                            if O["Auto Join (Speed Raid)"].Value == true and Level.Value >= 25 and MainCenterUi.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" and misc_local("CharacterShadownActived") > 0 then
+                                G["Not Equip Character"] = true
+                                Fluent:Notify({
+                                    Title = "Successfully room created",
+                                    Content = "MapName: ShadowRaid".."\nCharacter: "..misc_local("CharacterGet"),
+                                    SubContent = "Starting in 5 seconds.",
+                                    Duration = 5
+                                })
+                                task.wait(5)
+                                RemoteFunction:InvokeServer("TeleportToShadowRaid",misc_local("CharacterGet"))
+                                break
+                            end
+                            if O["Auto Join (Raid Challenge)"].Value == true and Level.Value >= 30 and MainCenterUi.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
+                                Fluent:Notify({
+                                    Title = "Successfully room created",
+                                    Content = "MapName: RaidChallenge".."\nAward Status: Reward Available",
+                                    SubContent = "Starting in 5 seconds.",
+                                    Duration = 5
+                                })
+                                task.wait(5)
+                                RemoteFunction:InvokeServer("TeleportToRaidChallenge")
+                                break
+                            end
+                            if O["Auto Join (Boss Rush)"].Value == true and Level.Value >= 15 and StatDisplay.BossRushFreeEntry.Value ~= 0 then
+                                Fluent:Notify({
+                                    Title = "Successfully room created",
+                                    Content = "MapName: BossRush".."\nFree Entry Left: "..MainCenterUi.BossRushFrame.BossRushFreeEntry.Text:split(" Free")[1],
+                                    SubContent = "Starting in 5 seconds.",
+                                    Duration = 5
+                                })
+                                task.wait(5)
+                                RemoteFunction:InvokeServer("TeleportToBossRush")
+                                break
+                            end
+                            if O["Auto Join (Infinite Mode)"].Value == true and Level.Value >= 20 and StatDisplay.InfiniteModeReward.Value == false then
+                                Fluent:Notify({
+                                    Title = "Successfully room created",
+                                    Content = "MapName: Infinite Mode".."\nDifficulty: Infinite\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: false",
+                                    SubContent = "Starting in 5 seconds.",
+                                    Duration = 5
+                                })
+                                task.wait(5)
+                                RemoteEvent:FireServer("RemovePlayerFromParty")
+                                RemoteFunction:InvokeServer("CreateRoom",{
+                                    ["Difficulty"] = "Infinite",
+                                    ["FriendsOnly"] = O["Friends Only"].Value,
+                                    ["MapName"] = "Infinite Mode",
+                                    ["Hardcore"] = false
+                                })
+                                RemoteFunction:InvokeServer("TeleportPlayers")
+                                break
+                            end
+                            if (O["Auto Join (Current Dimension)"].Value == true or O["Auto Join (Highnest)"].Value == true) then
+                                Fluent:Notify({
+                                    Title = "Successfully room created",
+                                    Content = "MapName: "..O["Current Dimension"].Value.."\nDifficulty: "..O["Current Difficulty"].Value.."\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: "..tostring(O["Hard core"].Value),
+                                    SubContent = "Starting in 5 seconds.",
+                                    Duration = 5
+                                })
+                                task.wait(5)
+                                RemoteEvent:FireServer("RemovePlayerFromParty")
+                                RemoteFunction:InvokeServer("CreateRoom",{
+                                    ["Difficulty"] = O["Current Difficulty"].Value,
+                                    ["FriendsOnly"] = O["Friends Only"].Value,
+                                    ["MapName"] = O["Current Dimension"].Value,
+                                    ["Hardcore"] = O["Hard core"].Value
+                                })
+                                RemoteFunction:InvokeServer("TeleportPlayers")
+                                break
+                            end
                         end
-
-                        if (O["Auto Join (Current Dimension)"].Value == true or O["Auto Join (Highnest)"].Value == true) then
-                            Fluent:Notify({
-                                Title = "Successfully room created",
-                                Content = "MapName: "..O["Current Dimension"].Value.."\nDifficulty: "..O["Current Difficulty"].Value.."\nFriendsOnly: "..tostring(O["Friends Only"].Value).."\nHardcore: "..tostring(O["Hard core"].Value),
-                                SubContent = "Starting in 5 seconds.",
-                                Duration = 5
-                            })
-                            task.wait(5)
-                            RemoteEvent:FireServer("RemovePlayerFromParty")
-                            RemoteFunction:InvokeServer("CreateRoom",{
-                                ["Difficulty"] = O["Current Difficulty"].Value,
-                                ["FriendsOnly"] = O["Friends Only"].Value,
-                                ["MapName"] = O["Current Dimension"].Value,
-                                ["Hardcore"] = O["Hard core"].Value
-                            })
-                            RemoteFunction:InvokeServer("TeleportPlayers")
-                        end
+                    else
+                        Fluent:Notify({
+                            Title = "Teleport (Error)",
+                            Content = "Returning to the lobby in 5 seconds.",
+                            SubContent = nil,
+                            Duration = 5
+                        })
+                        task.wait(5)
+                        game:GetService("TeleportService"):Teleport(6938803436)
+                        break
                     end
-                else
-                    Fluent:Notify({
-                        Title = "Teleport (Error)",
-                        Content = "Returning to the lobby in 5 seconds.",
-                        SubContent = nil,
-                        Duration = 5
-                    })
-                    task.wait(5)
-                    game:GetService("TeleportService"):Teleport(6938803436)
                 end
+                task.wait()
             end
         end
     end)
