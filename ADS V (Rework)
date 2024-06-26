@@ -50,7 +50,7 @@ local RemoteEvent, RemoteFunction =
 local LocalID, Game, Update, BlackList_Characters, Currency_Name, Room, Raid =
     Players:GetUserIdFromNameAsync(LocalPlayer.Name),
     "Anime Dimensions Simulator (Rework)",
-    " 1.0.2",
+    " 1.0.3",
     {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
@@ -2414,7 +2414,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
 
             else
                 TimeEnd = "Time: 08:00"
-                Rank = "Rank:"..PlrGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+                Rank = "Rank:"..PlayerGui.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
                 GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
                 ClearTime = "Raid Clears: Unknown"
 
