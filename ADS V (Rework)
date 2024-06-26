@@ -1393,6 +1393,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
         baspeed = 100
     end
 
+    if not bv then repeat bv = Instance.new("BodyVelocity") task.wait() until bv end
     coroutine.resume(coroutine.create(function ()
         if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
         LocalPlayer:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
