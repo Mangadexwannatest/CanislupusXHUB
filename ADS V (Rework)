@@ -1662,7 +1662,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     if LocalPlayer.Character ~= nil and LocalPlayer.Character.Humanoid.PlatformStand == true then LocalPlayer.Character.Humanoid.PlatformStand = false end
                 end
 
-                if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) and G["Auto Join (Raid)"] == true and not GameMap.find(GameMap,"Raid") then
+                if G["Auto Join (Raid)"] == true and not string.find(GameMap,"Raid") then
                     Fluent:Notify({
                         Title = "Auto Join (Raid)",
                         Content = "The raid has opened.",
