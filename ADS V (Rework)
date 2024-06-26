@@ -50,7 +50,7 @@ local RemoteEvent, RemoteFunction =
 local LocalID, Game, Update, BlackList_Characters, Currency_Name, Room, Raid =
     Players:GetUserIdFromNameAsync(LocalPlayer.Name),
     "Anime Dimensions Simulator (Rework)",
-    " 1.0.3",
+    " 1.0.2",
     {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
@@ -1491,7 +1491,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 a.CanCollide = true
                 a.Name = igname
                 a.Parent = v.Parent
-                repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_misc("Count") == 0 or local_misc("Dist", enemy("AllMob")[CFramePart(enemy("AllMob"))]) > 70 or Fluent.Unloaded
+                repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_misc("Count") == 0 or Fluent.Unloaded
                 task.wait(0.0475)
                 a:Destroy()
             end
