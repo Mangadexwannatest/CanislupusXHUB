@@ -240,7 +240,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                     end
                 end
             end
-        return thing
+            return thing
         end
         local function enemy_Normal()
             for i,v in ipairs(Workspace.Folders.Monsters:GetChildren()) do
@@ -1947,7 +1947,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Rewards, Currency_nu
                             for i,v in ipairs(PlrGui.MainGui.CenterUIFrame.Inventory.Frame.CardInventoryFrame.CardInventoryScrollingFrame:GetChildren()) do
                                 if v:IsA("ImageButton") and (v.Name ~= "CardInventorySlot" and v.Name ~= StatDisplay.Slot1.Value and v.Name ~= StatDisplay.Slot2.Value and v.Name ~= StatDisplay.Slot3.Value) and v.CardLock.Visible == false then
                                     for k,r in ipairs(ReplicatedStorage.TextGradients:GetChildren()) do
-                                        if table.find(Rarity,v.Name) and tostring(r.Color) == tostring(v.Epic.Color) then
+                                        if table.find(Rarity,r.Name) and tostring(r.Color) == tostring(v.Epic.Color) then
                                             RemoteFunction:InvokeServer("SellCard",v.Name)
                                         end
                                     end
