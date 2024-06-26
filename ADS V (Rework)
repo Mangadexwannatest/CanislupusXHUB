@@ -2475,7 +2475,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
     end))
     coroutine.resume(coroutine.create(function()
         while true do
-            if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or (GameMap == "Infinite Mode" or string.find(GameMap,"Raid")) or Fluent.Unloaded then coroutine.yield() end
+            if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or GameMap == "Infinite Mode" or string.find(GameMap,"Raid") or Fluent.Unloaded then coroutine.yield() end
             if G["Auto Lobby (Actived)"] then return end
             if O["Auto Back to Lobby"].Value == true then
                 if not isfile(CrazyDayF.."Timer.json") then
@@ -2533,7 +2533,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
     end))
     coroutine.resume(coroutine.create(function()
         while true do
-            if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or (GameMap == "Infinite Mode" or string.find(GameMap,"Raid")) or Fluent.Unloaded then coroutine.yield() end
+            if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or GameMap == "Infinite Mode" or string.find(GameMap,"Raid") or Fluent.Unloaded then coroutine.yield() end
             if not isfile(CrazyDayF.."Timer.json") then return end
             if O["Auto Back to Lobby"].Value == true then
                 local a = HttpService:JSONDecode(readfile(CrazyDayF.."Timer.json"))
