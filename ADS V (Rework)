@@ -911,9 +911,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             if G["Loading (Gui)"] == false and O["Auto Save"].Value == true then SaveManager:Save("Configs") end
             if v == true then
                 if None_equip() == "Zero" or (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) then return end
-                for Index,Value in ipairs(StatDisplay:GetChildren()) do
-                    if string.find(Value.Name,"Slot") and Value.Value ~= "" then
-                        RemoteFunction:InvokeServer("UnequipCard",Value.Value)
+                for Index,Val in ipairs(StatDisplay:GetChildren()) do
+                    if string.find(Val.Name,"Slot") and Val.Value ~= "" then
+                        RemoteFunction:InvokeServer("UnequipCard",Val.Value)
                     end
                 end
             end
@@ -1848,16 +1848,16 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             pcall(function ()
                 if (game.PlaceId ~= 7338881230 and game.PlaceId ~= 6938803436 and game.PlaceId ~= 7274690025) or Fluent.Unloaded then coroutine.yield() end
                 if O["Auto Equip"].Value == true and None_equip() == true then
-                    for Index,Value in ipairs(StatDisplay:GetChildren()) do
-                        if string.find(Value.Name,"Slot") and Value.Value ~= "" then
-                            RemoteFunction:InvokeServer("UnequipCard",Value.Value)
+                    for Index,Val in ipairs(StatDisplay:GetChildren()) do
+                        if string.find(Val.Name,"Slot") and Val.Value ~= "" then
+                            RemoteFunction:InvokeServer("UnequipCard",Val.Value)
                         end
                     end
                     repeat
-                        for i,v in ipairs(Best_cards()) do
-                            if None_equip() == true then
-                                RemoteFunction:InvokeServer("EquipCard",v) 
-                            end
+                        if None_equip() == true then
+                            RemoteFunction:InvokeServer("EquipCard",Best_cards()[1])
+                            RemoteFunction:InvokeServer("EquipCard",Best_cards()[2])
+                            RemoteFunction:InvokeServer("EquipCard",Best_cards()[3])
                         end
                         task.wait()
                     until None_equip() == false or O["Auto Equip"].Value == false or Fluent.Unloaded
