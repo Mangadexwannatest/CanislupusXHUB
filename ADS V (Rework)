@@ -1495,13 +1495,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 end
                 local a = v:Clone()
                 local side = math.clamp(3.35,0,10)
-                local Sizeto = v.Size + Vector3.new(side,97.5,side)
+                local Sizeto = v.Size + Vector3.new(side,100,side)
                 a.Size = Vector3.new(0,0,v.Size.Z)
                 if v.ClassName == "MeshPart" then
-                    a.Size = Vector3.new(0,0,97.5)
-                    Sizeto = v.Size + Vector3.new(side,side,97.5)
+                    a.Size = Vector3.new(0,0,100)
+                    Sizeto = v.Size + Vector3.new(side,side,100)
                 elseif v.Name == "FlameTrail" then
-                    Sizeto = v.Size + Vector3.new(side,97.5,side + 5.5)
+                    Sizeto = v.Size + Vector3.new(side,100,side + 5.5)
                 end
                 game:GetService("TweenService"):Create(a,TweenInfo.new(igspeed),{Size = Sizeto}):Play()
                 a.CFrame = v.CFrame + Vector3.new(0,0,0)
