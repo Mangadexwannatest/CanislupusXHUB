@@ -2431,7 +2431,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                         GameName = "GameMap: "..GameMap.."\nScore: "..BattleCenterUi.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..StatDisplay.TimeChallengeHighScore.Value
                         ClearTime = "Unknown: 0"
                     elseif GameMap == "Infinite Mode" then
-                        GameName = "GameMap: "..GameMap.."\nWave: "..BattleCenterUi.WaveClearClearText.Text.."\nWave (Highest): "..StatDisplay.InfiniteRecord.Value
+                        GameName = "GameMap: "..GameMap.."\nWave Reach: "..BattleCenterUi.WaveClearClearText.Text.."\nWave Clear: "..tonumber(BattleCenterUi.WaveClearClearText.Text - 1).."\nWave Clear (Highest): "..StatDisplay.InfiniteRecord.Value
                         ClearTime = "Dimension Clears: "..StatDisplay.StageClear.Value
                     elseif StatDisplay.StageClear.Value ~= Clear1 then
                         GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..local_misc("Stage")
