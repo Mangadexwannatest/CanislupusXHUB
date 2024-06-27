@@ -1491,7 +1491,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 if gui_misc("Bossbar") == true then
                     igspeed = 0.175
                 else
-                    igspeed = 0.275
+                    if GameMap == "Infinite Mode" then
+                        igspeed = 0.325
+                    else
+                        igspeed = 0.275
+                    end
                 end
                 local a = v:Clone()
                 local side = math.clamp(3.35,0,10)
@@ -1693,7 +1697,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     if LocalPlayer.Character ~= nil and LocalPlayer.Character.Humanoid.PlatformStand == true then LocalPlayer.Character.Humanoid.PlatformStand = false end
                 end
 
-                if G["Auto Join (Raid)"] == true and not string.find(GameMap,"Raid") then
+                if G["Auto Join (Raid)"] == true and not string.find(GameMap,"Raid") and GameMap ~= "Infinite Mode" then
                     Fluent:Notify({
                         Title = "Auto Join (Raid)",
                         Content = "The raid has opened.",
@@ -1750,7 +1754,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap ~= "Infinite Mode" then coroutine.yield() end
                 if auto_farm() == true and gui_misc("Bossbar") == false and not G["Dided"] then
                     if enemy_misc("Count") == 0 then
-                        task.wait(1.35)
+                        task.wait(1.475)
                         repeat
                             tween_function(Workspace.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 30, 0),100)
                             Tween_Info:Play()
@@ -1761,7 +1765,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                         repeat
                             tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
                             Tween_Info:Play()
-                            task.wait(0.475)
+                            task.wait(0.575)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or gui_misc("Bossbar") == true or auto_farm() == false or enemy("AllMob") == false or enemy_misc("Count") == 0 or Fluent.Unloaded
                         Tween_Info:Cancel()
                     end
