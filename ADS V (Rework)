@@ -1825,35 +1825,35 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 if is_usingskill() == 0 and O["Auto Skill"].Value == true and auto_farm() == true and local_misc("Dist", enemy("AllMob")[CFramePart(enemy("AllMob"))]) <= O["Current Skill Distance"].Value then
                     local a = PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder
 
-                    if a["Skill"..O["Skill One"].Value].Visible and tonumber(a["Skill"..O["Skill One"].Value].SkillName.Text) == nil then
+                    if a["Skill"..O["Skill One"].Value].Visible == true and a["Skill"..O["Skill One"].Value].Image ~= "rbxassetid://6797200424" then
                         repeat
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill One"].Value))
-                            task.wait(0.25)
-                        until is_usingskill() > 0 or tonumber(a["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
+                            task.wait(0.15)
+                        until is_usingskill() > 0 or a["Skill"..O["Skill One"].Value].Image == "rbxassetid://6797200424" or Fluent.Unloaded
                     end
-                    if a["Skill"..O["Skill Two"].Value].Visible and tonumber(a["Skill"..O["Skill One"].Value].SkillName.Text) ~= nil and tonumber(a["Skill"..O["Skill Two"].Value].SkillName.Text) == nil then
+                    if a["Skill"..O["Skill Two"].Value].Visible == true and a["Skill"..O["Skill One"].Value].Image == "rbxassetid://6797200424" and a["Skill"..O["Skill Two"].Value].Image ~= "rbxassetid://6797200424" then
                         repeat
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Two"].Value))
-                            task.wait(0.25)
-                        until is_usingskill() > 0 or tonumber(a["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
+                            task.wait(0.15)
+                        until is_usingskill() > 0 or a["Skill"..O["Skill Two"].Value].Image == "rbxassetid://6797200424" or Fluent.Unloaded
                     end
-                    if a["Skill"..O["Skill Third"].Value].Visible and tonumber(a["Skill"..O["Skill Two"].Value].SkillName.Text) ~= nil and tonumber(a["Skill"..O["Skill Third"].Value].SkillName.Text) == nil then
+                    if a["Skill"..O["Skill Third"].Value].Visible == true and a["Skill"..O["Skill Two"].Value].Image == "rbxassetid://6797200424" and a["Skill"..O["Skill Third"].Value].Image ~= "rbxassetid://6797200424" then
                         repeat
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Third"].Value))
-                            task.wait(0.25)
-                        until is_usingskill() > 0 or tonumber(a["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
+                            task.wait(0.15)
+                        until is_usingskill() > 0 or a["Skill"..O["Skill Third"].Value].Image == "rbxassetid://6797200424" or Fluent.Unloaded
                     end
-                    if a["Skill"..O["Skill Fourth"].Value].Visible and tonumber(a["Skill"..O["Skill Third"].Value].SkillName.Text) ~= nil and tonumber(a["Skill"..O["Skill Fourth"].Value].SkillName.Text) == nil then
+                    if a["Skill"..O["Skill Fourth"].Value].Visible == true and a["Skill"..O["Skill Third"].Value].Image == "rbxassetid://6797200424" and a["Skill"..O["Skill Fourth"].Value].Image ~= "rbxassetid://6797200424" then
                         repeat
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fourth"].Value))
-                            task.wait(0.25)
-                        until is_usingskill() > 0 or tonumber(a["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
+                            task.wait(0.15)
+                        until is_usingskill() > 0 or a["Skill"..O["Skill Fourth"].Value].Image == "rbxassetid://6797200424" or Fluent.Unloaded
                     end
-                    if a["Skill"..O["Skill Fifth"].Value].Visible and tonumber(a["Skill"..O["Skill Fourth"].Value].SkillName.Text) ~= nil and tonumber(a["Skill"..O["Skill Fifth"].Value].SkillName.Text) == nil then
+                    if a["Skill"..O["Skill Fifth"].Value].Visible == true and a["Skill"..O["Skill Fourth"].Value].Image == "rbxassetid://6797200424" and a["Skill"..O["Skill Fifth"].Value].Image ~= "rbxassetid://6797200424" then
                         repeat
                             RemoteEvent:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(enemy("AllMob").HumanoidRootPart.Position)},tonumber(O["Skill Fifth"].Value))
-                            task.wait(0.25)
-                        until is_usingskill() > 0  or tonumber(a["Skill"..O["Skill Fifth"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
+                            task.wait(0.15)
+                        until is_usingskill() > 0  or a["Skill"..O["Skill Fifth"].Value].Image == "rbxassetid://6797200424" or Fluent.Unloaded
                     end
 
                     for i,v in pairs(O["Current Assists"].Value) do
