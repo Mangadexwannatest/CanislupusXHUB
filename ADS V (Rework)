@@ -1489,19 +1489,19 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     igname = "FlameTrailIgnore"
                 end
                 if gui_misc("Bossbar") == true then
-                    igspeed = 0.15
+                    igspeed = 0.175
                 else
-                    igspeed = 0.25
+                    igspeed = 0.275
                 end
                 local a = v:Clone()
                 local side = math.clamp(3.35,0,10)
-                local Sizeto = v.Size + Vector3.new(side,100,side)
+                local Sizeto = v.Size + Vector3.new(side,97.5,side)
                 a.Size = Vector3.new(0,0,v.Size.Z)
                 if v.ClassName == "MeshPart" then
-                    a.Size = Vector3.new(0,0,100)
-                    Sizeto = v.Size + Vector3.new(side,side,100)
+                    a.Size = Vector3.new(0,0,97.5)
+                    Sizeto = v.Size + Vector3.new(side,side,97.5)
                 elseif v.Name == "FlameTrail" then
-                    Sizeto = v.Size + Vector3.new(side,100,side + 5.5)
+                    Sizeto = v.Size + Vector3.new(side,97.5,side + 5.5)
                 end
                 game:GetService("TweenService"):Create(a,TweenInfo.new(igspeed),{Size = Sizeto}):Play()
                 a.CFrame = v.CFrame + Vector3.new(0,0,0)
@@ -1750,17 +1750,18 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded or GameMap ~= "Infinite Mode" then coroutine.yield() end
                 if auto_farm() == true and gui_misc("Bossbar") == false and not G["Dided"] then
                     if enemy_misc("Count") == 0 then
+                        task.wait(0.15)
                         repeat
                             tween_function(Workspace.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0),100)
                             Tween_Info:Play()
                             task.wait()
-                        until (enemy_misc("Count") >= 1 and not G["Bringing Infinite"]) or auto_farm() == false
+                        until (enemy_misc("Count") >= 1 and not G["Bringing Infinite"]) or auto_farm() == false or Fluent.Unloaded
                         Tween_Info:Cancel()
                     elseif enemy("AllMob") ~= false and not G["Bringing Infinite"] and not G["Safe Mode"] and not G["Dodgeing"] then
                         repeat
                             tween_function(enemy("AllMob").HumanoidRootPart, G["Method"], 100)
                             Tween_Info:Play()
-                            task.wait(0.75)
+                            task.wait(0.15)
                         until G["Safe Mode"] == true or G["Dodgeing"] == true or G["Died"] == true or gui_misc("Bossbar") == true or auto_farm() == false or enemy("AllMob") == false or enemy_misc("Count") == 0 or Fluent.Unloaded
                         Tween_Info:Cancel()
                     end
