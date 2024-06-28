@@ -1822,7 +1822,6 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             pcall(function ()
                 if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
                 if G["Safe Mode"] == true or G["Bringing"] == true or G["Bringing Infinite"] == true or G["Died"] == true then return end
-                print(is_usingskill())
                 if is_usingskill() == 0 and O["Auto Skill"].Value == true and auto_farm() == true and local_misc("Dist", enemy("AllMob")[CFramePart(enemy("AllMob"))]) <= O["Current Skill Distance"].Value then
                     local a = PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder
 
@@ -1856,7 +1855,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                             task.wait(0.25)
                         until is_usingskill() > 0  or tonumber(a["Skill"..O["Skill Fifth"].Value].SkillName.Text) ~= nil or Fluent.Unloaded
                     end
-                    
+
                     for i,v in pairs(O["Current Assists"].Value) do
                         if i and v == true then
                             if a["Skill"..i].Visible == true and a["Skill"..i].Image ~= "rbxassetid://6797200424" and a["Skill"..i].SkillName.Text ~= "None" then
