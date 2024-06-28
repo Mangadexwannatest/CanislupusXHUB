@@ -50,7 +50,7 @@ local RemoteEvent, RemoteFunction =
 local LocalID, Game, Update, BlackList_Characters, Currency_Name, Room, Raid =
     Players:GetUserIdFromNameAsync(LocalPlayer.Name),
     "Anime Dimensions Simulator (Rework)",
-    " 1.0.3",
+    " 1.0.4",
     {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
@@ -1238,10 +1238,12 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 Duration = 2.5
             })
             end
+            local content = nil
+            if O["Webhook Ping"] and O["Webhook Ping"].Value == true then content = "<@"..tostring(O["Ping ID"].Value)..">" end
             local Data = HttpService:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
                 ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                content = nil,
+                content = content,
                 embeds = {{
                   ["title"] = nil,
                   ["color"] = tonumber(misc_local("color", O["Webhook Color"].Value)) or 0x7d7d7d,
@@ -1266,6 +1268,59 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             response({Url = O["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
         end
     })
+    local WebhookPing_AddSection = Tabs.Webhook:AddSection("Ping")
+    WebhookPing_AddSection:AddInput("Ping ID", {
+        Title = "Ping ID.",
+        Description = nil,
+        Default = nil,
+        Placeholder = "ID.",
+        Numeric = true,
+        Finished = false,
+        Callback = function(v)
+            if G["Loading (Gui)"] == false and O["Auto Save"].Value == true then SaveManager:Save("Configs") end
+        end
+    })
+    WebhookPing_AddSection:AddDropdown("Ping Action", {
+        Title = "Ping Action",
+        Description = "Select the options you want to ping.",
+        Values = {
+            "Legendary",
+            "Mythic",
+            "Divine",
+            "Character"
+        },
+        Multi = true,
+        Default = {
+            "Mythic",
+            "Divine",
+            "Character"
+        },
+        Callback = function (v)
+            if G["Loading (Gui)"] == false and O["Auto Save"].Value == true then SaveManager:Save("Configs") end
+            G["Ping Action Insert"] = true
+        end
+    })
+    WebhookPing_AddSection:AddToggle("Webhook Ping", {
+        Title = "Webhook Ping",
+        Description = "Will ping if the selected action is received.",
+        Default = false,
+        Callback = function (v)
+            if G["Loading (Gui)"] == false and O["Auto Save"].Value == true then SaveManager:Save("Configs") end
+        end
+    })
+    WebhookPing_AddSection:AddButton({
+        Title = "How to get an ID",
+        Description = "Press the button to copy the link.",
+        Callback = function()
+            setclipboard(tostring("https://streamable.com/hzzd5f"))
+            Fluent:Notify({
+                Title = "Successfully copied",
+                Content = "https://streamable.com/hzzd5f.",
+                SubContent = nil,
+                Duration = 4.5
+            })
+        end
+    })
     do
         SaveManager:SetLibrary(Fluent)
         SaveManager:SetFolder("CrazyDay/"..Game.."/"..LocalID)
@@ -1285,6 +1340,13 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 ["Assist2"] = true,
                 ["Fruit1"] = true,
                 ["Fruit2"] = true
+            })
+        end
+        if not G["Ping Action Insert"] then
+            O["Ping Action"]:SetValue({
+                ["Mythic"] = true,
+                ["Divine"] = true,
+                ["Character"] = true
             })
         end
     end
@@ -2462,11 +2524,21 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     end
                 end
             end
-
+            local content = nil
+            if O["Webhook Ping"].Value == true then
+                for i,v in pairs(O["Ping Action"].Value) do
+                    if v == true then
+                        local a = table.concat(Item_Rewards, "")
+                        if string.find(a, i) then
+                            content = "<@"..tostring(O["Ping ID"].Value)..">"
+                        end
+                    end
+                end
+            end
             local Data = HttpService:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
                 ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                content = nil,
+                content = content,
                 embeds = {{
                   ["title"] = nil,
                   ["color"] = tonumber(misc_local("color", O["Webhook Color"].Value)) or 0x7d7d7d,
