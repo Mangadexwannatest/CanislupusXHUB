@@ -2542,7 +2542,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                         end
                     end
                 end
-                content = "<@"..tostring(O["Ping ID"].Value)..">".."\n`You received:` "..table.concat(Content, "\n`You received:` ")
+                if #Content > 0 then
+                    content = "<@"..tostring(O["Ping ID"].Value)..">".."\n`You received:` "..table.concat(Content, "\n`You received:` ") 
+                end
             end
             local Data = HttpService:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
