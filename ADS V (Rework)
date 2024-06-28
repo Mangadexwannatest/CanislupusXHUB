@@ -1284,6 +1284,10 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
         Title = "Ping Action",
         Description = "Select the options you want to ping.",
         Values = {
+            "Common",
+            "Uncommon",
+            "Rare",
+            "Epic",
             "Legendary",
             "Mythic",
             "Divine",
