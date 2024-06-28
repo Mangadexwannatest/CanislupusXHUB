@@ -50,7 +50,7 @@ local RemoteEvent, RemoteFunction =
 local LocalID, Game, Update, BlackList_Characters, Currency_Name, Room, Raid =
     Players:GetUserIdFromNameAsync(LocalPlayer.Name),
     "Anime Dimensions Simulator (Rework)",
-    " 1.0.2",
+    " 1.0.3",
     {"Naruto","Sasuke"},
     {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
     {
