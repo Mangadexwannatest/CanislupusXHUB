@@ -1249,7 +1249,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                   ["color"] = tonumber(misc_local("color", O["Webhook Color"].Value)) or 0x7d7d7d,
                   ["description"] = nil,
                   ["footer"] = {
-                    ["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
+                    ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
                     ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
                   },
                   ["thumbnail"] = {
@@ -2544,7 +2544,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                   ["color"] = tonumber(misc_local("color", O["Webhook Color"].Value)) or 0x7d7d7d,
                   ["description"] = nil,
                   ["footer"] = {
-                    ["text"] = "Time: "..os.date("%c").."\nCredit: YT » @crazyday3693",
+                    ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
                     ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
                   },
                   ["thumbnail"] = {
