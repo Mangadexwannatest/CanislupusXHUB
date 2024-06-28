@@ -343,11 +343,11 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
     local function CFramePart(Object)
         local dist, thing = math.huge, false
         for i,v in ipairs(Object:GetChildren()) do
-            if v:IsA("Part") or v:IsA("BasePart") or v:IsA("MeshPart") then
+            if v.ClassName == "Part" or v.ClassName == "MeshPart" then
                 local mag = (LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
                 if mag < dist then
                     dist = mag
-                    thing = v.Name
+                    thing = v
                 end
             end
         end
@@ -1823,7 +1823,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             pcall(function ()
                 if (game.PlaceId == 7338881230 or game.PlaceId == 6938803436 or game.PlaceId == 7274690025) or Fluent.Unloaded then coroutine.yield() end
                 if G["Safe Mode"] == true or G["Bringing"] == true or G["Bringing Infinite"] == true or G["Died"] == true then return end
-                if is_usingskill() == 0 and O["Auto Skill"].Value == true and auto_farm() == true and local_misc("Dist", enemy("AllMob")[CFramePart(enemy("AllMob"))]) <= O["Current Skill Distance"].Value then
+                if is_usingskill() == 0 and O["Auto Skill"].Value == true and auto_farm() == true and local_misc("Dist", CFramePart(enemy("AllMob"))) <= O["Current Skill Distance"].Value then
                     local a = PlayerGui.UniversalGui.UniversalCenterUIFrame.SlotsHolder
 
                     if a["Skill"..O["Skill One"].Value].Visible == true and a["Skill"..O["Skill One"].Value].Image ~= "rbxassetid://6797200424" then
