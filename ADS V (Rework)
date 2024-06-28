@@ -1582,7 +1582,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 a.Name = igname
                 a.Parent = v.Parent
                 repeat task.wait() until not v.Parent or O["Dodge Skill"].Value == false or G["Bringing"] == true or G["Safe Mode"] == true or G["Bringing Infinite"] == true or enemy_misc("Count") == 0 or Fluent.Unloaded
-                task.wait(0.0475)
+                --task.wait(0.0475)
                 a:Destroy()
             end
         end)
