@@ -1239,7 +1239,7 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
             })
             end
             local content = nil
-            if O["Webhook Ping"] and O["Webhook Ping"].Value == true then content = "<@"..tostring(O["Ping ID"].Value)..">" end
+            if O["Webhook Ping"] and O["Webhook Ping"].Value == true then content = "<@"..tostring(O["Ping ID"].Value)..">".."\n`You received:` ".."`None`" end
             local Data = HttpService:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
                 ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
@@ -2455,6 +2455,9 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                 end
             end
 
+            local Content, content =
+                {},
+                nil
             local TimeEnd = "Time: 00:00"
             local DamageDeal = "Damage: "..misc_local("number" ,LocalPlayer.leaderstats.Damage.Value)
             local Rank = "Unknown: F"
@@ -2524,16 +2527,18 @@ local StatDisplay, Level, CrazyDayF, Item_Rewards, Currency_Number, Currency_Rew
                     end
                 end
             end
-            local content = nil
+
             if O["Webhook Ping"].Value == true then
                 for i,v in pairs(O["Ping Action"].Value) do
                     if v == true then
-                        local a = table.concat(Item_Rewards, "")
-                        if string.find(a, i) then
-                            content = "<@"..tostring(O["Ping ID"].Value)..">"
+                        for x = 1, #Item_Rewards do
+                            if string.find(Item_Rewards[x], i) then
+                                table.insert(Content,Item_Rewards[x])
+                            end
                         end
                     end
                 end
+                content = "<@"..tostring(O["Ping ID"].Value)..">".."\n`You received:` "..table.concat(Content, "\n`You received:` ")
             end
             local Data = HttpService:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
