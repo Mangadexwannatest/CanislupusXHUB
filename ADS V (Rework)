@@ -2705,8 +2705,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
     task.spawn(function ()
         while true do
             if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
-            if (V["Auto Equip"].Value and C:Empety() == true) or g["equiping"] then return end
-            if C:AutoFarm()  then
+            if V["Auto Equip"].Value and C:Empety() == true then return end
+            if C:AutoFarm() and not g["equiping"] then
                 if g["raid"] and lvl.Value >= 15 then
                     Gui:Notify({
                         Title = "Successfully room created",
