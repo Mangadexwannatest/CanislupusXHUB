@@ -2596,7 +2596,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         else
                             Rank = "Rank: D"
                         end
-    
+
                         if #R == 0 and #Q == 0 and Rank == "Rank: F" then
                             GameStatus = " [Defeat!]"
                             GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
@@ -2604,7 +2604,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         else
                             GameStatus = " [Victory!]"
                             local BT = lpg.BattleGui.CenterUIFrame
-    
+                            
                             if GameMap == "Virtual Garden" then
                                 TimeEnd = "Time: 08:00"
                                 GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
@@ -2655,7 +2655,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` "..table.concat(CO, "\n`You received:` ")
                         end
                     end
-                    print(content)
                     local Data = h:JSONEncode({
                         ["username"] = "Anime Dimensions Simulator : Notification",
                         ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
