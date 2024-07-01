@@ -1135,7 +1135,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     },
                     ["fields"] = {
                         {
-                            ["name"] = "```Status: The webhook is working.\nGame: "..m:GetProductInfo(pid).Name..".\nTime: "..tostring(w.DistributedGameTime)..".```",
+                            ["name"] = "```Status: The webhook is working.\nTime: "..tostring(w.DistributedGameTime)..".```",
                             ["value"] = "",
                             ["inline"] = false
                         }
