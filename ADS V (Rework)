@@ -30,7 +30,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end
 
     g["response"] = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
-    if not string.find(m:GetProductInfo(pid).Name,"Anime Dimension") or c:FindFirstChild("CrazyDay") or g["Loading (Gui)"] then return end
+    --// if not string.find(m:GetProductInfo(pid).Name,"Anime Dimension") or c:FindFirstChild("CrazyDay") or g["Loading (Gui)"] then return end
+    if c:FindFirstChild("CrazyDay") or g["Loading (Gui)"] then return end
     g["Loading (Gui)"] = true
     local lp, lpg, lpid, gname, ver, blc, curname, roomD, roomR, sTd, lvl ,re, rf =
         p.LocalPlayer,
