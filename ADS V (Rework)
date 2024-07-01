@@ -1116,7 +1116,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
             end
 
             local content = nil
-            if V["Webhook Ping (Activate)"].Value == true then content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` ".."`None`" end
+            if V["Webhook Ping (Activate)"].Value then content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` ".."`None`" end
             local Data = h:JSONEncode({
                 ["username"] = "Anime Dimensions Simulator : Notification",
                 ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
@@ -2549,153 +2549,156 @@ local p, c, t, w, r, m, h, g, vt, pid =
             end)
 
             c9 = R2:GetPropertyChangedSignal("Visible"):Connect(function ()
-                if not V["Send Webhook"].Value or not string.find(V["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
-                task.wait(1)
+                pcall(function ()
+                    task.wait(2)
+                    if not V["Send Webhook"].Value then return end
 
-                for i,v in pairs(R) do
-                    local name_count
-                    local sum = 0
-                    if #v >= 1 then
-                        for x = 1, #v do
-                            sum = sum + v[x]
-                            name_count = "`"..i.." ["..sum.."]`"
+                    for i,v in pairs(R) do
+                        local name_count
+                        local sum = 0
+                        if #v >= 1 then
+                            for x = 1, #v do
+                                sum = sum + v[x]
+                                name_count = "`"..i.." ["..sum.."]`"
+                            end
+                            table.insert(E, name_count)
+                        else
+                            table.insert(E, "`None     `")
                         end
-                        table.insert(E, name_count)
-                    else
-                        table.insert(E, "`None     `")
                     end
-                end
-                if #Q == 0 then
-                    table.insert(Q, "`None      `")
-                end
-
-                local TimeEnd = "Time: 00:00"
-                local DamageDeal = "Damage: "..C:Hex("number", lp.leaderstats.Damage.Value)
-                local Rank = "Unknown: F"
-                local ClearTime = "Unknown: 0"
-                local GameName = "Unknown: nil"
-                local GameStatus = " [End!]"
-
-                if R2 == lpg.UniversalGui.UniversalCenterUIFrame.ResultUI then
-                    local RI = R2.Frame.ResultDiamond.ResultRank.Image
-                    TimeEnd = R2.Frame.TimeText.Text
-
-                    if RI == "rbxassetid://7443889715" then
-                        Rank = "Rank: S+"
-                    elseif RI == "rbxassetid://6715353612" then
-                        Rank = "Rank: S"
-                    elseif RI == "rbxassetid://6891959728" then
-                        Rank = "Rank: A"
-                    elseif RI == "rbxassetid://6891959611" then
-                        Rank = "Rank: B"
-                    elseif RI == "rbxassetid://6891959460" then
-                        Rank = "Rank: C"
-                    elseif RI == "rbxassetid://6782568839" then
-                        Rank = "Rank: F"
-                    else
-                        Rank = "Rank: D"
+                    if #Q == 0 then
+                        table.insert(Q, "`None      `")
                     end
 
-                    if #R == 0 and #Q == 0 and Rank == "Rank: F" then
-                        GameStatus = " [Defeat!]"
-                        GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
-                        ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                    else
-                        GameStatus = " [Victory!]"
-                        local BT = lpg.BattleGui.CenterUIFrame
+                    local TimeEnd = "Time: 00:00"
+                    local DamageDeal = "Damage: "..C:Hex("number", lp.leaderstats.Damage.Value)
+                    local Rank = "Unknown: F"
+                    local ClearTime = "Unknown: 0"
+                    local GameName = "Unknown: nil"
+                    local GameStatus = " [End!]"
 
-                        if GameMap == "Virtual Garden" then
-                            TimeEnd = "Time: 08:00"
-                            GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
-                            ClearTime = "Unknown: 0"
-                        elseif GameMap == "Infinite Mode" then
-                            GameName = "GameMap: "..GameMap.."\nWave Reach: "..BT.WaveClearClearText.Text.."\nWave Clear: "..tonumber(BT.WaveClearClearText.Text - 1).."\nWave Clear (Highest): "..sTd.InfiniteRecord.Value
-                            ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                        elseif sTd.StageClear.Value ~= C1 then
+                    if R2 == lpg.UniversalGui.UniversalCenterUIFrame.ResultUI then
+                        local RI = R2.Frame.ResultDiamond.ResultRank.Image
+                        TimeEnd = R2.Frame.TimeText.Text
+
+                        if RI == "rbxassetid://7443889715" then
+                            Rank = "Rank: S+"
+                        elseif RI == "rbxassetid://6715353612" then
+                            Rank = "Rank: S"
+                        elseif RI == "rbxassetid://6891959728" then
+                            Rank = "Rank: A"
+                        elseif RI == "rbxassetid://6891959611" then
+                            Rank = "Rank: B"
+                        elseif RI == "rbxassetid://6891959460" then
+                            Rank = "Rank: C"
+                        elseif RI == "rbxassetid://6782568839" then
+                            Rank = "Rank: F"
+                        else
+                            Rank = "Rank: D"
+                        end
+    
+                        if #R == 0 and #Q == 0 and Rank == "Rank: F" then
+                            GameStatus = " [Defeat!]"
                             GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
                             ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                        elseif sTd.BossRushClears.Value ~= C2 then
-                            TimeEnd = R2.Frame.TimeText.Text.."\nBest Record: "..sTd.BossRushRecordString.Value
-                            GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
-                            ClearTime = "BossRush Clears: "..sTd.BossRushClears.Value
-                        elseif sTd.WeeklyShadowRaidsCleared.Value ~= C3 then
-                            GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..C:N1("stage")
-                            ClearTime = "SpeedRaid Clears: "..sTd.WeeklyShadowRaidsCleared.Value
-                        end
-                    end
-                else
-                    TimeEnd = "Time: 08:00"
-                    Rank = "Rank:"..lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
-                    GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                    ClearTime = "Raid Clears: Unknown"
-
-                    if sTd.RaidClears.Value ~= C4 then
-                        for i,v in pairs(Table) do
-                            if sTd:FindFirstChild(i).Value ~= v[1] then
-                                GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                                ClearTime = "Raid Clears: "..sTd.RaidClears.Value.."\n"..i..": "..(v[1] + 1)
+                        else
+                            GameStatus = " [Victory!]"
+                            local BT = lpg.BattleGui.CenterUIFrame
+    
+                            if GameMap == "Virtual Garden" then
+                                TimeEnd = "Time: 08:00"
+                                GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
+                                ClearTime = "Unknown: 0"
+                            elseif GameMap == "Infinite Mode" then
+                                GameName = "GameMap: "..GameMap.."\nWave Reach: "..BT.WaveClearClearText.Text.."\nWave Clear: "..tonumber(BT.WaveClearClearText.Text - 1).."\nWave Clear (Highest): "..sTd.InfiniteRecord.Value
+                                ClearTime = "Dimension Clears: "..sTd.StageClear.Value
+                            elseif sTd.StageClear.Value ~= C1 then
+                                GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
+                                ClearTime = "Dimension Clears: "..sTd.StageClear.Value
+                            elseif sTd.BossRushClears.Value ~= C2 then
+                                TimeEnd = R2.Frame.TimeText.Text.."\nBest Record: "..sTd.BossRushRecordString.Value
+                                GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
+                                ClearTime = "BossRush Clears: "..sTd.BossRushClears.Value
+                            elseif sTd.WeeklyShadowRaidsCleared.Value ~= C3 then
+                                GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..C:N1("stage")
+                                ClearTime = "SpeedRaid Clears: "..sTd.WeeklyShadowRaidsCleared.Value
                             end
                         end
-                    end
-                end
+                    else
+                        TimeEnd = "Time: 08:00"
+                        Rank = "Rank:"..lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+                        GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                        ClearTime = "Raid Clears: Unknown"
 
-                local content = nil
-                if V["Webhook Ping (Activate)"].Value then
-                    for i, v in pairs(V["Ping Action"].Value) do
-                        if v == true then
-                            for x = 1, #Q do
-                                if string.find(Q[x], i) then
-                                    table.insert(CO, Q[x])
+                        if sTd.RaidClears.Value ~= C4 then
+                            for i,v in pairs(Table) do
+                                if sTd:FindFirstChild(i).Value ~= v[1] then
+                                    GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                                    ClearTime = "Raid Clears: "..sTd.RaidClears.Value.."\n"..i..": "..(v[1] + 1)
                                 end
                             end
                         end
                     end
-                    if #CO > 0 then
-                        content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` "..table.concat(CO, "\n`You received:` ")
+
+                    local content = nil
+                    if V["Webhook Ping (Activate)"].Value then
+                        for i, v in pairs(V["Webhook Ping (Type)"].Value) do
+                            if v == true then
+                                for x = 1, #Q do
+                                    if string.find(Q[x], i) then
+                                        table.insert(CO, Q[x])
+                                    end
+                                end
+                            end
+                        end
+                        if #CO > 0 then
+                            content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` "..table.concat(CO, "\n`You received:` ")
+                        end
                     end
-                end
-                local Data = h:JSONEncode({
-                    ["username"] = "Anime Dimensions Simulator : Notification",
-                    ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                    content = content,
-                    embeds = {{
-                      ["title"] = nil,
-                      ["color"] = tonumber(C:Hex("color", V["Webhook Color"].Value)),
-                      ["description"] = nil,
-                      ["footer"] = {
-                        ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
-                        ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
-                      },
-                      ["thumbnail"] = {
-                        ["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                      },
-                      ["fields"] = {
-                        {
-                            ["name"] = "**Item Rewards**",
-                            ["value"] = "\n`[+]` "..table.concat(Q, "\n`[+]` "),
-                            ["inline"] = true
+                    print(content)
+                    local Data = h:JSONEncode({
+                        ["username"] = "Anime Dimensions Simulator : Notification",
+                        ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+                        content = content,
+                        embeds = {{
+                          ["title"] = nil,
+                          ["color"] = tonumber(C:Hex("color", V["Webhook Color"].Value)),
+                          ["description"] = nil,
+                          ["footer"] = {
+                            ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
+                            ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+                          },
+                          ["thumbnail"] = {
+                            ["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+                          },
+                          ["fields"] = {
+                            {
+                                ["name"] = "**Item Rewards**",
+                                ["value"] = "\n`[+]` "..table.concat(Q, "\n`[+]` "),
+                                ["inline"] = true
+                            },
+                            {
+                                ["name"] = "**Currency Rewards**",
+                                ["value"] = "\n`[+]` "..table.concat(E, "\n`[+]` "),
+                                ["inline"] = true
+                            },
+                            {
+                                ["name"] = "**Match Information"..GameStatus.."**",
+                                ["value"] = "```\n"..GameName.."\n"..Rank.."\n"..DamageDeal.."\n"..TimeEnd.."```",
+                                ["inline"] = false
+                            },
+                            {
+                                ["name"] = "**Player Information**".." __**|| ["..lp.Name.."] ||**__",
+                                ["value"] = "```\nLevel: "..lvl.Value.." ["..C:CUR("Exp").."]\nCardsOwned: "..sTd.CardsOwned.Value.."/"..sTd.MaxCardsOwned.Value
+                                .."\n"..ClearTime.."\nCurrency:\n ∘ Gold: "..C:CUR("Gold").."\n ∘ Gem: "..C:CUR("Gem").."\n ∘ TraitToken: "..C:CUR("TraitToken")
+                                .."\n ∘ RaidToken: "..C:CUR("RaidToken").."\n ∘ SpeedRaidToken: "..C:CUR("ShadowCoin").."\n ∘ BossRushToken: "..C:CUR("BossRush").."```",
+                                ["inline"] = false
+                            }
                         },
-                        {
-                            ["name"] = "**Currency Rewards**",
-                            ["value"] = "\n`[+]` "..table.concat(E, "\n`[+]` "),
-                            ["inline"] = true
-                        },
-                        {
-                            ["name"] = "**Match Information"..GameStatus.."**",
-                            ["value"] = "```\n"..GameName.."\n"..Rank.."\n"..DamageDeal.."\n"..TimeEnd.."```",
-                            ["inline"] = false
-                        },
-                        {
-                            ["name"] = "**Player Information**".." __**|| ["..lp.Name.."] ||**__",
-                            ["value"] = "```\nLevel: "..lvl.Value.." ["..C:CUR("Exp").."]\nCardsOwned: "..sTd.CardsOwned.Value.."/"..sTd.MaxCardsOwned.Value
-                            .."\n"..ClearTime.."\nCurrency:\n ∘ Gold: "..C:CUR("Gold").."\n ∘ Gem: "..C:CUR("Gem").."\n ∘ TraitToken: "..C:CUR("TraitToken")
-                            .."\n ∘ RaidToken: "..C:CUR("RaidToken").."\n ∘ SpeedRaidToken: "..C:CUR("ShadowCoin").."\n ∘ BossRushToken: "..C:CUR("BossRush").."```",
-                            ["inline"] = false
-                        }
-                    },
-                }}
-                })
-                g["response"]({Url = V["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+                    }}
+                    })
+                    g["response"]({Url = V["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+                end)
             end)
     end)
 
