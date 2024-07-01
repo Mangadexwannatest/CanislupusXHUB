@@ -2550,8 +2550,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
 
             c9 = R2:GetPropertyChangedSignal("Visible"):Connect(function ()
                 pcall(function ()
-                    task.wait(2)
-                    if not V["Send Webhook"].Value then return end
+                    task.wait(2.5)
+                    if not V["Send Webhook"].Value or not string.find(V["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
 
                     for i,v in pairs(R) do
                         local name_count
@@ -2604,7 +2604,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         else
                             GameStatus = " [Victory!]"
                             local BT = lpg.BattleGui.CenterUIFrame
-                            
+
                             if GameMap == "Virtual Garden" then
                                 TimeEnd = "Time: 08:00"
                                 GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
