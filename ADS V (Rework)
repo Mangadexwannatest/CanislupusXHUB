@@ -102,7 +102,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
         check = false,
         debounce = false,
         step = 0,
-        tpstep = 0
     }
 
     function C:Empety()
@@ -1344,7 +1343,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end
 
     if GameMap == "CharacterTest" then return Gui:Notify({Title = "Failed to load function (Error)", Content = "This map is not supported.", SubContent = nil, Duration = 99999999})
-    elseif GameMap == "Infinite Mode" then misc.speed = 80
+    elseif GameMap == "Infinite Mode" then misc.speed = 80 misc.step = 0.575
     end
     task.wait(1)
 
@@ -1783,7 +1782,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         g["bring 2"] = false
                         C:Tween(C:N2("boss").HumanoidRootPart, g["method"])
                         tween:Play()
-                        task.wait()
+                        task.wait(misc.step)
                     until C:N3() or not C:Bar("boss") or not C:AutoFarm() or C:Flame() or g["safe"] or g["dead"] or g["dodge"] or g["stop"] or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                     tween:Cancel()
                 end
@@ -1845,7 +1844,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if C:N4("count") == 0 then
                         task.wait(1.375)
                         repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 31, 0))
+                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 30.5, 0))
                             tween:Play()
                             task.wait()
                         until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
@@ -1854,7 +1853,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
-                            task.wait(0.475)
+                            task.wait(0.575)
                         until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                         tween:Cancel()
                     end
@@ -1885,7 +1884,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         misc.name = "FlameTrailIgnore"
                     end
                     if C:Bar("boss") then
-                        misc.tweenspeed = 0.1425
+                        misc.tweenspeed = 0.15
                     else
                         if GameMap == "Infinite Mode" then
                             misc.tweenspeed = 0.325
@@ -1992,7 +1991,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             if (LastPos - NewPos).Magnitude > 25 then
                                 g["stop"] = true
                                 tween:Cancel()
-                                task.wait(2.35)
+                                task.wait(2.675)
+                                --task.wait(2.35)
                                 g["stop"] = false
                                 tween:Cancel()
                             end
@@ -2019,28 +2019,28 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
+
                     if gui["Skill"..V[g["cNum"].."Skill Two"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Two"].Value))
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
+
                     if gui["Skill"..V[g["cNum"].."Skill Third"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Third"].Value))
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
+
                     if gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fourth"].Value))
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
+
                     if gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId and not gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fifth"].Value))
