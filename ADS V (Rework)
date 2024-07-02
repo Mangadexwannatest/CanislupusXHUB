@@ -101,7 +101,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
         rarity = {},
         check = false,
         debounce = false,
-        max = 25,
         step = 0,
         tpstep = 0
     }
@@ -1695,17 +1694,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 break
             end
             pcall(function ()
-                if misc.tpstep >= 2 then
-                    g["stop"] = true
-                    tween:Cancel()
-                    -- print("TP STEP DETECH")
-                    task.delay(3, function()
-                        misc.tpstep = 0
-                        g["stop"] = false
-                        tween:Cancel()
-                    end)
-                end
-
                 if V["Auto Join (Raid)"].Value and lvl.Value >= 15 then
                     if tonumber(os.date("!*t").min) <= 8 then
                         g["raid"] = true
@@ -1788,8 +1776,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then break end
             pcall(function ()
-                local anc = lp.Character.HumanoidRootPart.Anchored
-                if C:AutoFarm() and C:Bar("boss") and not C:Flame() and not C:N3() and not g["safe"] and not g["dead"] and not g["dodge"] and not g["stop"] and not anc then
+                if C:AutoFarm() and C:Bar("boss") and not C:Flame() and not C:N3() and not g["safe"] and not g["dead"] and not g["dodge"] and not g["stop"] and not lp.Character.HumanoidRootPart.Anchored then
                     repeat
                         misc.current = 0
                         g["bring 1"] = false
@@ -1797,7 +1784,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         C:Tween(C:N2("boss").HumanoidRootPart, g["method"])
                         tween:Play()
                         task.wait()
-                    until C:N3() or not C:Bar("boss") or not C:AutoFarm() or C:Flame() or g["safe"] or g["dead"] or g["dodge"] or g["stop"] or anc or Gui.Unloaded
+                    until C:N3() or not C:Bar("boss") or not C:AutoFarm() or C:Flame() or g["safe"] or g["dead"] or g["dodge"] or g["stop"] or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                     tween:Cancel()
                 end
             end)
@@ -1810,7 +1797,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded or GameMap == "Infinite Mode" then break end
             pcall(function ()
-                local anc = lp.Character.HumanoidRootPart.Anchored
                 if C:AutoFarm() and not C:Bar("boss") and not C:N3() and not g["safe"] and not g["dead"] then
                     if V["Current Farm Mode"].Value == "Bring Mode" and not g["spawning"] then
                         if misc.current == 0 and C:N2("bring") then
@@ -1828,21 +1814,21 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             tween.Completed:Wait()
                             task.wait(2.675)
                             misc.current = 2
-                        elseif misc.current == 2 and not g["dodge"] and not anc then
+                        elseif misc.current == 2 and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                             repeat
                                 g["bring 1"] = false
                                 C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                                 tween:Play()
                                 task.wait()
-                            until misc.current ~= 2 or C:N3() or C:Bar("boss") or not C:AutoFarm() or g["safe"] or g["dead"] or g["dodge"] or anc or g["spawning"] or Gui.Unloaded
+                            until misc.current ~= 2 or C:N3() or C:Bar("boss") or not C:AutoFarm() or g["safe"] or g["dead"] or g["dodge"] or g["spawning"] or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                             tween:Cancel()
                         end
-                    elseif V["Current Farm Mode"].Value == "Normal Mode" and not g["dodge"] and not anc then
+                    elseif V["Current Farm Mode"].Value == "Normal Mode" and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
                             task.wait()
-                        until C:N3() or C:Bar("boss") or not C:AutoFarm() or g["safe"] or g["dead"] or g["dodge"] or g["spawning"] or anc or Gui.Unloaded
+                        until C:N3() or C:Bar("boss") or not C:AutoFarm() or g["safe"] or g["dead"] or g["dodge"] or g["spawning"] or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                         tween:Cancel()
                     end
                 end
@@ -1855,22 +1841,21 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded or GameMap ~= "Infinite Mode" then break end
             pcall(function ()
-                local anc = lp.Character.HumanoidRootPart.Anchored
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
                     if C:N4("count") == 0 then
                         task.wait(1.375)
                         repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 31.75, 0))
+                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 31, 0))
                             tween:Play()
                             task.wait()
                         until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
                         tween:Cancel()
-                    elseif not g["bring 2"] and not g["dodge"] and not anc then
+                    elseif not g["bring 2"] and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
-                            task.wait(0.585)
-                        until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or anc or Gui.Unloaded
+                            task.wait(0.475)
+                        until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                         tween:Cancel()
                     end
                 end
@@ -1995,11 +1980,10 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 5 and misc.tpstep < 2 then
+                    if misc.step >= 5 then
                         g["stop"] = true
-                        -- print("stop by skill 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                         tween:Cancel()
-                        wait(1.35)
+                        task.wait(1.35)
                         g["stop"] = false
                         misc.check = false
                         misc.debounce = false
@@ -2016,8 +2000,12 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         else
                             if misc.debounce == false then
                                 local NewPos = lp.Character.HumanoidRootPart.Position
-                                if (LastPos - NewPos).Magnitude > misc.max then
-                                    misc.tpstep = misc.tpstep + 1
+                                if (LastPos - NewPos).Magnitude > 25 then
+                                    g["stop"] = true
+                                    tween:Cancel()
+                                    task.wait(2.35)
+                                    g["stop"] = false
+                                    tween:Cancel()
                                 end
                                 misc.check = false
                             end
