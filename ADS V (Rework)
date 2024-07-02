@@ -1844,13 +1844,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
                     if C:N4("count") == 0 then
                         task.wait(1.375)
-                        repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
-                            tween:Play()
-                            task.wait()
-                        until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
-                        tween:Cancel()
-                        task.wait(0.75)
+                        C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
+                        tween:Play()
+                        task.wait(0.1)
                     elseif not g["bring 2"] and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
@@ -1915,9 +1911,13 @@ local p, c, t, w, r, m, h, g, vt, pid =
             end)
         end)
 
-        function C.Touch()
+        function C.Touch(cha)
             pcall(function ()
-                c4 = lp.Character.HumanoidRootPart.Touched:Connect(function (Part)
+                local humanoid = cha:WaitForChild("HumanoidRootPart", 5)
+                if not humanoid then
+                    return
+                end
+                c4 = humanoid.Touched:Connect(function (Part)
                     if Part.Name == "Ignore" or Part.Name == "FlameTrailIgnore" then
                        g["dodge"] = true
                        repeat task.wait() if tween then tween:Cancel() end g["dodge"] = true until not Part.Parent
@@ -1948,7 +1948,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     misc.current = 0
                     g["stop"] = false
                     g["dead"] = false
-                    C.Touch()
+                    C.Touch(lp.Character)
                     C:Head()
                     if c5 then c5:Disconnect() c5 = nil end
                 end)
@@ -1959,7 +1959,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         do
             local cha = lp.Character or lp.CharacterAdded:Wait()
             if cha then
-                C.Touch()
+                C.Touch(cha)
                 C.CharacterAdded(cha)
             end
         end
@@ -1984,19 +1984,17 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if misc.check == false and misc.debounce == false then
                         misc.debounce = true
                         LastPos = lp.Character.HumanoidRootPart.Position
-                        task.wait(.1)
+                        wait(0.01)
                         misc.check = true
                         misc.debounce = false
                     else
                         if misc.debounce == false then
                             local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude >= 30 then
+                            if (LastPos - NewPos).Magnitude >= 10 then
                                 g["stop"] = true
                                 tween:Cancel()
                                 task.wait(2.675)
-                                --task.wait(2.35)
                                 g["stop"] = false
-                                tween:Cancel()
                             end
                             misc.check = false
                         end
@@ -2086,7 +2084,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 end
 
             end)
-            task.wait(0.335)
+            task.wait(0.185)
         end
     end)
 
