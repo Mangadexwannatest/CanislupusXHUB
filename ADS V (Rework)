@@ -1344,7 +1344,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end
 
     if GameMap == "CharacterTest" then return Gui:Notify({Title = "Failed to load function (Error)", Content = "This map is not supported.", SubContent = nil, Duration = 99999999})
-    elseif GameMap == "Infinite Mode" then misc.speed = 100
+    elseif GameMap == "Infinite Mode" then misc.speed = 80
     end
     task.wait(1)
 
