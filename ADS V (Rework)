@@ -87,10 +87,10 @@ local p, c, t, w, r, m, h, g, vt, pid =
             "Hirito Raid",
             "Titan Raid"
         },
-        r[p.LocalPlayer.Name.."StatDisplay"],
-        p.LocalPlayer.leaderstats.Level,
-        r.RemoteEvents.MainRemoteEvent,
-        r.RemoteFunctions.MainRemoteFunction
+        r:WaitForChild(p.LocalPlayer.Name.."StatDisplay"),
+        p.LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Level"),
+        r:WaitForChild("RemoteEvents"):WaitForChild("MainRemoteEvent"),
+        r:WaitForChild("RemoteFunctions"):WaitForChild("MainRemoteFunction")
 
     local File = "CrazyDay/"..gname.."/"..lpid
     do if not isfolder("CrazyDay") then makefolder("CrazyDay") makefolder("CrazyDay/"..gname) else if not isfolder("CrazyDay/"..gname) then makefolder("CrazyDay/"..gname) end end end local C = {} local tween
