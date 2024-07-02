@@ -1980,35 +1980,23 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 5 then
-                        g["stop"] = true
-                        tween:Cancel()
-                        task.wait(1.35)
-                        g["stop"] = false
-                        misc.check = false
+                    if misc.check == false and misc.debounce == false then
+                        misc.debounce = true
+                        LastPos = lp.Character.HumanoidRootPart.Position
+                        task.wait(.1)
+                        misc.check = true
                         misc.debounce = false
-                        tween:Cancel()
-
-                        misc.step = 0
                     else
-                        if misc.check == false and misc.debounce == false then
-                            misc.debounce = true
-                            LastPos = lp.Character.HumanoidRootPart.Position
-                            task.wait(.1)
-                            misc.check = true
-                            misc.debounce = false
-                        else
-                            if misc.debounce == false then
-                                local NewPos = lp.Character.HumanoidRootPart.Position
-                                if (LastPos - NewPos).Magnitude > 25 then
-                                    g["stop"] = true
-                                    tween:Cancel()
-                                    task.wait(2.35)
-                                    g["stop"] = false
-                                    tween:Cancel()
-                                end
-                                misc.check = false
+                        if misc.debounce == false then
+                            local NewPos = lp.Character.HumanoidRootPart.Position
+                            if (LastPos - NewPos).Magnitude > 25 then
+                                g["stop"] = true
+                                tween:Cancel()
+                                task.wait(2.35)
+                                g["stop"] = false
+                                tween:Cancel()
                             end
+                            misc.check = false
                         end
                     end
                 end)
@@ -2026,46 +2014,36 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     local iId = "rbxassetid://6797200424"
 
                     if gui["Skill"..V[g["cNum"].."Skill One"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill One"].Value].Image ~= iId then
-                        misc.step = 0
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill One"].Value))
-                            misc.step = misc.step + 1
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
                     repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Two"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image ~= iId then
-                        misc.step = 0
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Two"].Value))
-                            misc.step = misc.step + 1
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
                     repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Third"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image ~= iId then
-                        misc.step = 0
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Third"].Value))
-                            misc.step = misc.step + 1
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
                     repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image ~= iId then
-                        misc.step = 0
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fourth"].Value))
-                            misc.step = misc.step + 1
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
                     repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId and not gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image ~= iId then
-                        misc.step = 0
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fifth"].Value))
-                            misc.step = misc.step + 1
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
