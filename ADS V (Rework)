@@ -1846,9 +1846,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 local anc = lp.Character.HumanoidRootPart.Anchored
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
                     if C:N4("count") == 0 then
-                        task.wait(1.275)
+                        task.wait(1.375)
                         repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 38.75, 0))
+                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 35, 0))
                             tween:Play()
                             task.wait()
                         until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
@@ -1857,7 +1857,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
-                            task.wait(0.425)
+                            task.wait(0.575)
                         until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or anc or Gui.Unloaded
                         tween:Cancel()
                     end
@@ -1983,7 +1983,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 7 then
+                    if misc.step >= 6 then
                         g["stop"] = true
                         --print("stop by skill: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                         if tween then tween:Cancel() end
@@ -2112,7 +2112,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 end
 
             end)
-            task.wait(0.185)
+            task.wait(0.215)
         end
     end)
 
