@@ -101,7 +101,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         rarity = {},
         check = false,
         debounce = false,
-        max = 15,
+        max = 25,
         step = 0,
         tpstep = 0
     }
