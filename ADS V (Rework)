@@ -101,7 +101,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         rarity = {},
         check = false,
         debounce = false,
-        max = 20,
+        max = 30,
         step = 0
     }
 
@@ -1983,9 +1983,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 5 then
+                    if misc.step >= 7 then
                         g["stop"] = true
-                        --print("stop by skill: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
+                        -- print("stop by skill 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                         if tween then tween:Cancel() end
                         wait(1.75)
                         g["stop"] = false
@@ -1994,27 +1994,28 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         if tween then tween:Cancel() end
 
                         misc.step = 0
-                    end
-                    if misc.check == false and misc.debounce == false then
-                        misc.debounce = true
-                        LastPos = lp.Character.HumanoidRootPart.Position
-                        task.wait(0.075)
-                        misc.check = true
-                        misc.debounce = false
-                    else
-                        if misc.debounce == false then
-                            local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude > misc.max then
-                                g["stop"] = true
-                                --print("stop by tp: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
-                                if tween then tween:Cancel() end
-                                wait(1.75)
-                                g["stop"] = false
-                                if tween then tween:Cancel() end
-                            else
-                                g["stop"] = false
+                    elseif misc.step < 7 then
+                        if misc.check == false and misc.debounce == false then
+                            misc.debounce = true
+                            LastPos = lp.Character.HumanoidRootPart.Position
+                            task.wait(0.075)
+                            misc.check = true
+                            misc.debounce = false
+                        else
+                            if misc.debounce == false then
+                                local NewPos = lp.Character.HumanoidRootPart.Position
+                                if (LastPos - NewPos).Magnitude > misc.max then
+                                    g["stop"] = true
+                                    -- print("stop by tp 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
+                                    if tween then tween:Cancel() end
+                                    wait(1.75)
+                                    g["stop"] = false
+                                    if tween then tween:Cancel() end
+                                else
+                                    g["stop"] = false
+                                end
+                                misc.check = false
                             end
-                            misc.check = false
                         end
                     end
                 end)
