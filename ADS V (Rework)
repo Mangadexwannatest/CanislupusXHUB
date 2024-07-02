@@ -1845,11 +1845,12 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if C:N4("count") == 0 then
                         task.wait(1.375)
                         repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 30.5, 0))
+                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
                             tween:Play()
                             task.wait()
                         until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
                         tween:Cancel()
+                        task.wait(0.75)
                     elseif not g["bring 2"] and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
@@ -1989,7 +1990,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     else
                         if misc.debounce == false then
                             local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude >= 20 then
+                            if (LastPos - NewPos).Magnitude >= 30 then
                                 g["stop"] = true
                                 tween:Cancel()
                                 task.wait(2.675)
