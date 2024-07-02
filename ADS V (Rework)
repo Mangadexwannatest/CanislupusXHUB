@@ -1983,13 +1983,13 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if misc.check == false and misc.debounce == false then
                         misc.debounce = true
                         LastPos = lp.Character.HumanoidRootPart.Position
-                        task.wait(.085)
+                        task.wait(.1)
                         misc.check = true
                         misc.debounce = false
                     else
                         if misc.debounce == false then
                             local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude > 20 then
+                            if (LastPos - NewPos).Magnitude >= 20 then
                                 g["stop"] = true
                                 tween:Cancel()
                                 task.wait(2.675)
