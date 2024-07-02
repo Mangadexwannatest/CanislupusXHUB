@@ -102,7 +102,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
         check = false,
         debounce = false,
         max = 20,
-        step = 0
+        step = 0,
+        tpstep = 0
     }
 
     function C:Empety()
@@ -1694,6 +1695,16 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 break
             end
             pcall(function ()
+                if misc.tpstep >= 3 then
+                    g["stop"] = true
+                    tween:Cancel()
+                    task.delay(3, function()
+                        misc.tpstep = 0
+                        g["stop"] = false
+                        tween:Cancel()
+                    end)
+                end
+
                 if V["Auto Join (Raid)"].Value and lvl.Value >= 15 then
                     if tonumber(os.date("!*t").min) <= 8 then
                         g["raid"] = true
@@ -1983,7 +1994,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 7 then
+                    if misc.step >= 7 and misc.tpstep < 3 then
                         g["stop"] = true
                         -- print("stop by skill 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                         if tween then tween:Cancel() end
@@ -1994,7 +2005,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         if tween then tween:Cancel() end
 
                         misc.step = 0
-                    elseif misc.step < 7 then
+                    else
                         if misc.check == false and misc.debounce == false then
                             misc.debounce = true
                             LastPos = lp.Character.HumanoidRootPart.Position
@@ -2005,14 +2016,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             if misc.debounce == false then
                                 local NewPos = lp.Character.HumanoidRootPart.Position
                                 if (LastPos - NewPos).Magnitude > misc.max then
-                                    g["stop"] = true
-                                    -- print("stop by tp 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
-                                    if tween then tween:Cancel() end
-                                    wait(2)
-                                    g["stop"] = false
-                                    if tween then tween:Cancel() end
-                                else
-                                    g["stop"] = false
+                                    misc.tpstep = misc.tpstep + 1
                                 end
                                 misc.check = false
                             end
@@ -2090,7 +2094,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     end
                 end
             end)
-            task.wait(0.0875)
+            task.wait(0.125)
         end
     end)
 
@@ -2113,7 +2117,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 end
 
             end)
-            task.wait(0.215)
+            task.wait(0.375)
         end
     end)
 
