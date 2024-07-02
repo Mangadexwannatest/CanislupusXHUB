@@ -2078,8 +2078,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position),["attackNumber"] = 4},"BasicAttack")
                         end
                     elseif V["Current Attack Method"].Value == "Click" then
-                        game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 1)
-                        game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 1)
+                        game:GetService"VirtualUser":CaptureController()
+                        game:GetService"VirtualUser":Button1Down(Vector2.new(1200,672))
                     end
                 end
 
