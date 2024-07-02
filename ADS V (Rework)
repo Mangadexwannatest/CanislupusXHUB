@@ -29,6 +29,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         end
     end
 
+    task.wait(1)
     g["response"] = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (request)
     --// if not string.find(m:GetProductInfo(pid).Name,"Anime Dimension") or c:FindFirstChild("CrazyDay") or g["Loading (Gui)"] then return end
     if c:FindFirstChild("CrazyDay") or g["Loading (Gui)"] then return end
@@ -1314,16 +1315,16 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if lp.Character ~= nil then lp.Character.Humanoid.PlatformStand = false local bv = lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyVelocity") if bv then bv:Destroy() end end
                     game:GetService "RunService":Set3dRenderingEnabled(true)
                     g["bring 1"] = false g["bring 2"] = false g["safe"] = false g["dead"] = false g["dodge"] = false g["hide+"] = false g["back lobby"] = false g["raid"] = false misc.current = 0
-                    if c1 then c1:Disconnect() end
-                    if c2 then c2:Disconnect() end
-                    if c3 then c3:Disconnect() end
-                    if c4 then c4:Disconnect() end
-                    if c5 then c5:Disconnect() end
-                    if c6 then c6:Disconnect() end
-                    if c7 then c7:Disconnect() end
-                    if c8 then c8:Disconnect() end
-                    if c9 then c9:Disconnect() end
-                    if c10 then c10:Disconnect() end
+                    if c1 then c1:Disconnect() c1 = nil end
+                    if c2 then c2:Disconnect() c2 = nil end
+                    if c3 then c3:Disconnect() c3 = nil end
+                    if c4 then c4:Disconnect() c4 = nil end
+                    if c5 then c5:Disconnect() c5 = nil end
+                    if c6 then c6:Disconnect() c6 = nil end
+                    if c7 then c7:Disconnect() c7 = nil end
+                    if c8 then c8:Disconnect() c8 = nil end
+                    if c9 then c9:Disconnect() c9 = nil end
+                    if c10 then c10:Disconnect() c10 = nil end
                     if tween then tween:Cancel() end
                     C:Head()
                 end)
@@ -1982,13 +1983,13 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if misc.check == false and misc.debounce == false then
                         misc.debounce = true
                         LastPos = lp.Character.HumanoidRootPart.Position
-                        task.wait(.1)
+                        task.wait(.085)
                         misc.check = true
                         misc.debounce = false
                     else
                         if misc.debounce == false then
                             local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude > 25 then
+                            if (LastPos - NewPos).Magnitude > 20 then
                                 g["stop"] = true
                                 tween:Cancel()
                                 task.wait(2.675)
