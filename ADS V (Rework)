@@ -101,7 +101,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         rarity = {},
         check = false,
         debounce = false,
-        max = 30,
+        max = 25,
         step = 0
     }
 
@@ -1846,9 +1846,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 local anc = lp.Character.HumanoidRootPart.Anchored
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
                     if C:N4("count") == 0 then
-                        task.wait(1.375)
+                        task.wait(1.475)
                         repeat
-                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 35, 0))
+                            C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 33.25, 0))
                             tween:Play()
                             task.wait()
                         until (C:N4("count") >= 1 and not g["bring 2"]) or g["stop"] or g["safe"] or not C:AutoFarm() or C:Bar("boss") or Gui.Unloaded
@@ -1888,7 +1888,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         misc.name = "FlameTrailIgnore"
                     end
                     if C:Bar("boss") then
-                        misc.tweenspeed = 0.125
+                        misc.tweenspeed = 0.1425
                     else
                         if GameMap == "Infinite Mode" then
                             misc.tweenspeed = 0.325
@@ -1898,7 +1898,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     end
                     local a = v:Clone()
                     local side = math.clamp(3.45,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,100,side + 4.35)
+                    local Sizeto = v.Size + Vector3.new(side,100,side + 3.25)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
                         a.Size = Vector3.new(0,0,100)
@@ -1983,11 +1983,11 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 6 then
+                    if misc.step >= 5 then
                         g["stop"] = true
                         --print("stop by skill: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                         if tween then tween:Cancel() end
-                        wait(1.35)
+                        wait(1.5)
                         g["stop"] = false
                         misc.check = false
                         misc.debounce = false
@@ -2008,7 +2008,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                                 g["stop"] = true
                                 --print("stop by tp: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
                                 if tween then tween:Cancel() end
-                                wait(1.35)
+                                wait(1.5)
                                 g["stop"] = false
                                 if tween then tween:Cancel() end
                             else
