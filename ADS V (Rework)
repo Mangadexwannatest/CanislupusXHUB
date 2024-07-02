@@ -101,7 +101,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         rarity = {},
         check = false,
         debounce = false,
-        max = 20,
+        max = 15,
         step = 0,
         tpstep = 0
     }
@@ -1695,9 +1695,10 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 break
             end
             pcall(function ()
-                if misc.tpstep >= 3 then
+                if misc.tpstep >= 2 then
                     g["stop"] = true
                     tween:Cancel()
+                    -- print("TP STEP DETECH")
                     task.delay(3, function()
                         misc.tpstep = 0
                         g["stop"] = false
@@ -1994,15 +1995,15 @@ local p, c, t, w, r, m, h, g, vt, pid =
             c7 = game:GetService "RunService".Heartbeat:Connect(function()
                 pcall(function ()
                     if g["dead"] then return end
-                    if misc.step >= 7 and misc.tpstep < 3 then
+                    if misc.step >= 5 and misc.tpstep < 2 then
                         g["stop"] = true
                         -- print("stop by skill 1: "..tostring(lpg.BattleGui.CenterUIFrame.WaveClearClearText.Text))
-                        if tween then tween:Cancel() end
-                        wait(1.5)
+                        tween:Cancel()
+                        wait(1.35)
                         g["stop"] = false
                         misc.check = false
                         misc.debounce = false
-                        if tween then tween:Cancel() end
+                        tween:Cancel()
 
                         misc.step = 0
                     else
@@ -2044,7 +2045,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-
+                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Two"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image ~= iId then
                         misc.step = 0
                         repeat
@@ -2053,7 +2054,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-
+                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Third"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image ~= iId then
                         misc.step = 0
                         repeat
@@ -2062,7 +2063,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-
+                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image ~= iId then
                         misc.step = 0
                         repeat
@@ -2071,7 +2072,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             task.wait(0.125)
                         until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId or g["stop"] or Gui.Unloaded
                     end
-
+                    repeat task.wait() until C:N5() == 0 or Gui.Unloaded
                     if gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId and not gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image ~= iId then
                         misc.step = 0
                         repeat
@@ -2094,7 +2095,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     end
                 end
             end)
-            task.wait(0.125)
+            task.wait(0.135)
         end
     end)
 
@@ -2117,7 +2118,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 end
 
             end)
-            task.wait(0.375)
+            task.wait(0.335)
         end
     end)
 
