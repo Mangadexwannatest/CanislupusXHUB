@@ -1843,15 +1843,15 @@ local p, c, t, w, r, m, h, g, vt, pid =
             pcall(function ()
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
                     if C:N4("count") == 0 then
-                        task.wait(1.375)
+                        task.wait(1.475)
                         C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
                         tween:Play()
-                        task.wait(0.1)
+                        tween.Completed:Wait()
                     elseif not g["bring 2"] and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
-                            task.wait(0.575)
+                            task.wait(0.585)
                         until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
                         tween:Cancel()
                     end
@@ -1984,7 +1984,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     if misc.check == false and misc.debounce == false then
                         misc.debounce = true
                         LastPos = lp.Character.HumanoidRootPart.Position
-                        wait(0.01)
+                        wait(0.005)
                         misc.check = true
                         misc.debounce = false
                     else
@@ -1993,7 +1993,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             if (LastPos - NewPos).Magnitude >= 10 then
                                 g["stop"] = true
                                 tween:Cancel()
-                                task.wait(2.675)
+                                task.wait(2.25)
                                 g["stop"] = false
                             end
                             misc.check = false
