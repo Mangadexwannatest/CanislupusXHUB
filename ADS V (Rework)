@@ -1344,7 +1344,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end
 
     if GameMap == "CharacterTest" then return Gui:Notify({Title = "Failed to load function (Error)", Content = "This map is not supported.", SubContent = nil, Duration = 99999999})
-    elseif GameMap == "Infinite Mode" then misc.speed = 80 misc.step = 0.575
+    elseif GameMap == "Infinite Mode" then misc.speed = 75 misc.step = 0.575
     end
     task.wait(1)
 
@@ -1763,7 +1763,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     g["safe"] = false
                 end
 
-                if g["safe"] and not g["dead"] and not g["stop"] then
+                if g["safe"] and not g["dead"] then
                     C:Tween(w.Folders.SpawnPoints[lp.RespawnLocation.Name], CFrame.new(0, 70, 0))
                     tween:Play()
                 end
@@ -1776,7 +1776,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then break end
             pcall(function ()
-                if C:AutoFarm() and C:Bar("boss") and not C:Flame() and not C:N3() and not g["safe"] and not g["dead"] and not g["dodge"] and not g["stop"] and not lp.Character.HumanoidRootPart.Anchored then
+                local hum = lp.Character.HumanoidRootPart
+                if C:AutoFarm() and C:Bar("boss") and not C:Flame() and not C:N3() and not g["safe"] and not g["dead"] and not g["dodge"] and not hum.Anchored then
                     repeat
                         misc.current = 0
                         g["bring 1"] = false
@@ -1784,7 +1785,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         C:Tween(C:N2("boss").HumanoidRootPart, g["method"])
                         tween:Play()
                         task.wait(misc.step)
-                    until C:N3() or not C:Bar("boss") or not C:AutoFarm() or C:Flame() or g["safe"] or g["dead"] or g["dodge"] or g["stop"] or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
+                    until C:N3() or not C:Bar("boss") or not C:AutoFarm() or C:Flame() or g["safe"] or g["dead"] or g["dodge"] or hum.Anchored or Gui.Unloaded
                     tween:Cancel()
                 end
             end)
@@ -1841,18 +1842,19 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded or GameMap ~= "Infinite Mode" then break end
             pcall(function ()
-                if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] and not g["stop"] then
+                local hum = lp.Character.HumanoidRootPart
+                if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] then
                     if C:N4("count") == 0 then
-                        task.wait(1.475)
+                        task.wait(1.275)
                         C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
                         tween:Play()
                         tween.Completed:Wait()
-                    elseif not g["bring 2"] and not g["dodge"] and not lp.Character.HumanoidRootPart.Anchored then
+                    elseif not g["bring 2"] and not g["dodge"] and not hum.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
                             tween:Play()
-                            task.wait(0.585)
-                        until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or g["stop"] or C:Bar("boss") or C:N4("count") == 0 or lp.Character.HumanoidRootPart.Anchored or Gui.Unloaded
+                            task.wait(0.575)
+                        until g["safe"] or g["dodge"] or g["dead"] or not C:AutoFarm() or C:Bar("boss") or C:N4("count") == 0 or hum.Anchored or Gui.Unloaded
                         tween:Cancel()
                     end
                 end
@@ -1882,21 +1884,17 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         misc.name = "FlameTrailIgnore"
                     end
                     if C:Bar("boss") then
-                        misc.tweenspeed = 0.15
+                        misc.tweenspeed = 0.155
                     else
-                        if GameMap == "Infinite Mode" then
-                            misc.tweenspeed = 0.325
-                        else
-                            misc.tweenspeed = 0.275
-                        end
+                        misc.tweenspeed = 0.275
                     end
                     local a = v:Clone()
                     local side = math.clamp(3.45,0,10)
-                    local Sizeto = v.Size + Vector3.new(side,100,side + 3.25)
+                    local Sizeto = v.Size + Vector3.new(side,98.75,side + 3.25)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
-                        a.Size = Vector3.new(0,0,100)
-                        Sizeto = v.Size + Vector3.new(side,side,100)
+                        a.Size = Vector3.new(0,0,98.75)
+                        Sizeto = v.Size + Vector3.new(side,side,98.75)
                     end
                     t:Create(a, TweenInfo.new(misc.tweenspeed), {Size = Sizeto}):Play()
                     a.CFrame = v.CFrame + Vector3.new(0,0,0)
@@ -1939,14 +1937,12 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 g["bring 2"] = false
                 g["dodge"] = false
                 g["safe"] = false
-                g["stop"] = false
                 g["dead"] = true
                 if c4 then c4:Disconnect() c4 = nil end
 
                 c5 = lp.CharacterAdded:Connect(function ()
                     task.wait(1)
                     misc.current = 0
-                    g["stop"] = false
                     g["dead"] = false
                     C.Touch(lp.Character)
                     C:Head()
@@ -1977,30 +1973,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
                     g["bring 2"] = false
                 end
             end)
-
-            c7 = game:GetService "RunService".Heartbeat:Connect(function()
-                pcall(function ()
-                    if g["dead"] then return end
-                    if misc.check == false and misc.debounce == false then
-                        misc.debounce = true
-                        LastPos = lp.Character.HumanoidRootPart.Position
-                        wait(0.005)
-                        misc.check = true
-                        misc.debounce = false
-                    else
-                        if misc.debounce == false then
-                            local NewPos = lp.Character.HumanoidRootPart.Position
-                            if (LastPos - NewPos).Magnitude >= 10 then
-                                g["stop"] = true
-                                tween:Cancel()
-                                task.wait(2.25)
-                                g["stop"] = false
-                            end
-                            misc.check = false
-                        end
-                    end
-                end)
-            end)
         end
     end)
 
@@ -2008,7 +1980,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then break end
             pcall(function ()
-                if g["bring 1"] or g["bring 2"] or g["dead"] or g["safe"] or g["stop"] then return end
+                if g["bring 1"] or g["bring 2"] or g["dead"] or g["safe"] then return end
                 if V["Auto Skill"].Value and C:N5() == 0 and C:AutoFarm() and  C:N1("dist", C:N6(C:N2("all"))) <= V[g["cNum"].."Skill Distance"].Value then
                     local gui = lpg.UniversalGui.UniversalCenterUIFrame.SlotsHolder
                     local iId = "rbxassetid://6797200424"
@@ -2017,35 +1989,35 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill One"].Value))
                             task.wait(0.125)
-                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId or g["stop"] or Gui.Unloaded
+                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId or Gui.Unloaded
                     end
 
                     if gui["Skill"..V[g["cNum"].."Skill Two"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill One"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Two"].Value))
                             task.wait(0.125)
-                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId or g["stop"] or Gui.Unloaded
+                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId or Gui.Unloaded
                     end
 
                     if gui["Skill"..V[g["cNum"].."Skill Third"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Two"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Third"].Value))
                             task.wait(0.125)
-                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId or g["stop"] or Gui.Unloaded
+                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId or Gui.Unloaded
                     end
 
                     if gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Third"].Value].Image == iId and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fourth"].Value))
                             task.wait(0.125)
-                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId or g["stop"] or Gui.Unloaded
+                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId or Gui.Unloaded
                     end
 
                     if gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Visible and gui["Skill"..V[g["cNum"].."Skill Fourth"].Value].Image == iId and not gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image ~= iId then
                         repeat
                             re:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(C:N2("all").HumanoidRootPart.Position)},tonumber(V[g["cNum"].."Skill Fifth"].Value))
                             task.wait(0.125)
-                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image == iId or g["stop"] or Gui.Unloaded
+                        until C:N5() >= 1 or gui["Skill"..V[g["cNum"].."Skill Fifth"].Value].Image == iId or Gui.Unloaded
                     end
 
                     for i,v in pairs(V["Current Assists"].Value) do
@@ -2069,7 +2041,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then break end
             pcall(function ()
-                if g["bring 1"] or g["bring 2"] or g["dead"] or g["safe"] or g["stop"] then return end
+                if g["bring 1"] or g["bring 2"] or g["dead"] or g["safe"] then return end
                 if V["Auto Skill"].Value and C:N5() == 0 and C:AutoFarm() and C:N1("dist", C:N6(C:N2("all"))) <= 11.5 then
                     if V["Current Attack Method"].Value == "Remote" then
                         if lp.Character:FindFirstChild("Bow") or (lp.Character:FindFirstChild("Gun1") and lp.Character:FindFirstChild("Gun2")) or (lp.Character:FindFirstChild("Staff") and lp.Character.Staff:FindFirstChild("EssentialWeld") and lp.Character.Staff.EssentialWeld.C1.X <= -0.038) then
