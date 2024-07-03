@@ -39,7 +39,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         p.LocalPlayer.PlayerGui,
         p:GetUserIdFromNameAsync(p.LocalPlayer.Name),
         "Anime Dimensions Simulator (Rework)",
-        " 1.0.5",
+        " 1.0.7",
         {"Naruto","Sasuke"},
         {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
         {
@@ -1869,7 +1869,6 @@ local p, c, t, w, r, m, h, g, vt, pid =
 
 
     task.spawn(function ()
-        if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then return end
         c2 = lp:GetPropertyChangedSignal("RespawnLocation"):Connect(function ()
             misc.current = 0
             g["spawning"] = true
@@ -2311,362 +2310,362 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end)
 
     task.spawn(function ()
-        if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then return end
-        task.wait(2)
-        local Q, R, E, CO = {}, {}, {}, {}
-
-        local R1, R2
-        local Table = {}
-        local C1, C2, C3, C4 =
-            sTd.StageClear.Value,
-            sTd.BossRushClears.Value,
-            sTd.WeeklyShadowRaidsCleared.Value,
-            sTd.RaidClears.Value
-
-            if lpg.BattleGui.CenterUIFrame.RaidDataFrame.Visible then
-                R1, R2 =
-                    C:Bar("res"),
-                    lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI
-            else
-                R1, R2 =
-                lpg.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RewardFrame.RewardGridFrame,
-                lpg.UniversalGui.UniversalCenterUIFrame.ResultUI
-            end
-
-            for i,v in ipairs(sTd:GetChildren()) do
-                if v.Name.find(v.Name, "RaidBeat") then
-                    if not Table[v.Name] then
-                        Table[v.Name] = {}
-                    end
-                    table.insert(Table[v.Name], v.Value)
+        pcall(function ()
+            if (pid == 7338881230 or pid == 6938803436 or pid == 7274690025) or Gui.Unloaded then return end
+            task.wait(2)
+            local Q, R, E, CO = {}, {}, {}, {}
+    
+            local R1, R2
+            local Table = {}
+            local C1, C2, C3, C4 =
+                sTd.StageClear.Value,
+                sTd.BossRushClears.Value,
+                sTd.WeeklyShadowRaidsCleared.Value,
+                sTd.RaidClears.Value
+    
+                if lpg.BattleGui.CenterUIFrame.RaidDataFrame.Visible then
+                    R1, R2 =
+                        C:Bar("res"),
+                        lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI
+                else
+                    R1, R2 =
+                    lpg.UniversalGui.UniversalCenterUIFrame.ResultUI.Frame.RewardFrame.RewardGridFrame,
+                    lpg.UniversalGui.UniversalCenterUIFrame.ResultUI
                 end
-            end
-
-
-            c8 = R1.ChildAdded:Connect(function(v)
-                if not table.find(curname, v.Name) then
-                    if v.Name == "RewardTemplate" then
-                        if v.RewardImage.Image == "rbxassetid://13406949044" then
-                            table.insert(Q, "`Character [Sakura]`")
-                        elseif v.RewardImage.Image == "rbxassetid://12992685998" then
-                            table.insert(Q, "`Character [Natsu]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7037255754" then
-                            table.insert(Q, "`Character [Killua]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://7053221313" then
-                            table.insert(Q, "`Character [Asta]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16629613718" then
-                            table.insert(Q, "`Character [Itadori]`")
-                        elseif v.RewardImage.Image == "rbxassetid://12992687663" then
-                            table.insert(Q, "`Character [Akaza]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://13621197278" then
-                            table.insert(Q, "`Character [Sasuke]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7057569994" then
-                            table.insert(Q, "`Character [Gray]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16629618004" then
-                            table.insert(Q, "`Character [Sukuna]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://7132704621" then
-                            table.insert(Q, "`Character [Rukai]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13621200238" then
-                            table.insert(Q, "`Character [Shinra]`")
-                        elseif v.RewardImage.Image == "rbxassetid://15699330111" then
-                            table.insert(Q, "`Character [All Might]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://16834106549" then
-                            table.insert(Q, "`Character [Zoro]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13621194902" then
-                            table.insert(Q, "`Character [Asuna]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://7542006362" then
-                            table.insert(Q, "`Character [Emiya Archer]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7785010433" then
-                            table.insert(Q, "`Character [Kaneki]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://8270023417" then
-                            table.insert(Q, "`Character [Lancer]`")
-                        elseif v.RewardImage.Image == "rbxassetid://9038000341" then
-                            table.insert(Q, "`Character [Saber Alter]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://9672496119" then
-                            table.insert(Q, "`Character [Diablo]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13406949528" then
-                            table.insert(Q, "`Character [Rimuru]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://16834116921" then
-                            table.insert(Q, "`Character [Power]`")
-                        elseif v.RewardImage.Image == "rbxassetid://17096447919" then
-                            table.insert(Q, "`Character [Yamato]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16620398317" then
-                            table.insert(Q, "`Character [Sonic]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16745228465" then
-                            table.insert(Q, "`Character [Rank ??? Hunter]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://16832873774" then
-                            table.insert(Q, "`Character [Broly]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7401067364" then
-                            table.insert(Q, "`Character [Alice]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7386538151" then
-                            table.insert(Q, "`Character [Gilgamesh]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7384650558" then
-                            table.insert(Q, "`Character [Kokushibo]`")
-
-                        elseif v.RewardImage.Image == "rbxassetid://17524638400" then
-                            table.insert(Q, "`Character [RinOkumura]`")
-                        elseif v.RewardImage.Image == "rbxassetid://17257820522" then
-                            table.insert(Q, "`Character [Mob]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16913579571" then
-                            table.insert(Q, "`Character [Mash]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16833352600" then
-                            table.insert(Q, "`Character [Mihawk]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16629617713" then
-                            table.insert(Q, "`Character [SukunaShibuya]`")
-                        elseif v.RewardImage.Image == "rbxassetid://14785556998" then
-                            table.insert(Q, "`Character [Asta (Black Asta)]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13736210016" then
-                            table.insert(Q, "`Character [Cosmic Garou]`")
-                        elseif v.RewardImage.Image == "rbxassetid://14295913088" then
-                            table.insert(Q, "`Character [Jotaro]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13294872244" then
-                            table.insert(Q, "`Character [Mitsuri]`")
-                        elseif v.RewardImage.Image == "rbxassetid://12548891547" then
-                            table.insert(Q, "`Character [Tanjiro (Sun God)]`")
-                        elseif v.RewardImage.Image == "rbxassetid://12275838772" then
-                            table.insert(Q, "`Character [Dio]`")
-                        elseif v.RewardImage.Image == "rbxassetid://8827725106" then
-                            table.insert(Q, "`Character [RimuruDemonLord]`")
-                        elseif v.RewardImage.Image == "rbxassetid://12087483204" then
-                            table.insert(Q, "`Character [Ichigo (Fullbring Bankai)]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16833324796" then
-                            table.insert(Q, "`Character [Goku UI]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16832872564" then
-                            table.insert(Q, "`Character [Denji]`")
-                        elseif v.RewardImage.Image == "rbxassetid://10835672920" then
-                            table.insert(Q, "`Character [Naruto (Kurama Mode)]`")
-                        elseif v.RewardImage.Image == "rbxassetid://10688580603" then
-                            table.insert(Q, "`Character [Obito]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16834112408" then
-                            table.insert(Q, "`Character [Shanks]`")
-                        elseif v.RewardImage.Image == "rbxassetid://10182602891" then
-                            table.insert(Q, "`Character [Uzui]`")
-                        elseif v.RewardImage.Image == "rbxassetid://8466801602" then
-                            table.insert(Q, "`Character [Yoriichi]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16802362266" then
-                            table.insert(Q, "`Character [Ice Queen Esdeath]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16629613889" then
-                            table.insert(Q, "`Character [Infinity Gojo]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16832874929" then
-                            table.insert(Q, "`Character [Attack Titan]`")
-                        elseif v.RewardImage.Image == "rbxassetid://9432939692" then
-                            table.insert(Q, "`Character [Accelerator]`")
-                        elseif v.RewardImage.Image == "rbxassetid://17076062883" then
-                            table.insert(Q, "`Character [Gear 5 Luffy]`")
-                        elseif v.RewardImage.Image == "rbxassetid://7210567835" then
-                            table.insert(Q, "`Character [Rengoku]`")
-                        elseif v.RewardImage.Image == "rbxassetid://13621198974" then
-                            table.insert(Q, "`Character [Kirito]`")
-                        elseif v.RewardImage.Image == "rbxassetid://16833356947" then
-                            table.insert(Q, "`Character [Levi]`")
-                        else
-                            table.insert(Q, "`Character [Unknow]`")
+    
+                for i,v in ipairs(sTd:GetChildren()) do
+                    if v.Name.find(v.Name, "RaidBeat") then
+                        if not Table[v.Name] then
+                            Table[v.Name] = {}
                         end
-                    else
-                        if v.Name == "Divine Core" then
-                            table.insert(Q, "`"..v.Name.." [Divine]`")
+                        table.insert(Table[v.Name], v.Value)
+                    end
+                end
+    
+    
+                c8 = R1.ChildAdded:Connect(function(v)
+                    if not table.find(curname, v.Name) then
+                        if v.Name == "RewardTemplate" then
+                            if v.RewardImage.Image == "rbxassetid://13406949044" then
+                                table.insert(Q, "`Character [Sakura]`")
+                            elseif v.RewardImage.Image == "rbxassetid://12992685998" then
+                                table.insert(Q, "`Character [Natsu]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7037255754" then
+                                table.insert(Q, "`Character [Killua]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://7053221313" then
+                                table.insert(Q, "`Character [Asta]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16629613718" then
+                                table.insert(Q, "`Character [Itadori]`")
+                            elseif v.RewardImage.Image == "rbxassetid://12992687663" then
+                                table.insert(Q, "`Character [Akaza]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://13621197278" then
+                                table.insert(Q, "`Character [Sasuke]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7057569994" then
+                                table.insert(Q, "`Character [Gray]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16629618004" then
+                                table.insert(Q, "`Character [Sukuna]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://7132704621" then
+                                table.insert(Q, "`Character [Rukai]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13621200238" then
+                                table.insert(Q, "`Character [Shinra]`")
+                            elseif v.RewardImage.Image == "rbxassetid://15699330111" then
+                                table.insert(Q, "`Character [All Might]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://16834106549" then
+                                table.insert(Q, "`Character [Zoro]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13621194902" then
+                                table.insert(Q, "`Character [Asuna]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://7542006362" then
+                                table.insert(Q, "`Character [Emiya Archer]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7785010433" then
+                                table.insert(Q, "`Character [Kaneki]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://8270023417" then
+                                table.insert(Q, "`Character [Lancer]`")
+                            elseif v.RewardImage.Image == "rbxassetid://9038000341" then
+                                table.insert(Q, "`Character [Saber Alter]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://9672496119" then
+                                table.insert(Q, "`Character [Diablo]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13406949528" then
+                                table.insert(Q, "`Character [Rimuru]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://16834116921" then
+                                table.insert(Q, "`Character [Power]`")
+                            elseif v.RewardImage.Image == "rbxassetid://17096447919" then
+                                table.insert(Q, "`Character [Yamato]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16620398317" then
+                                table.insert(Q, "`Character [Sonic]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16745228465" then
+                                table.insert(Q, "`Character [Rank ??? Hunter]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://16832873774" then
+                                table.insert(Q, "`Character [Broly]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7401067364" then
+                                table.insert(Q, "`Character [Alice]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7386538151" then
+                                table.insert(Q, "`Character [Gilgamesh]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7384650558" then
+                                table.insert(Q, "`Character [Kokushibo]`")
+    
+                            elseif v.RewardImage.Image == "rbxassetid://17524638400" then
+                                table.insert(Q, "`Character [RinOkumura]`")
+                            elseif v.RewardImage.Image == "rbxassetid://17257820522" then
+                                table.insert(Q, "`Character [Mob]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16913579571" then
+                                table.insert(Q, "`Character [Mash]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16833352600" then
+                                table.insert(Q, "`Character [Mihawk]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16629617713" then
+                                table.insert(Q, "`Character [SukunaShibuya]`")
+                            elseif v.RewardImage.Image == "rbxassetid://14785556998" then
+                                table.insert(Q, "`Character [Asta (Black Asta)]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13736210016" then
+                                table.insert(Q, "`Character [Cosmic Garou]`")
+                            elseif v.RewardImage.Image == "rbxassetid://14295913088" then
+                                table.insert(Q, "`Character [Jotaro]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13294872244" then
+                                table.insert(Q, "`Character [Mitsuri]`")
+                            elseif v.RewardImage.Image == "rbxassetid://12548891547" then
+                                table.insert(Q, "`Character [Tanjiro (Sun God)]`")
+                            elseif v.RewardImage.Image == "rbxassetid://12275838772" then
+                                table.insert(Q, "`Character [Dio]`")
+                            elseif v.RewardImage.Image == "rbxassetid://8827725106" then
+                                table.insert(Q, "`Character [RimuruDemonLord]`")
+                            elseif v.RewardImage.Image == "rbxassetid://12087483204" then
+                                table.insert(Q, "`Character [Ichigo (Fullbring Bankai)]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16833324796" then
+                                table.insert(Q, "`Character [Goku UI]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16832872564" then
+                                table.insert(Q, "`Character [Denji]`")
+                            elseif v.RewardImage.Image == "rbxassetid://10835672920" then
+                                table.insert(Q, "`Character [Naruto (Kurama Mode)]`")
+                            elseif v.RewardImage.Image == "rbxassetid://10688580603" then
+                                table.insert(Q, "`Character [Obito]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16834112408" then
+                                table.insert(Q, "`Character [Shanks]`")
+                            elseif v.RewardImage.Image == "rbxassetid://10182602891" then
+                                table.insert(Q, "`Character [Uzui]`")
+                            elseif v.RewardImage.Image == "rbxassetid://8466801602" then
+                                table.insert(Q, "`Character [Yoriichi]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16802362266" then
+                                table.insert(Q, "`Character [Ice Queen Esdeath]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16629613889" then
+                                table.insert(Q, "`Character [Infinity Gojo]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16832874929" then
+                                table.insert(Q, "`Character [Attack Titan]`")
+                            elseif v.RewardImage.Image == "rbxassetid://9432939692" then
+                                table.insert(Q, "`Character [Accelerator]`")
+                            elseif v.RewardImage.Image == "rbxassetid://17076062883" then
+                                table.insert(Q, "`Character [Gear 5 Luffy]`")
+                            elseif v.RewardImage.Image == "rbxassetid://7210567835" then
+                                table.insert(Q, "`Character [Rengoku]`")
+                            elseif v.RewardImage.Image == "rbxassetid://13621198974" then
+                                table.insert(Q, "`Character [Kirito]`")
+                            elseif v.RewardImage.Image == "rbxassetid://16833356947" then
+                                table.insert(Q, "`Character [Levi]`")
+                            else
+                                table.insert(Q, "`Character [Unknow]`")
+                            end
                         else
-                            if not v:FindFirstChild("Gradient") then
-                                table.insert(Q, "`"..v.Name.." [Common]`")
-                            elseif v:FindFirstChild("Gradient") then
-                                if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Uncommon]`")
-                                elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Rare]`")
-                                elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Epic]`")
-                                elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Legendary]`")
-                                elseif tostring(v.Gradient.Color) == "0 0.407843 0.0941176 0.0980392 0 0.510815 1 0 0.0156863 0 1 0.439216 0.0705882 0.0784314 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Mythic]`")
-                                elseif tostring(v.Gradient.Color) == "0 1 0.976471 0.258824 0 0.541523 1 0.494118 0.976471 0 1 0.333333 1 0.945098 0 " then
-                                    table.insert(Q, "`"..v.Name.." [Divine]`")
+                            if v.Name == "Divine Core" then
+                                table.insert(Q, "`"..v.Name.." [Divine]`")
+                            else
+                                if not v:FindFirstChild("Gradient") then
+                                    table.insert(Q, "`"..v.Name.." [Common]`")
+                                elseif v:FindFirstChild("Gradient") then
+                                    if tostring(v.Gradient.Color) == "0 0.352941 1 0.407843 0 1 0.513726 1 0.635294 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Uncommon]`")
+                                    elseif tostring(v.Gradient.Color) == "0 0 0.666667 1 0 1 0.6 0.780392 1 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Rare]`")
+                                    elseif tostring(v.Gradient.Color) == "0 0.666667 0.333333 1 0 1 0.352941 0.494118 1 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Epic]`")
+                                    elseif tostring(v.Gradient.Color) == "0 1 0.380392 0.392157 0 1 1 0.639216 0.278431 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Legendary]`")
+                                    elseif tostring(v.Gradient.Color) == "0 0.407843 0.0941176 0.0980392 0 0.510815 1 0 0.0156863 0 1 0.439216 0.0705882 0.0784314 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Mythic]`")
+                                    elseif tostring(v.Gradient.Color) == "0 1 0.976471 0.258824 0 0.541523 1 0.494118 0.976471 0 1 0.333333 1 0.945098 0 " then
+                                        table.insert(Q, "`"..v.Name.." [Divine]`")
+                                    end
                                 end
                             end
                         end
-                    end
-                else
-                    if tonumber(v.LevelReq.Text) then
-                        if not R[v.Name] then
-                            R[v.Name] = {}
-                        end
-                        table.insert(R[v.Name], tonumber(v.LevelReq.Text))
-                    end
-                end
-            end)
-
-            c9 = R2:GetPropertyChangedSignal("Visible"):Connect(function ()
-                pcall(function ()
-                    task.wait(3.5)
-                    if not V["Send Webhook"].Value or not string.find(V["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
-
-                    for i,v in pairs(R) do
-                        local name_count
-                        local sum = 0
-                        if #v >= 1 then
-                            for x = 1, #v do
-                                sum = sum + v[x]
-                                name_count = "`"..i.." ["..sum.."]`"
+                    else
+                        if tonumber(v.LevelReq.Text) then
+                            if not R[v.Name] then
+                                R[v.Name] = {}
                             end
-                            table.insert(E, name_count)
-                        else
-                            table.insert(E, "`None     `")
+                            table.insert(R[v.Name], tonumber(v.LevelReq.Text))
                         end
                     end
-                    if #Q == 0 then
-                        table.insert(Q, "`None      `")
-                    end
-
-                    local TimeEnd = "Time: 00:00"
-                    local DamageDeal = "Damage: "..C:Hex("number", lp.leaderstats.Damage.Value)
-                    local Rank = "Unknown: F"
-                    local ClearTime = "Unknown: 0"
-                    local GameName = "Unknown: nil"
-                    local GameStatus = " [End!]"
-
-                    if R2 == lpg.UniversalGui.UniversalCenterUIFrame.ResultUI then
-                        local RI = R2.Frame.ResultDiamond.ResultRank.Image
-                        TimeEnd = R2.Frame.TimeText.Text
-
-                        if RI == "rbxassetid://7443889715" then
-                            Rank = "Rank: S+"
-                        elseif RI == "rbxassetid://6715353612" then
-                            Rank = "Rank: S"
-                        elseif RI == "rbxassetid://6891959728" then
-                            Rank = "Rank: A"
-                        elseif RI == "rbxassetid://6891959611" then
-                            Rank = "Rank: B"
-                        elseif RI == "rbxassetid://6891959460" then
-                            Rank = "Rank: C"
-                        elseif RI == "rbxassetid://6782568839" then
-                            Rank = "Rank: F"
-                        else
-                            Rank = "Rank: D"
+                end)
+    
+                c9 = R2:GetPropertyChangedSignal("Visible"):Connect(function ()
+                        task.wait(3.5)
+                        if not V["Send Webhook"].Value or not string.find(V["Webhook URL"].Value,"https://discord.com/api/webhooks") then return end
+    
+                        for i,v in pairs(R) do
+                            local name_count
+                            local sum = 0
+                            if #v >= 1 then
+                                for x = 1, #v do
+                                    sum = sum + v[x]
+                                    name_count = "`"..i.." ["..sum.."]`"
+                                end
+                                table.insert(E, name_count)
+                            else
+                                table.insert(E, "`None     `")
+                            end
                         end
-
-                        if #R == 0 and #Q == 0 and Rank == "Rank: F" then
-                            GameStatus = " [Defeat!]"
-                            GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
-                            ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                        else
-                            GameStatus = " [Victory!]"
-                            local BT = lpg.BattleGui.CenterUIFrame
-
-                            if GameMap == "Virtual Garden" then
-                                TimeEnd = "Time: 08:00"
-                                GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
-                                ClearTime = "Unknown: 0"
-                            elseif GameMap == "Infinite Mode" then
-                                GameName = "GameMap: "..GameMap.."\nWave Reach: "..BT.WaveClearClearText.Text.."\nWave Clear: "..tonumber(BT.WaveClearClearText.Text - 1).."\nWave Clear (Highest): "..sTd.InfiniteRecord.Value
-                                ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                            elseif sTd.StageClear.Value ~= C1 then
+                        if #Q == 0 then
+                            table.insert(Q, "`None      `")
+                        end
+    
+                        local TimeEnd = "Time: 00:00"
+                        local DamageDeal = "Damage: "..C:Hex("number", lp.leaderstats.Damage.Value)
+                        local Rank = "Unknown: F"
+                        local ClearTime = "Unknown: 0"
+                        local GameName = "Unknown: nil"
+                        local GameStatus = " [End!]"
+    
+                        if R2 == lpg.UniversalGui.UniversalCenterUIFrame.ResultUI then
+                            local RI = R2.Frame.ResultDiamond.ResultRank.Image
+                            TimeEnd = R2.Frame.TimeText.Text
+    
+                            if RI == "rbxassetid://7443889715" then
+                                Rank = "Rank: S+"
+                            elseif RI == "rbxassetid://6715353612" then
+                                Rank = "Rank: S"
+                            elseif RI == "rbxassetid://6891959728" then
+                                Rank = "Rank: A"
+                            elseif RI == "rbxassetid://6891959611" then
+                                Rank = "Rank: B"
+                            elseif RI == "rbxassetid://6891959460" then
+                                Rank = "Rank: C"
+                            elseif RI == "rbxassetid://6782568839" then
+                                Rank = "Rank: F"
+                            else
+                                Rank = "Rank: D"
+                            end
+    
+                            if #R == 0 and #Q == 0 and Rank == "Rank: F" then
+                                GameStatus = " [Defeat!]"
                                 GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
                                 ClearTime = "Dimension Clears: "..sTd.StageClear.Value
-                            elseif sTd.BossRushClears.Value ~= C2 then
-                                TimeEnd = R2.Frame.TimeText.Text.."\nBest Record: "..sTd.BossRushRecordString.Value
-                                GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
-                                ClearTime = "BossRush Clears: "..sTd.BossRushClears.Value
-                            elseif sTd.WeeklyShadowRaidsCleared.Value ~= C3 then
-                                GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..C:N1("stage")
-                                ClearTime = "SpeedRaid Clears: "..sTd.WeeklyShadowRaidsCleared.Value
+                            else
+                                GameStatus = " [Victory!]"
+                                local BT = lpg.BattleGui.CenterUIFrame
+    
+                                if GameMap == "Virtual Garden" then
+                                    TimeEnd = "Time: 08:00"
+                                    GameName = "GameMap: "..GameMap.."\nScore: "..BT.EnemiesDefeatedBack.EnemyDefeatedNumber.Text.."\nScore (Highest): "..sTd.TimeChallengeHighScore.Value
+                                    ClearTime = "Unknown: 0"
+                                elseif GameMap == "Infinite Mode" then
+                                    GameName = "GameMap: "..GameMap.."\nWave Reach: "..BT.WaveClearClearText.Text.."\nWave Clear: "..tonumber(BT.WaveClearClearText.Text - 1).."\nWave Clear (Highest): "..sTd.InfiniteRecord.Value
+                                    ClearTime = "Dimension Clears: "..sTd.StageClear.Value
+                                elseif sTd.StageClear.Value ~= C1 then
+                                    GameName = "Dimension: "..GameMap:split("Dimension")[1].."\nStage Clear: "..C:N1("stage")
+                                    ClearTime = "Dimension Clears: "..sTd.StageClear.Value
+                                elseif sTd.BossRushClears.Value ~= C2 then
+                                    TimeEnd = R2.Frame.TimeText.Text.."\nBest Record: "..sTd.BossRushRecordString.Value
+                                    GameName = "GameMap: "..GameMap.."\nStage Clear: 3"
+                                    ClearTime = "BossRush Clears: "..sTd.BossRushClears.Value
+                                elseif sTd.WeeklyShadowRaidsCleared.Value ~= C3 then
+                                    GameName = "SpeedRaid: "..GameMap:split("Raid")[1].."\nStage Clear: "..C:N1("stage")
+                                    ClearTime = "SpeedRaid Clears: "..sTd.WeeklyShadowRaidsCleared.Value
+                                end
                             end
-                        end
-                    else
-                        TimeEnd = "Time: 08:00"
-                        Rank = "Rank:"..lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
-                        GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                        ClearTime = "Raid Clears: Unknown"
-
-                        if sTd.RaidClears.Value ~= C4 then
-                            for i,v in pairs(Table) do
-                                if sTd:FindFirstChild(i).Value ~= v[1] then
-                                    GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
-                                    ClearTime = "Raid Clears: "..sTd.RaidClears.Value.."\n"..i..": "..(v[1] + 1)
+                        else
+                            TimeEnd = "Time: 08:00"
+                            Rank = "Rank:"..lpg.UniversalGui.UniversalCenterUIFrame.RaidResultUI.Frame.RankText.Text:split(":")[2]
+                            GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                            ClearTime = "Raid Clears: Unknown"
+    
+                            if sTd.RaidClears.Value ~= C4 then
+                                for i,v in pairs(Table) do
+                                    if sTd:FindFirstChild(i).Value ~= v[1] then
+                                        GameName = "Raid: "..GameMap:split("Raid")[1].."\nStage Clear: 0"
+                                        ClearTime = "Raid Clears: "..sTd.RaidClears.Value.."\n"..i..": "..(v[1] + 1)
+                                    end
                                 end
                             end
                         end
-                    end
-
-                    local content = nil
-                    if V["Webhook Ping (Activate)"].Value then
-                        for i, v in pairs(V["Webhook Ping (Type)"].Value) do
-                            if v == true then
-                                for x = 1, #Q do
-                                    if i == "Character" then
-                                        if string.find(Q[x], i) then
-                                            local gs = Q[x]:gsub("`", ""):gsub(" ", ""):split("[")[1]
-                                            if gs == i then
-                                                table.insert(CO, Q[x])
+    
+                        local content = nil
+                        if V["Webhook Ping (Activate)"].Value then
+                            for i, v in pairs(V["Webhook Ping (Type)"].Value) do
+                                if v == true then
+                                    for x = 1, #Q do
+                                        if i == "Character" then
+                                            if string.find(Q[x], i) then
+                                                local gs = Q[x]:gsub("`", ""):gsub(" ", ""):split("[")[1]
+                                                if gs == i then
+                                                    table.insert(CO, Q[x])
+                                                end
                                             end
-                                        end
-                                    elseif i ~= "Character" then
-                                        if string.find(Q[x], i) then
-                                            local gs = Q[x]:gsub("`", ""):gsub("]", ""):split("[")[2]
-                                            if gs == i then
-                                                table.insert(CO, Q[x])
+                                        elseif i ~= "Character" then
+                                            if string.find(Q[x], i) then
+                                                local gs = Q[x]:gsub("`", ""):gsub("]", ""):split("[")[2]
+                                                if gs == i then
+                                                    table.insert(CO, Q[x])
+                                                end
                                             end
                                         end
                                     end
                                 end
                             end
+                            if #CO > 0 then
+                                content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` "..table.concat(CO, "\n`You received:` ")
+                            end
                         end
-                        if #CO > 0 then
-                            content = "<@"..tostring(V["Webhook Ping (Id)"].Value)..">".."\n`You received:` "..table.concat(CO, "\n`You received:` ")
-                        end
-                    end
-                    local Data = h:JSONEncode({
-                        ["username"] = "Anime Dimensions Simulator : Notification",
-                        ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                        content = content,
-                        embeds = {{
-                          ["title"] = nil,
-                          ["color"] = tonumber(C:Hex("color", V["Webhook Color"].Value)),
-                          ["description"] = nil,
-                          ["footer"] = {
-                            ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
-                            ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
-                          },
-                          ["thumbnail"] = {
-                            ["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
-                          },
-                          ["fields"] = {
-                            {
-                                ["name"] = "**Item Rewards**",
-                                ["value"] = "\n`[+]` "..table.concat(Q, "\n`[+]` "),
-                                ["inline"] = true
+                        local Data = h:JSONEncode({
+                            ["username"] = "Anime Dimensions Simulator : Notification",
+                            ["avatar_url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+                            content = content,
+                            embeds = {{
+                              ["title"] = nil,
+                              ["color"] = tonumber(C:Hex("color", V["Webhook Color"].Value)),
+                              ["description"] = nil,
+                              ["footer"] = {
+                                ["text"] = "Time: "..os.date("%X").." ["..os.date("%x").."]".."\nCredit: YT » @crazyday3693",
+                                ["icon_url"] = "https://yt3.ggpht.com/yti/ANjgQV_KI8R3VhsnEhzYD0M1EJXUU29p0YC5gzrrhv8nWzA7j6s=s88-c-k-c0x00ffffff-no-rj"
+                              },
+                              ["thumbnail"] = {
+                                ["url"] = "https://tr.rbxcdn.com/1fb0c8f3fe70c5ec485cfab729d4ac44/150/150/Image/Webp",
+                              },
+                              ["fields"] = {
+                                {
+                                    ["name"] = "**Item Rewards**",
+                                    ["value"] = "\n`[+]` "..table.concat(Q, "\n`[+]` "),
+                                    ["inline"] = true
+                                },
+                                {
+                                    ["name"] = "**Currency Rewards**",
+                                    ["value"] = "\n`[+]` "..table.concat(E, "\n`[+]` "),
+                                    ["inline"] = true
+                                },
+                                {
+                                    ["name"] = "**Match Information"..GameStatus.."**",
+                                    ["value"] = "```\n"..GameName.."\n"..Rank.."\n"..DamageDeal.."\n"..TimeEnd.."```",
+                                    ["inline"] = false
+                                },
+                                {
+                                    ["name"] = "**Player Information**".." __**|| ["..lp.Name.."] ||**__",
+                                    ["value"] = "```\nLevel: "..lvl.Value.." ["..C:CUR("Exp").."]\nCardsOwned: "..sTd.CardsOwned.Value.."/"..sTd.MaxCardsOwned.Value
+                                    .."\n"..ClearTime.."\nCurrency:\n ∘ Gold: "..C:CUR("Gold").."\n ∘ Gem: "..C:CUR("Gem").."\n ∘ TraitToken: "..C:CUR("TraitToken")
+                                    .."\n ∘ RaidToken: "..C:CUR("RaidToken").."\n ∘ SpeedRaidToken: "..C:CUR("ShadowCoin").."\n ∘ BossRushToken: "..C:CUR("BossRush").."```",
+                                    ["inline"] = false
+                                }
                             },
-                            {
-                                ["name"] = "**Currency Rewards**",
-                                ["value"] = "\n`[+]` "..table.concat(E, "\n`[+]` "),
-                                ["inline"] = true
-                            },
-                            {
-                                ["name"] = "**Match Information"..GameStatus.."**",
-                                ["value"] = "```\n"..GameName.."\n"..Rank.."\n"..DamageDeal.."\n"..TimeEnd.."```",
-                                ["inline"] = false
-                            },
-                            {
-                                ["name"] = "**Player Information**".." __**|| ["..lp.Name.."] ||**__",
-                                ["value"] = "```\nLevel: "..lvl.Value.." ["..C:CUR("Exp").."]\nCardsOwned: "..sTd.CardsOwned.Value.."/"..sTd.MaxCardsOwned.Value
-                                .."\n"..ClearTime.."\nCurrency:\n ∘ Gold: "..C:CUR("Gold").."\n ∘ Gem: "..C:CUR("Gem").."\n ∘ TraitToken: "..C:CUR("TraitToken")
-                                .."\n ∘ RaidToken: "..C:CUR("RaidToken").."\n ∘ SpeedRaidToken: "..C:CUR("ShadowCoin").."\n ∘ BossRushToken: "..C:CUR("BossRush").."```",
-                                ["inline"] = false
-                            }
-                        },
-                    }}
-                    })
-                    g["response"]({Url = V["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
+                        }}
+                        })
+                        g["response"]({Url = V["Webhook URL"].Value, Method = "POST", Headers = {["Content-Type"] = "application/json"}, Body = Data})
                 end)
-            end)
+        end)
     end)
 
     task.spawn(function ()
@@ -2783,17 +2782,16 @@ local p, c, t, w, r, m, h, g, vt, pid =
     task.spawn(function ()
         while true do
             if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
-            pcall(function ()
                 if V["Auto Buy"].Value then
-                    if tonumber(lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text) < V["Limit Ticket"].Value then
-                        if V["Boss Rush Type"].Value == "Gem" and C:GS(C:CUR("Gem")) >= "250" then
+                    if tonumber(lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text) >= tonumber(V["Limit Ticket"].Value) then
+                    else
+                        if V["Boss Rush Type"].Value == "Gem" and tonumber(C:GS(C:CUR("Gem"))) >= 250 then
                             rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Gem)")
-                        elseif V["Boss Rush Type"].Value == "Raid" and C:GS(C:CUR("RaidToken")) >= "150" then
+                        elseif V["Boss Rush Type"].Value == "Raid" and tonumber(C:GS(C:CUR("RaidToken"))) >= 150 then
                             rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Raid)")
                         end
                     end
                 end
-            end)
             task.wait()
         end
     end)
