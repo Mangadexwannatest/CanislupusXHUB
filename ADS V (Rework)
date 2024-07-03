@@ -2670,9 +2670,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
 
     task.spawn(function ()
         while true do
-            if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
-            if V["Auto Equip"].Value and C:Empety() == true then repeat task.wait() until not V["Auto Equip"].Value or C:Empety() == false or Gui.Unloaded end
-            if C:AutoFarm() and not g["equiping"] then
+            if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or g["started"] or Gui.Unloaded then break end
+            pcall(function ()
+                if (V["Auto Equip"].Value and C:Empety() == true) or g["equiping"] or not C:AutoFarm() then return end
                 if g["raid"] and lvl.Value >= 15 then
                     Gui:Notify({
                         Title = "Successfully room created",
@@ -2689,7 +2689,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         ["Hardcore"] = false
                     })
                     rf:InvokeServer("TeleportPlayers")
-                    break
+                    g["started"] = true
                 else
                     if V["Auto Join (Speed Raid)"].Value and lvl.Value >= 25 and #C:Hex("character") >= 1 and lpg.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
                         Gui:Notify({
@@ -2702,7 +2702,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         g["speedraid"] = true
                         task.wait(5)
                         rf:InvokeServer("TeleportToShadowRaid", C:Hex("character")[1])
-                        break
+                        g["started"] = true
                     end
                     if V["Auto Join (Raid Challenge)"].Value and lvl.Value >= 30 and lpg.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
                         Gui:Notify({
@@ -2714,7 +2714,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
 
                         task.wait(5)
                         rf:InvokeServer("TeleportToRaidChallenge")
-                        break
+                        g["started"] = true
                     end
                     if V["Auto Join (Infinite Mode)"].Value and lvl.Value >= 20 and not sTd.InfiniteModeReward.Value then
                         Gui:Notify({
@@ -2733,7 +2733,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             ["Hardcore"] = false
                         })
                         rf:InvokeServer("TeleportPlayers")
-                        break
+                        g["started"] = true
                     end
                     if V["Auto Join (Boss Rush)"].Value and lvl.Value >= 15 and ((V["Boss Rush Type"].Value == "Free" and sTd.BossRushFreeEntry.Value >= 1) or (V["Boss Rush Type"].Value ~= "Free" and lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text >= "1")) then
                         local text
@@ -2751,7 +2751,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
 
                         task.wait(5)
                         rf:InvokeServer("TeleportToBossRush")
-                        break
+                        g["started"] = true
                     end
 
                     if (V["Auto Join (Current Dimension)"].Value or V["Auto Join (Highnest)"].Value) then
@@ -2771,10 +2771,10 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             ["Hardcore"] = V["Hard core"].Value
                         })
                         rf:InvokeServer("TeleportPlayers")
-                        break
+                        g["started"] = true
                     end
                 end
-            end
+            end)
             task.wait()
         end
     end)
