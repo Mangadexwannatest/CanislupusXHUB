@@ -1312,7 +1312,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 pcall(function ()
                     if lp.Character ~= nil then lp.Character.Humanoid.PlatformStand = false local bv = lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyVelocity") if bv then bv:Destroy() end end
                     game:GetService "RunService":Set3dRenderingEnabled(true)
-                    g["bring 1"] = false g["bring 2"] = false g["safe"] = false g["dead"] = false g["dodge"] = false g["hide+"] = false g["back lobby"] = false g["raid"] = false misc.current = 0
+                    g["bring 1"] = false g["bring 2"] = false g["safe"] = false g["dead"] = false g["dodge"] = false g["hide+"] = false g["back lobby"] = false g["raid"] = false g["equiping"] = false misc.current = 0
                     if c1 then c1:Disconnect() c1 = nil end
                     if c2 then c2:Disconnect() c2 = nil end
                     if c3 then c3:Disconnect() c3 = nil end
@@ -1731,6 +1731,10 @@ local p, c, t, w, r, m, h, g, vt, pid =
                             SubContent = nil,
                             Duration = 2.75
                         })
+                    end
+                else
+                    if g["equiping"] then
+                        g["equiping"] = false
                     end
                 end
             end)
@@ -2668,7 +2672,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
     task.spawn(function ()
         while true do
             if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
-            if V["Auto Equip"].Value and C:Empety() == true then return end
+            if V["Auto Equip"].Value and C:Empety() == true then repeat task.wait() until not V["Auto Equip"].Value or C:Empety() == false or Gui.Unloaded end
             if C:AutoFarm() and not g["equiping"] then
                 if g["raid"] and lvl.Value >= 15 then
                     Gui:Notify({
