@@ -203,9 +203,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
     end
 
     function C:Tween(pos, cf)
-        pcall(function ()
-            tween = t:Create(lp.Character.HumanoidRootPart, TweenInfo.new((pos.Position - lp.Character.HumanoidRootPart.Position).Magnitude/misc.speed, Enum.EasingStyle.Linear), {CFrame = pos.CFrame * cf})
-        end)
+        tween = t:Create(lp.Character.HumanoidRootPart, TweenInfo.new((pos.Position - lp.Character.HumanoidRootPart.Position).Magnitude/misc.speed, Enum.EasingStyle.Linear), {CFrame = pos.CFrame * cf})
     end
 
     g.Tabs = {
@@ -1875,7 +1873,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
         end)
         c3 = w.Folders.Debris.ChildAdded:Connect(function (v)
             pcall(function ()
-                if V["Dodge Skill"].Value and (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") and not g["bring 1"] and not g["bring 2"] and not g["safe"] then
+                if not V["Dodge Skill"].Value or g["bring 1"] or g["bring 2"] or g["safe"] or C:N4("count") == 0 or Gui.Unloaded then return end
+                if (v.Name == "FlameTrail" or table.find({"telegraph"},v.Name:lower())) and not v:IsA("Model") then
                     misc.name = "Ignore"
                     if v.Name == "FlameTrail" then
                         task.wait(0.0375)
@@ -1884,12 +1883,12 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         misc.name = "FlameTrailIgnore"
                     end
                     if C:Bar("boss") then
-                        misc.tweenspeed = 0.155
+                        misc.tweenspeed = 0.175
                     else
-                        misc.tweenspeed = 0.275
+                        misc.tweenspeed = 0.335
                     end
                     local a = v:Clone()
-                    local side = math.clamp(3.45,0,10)
+                    local side = math.clamp(3.35,0,10)
                     local Sizeto = v.Size + Vector3.new(side,98.75,side + 3.25)
                     a.Size = Vector3.new(0,0,v.Size.Z)
                     if v.ClassName == "MeshPart" then
