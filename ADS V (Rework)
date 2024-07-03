@@ -2783,14 +2783,12 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
                 if V["Auto Buy"].Value then
-                    if tonumber(lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text) == tonumber(V["Limit Ticket"].Value) then
-                    else
-                        if tonumber(V["Limit Ticket"].Value) > tonumber(lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text) then
-                            if V["Boss Rush Type"].Value == "Gem" and tonumber(C:GS(C:CUR("Gem"))) >= 250 then
-                                rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Gem)")
-                            elseif V["Boss Rush Type"].Value == "Raid" and tonumber(C:GS(C:CUR("RaidToken"))) >= 150 then
-                                rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Raid)")
-                            end
+                    local count = lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text
+                    if tonumber(V["Limit Ticket"].Value) > tonumber(count) and tonumber(count) ~= tonumber(V["Limit Ticket"].Value) then
+                        if V["Boss Rush Type"].Value == "Gem" and tonumber(C:GS(C:CUR("Gem"))) >= 250 then
+                            rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Gem)")
+                        elseif V["Boss Rush Type"].Value == "Raid" and tonumber(C:GS(C:CUR("RaidToken"))) >= 150 then
+                            rf:InvokeServer("BuyBossRushShopItem", "Boss Rush Ticket (Raid)")
                         end
                     end
                 end
