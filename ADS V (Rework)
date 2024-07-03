@@ -39,7 +39,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         p.LocalPlayer.PlayerGui,
         p:GetUserIdFromNameAsync(p.LocalPlayer.Name),
         "Anime Dimensions Simulator (Rework)",
-        " 1.0.8",
+        " 1.0.9",
         {"Naruto","Sasuke"},
         {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
         {
@@ -1848,11 +1848,9 @@ local p, c, t, w, r, m, h, g, vt, pid =
             pcall(function ()
                 local hum = lp.Character.HumanoidRootPart
                 if C:AutoFarm() and not C:Bar("boss") and not g["dead"] and not g["safe"] then
-                    if C:N4("count") == 0 then
-                        task.wait(1.275)
+                    if g["bring 2"] then
                         C:Tween(w.Folders.SpawnPoints.SpawnLocation1, CFrame.new(0, 32.5, 0))
                         tween:Play()
-                        tween.Completed:Wait()
                     elseif not g["bring 2"] and not g["dodge"] and not hum.Anchored then
                         repeat
                             C:Tween(C:N2("all").HumanoidRootPart, g["method"])
