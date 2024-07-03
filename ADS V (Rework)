@@ -39,7 +39,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         p.LocalPlayer.PlayerGui,
         p:GetUserIdFromNameAsync(p.LocalPlayer.Name),
         "Anime Dimensions Simulator (Rework)",
-        " 1.0.7",
+        " 1.0.8",
         {"Naruto","Sasuke"},
         {"Gold","TraitToken","RaidCurrency","BossRushCurrency","Gem"},
         {
@@ -1312,7 +1312,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
                 pcall(function ()
                     if lp.Character ~= nil then lp.Character.Humanoid.PlatformStand = false local bv = lp.Character.HumanoidRootPart:FindFirstChildOfClass("BodyVelocity") if bv then bv:Destroy() end end
                     game:GetService "RunService":Set3dRenderingEnabled(true)
-                    g["bring 1"] = false g["bring 2"] = false g["safe"] = false g["dead"] = false g["dodge"] = false g["hide+"] = false g["back lobby"] = false g["raid"] = false g["equiping"] = false misc.current = 0
+                    g["bring 1"] = false g["bring 2"] = false g["safe"] = false g["dead"] = false g["dodge"] = false g["hide+"] = false g["back lobby"] = false g["raid"] = false g["equiping"] = false g["started"] = false misc.current = 0
                     if c1 then c1:Disconnect() c1 = nil end
                     if c2 then c2:Disconnect() c2 = nil end
                     if c3 then c3:Disconnect() c3 = nil end
@@ -2772,6 +2772,118 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         })
                         rf:InvokeServer("TeleportPlayers")
                         g["started"] = true
+                    end
+                end
+            end)
+            task.wait()
+        end
+    end)
+
+    task.spawn(function ()
+        while true do
+            if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
+            pcall(function ()
+                if not g["started"] or lpg.UniversalGui.TeleportingUI.Visible then return end
+                Gui:Notify({
+                    Title = "Auto Join (Error)",
+                    Content = "Creating a new room in 5 seconds.",
+                    SubContent = nil,
+                    Duration = 5
+                })
+                task.wait(5)
+                if g["raid"] and lvl.Value >= 15 then
+                    Gui:Notify({
+                        Title = "Successfully room created",
+                        Content = "MapName: "..V["Current Raid"].Value.."\nDifficulty: Easy".."\nFriendsOnly: "..tostring(V["Friends Only"].Value).."\nHardcore: false",
+                        SubContent = "Starting in 5 seconds.",
+                        Duration = 5
+                    })
+                    task.wait(5)
+                    re:FireServer("RemovePlayerFromParty")
+                    rf:InvokeServer("CreateRoom",{
+                        ["Difficulty"] = "Easy",
+                        ["FriendsOnly"] = V["Friends Only"].Value,
+                        ["MapName"] = V["Current Raid"].Value,
+                        ["Hardcore"] = false
+                    })
+                    rf:InvokeServer("TeleportPlayers")
+                else
+                    if V["Auto Join (Speed Raid)"].Value and lvl.Value >= 25 and #C:Hex("character") >= 1 and lpg.MainGui.CenterUIFrame.PlayButtonsFrame.Frame.SpeedRaidBanner.SpeedRaidBannerOpenText.Text == "Ready to enter" then
+                        Gui:Notify({
+                            Title = "Successfully room created",
+                            Content = "MapName: ShadowRaid".."\nCharacter: "..C:Hex("character")[1],
+                            SubContent = "Starting in 5 seconds.",
+                            Duration = 5
+                        })
+
+                        g["speedraid"] = true
+                        task.wait(5)
+                        rf:InvokeServer("TeleportToShadowRaid", C:Hex("character")[1])
+                    end
+                    if V["Auto Join (Raid Challenge)"].Value and lvl.Value >= 30 and lpg.MainGui.CenterUIFrame.DailyRaidChallengeFrame.RaidChallengeRewardAvailable.Text == "Reward Available" then
+                        Gui:Notify({
+                            Title = "Successfully room created",
+                            Content = "MapName: RaidChallenge".."\nAward Status: Reward Available",
+                            SubContent = "Starting in 5 seconds.",
+                            Duration = 5
+                        })
+
+                        task.wait(5)
+                        rf:InvokeServer("TeleportToRaidChallenge")
+                    end
+                    if V["Auto Join (Infinite Mode)"].Value and lvl.Value >= 20 and not sTd.InfiniteModeReward.Value then
+                        Gui:Notify({
+                            Title = "Successfully room created",
+                            Content = "MapName: Infinite Mode".."\nDifficulty: Infinite\nFriendsOnly: "..tostring(V["Friends Only"].Value).."\nHardcore: false",
+                            SubContent = "Starting in 5 seconds.",
+                            Duration = 5
+                        })
+
+                        task.wait(5)
+                        re:FireServer("RemovePlayerFromParty")
+                        rf:InvokeServer("CreateRoom",{
+                            ["Difficulty"] = "Infinite",
+                            ["FriendsOnly"] = V["Friends Only"].Value,
+                            ["MapName"] = "Infinite Mode",
+                            ["Hardcore"] = false
+                        })
+                        rf:InvokeServer("TeleportPlayers")
+                    end
+                    if V["Auto Join (Boss Rush)"].Value and lvl.Value >= 15 and ((V["Boss Rush Type"].Value == "Free" and sTd.BossRushFreeEntry.Value >= 1) or (V["Boss Rush Type"].Value ~= "Free" and lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text >= "1")) then
+                        local text
+                        if V["Boss Rush Type"].Value == "Free" then
+                            text = "Free Entry Left: "..tostring(sTd.BossRushFreeEntry.Value)
+                        else
+                            text = "Ticket Entry Left: "..lpg.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text
+                        end
+                        Gui:Notify({
+                            Title = "Successfully room created",
+                            Content = "MapName: BossRush".."\n"..text,
+                            SubContent = "Starting in 5 seconds.",
+                            Duration = 5
+                        })
+
+                        task.wait(5)
+                        rf:InvokeServer("TeleportToBossRush")
+                    end
+
+                    if (V["Auto Join (Current Dimension)"].Value or V["Auto Join (Highnest)"].Value) then
+                        Gui:Notify({
+                            Title = "Successfully room created",
+                            Content = "MapName: "..V["Current Dimension"].Value.."\nDifficulty: "..V["Current Difficulty"].Value.."\nFriendsOnly: "..tostring(V["Friends Only"].Value).."\nHardcore: "..tostring(V["Hard core"].Value),
+                            SubContent = "Starting in 5 seconds.",
+                            Duration = 5
+                        })
+
+                        task.wait(5)
+                        re:FireServer("RemovePlayerFromParty")
+                        rf:InvokeServer("CreateRoom",{
+                            ["Difficulty"] = V["Current Difficulty"].Value,
+                            ["FriendsOnly"] = V["Friends Only"].Value,
+                            ["MapName"] = V["Current Dimension"].Value,
+                            ["Hardcore"] = V["Hard core"].Value
+                        })
+                        rf:InvokeServer("TeleportPlayers")
                     end
                 end
             end)
