@@ -1406,6 +1406,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
         if string.find(text, ",") then
             local gsu = text:gsub(",", "")
             return gsu
+        else
+            return text
         end
     end
 
