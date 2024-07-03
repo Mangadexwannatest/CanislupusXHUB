@@ -95,8 +95,8 @@ local p, c, t, w, r, m, h, g, vt, pid =
     local File = "CrazyDay/"..gname.."/"..lpid
     do if not isfolder("CrazyDay") then makefolder("CrazyDay") makefolder("CrazyDay/"..gname) else if not isfolder("CrazyDay/"..gname) then makefolder("CrazyDay/"..gname) end end end local C = {} local tween
     local misc = {
-        tweenspeed = 0.125,
-        speed = 150,
+        tweenspeed = 0.175,
+        speed = 135,
         name = "Ignore",
         current = 0,
         rarity = {},
@@ -2597,8 +2597,20 @@ local p, c, t, w, r, m, h, g, vt, pid =
                         for i, v in pairs(V["Webhook Ping (Type)"].Value) do
                             if v == true then
                                 for x = 1, #Q do
-                                    if string.find(Q[x], i) then
-                                        table.insert(CO, Q[x])
+                                    if i == "Character" then
+                                        if string.find(Q[x], i) then
+                                            local gs = Q[x]:gsub("`", ""):gsub(" ", ""):split("[")[1]
+                                            if gs == i then
+                                                table.insert(CO, Q[x])
+                                            end
+                                        end
+                                    elseif i ~= "Character" then
+                                        if string.find(Q[x], i) then
+                                            local gs = Q[x]:gsub("`", ""):gsub("]", ""):split("[")[2]
+                                            if gs == i then
+                                                table.insert(CO, Q[x])
+                                            end
+                                        end
                                     end
                                 end
                             end
