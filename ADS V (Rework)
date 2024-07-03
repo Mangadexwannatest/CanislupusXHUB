@@ -2783,7 +2783,7 @@ local p, c, t, w, r, m, h, g, vt, pid =
         while true do
             if (pid ~= 7338881230 and pid ~= 6938803436 and pid ~= 7274690025) or Gui.Unloaded then break end
             pcall(function ()
-                if not g["started"] or lpg.UniversalGui.TeleportingUI.Visible then return end
+                if not g["started"] or lpg.UniversalGui.TeleportingUI.Visible or g["teleporting"] then return end
                 Gui:Notify({
                     Title = "Auto Join (Error)",
                     Content = "Creating a new room in 5 seconds.",
