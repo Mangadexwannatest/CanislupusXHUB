@@ -18,7 +18,7 @@ local p, c, t, w, r, h, a, b =
     local Lp, Game, Ver, Space, Time, LpId, Lvl, LpUi, GameId, Display, RE, RF, GameMap  =
         p.LocalPlayer,
         "Anime Dimensions Simulator (Rework)",
-        " V 1.1.0",
+        " V 1.1.1",
         "                                                                                                                                                                                                                                                                                                                                    \n",
         tick(),
         p:GetUserIdFromNameAsync(p.LocalPlayer.Name),
@@ -134,8 +134,8 @@ local p, c, t, w, r, h, a, b =
         local Window = Gui:CreateWindow({
             Title = Game .. Ver,
             SubTitle = " [YT: @crazyday3693]",
-            UpdateDate = "07/08/2024 [V 1.1.0]",
-            UpdateLog = "● Added Update Log" .. Space .. "● Added Auto Rejoin Function" .. Space .. "● Added Auto Reset [Infinite Mode]" .. Space .. "● Added Auto Swap [Character]".. Space .. "● Added Auto Claim [Raid Token]" .. Space .. "● Removed Auto Hide Ui" .. Space .. "● Removed Auto Buy".. Space .. "● Changed Power Button" .. Space .. "● Changed Boss Rush Mode" .. Space .. "● Changed Selected Dimension Auto Update" .. Space .. "● Changed Selected Raid Auto Update",
+            UpdateDate = "07/08/2024 [V 1.1.1]",
+            UpdateLog = "● Fixed Auto Join [Highnest] Not Working" .. Space .. "● Fixed Black Screen Not Save",
             IconVisual = nil,
             TabWidth = 155,
             Size = UDim2.fromOffset(605, 445),
@@ -236,80 +236,80 @@ local p, c, t, w, r, h, a, b =
                 if v then
                     local x, o = Options["Selected Dimension"], Options["Selected Difficulty"]
                     if Lvl.Value > 0 and Lvl.Value < 6 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Titan Dimension"
+                        a.diff = "Easy"
+                        a.room = "Titan Dimension"
                     elseif Lvl.Value > 5 and Lvl.Value < 11 then
-                        Options["Selected Difficulty"].Value = "Hard"
-                        Options["Selected Dimension"].Value = "Titan Dimension"
+                        a.diff = "Hard"
+                        a.room = "Titan Dimension"
                     elseif Lvl.Value > 10 and Lvl.Value < 16 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Titan Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Titan Dimension"
                     elseif Lvl.Value > 15 and Lvl.Value < 21 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Demon Dimension"
+                        a.diff = "Easy"
+                        a.room = "Demon Dimension"
                     elseif Lvl.Value > 20 and Lvl.Value < 26 then
-                        Options["Selected Difficulty"].Value = "Hard"
-                        Options["Selected Dimension"].Value = "Demon Dimension"
+                        a.diff = "Hard"
+                        a.room = "Demon Dimension"
                     elseif Lvl.Value > 25 and Lvl.Value < 31 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Demon Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Demon Dimension"
                     elseif Lvl.Value > 30 and Lvl.Value < 36 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Curse Dimension"
+                        a.diff = "Easy"
+                        a.room = "Curse Dimension"
                     elseif Lvl.Value > 35 and Lvl.Value < 41 then
-                        Options["Selected Difficulty"].Value = "Hard"
-                        Options["Selected Dimension"].Value = "Curse Dimension"
+                        a.diff = "Hard"
+                        a.room = "Curse Dimension"
                     elseif Lvl.Value > 40 and Lvl.Value < 46 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Curse Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Curse Dimension"
                     elseif Lvl.Value > 45 and Lvl.Value < 51 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Villain Dimension"
+                        a.diff = "Easy"
+                        a.room = "Villain Dimension"
                     elseif Lvl.Value > 50 and Lvl.Value < 56 then
-                        Options["Selected Difficulty"].Value = "Hard"
-                        Options["Selected Dimension"].Value = "Villain Dimension"
+                        a.diff = "Hard"
+                        a.room = "Villain Dimension"
                     elseif Lvl.Value > 55 and Lvl.Value < 61 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Villain Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Villain Dimension"
                     elseif Lvl.Value > 60 and Lvl.Value < 68 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Sword Dimension"
+                        a.diff = "Easy"
+                        a.room = "Sword Dimension"
                     elseif Lvl.Value > 67 and Lvl.Value < 76 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Sword Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Sword Dimension"
                     elseif Lvl.Value > 75 and Lvl.Value < 83 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Ghoul Dimension"
+                        a.diff = "Easy"
+                        a.room = "Ghoul Dimension"
                     elseif Lvl.Value > 82 and Lvl.Value < 91 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Ghoul Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Ghoul Dimension"
                     elseif Lvl.Value > 90 and Lvl.Value < 98 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Fate Dimension"
+                        a.diff = "Easy"
+                        a.room = "Fate Dimension"
                     elseif Lvl.Value > 97 and Lvl.Value < 106 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Fate Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Fate Dimension"
                     elseif Lvl.Value > 105 and Lvl.Value < 113 then
-                        Options["Selected Difficulty"].Value = "Easy"
-                        Options["Selected Dimension"].Value = "Slime Dimension"
+                        a.diff = "Easy"
+                        a.room = "Slime Dimension"
                     elseif Lvl.Value > 112 and Lvl.Value < 121 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Slime Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Slime Dimension"
                     elseif Lvl.Value > 120 and Lvl.Value < 131 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Devil Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Devil Dimension"
                     elseif Lvl.Value > 130 and Lvl.Value < 141 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Pirate Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Pirate Dimension"
                     elseif Lvl.Value > 140 and Lvl.Value < 151 then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Alien Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Alien Dimension"
                     elseif Lvl.Value > 150 and Lvl.Value < 161  then
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = "Level Dimension"
+                        a.diff = "Nightmare"
+                        a.room = "Level Dimension"
                     else
-                        Options["Selected Difficulty"].Value = "Nightmare"
-                        Options["Selected Dimension"].Value = misc.dimension[#misc.dimension]
+                        a.diff = "Nightmare"
+                        a.room = misc.dimension[#misc.dimension]
                     end
                 end
             end
@@ -1072,7 +1072,7 @@ local p, c, t, w, r, h, a, b =
                                 local time = tick()
                                 writefile(Files.."/settings/Configs.json",
                                 [[
-                                {"objects":[{"idx":"Auto Join [Boss Rush]","type":"Toggle","value":false},{"idx":"Enabled FriendsOnly","type":"Toggle","value":false},{"idx":"[C2] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Upgrade [Card]","type":"Toggle","value":false},{"idx":"[C2] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"[C3] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Selected Type [Attack]","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Auto Enemy Distance","type":"Toggle","value":true},{"idx":"Wave [End]","type":"Input","text":"10"},{"idx":"Selected Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"[C1] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"[C1] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Join [Speed Raid]","type":"Toggle","value":false},{"idx":"Selected Type [Time]","type":"Dropdown","mutli":false,"value":"Minute"},{"idx":"Auto Sell [Card]","type":"Toggle","value":false},{"idx":"Webhook [ID]","type":"Input","text":""},{"idx":"Auto Attack","type":"Toggle","value":true},{"idx":"Auto Swap [Character]","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Selected Type [Webhook]","type":"Dropdown","mutli":true,"value":{"Mythic":true,"Character":true,"Divine":true}},{"idx":"Enabled Webhook [Ping]","type":"Toggle","value":false},{"idx":"Webhook [Color]","type":"Colorpicker","transparency":0,"value":"191919"},{"idx":"Selected Health","type":"Slider","value":"50"},{"idx":"Enabled Hardcore","type":"Toggle","value":false},{"idx":"[C1] Selected Distance","type":"Slider","value":"35"},{"idx":"[C3] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Claim [Raid Token]","type":"Toggle","value":false},{"idx":"Selected Raid","type":"Dropdown","mutli":false,"value":"Divine Guardian Raid"},{"idx":"[C1] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"[C3] Selected Distance","type":"Slider","value":"35"},{"idx":"[C2] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Join [Normal]","type":"Toggle","value":false},{"idx":"Webhook [URL]","type":"Input","text":""},{"idx":"Selected Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Enabled Dodge Skill","type":"Toggle","value":true},{"idx":"Enabled Webhook [Notify]","type":"Toggle","value":false},{"idx":"[C1] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Selected Time","type":"Slider","value":"20"},{"idx":"Auto Claim [Quest]","type":"Toggle","value":false},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Equip [Character]","type":"Toggle","value":false},{"idx":"BlackScreenToggle","type":"Toggle","value":false},{"idx":"Auto Claim [Speed Raid]","type":"Toggle","value":false},{"idx":"[C3] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Selected Distance","type":"Slider","value":"6.5"},{"idx":"Auto Back to Lobby","type":"Toggle","value":false},{"idx":"Selected Type [Farm]","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Selected Mode [Farm]","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Enabled Dash No Cooldown","type":"Toggle","value":false},{"idx":"Selected Character","type":"Dropdown","mutli":true,"value":[]},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Auto Join [Raid]","type":"Toggle","value":false},{"idx":"[C2] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"[C3] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"[C3] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Auto Join [Highnest]","type":"Toggle","value":false},{"idx":"[C2] Selected Distance","type":"Slider","value":"35"},{"idx":"Auto Reset [Infinite Mode]","type":"Toggle","value":false},{"idx":"[C2] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"[C1] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Join [Raid Challenge]","type":"Toggle","value":false},{"idx":"Selected Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Selected Type [Boss Rush]","type":"Dropdown","mutli":false,"value":"Free"},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Auto Equip [Card]","type":"Toggle","value":false},{"idx":"Selected Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Join [Infinite Mode]","type":"Toggle","value":false}]}
+                                {"objects":[{"idx":"Auto Join [Boss Rush]","type":"Toggle","value":false},{"idx":"Enabled FriendsOnly","type":"Toggle","value":false},{"idx":"[C2] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Upgrade [Card]","type":"Toggle","value":false},{"idx":"[C2] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"[C3] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Selected Type [Attack]","type":"Dropdown","mutli":false,"value":"Remote"},{"idx":"Auto Enemy Distance","type":"Toggle","value":true},{"idx":"Wave [End]","type":"Input","text":"10"},{"idx":"Selected Rarity","type":"Dropdown","mutli":true,"value":{"Uncommon":true,"Common":true}},{"idx":"[C1] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"[C1] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"Auto Join [Speed Raid]","type":"Toggle","value":false},{"idx":"Selected Type [Time]","type":"Dropdown","mutli":false,"value":"Minute"},{"idx":"Auto Sell [Card]","type":"Toggle","value":false},{"idx":"Webhook [ID]","type":"Input","text":""},{"idx":"Auto Attack","type":"Toggle","value":true},{"idx":"Auto Swap [Character]","type":"Toggle","value":false},{"idx":"Auto Safe","type":"Toggle","value":false},{"idx":"Selected Type [Webhook]","type":"Dropdown","mutli":true,"value":{"Mythic":true,"Character":true,"Divine":true}},{"idx":"Enabled Webhook [Ping]","type":"Toggle","value":false},{"idx":"Webhook [Color]","type":"Colorpicker","transparency":0,"value":"191919"},{"idx":"Selected Health","type":"Slider","value":"50"},{"idx":"Enabled Hardcore","type":"Toggle","value":false},{"idx":"[C1] Selected Distance","type":"Slider","value":"35"},{"idx":"[C3] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Claim [Raid Token]","type":"Toggle","value":false},{"idx":"Selected Raid","type":"Dropdown","mutli":false,"value":"Divine Guardian Raid"},{"idx":"[C1] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"[C3] Selected Distance","type":"Slider","value":"35"},{"idx":"[C2] Skill Two","type":"Dropdown","mutli":false,"value":"2"},{"idx":"Auto Join [Normal]","type":"Toggle","value":false},{"idx":"Webhook [URL]","type":"Input","text":""},{"idx":"Selected Difficulty","type":"Dropdown","mutli":false,"value":"Easy"},{"idx":"Enabled Dodge Skill","type":"Toggle","value":true},{"idx":"Enabled Webhook [Notify]","type":"Toggle","value":false},{"idx":"[C1] Skill Fourth","type":"Dropdown","mutli":false,"value":"4"},{"idx":"Selected Time","type":"Slider","value":"20"},{"idx":"Auto Claim [Quest]","type":"Toggle","value":false},{"idx":"Auto Save","type":"Toggle","value":true},{"idx":"Auto Equip [Character]","type":"Toggle","value":false},{"idx":"Auto Claim [Speed Raid]","type":"Toggle","value":false},{"idx":"[C3] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Selected Distance","type":"Slider","value":"6.5"},{"idx":"Auto Back to Lobby","type":"Toggle","value":false},{"idx":"Selected Type [Farm]","type":"Dropdown","mutli":false,"value":"Over"},{"idx":"Selected Mode [Farm]","type":"Dropdown","mutli":false,"value":"Bring Mode"},{"idx":"Enabled Dash No Cooldown","type":"Toggle","value":false},{"idx":"Selected Character","type":"Dropdown","mutli":true,"value":[]},{"idx":"Auto Retry","type":"Toggle","value":false},{"idx":"Auto Join [Raid]","type":"Toggle","value":false},{"idx":"[C2] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"[C3] Skill Third","type":"Dropdown","mutli":false,"value":"3"},{"idx":"[C3] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"Auto Join [Highnest]","type":"Toggle","value":false},{"idx":"[C2] Selected Distance","type":"Slider","value":"35"},{"idx":"Auto Reset [Infinite Mode]","type":"Toggle","value":false},{"idx":"[C2] Skill One","type":"Dropdown","mutli":false,"value":"1"},{"idx":"[C1] Skill Fifth","type":"Dropdown","mutli":false,"value":"5"},{"idx":"Auto Join [Raid Challenge]","type":"Toggle","value":false},{"idx":"Selected Dimension","type":"Dropdown","mutli":false,"value":"Titan Dimension"},{"idx":"Selected Type [Boss Rush]","type":"Dropdown","mutli":false,"value":"Free"},{"idx":"Auto Skill","type":"Toggle","value":true},{"idx":"Auto Equip [Card]","type":"Toggle","value":false},{"idx":"Selected Assists","type":"Dropdown","mutli":true,"value":{"Assist2":true,"Fruit1":true,"Fruit2":true,"Assist1":true}},{"idx":"Auto Join [Infinite Mode]","type":"Toggle","value":false}]}
                                 ]])
                                 task.wait(0.35)
                                 do
@@ -1094,7 +1094,7 @@ local p, c, t, w, r, h, a, b =
                         {
                             Title = "No",
                             Callback = function()
-                               -- setclipboard(tostring(readfile(Files.."/settings/Configs.json")))
+                               setclipboard(tostring(readfile(Files.."/settings/Configs.json")))
                             end
                         }
                     }
@@ -2361,15 +2361,15 @@ local p, c, t, w, r, h, a, b =
                                     Title = "Successfully room created",
                                     Content = nil,
                                     Show = false,
-                                    SubContent = "MapName: ".. Options["Selected Dimension"].Value .. "\nDifficulty: " .. Options["Selected Difficulty"].Value .. "\nFriendsOnly: " .. i(f) .. "\nHardcore: " .. i(x) .. "\nStarting In 5 Seconds.",
+                                    SubContent = "MapName: ".. (a.room or Options["Selected Dimension"].Value) .. "\nDifficulty: " .. (a.diff or Options["Selected Difficulty"].Value) .. "\nFriendsOnly: " .. i(f) .. "\nHardcore: " .. i(x) .. "\nStarting In 5 Seconds.",
                                     Duration = 5
                                 })
                                 task.wait(5)
                                 RE:FireServer("RemovePlayerFromParty")
                                 RF:InvokeServer("CreateRoom",{
-                                    ["Difficulty"] = Options["Selected Difficulty"].Value,
+                                    ["Difficulty"] = a.diff or Options["Selected Difficulty"].Value,
                                     ["FriendsOnly"] = f,
-                                    ["MapName"] = Options["Selected Dimension"].Value,
+                                    ["MapName"] = a.room or Options["Selected Dimension"].Value,
                                     ["Hardcore"] = x
                                 })
                                 RF:InvokeServer("TeleportPlayers")
