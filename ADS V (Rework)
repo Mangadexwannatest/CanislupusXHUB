@@ -135,7 +135,7 @@ local p, c, t, w, r, h, a, b =
             Title = Game .. Ver,
             SubTitle = " [YT: @crazyday3693]",
             UpdateDate = "07/08/2024 [V 1.1.0]",
-            UpdateLog = "● Added Update Log" .. Space .. "● Added Auto Rejoin Function." .. Space .. "● Added Auto Reset [Infinite Mode]." .. Space .. "● Added Auto Swap [Character].".. Space .. "● Added Auto Claim [Raid Token]." .. Space .. "● Removed Auto Hide Ui." .. Space .. "● Removed Auto Buy.".. Space .. "● Changed Power Button." .. Space .. "● Changed Boss Rush Mode." .. Space .. "● Changed Selected Dimension Auto Update." .. Space .. "● Changed Selected Raid Auto Update.",
+            UpdateLog = "● Added Update Log" .. Space .. "● Added Auto Rejoin Function" .. Space .. "● Added Auto Reset [Infinite Mode]" .. Space .. "● Added Auto Swap [Character]".. Space .. "● Added Auto Claim [Raid Token]" .. Space .. "● Removed Auto Hide Ui" .. Space .. "● Removed Auto Buy".. Space .. "● Changed Power Button" .. Space .. "● Changed Boss Rush Mode" .. Space .. "● Changed Selected Dimension Auto Update" .. Space .. "● Changed Selected Raid Auto Update",
             IconVisual = nil,
             TabWidth = 155,
             Size = UDim2.fromOffset(605, 445),
@@ -2219,8 +2219,8 @@ local p, c, t, w, r, h, a, b =
                 while true do
                     if (GameId ~= 7338881230 and GameId ~= 6938803436 and GameId ~= 7274690025) or Gui.Unloaded then break end
                     pcall(function ()
+                        task.wait(0.35)
                         if not EnabledFarm() or (Options["Auto Equip [Card]"].Value and CardInfo("slot") == true) or LpUi.UniversalGui.TeleportingUI.Visible or a.teleporting or a.eq then return end
-                        task.wait(0.25)
                         local i, f, x, v = tostring , Options["Enabled FriendsOnly"].Value, Options["Enabled Hardcore"].Value, Options["Selected Type [Boss Rush]"]
                         if a.raid then
                             Gui:Notify({
