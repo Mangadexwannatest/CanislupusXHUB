@@ -236,80 +236,80 @@ local p, c, t, w, r, h, a, b =
                 if v then
                     local x, o = Options["Selected Dimension"], Options["Selected Difficulty"]
                     if Lvl.Value > 0 and Lvl.Value < 6 then
-                        o.Value = "Easy"
-                        x.Value = "Titan Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Titan Dimension"
                     elseif Lvl.Value > 5 and Lvl.Value < 11 then
-                        o.Value = "Hard"
-                        x.Value = "Titan Dimension"
+                        Options["Selected Difficulty"].Value = "Hard"
+                        Options["Selected Dimension"].Value = "Titan Dimension"
                     elseif Lvl.Value > 10 and Lvl.Value < 16 then
-                        o.Value = "Nightmare"
-                        x.Value = "Titan Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Titan Dimension"
                     elseif Lvl.Value > 15 and Lvl.Value < 21 then
-                        o.Value = "Easy"
-                        x.Value = "Demon Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Demon Dimension"
                     elseif Lvl.Value > 20 and Lvl.Value < 26 then
-                        o.Value = "Hard"
-                        x.Value = "Demon Dimension"
+                        Options["Selected Difficulty"].Value = "Hard"
+                        Options["Selected Dimension"].Value = "Demon Dimension"
                     elseif Lvl.Value > 25 and Lvl.Value < 31 then
-                        o.Value = "Nightmare"
-                        x.Value = "Demon Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Demon Dimension"
                     elseif Lvl.Value > 30 and Lvl.Value < 36 then
-                        o.Value = "Easy"
-                        x.Value = "Curse Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Curse Dimension"
                     elseif Lvl.Value > 35 and Lvl.Value < 41 then
-                        o.Value = "Hard"
-                        x.Value = "Curse Dimension"
+                        Options["Selected Difficulty"].Value = "Hard"
+                        Options["Selected Dimension"].Value = "Curse Dimension"
                     elseif Lvl.Value > 40 and Lvl.Value < 46 then
-                        o.Value = "Nightmare"
-                        x.Value = "Curse Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Curse Dimension"
                     elseif Lvl.Value > 45 and Lvl.Value < 51 then
-                        o.Value = "Easy"
-                        x.Value = "Villain Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Villain Dimension"
                     elseif Lvl.Value > 50 and Lvl.Value < 56 then
-                        o.Value = "Hard"
-                        x.Value = "Villain Dimension"
+                        Options["Selected Difficulty"].Value = "Hard"
+                        Options["Selected Dimension"].Value = "Villain Dimension"
                     elseif Lvl.Value > 55 and Lvl.Value < 61 then
-                        o.Value = "Nightmare"
-                        x.Value = "Villain Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Villain Dimension"
                     elseif Lvl.Value > 60 and Lvl.Value < 68 then
-                        o.Value = "Easy"
-                        x.Value = "Sword Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Sword Dimension"
                     elseif Lvl.Value > 67 and Lvl.Value < 76 then
-                        o.Value = "Nightmare"
-                        x.Value = "Sword Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Sword Dimension"
                     elseif Lvl.Value > 75 and Lvl.Value < 83 then
-                        o.Value = "Easy"
-                        x.Value = "Ghoul Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Ghoul Dimension"
                     elseif Lvl.Value > 82 and Lvl.Value < 91 then
-                        o.Value = "Nightmare"
-                        x.Value = "Ghoul Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Ghoul Dimension"
                     elseif Lvl.Value > 90 and Lvl.Value < 98 then
-                        o.Value = "Easy"
-                        x.Value = "Fate Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Fate Dimension"
                     elseif Lvl.Value > 97 and Lvl.Value < 106 then
-                        o.Value = "Nightmare"
-                        x.Value = "Fate Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Fate Dimension"
                     elseif Lvl.Value > 105 and Lvl.Value < 113 then
-                        o.Value = "Easy"
-                        x.Value = "Slime Dimension"
+                        Options["Selected Difficulty"].Value = "Easy"
+                        Options["Selected Dimension"].Value = "Slime Dimension"
                     elseif Lvl.Value > 112 and Lvl.Value < 121 then
-                        o.Value = "Nightmare"
-                        x.Value = "Slime Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Slime Dimension"
                     elseif Lvl.Value > 120 and Lvl.Value < 131 then
-                        o.Value = "Nightmare"
-                        x.Value = "Devil Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Devil Dimension"
                     elseif Lvl.Value > 130 and Lvl.Value < 141 then
-                        o.Value = "Nightmare"
-                        x.Value = "Pirate Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Pirate Dimension"
                     elseif Lvl.Value > 140 and Lvl.Value < 151 then
-                        o.Value = "Nightmare"
-                        x.Value = "Alien Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Alien Dimension"
                     elseif Lvl.Value > 150 and Lvl.Value < 161  then
-                        o.Value = "Nightmare"
-                        x.Value = "Level Dimension"
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = "Level Dimension"
                     else
-                        o.Value = "Nightmare"
-                        x.Value = misc.dimension[#misc.dimension]
+                        Options["Selected Difficulty"].Value = "Nightmare"
+                        Options["Selected Dimension"].Value = misc.dimension[#misc.dimension]
                     end
                 end
             end
@@ -2220,6 +2220,7 @@ local p, c, t, w, r, h, a, b =
                     if (GameId ~= 7338881230 and GameId ~= 6938803436 and GameId ~= 7274690025) or Gui.Unloaded then break end
                     pcall(function ()
                         if not EnabledFarm() or (Options["Auto Equip [Card]"].Value and CardInfo("slot") == true) or LpUi.UniversalGui.TeleportingUI.Visible or a.teleporting or a.eq then return end
+                        task.wait(0.25)
                         local i, f, x, v = tostring , Options["Enabled FriendsOnly"].Value, Options["Enabled Hardcore"].Value, Options["Selected Type [Boss Rush]"]
                         if a.raid then
                             Gui:Notify({
