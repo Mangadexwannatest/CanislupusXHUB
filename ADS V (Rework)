@@ -47,7 +47,7 @@ local p, c, t, w, r, h, a, b =
         AddSignal.h(
             Lp.OnTeleport:Connect(function (s)
                 local z = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-                if s ~= Enum.TeleportState.InProgress then return end
+                if s ~= Enum.TeleportState.InProgress or a.inenx then return end
                 a.teleporting = true
                 z(
                 [[
@@ -2649,5 +2649,4 @@ local p, c, t, w, r, h, a, b =
                 )
             end
         )
-
 
