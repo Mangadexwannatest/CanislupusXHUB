@@ -1202,7 +1202,7 @@ local p, c, t, w, r, h, a, b =
                 Duration = 9e9 * 9e9
             })
         elseif GameMap == "Infinite Mode" then
-            misc.speed = 60
+            misc.speed = 100
             misc.wait = 0.585
         end
         task.wait(1)
