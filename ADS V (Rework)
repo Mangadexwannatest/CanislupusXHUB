@@ -49,10 +49,8 @@ local p, c, t, w, r, h, a, b =
                 local z = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
                 if s ~= Enum.TeleportState.InProgress or a.inenx then return end
                 a.teleporting = true
-                z(
-                [[
-                loadstring(game:HttpGet('https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)'))()
-                ]])
+                print("%627f-12957-@9910")
+                z('loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)"))()')
             end),
             Lp.Idled:Connect(function ()
                 b:CaptureController()
@@ -2221,6 +2219,7 @@ local p, c, t, w, r, h, a, b =
                     pcall(function ()
                         task.wait(0.35)
                         if not EnabledFarm() or (Options["Auto Equip [Card]"].Value and CardInfo("slot") == true) or LpUi.UniversalGui.TeleportingUI.Visible or a.teleporting or a.eq then return end
+                        repeat task.wait() until not a.eq
                         local i, f, x, v = tostring , Options["Enabled FriendsOnly"].Value, Options["Enabled Hardcore"].Value, Options["Selected Type [Boss Rush]"]
                         if a.raid then
                             Gui:Notify({
