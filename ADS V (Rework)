@@ -47,9 +47,8 @@ local p, c, t, w, r, h, a, b =
         AddSignal.h(
             Lp.OnTeleport:Connect(function (s)
                 local z = queue_on_teleport or queueonteleport or (syn and syn.queue_on_teleport)
-                if s ~= Enum.TeleportState.InProgress or a.inenx then return end
+                if s ~= Enum.TeleportState.InProgress then return end
                 a.teleporting = true
-                print("%627f-12957-@9910")
                 z('loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangadexwannatest/CanislupusXHUB/main/ADS%20V%20(Rework)"))()')
             end),
             Lp.Idled:Connect(function ()
@@ -358,12 +357,12 @@ local p, c, t, w, r, h, a, b =
 
         Text["Ticket"] =
         AV.a[3]:AddParagraph({
-            Title = "Ticket Left: "..LpUi.MainGui.CenterUIFrame.BossRushFrame.BossRushEntryPassCount.Text,
+            Title = "Ticket Left: "..LpUi:WaitForChild("MainGui"):WaitForChild("CenterUIFrame"):WaitForChild("BossRushFrame"):WaitForChild("BossRushEntryPassCount").Text,
             Content = nil
         })
         Text["Free Ticket"] =
         AV.a[3]:AddParagraph({
-            Title = "Free Entry Left: " ..tostring(Display.BossRushFreeEntry.Value),
+            Title = "Free Entry Left: " ..tostring(Display:WaitForChild("BossRushFreeEntry").Value),
             Content = nil
         })
 
