@@ -1852,36 +1852,36 @@ local p, c, t, w, r, h, a, b =
                             if q["Skill" .. Options[a.cq .. " Skill One"].Value].Visible and q["Skill" .. Options[a.cq .. " Skill One"].Value].Image ~= f then
                                 repeat
                                     RE:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(mob1("all").HumanoidRootPart.Position)},tonumber(Options[a.cq .. " Skill One"].Value))
-                                    task.wait(0.125)
+                                    task.wait(0.05)
                                 until animations("Animation") >= 1 or q["Skill" .. Options[a.cq .. " Skill One"].Value].Image == f or Gui.Unloaded
                             end
                             if q["Skill" .. Options[a.cq .. " Skill Two"].Value].Visible and q["Skill" .. Options[a.cq .. " Skill One"].Value].Image == f and q["Skill" .. Options[a.cq .. " Skill Two"].Value].Image ~= f then
                                 repeat
                                     RE:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(mob1("all").HumanoidRootPart.Position)},tonumber(Options[a.cq .. " Skill Two"].Value))
-                                    task.wait(0.125)
+                                    task.wait(0.05)
                                 until animations("Animation") >= 1 or q["Skill" .. Options[a.cq .. " Skill Two"].Value].Image == f or Gui.Unloaded
                             end
                             if q["Skill" .. Options[a.cq .. " Skill Third"].Value].Visible and q["Skill" .. Options[a.cq .. " Skill Two"].Value].Image == f and q["Skill" .. Options[a.cq .. " Skill Third"].Value].Image ~= f then
                                 repeat
                                     RE:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(mob1("all").HumanoidRootPart.Position)},tonumber(Options[a.cq .. " Skill Third"].Value))
-                                    task.wait(0.125)
+                                    task.wait(0.05)
                                 until animations("Animation") >= 1 or q["Skill" .. Options[a.cq .. " Skill Third"].Value].Image == f or Gui.Unloaded
                             end
                             if q["Skill" .. Options[a.cq .. " Skill Fourth"].Value].Visible and q["Skill" .. Options[a.cq .. " Skill Third"].Value].Image == f and q["Skill" .. Options[a.cq .. " Skill Fourth"].Value].Image ~= f then
                                 repeat
                                     RE:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(mob1("all").HumanoidRootPart.Position)},tonumber(Options[a.cq .. " Skill Fourth"].Value))
-                                    task.wait(0.125)
+                                    task.wait(0.05)
                                 until animations("Animation") >= 1 or q["Skill" .. Options[a.cq .. " Skill Fourth"].Value].Image == f or Gui.Unloaded
                             end
                             if q["Skill" .. Options[a.cq .. " Skill Fifth"].Value].Visible and q["Skill" .. Options[a.cq .. " Skill Fourth"].Value].Image == f and q["Skill" .. Options[a.cq .. " Skill Fifth"].Value].Image ~= f then
                                 repeat
                                     RE:FireServer("UseSkill",{["hrpCFrame"] = CFrame.new(mob1("all").HumanoidRootPart.Position)},tonumber(Options[a.cq .. " Skill Fifth"].Value))
-                                    task.wait(0.125)
+                                    task.wait(0.05)
                                 until animations("Animation") >= 1 or q["Skill" .. Options[a.cq .. " Skill Fifth"].Value].Image == f or Gui.Unloaded
                             end
                         end
                     end)
-                    task.wait(0.135)
+                    task.wait(0.045)
                 end
             end
         )
@@ -2647,4 +2647,3 @@ local p, c, t, w, r, h, a, b =
                 )
             end
         )
-
